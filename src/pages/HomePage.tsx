@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { HomeWelcome } from '../components/HomeWelcome'
+import { ImageCredits } from '../components/ImageCredits'
 import type { Character } from '../types'
 import type { DemoActivity } from '../data/demo'
 import { challengeActivities, demoAccount, lessons } from '../data/demo'
@@ -17,7 +20,13 @@ import { Footer } from '../components/Footer'
 import { LoginModal } from '../components/LoginModal'
 import { ActivityModal } from '../components/ActivityModal'
 
-export function HomePage() {
+export function HomePage({ landing = false }: { landing?: boolean }) {
+  const navigate = useNavigate()
+  useEffect(() => {
+    const target = window.location.hash.slice(1)
+    if (target) document.getElementById(target)?.scrollIntoView()
+    else window.scrollTo(0, 0)
+  }, [landing])
   const { session, login, logout, selectGrade, reset, completeActivity } = useDemoSession()
   const [activeCharacter, setActiveCharacter] = useState<Character | null>(null)
   const [activeActivity, setActiveActivity] = useState<DemoActivity | null>(null)
@@ -41,11 +50,13 @@ export function HomePage() {
     setLoginOpen(false)
     setNotice(`Chào mừng ${demoAccount.name} trở lại!`)
     if (pendingActivity) { setActiveActivity(pendingActivity); setPendingActivity(null) }
+    if (landing) navigate('/home')
     return true
   }
 
   function handleSelectGrade(grade: number) {
     selectGrade(grade)
+    if (landing) { navigate('/home'); return }
     document.getElementById('journey')?.scrollIntoView({ behavior: 'smooth' })
     setNotice(`Đã chọn Lớp ${grade}. Hãy mở bài học để khám phá!`)
   }
@@ -56,7 +67,7 @@ export function HomePage() {
   }
 
   return (
-    <div id="top">
+    <div id="top" className={landing ? 'landing-page' : 'learning-page'}>
       <Navbar
         loggedIn={session.loggedIn}
         onLogin={() => setLoginOpen(true)}
@@ -66,26 +77,28 @@ export function HomePage() {
         }}
       />
       <main>
-        <Hero />
-        <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} />
-        <ContinueJourney
+        {landing ? <Hero /> : <HomeWelcome session={session} />}
+
+        {!landing && <ContinueJourney
           grade={session.grade}
           completed={session.completedActivities.includes(`lesson-${session.grade}`)}
           onContinue={() => openActivity(lessons[session.grade])}
-        />
+        />}
+        <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} />
         <HistoryTimeline />
         <CharacterSection onChat={setActiveCharacter} />
         <ChallengeSection completedActivities={session.completedActivities} onTry={id => openActivity(challengeActivities[id])} />
-        <UserProgress
+        {!landing && <UserProgress
           session={session}
           onLogin={() => setLoginOpen(true)}
           onReset={() => {
             reset()
             setNotice('Đã đặt lại hành trình demo của Minh.')
           }}
-        />
+        />}
         <StatsSection />
       </main>
+      <ImageCredits />
       <Footer />
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} />}

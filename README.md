@@ -2,6 +2,8 @@
 
 Trang chủ demo cho nền tảng học Lịch sử Việt Nam dành cho học sinh THCS lớp 6–9. Dự án dùng React, TypeScript, Vite, Tailwind CSS, React Router và Lucide React. Toàn bộ nội dung hiện là dữ liệu mẫu, không có backend hay API AI.
 
+**Bản demo:** [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app)
+
 ## Chạy dự án
 
 Yêu cầu Node.js 18 trở lên và npm.
@@ -22,7 +24,15 @@ npm run preview
 
 ## Triển khai Vercel
 
-Import repository vào Vercel hoặc chạy `vercel --prod` từ thư mục gốc sau khi đăng nhập Vercel CLI. Framework là Vite, lệnh build là `npm run build`, thư mục đầu ra là `dist`. `vercel.json` cấu hình fallback về `index.html` cho React Router.
+Mỗi lần push lên `main`, [GitHub Actions](.github/workflows/deploy-vercel.yml) sẽ build và deploy production lên Vercel. Có thể chạy lại thủ công bằng **Actions → Deploy to Vercel → Run workflow**.
+
+Workflow dùng GitHub secret `VERCEL_TOKEN` và hai repository variables `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`. Framework là Vite, lệnh build là `npm run build`, thư mục đầu ra là `dist`. `vercel.json` cấu hình fallback về `index.html` cho React Router.
+
+Tạo token tại [vercel.com/account/tokens](https://vercel.com/account/tokens) (scope là team chứa project `xuyen-su-ky`), rồi lưu vào GitHub:
+
+```bash
+gh secret set VERCEL_TOKEN -R nguyenddung/EXE_XuyenSuKy
+```
 
 ## Cấu trúc
 
@@ -31,12 +41,15 @@ src/
   components/  Các section và thành phần giao diện
   data/        Dữ liệu mẫu cho lớp học, nhân vật, timeline, thử thách, bảng xếp hạng
   hooks/       Trạng thái demo và lưu trữ trên trình duyệt
-  pages/       HomePage và điều phối các tương tác
+  pages/       HomePage (landing ở `/`, trang học ở `/home`)
   types/       Các kiểu dữ liệu chung
   App.tsx      React Router
   main.tsx     Điểm vào ứng dụng
   index.css    Tailwind và style giao diện
   demo.css     Style cho đăng nhập, bài học và thử thách
+  heritage.css Bộ nhận diện "di sản": hero, ảnh nhân vật, trang học
+public/
+  images/characters/  Minh họa nhân vật (WebP)
 ```
 
 ## Tương tác demo
