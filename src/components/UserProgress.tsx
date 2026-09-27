@@ -12,6 +12,7 @@ export function UserProgress({ session, onLogin, onReset }: Props) {
   const badges = ['Nhà Trần', 'Bạch Đằng', 'Quiz Master']
   if (session.completedActivities.some(id => id.startsWith('lesson-'))) badges.push('Nhà khám phá')
   if (session.completedActivities.some(id => id.startsWith('challenge-'))) badges.push('Chinh phục thử thách')
+  if (session.completedActivities.some(id => id.startsWith('minigame-'))) badges.push('Nhà giải mã lịch sử')
   const ranks = leaderboard.map(entry => entry.name === demoAccount.name ? { ...entry, xp: demoAccount.leaderboardXp + session.earnedXp } : entry).sort((a, b) => b.xp - a.xp)
 
   return (
@@ -24,7 +25,7 @@ export function UserProgress({ session, onLogin, onReset }: Props) {
               <h2 id="progress-title">Xin chào, {demoAccount.name}! <span>✦</span></h2>
               <p>{session.loggedIn
                 ? `Lớp ${session.grade} · ${session.completedActivities.length} hoạt động đã hoàn thành`
-                : 'Hồ sơ mẫu của Minh. Đăng nhập để mở bài học và nhận XP.'}</p>
+                : 'Hồ sơ mẫu của Minh. XP minigame lưu trên trình duyệt; đăng nhập để mở bài học.'}</p>
             </div>
             <div className="profile-avatar">{demoAccount.avatar}</div>
           </div>

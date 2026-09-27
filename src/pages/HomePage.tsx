@@ -1,10 +1,12 @@
+import { MiniGameModal } from '../components/MiniGameModal'
+import type { GameId } from '../data/minigames'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HomeWelcome } from '../components/HomeWelcome'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character } from '../types'
 import type { DemoActivity } from '../data/demo'
-import { challengeActivities, demoAccount, lessons } from '../data/demo'
+import { demoAccount, lessons } from '../data/demo'
 import { useDemoSession } from '../hooks/useDemoSession'
 import { Navbar } from '../components/Navbar'
 import { Hero } from '../components/Hero'
@@ -28,6 +30,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     else window.scrollTo(0, 0)
   }, [landing])
   const { session, login, logout, selectGrade, reset, completeActivity } = useDemoSession()
+  const [activeGame, setActiveGame] = useState<GameId | null>(null)
   const [activeCharacter, setActiveCharacter] = useState<Character | null>(null)
   const [activeActivity, setActiveActivity] = useState<DemoActivity | null>(null)
   const [pendingActivity, setPendingActivity] = useState<DemoActivity | null>(null)
@@ -87,7 +90,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} />
         <HistoryTimeline />
         <CharacterSection onChat={setActiveCharacter} />
-        <ChallengeSection completedActivities={session.completedActivities} onTry={id => openActivity(challengeActivities[id])} />
+        <ChallengeSection completedActivities={session.completedActivities} onTry={setActiveGame} />
         {!landing && <UserProgress
           session={session}
           onLogin={() => setLoginOpen(true)}
@@ -101,6 +104,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       <ImageCredits />
       <Footer />
       {notice && <div className="toast" role="status">✦ {notice}</div>}
+      {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} onComplete={completeActivity} onClose={() => setActiveGame(null)} />}
       {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal
