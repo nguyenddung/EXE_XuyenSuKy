@@ -8,3 +8,5 @@ import './heritage.css'
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>)
 
 import './minigames.css'
+
+import './learning.css'

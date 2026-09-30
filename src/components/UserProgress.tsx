@@ -3,9 +3,9 @@ import { demoAccount } from '../data/demo'
 import { leaderboard } from '../data/leaderboard'
 import type { DemoSession } from '../hooks/useDemoSession'
 
-interface Props { session: DemoSession; onLogin: () => void; onReset: () => void }
+interface Props { session: DemoSession; learningStreak: number; onLogin: () => void; onReset: () => void }
 
-export function UserProgress({ session, onLogin, onReset }: Props) {
+export function UserProgress({ session, learningStreak, onLogin, onReset }: Props) {
   const totalXp = demoAccount.baseXp + session.earnedXp
   const level = 5 + Math.floor(totalXp / 1000)
   const currentXp = totalXp % 1000
@@ -32,7 +32,7 @@ export function UserProgress({ session, onLogin, onReset }: Props) {
           <div className="level-panel">
             <span className="level-icon"><Star size={23} fill="currentColor" /></span>
             <div className="flex-1"><span>CẤP ĐỘ {level}</span><strong>Nhà Sử Học Cấp {level}</strong></div>
-            <span className="level-flame"><Flame size={17} fill="currentColor" /> {demoAccount.streak} ngày</span>
+            <span className="level-flame"><Flame size={17} fill="currentColor" /> {learningStreak} ngày</span>
           </div>
           <div className="xp-row"><span>Điểm kinh nghiệm</span><strong>{currentXp} <small>/ 1000 XP</small></strong></div>
           <div className="progress-track xp-track"><span style={{ width: `${currentXp / 10}%` }} /></div>

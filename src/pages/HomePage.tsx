@@ -1,3 +1,5 @@
+import { LearningHub } from '../components/LearningHub'
+import { useLearningJournal, streak } from '../hooks/useLearningJournal'
 import { MiniGameModal } from '../components/MiniGameModal'
 import type { GameId } from '../data/minigames'
 import { useEffect, useState } from 'react'
@@ -30,6 +32,11 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     else window.scrollTo(0, 0)
   }, [landing])
   const { session, login, logout, selectGrade, reset, completeActivity } = useDemoSession()
+  const learning = useLearningJournal()
+  function completeLearning(id: string, reward: number) {
+    completeActivity(id, reward)
+    learning.record(id, id.startsWith('minigame-') ? 'game' : 'quiz')
+  }
   const [activeGame, setActiveGame] = useState<GameId | null>(null)
   const [activeCharacter, setActiveCharacter] = useState<Character | null>(null)
   const [activeActivity, setActiveActivity] = useState<DemoActivity | null>(null)
@@ -88,14 +95,18 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
           onContinue={() => openActivity(lessons[session.grade])}
         />}
         <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} />
+        <LearningHub learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} />
         <HistoryTimeline />
         <CharacterSection onChat={setActiveCharacter} />
         <ChallengeSection completedActivities={session.completedActivities} onTry={setActiveGame} />
         {!landing && <UserProgress
           session={session}
+          learningStreak={streak(learning.journal.events)}
           onLogin={() => setLoginOpen(true)}
           onReset={() => {
+            if (!window.confirm('Đặt lại toàn bộ tiến độ, bài đã lưu và ghi chú trên trình duyệt này?')) return
             reset()
+            learning.resetJournal()
             setNotice('Đã đặt lại hành trình demo của Minh.')
           }}
         />}
@@ -104,14 +115,14 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       <ImageCredits />
       <Footer />
       {notice && <div className="toast" role="status">✦ {notice}</div>}
-      {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} onComplete={completeActivity} onClose={() => setActiveGame(null)} />}
+      {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
       {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}
         activity={activeActivity}
         alreadyCompleted={session.completedActivities.includes(activeActivity.id)}
-        onComplete={completeActivity}
+        onComplete={completeLearning}
         onClose={() => setActiveActivity(null)}
         onViewProgress={viewProgress}
       />}

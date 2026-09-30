@@ -1,4 +1,4 @@
-﻿# Xuyên Sử Kí — MVP Homepage
+# Xuyên Sử Kí — MVP Homepage
 
 Trang chủ demo cho nền tảng học Lịch sử Việt Nam dành cho học sinh THCS lớp 6–9. Dự án dùng React, TypeScript, Vite, Tailwind CSS, React Router và Lucide React. Toàn bộ nội dung hiện là dữ liệu mẫu, không có backend hay API AI.
 
@@ -57,11 +57,11 @@ public/
 - Menu điều hướng cuộn đến các section; menu mobile có nút mở/đóng.
 - Chọn một trong bốn lớp sẽ đổi bài học tương ứng và cuộn đến hành trình học.
 - Đăng nhập bằng `minh@xuyensuki.vn` / `demo123`, hoặc dùng nút **Điền tài khoản mẫu**. Đây chỉ là kiểm tra dữ liệu trên frontend.
-- Bài học yêu cầu đăng nhập; hoạt động đang chọn tự mở sau đăng nhập. Bốn minigame chơi ngay không cần tài khoản, hoàn thành nhận XP một lần mỗi trò.
+- Câu hỏi kiểm tra bài học yêu cầu đăng nhập; phần đọc, ghi chú và thẻ ôn tập dùng ngay không cần tài khoản; hoạt động đang chọn tự mở sau đăng nhập. Bốn minigame chơi ngay không cần tài khoản, hoàn thành nhận XP một lần mỗi trò.
 - Tiến độ, XP, huy hiệu và điểm của Minh trên bảng xếp hạng cập nhật ngay. XP chỉ nhận một lần cho mỗi hoạt động, kể cả khi chơi lại.
 - Trạng thái demo được lưu trong `localStorage`; có thể đăng xuất, đăng nhập lại hoặc dùng **Đặt lại dữ liệu demo** trong hồ sơ.
 - Nhấn “Trò chuyện” để mở hộp thoại nhân vật. Mọi câu hỏi nhận cùng một phản hồi mẫu; không gửi dữ liệu ra ngoài.
-- Streak, nhân vật, thống kê và nội dung câu hỏi vẫn là mock data.
+- Streak và lịch học được tính từ hoạt động thực trên trình duyệt. Hồ sơ Minh, bảng xếp hạng, thống kê tổng và nội dung mẫu vẫn phục vụ bản demo.
 
 ## Hướng mở rộng
 
@@ -90,3 +90,15 @@ npm run test:games
 Máy Windows có Edge có thể dùng PowerShell: `$env:PLAYWRIGHT_CHANNEL='msedge'; npm run test:games`.
 
 Bộ kiểm thử bao gồm bốn game, đáp án sai, gợi ý, hoàn thành, chống cộng XP trùng, lưu sau reload, mobile, focus bàn phím và Escape. Chạy `npm run build` trước deploy.
+
+
+## Thư viện và sổ tay học tập
+
+- 12 bài đọc gợi ý cho lớp 6–9, mỗi bài có một thẻ ôn tập và câu hỏi nhận XP. Nội dung mock ngắn gọn, nhãn lớp không cam kết khớp một bộ sách giáo khoa cụ thể.
+- Tìm kiếm tiếng Việt có/không dấu trong tiêu đề, giai đoạn và nội dung; lọc lớp, đã lưu, chưa đọc, cần ôn hoặc có ghi chú; tải thêm bài.
+- Màn đọc hỗ trợ chữ lớn, đánh dấu đã đọc, lưu yêu thích, tự đánh giá thẻ ôn tập và ghi chú tối đa 2.000 ký tự mỗi bài.
+- Mục tiêu 1/3/5 hoạt động mỗi ngày, lịch 7 ngày, gợi ý bài theo lớp và lịch sử gần đây. Ngày tính theo múi giờ Việt Nam. Mỗi tổ hợp nội dung/loại hoạt động tính một lượt mỗi ngày. Chơi lại và ôn lại có thể duy trì chuỗi ngày nhưng không cộng thêm XP đã nhận.
+- Sổ tay lưu tại `xuyen-su-ky-journal-v1`, độc lập với khóa phiên cũ để giữ nguyên XP. Nhật ký giữ 1.000 hoạt động gần nhất. Không suy diễn ngày học cho thành tích từ trước khi nhật ký được bổ sung.
+- Có thông báo nếu trình duyệt chặn hoặc hết dung lượng lưu trữ. Đặt lại dữ liệu demo cần xác nhận và xóa cả phiên học, sổ tay, yêu thích, ghi chú.
+
+`npm run test:games` chạy cả kiểm thử minigame lẫn thư viện: lưu dữ liệu, bộ lọc, ghi chú, XP, mốc nửa đêm theo giờ Việt Nam, bàn phím, mobile và lỗi lưu trữ.

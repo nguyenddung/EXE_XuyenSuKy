@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDown, ArrowUp, ArrowRight, Lightbulb, RotateCcw, Trophy, X } from 'lucide-react'
 import { cases, decisions, games, milestones, pairs, shuffle, type GameId } from '../data/minigames'
 
@@ -75,6 +75,6 @@ export function MiniGameModal({ gameId, completed, onComplete, onClose }: Props)
     return () => { document.removeEventListener('keydown', keyboard); document.body.style.overflow = overflow; previous?.focus() }
   }, [])
   useEffect(() => { if (result) { heading.current?.focus(); panel.current?.scrollTo({ top: 0 }) } }, [result])
-  function finish(summary: string, stars: number) { if (result) return; if (!rewarded) { onComplete(`minigame-${gameId}`, game.reward); setRewarded(true); setNewReward(true) } setResult({ summary, stars }) }
+  function finish(summary: string, stars: number) { if (result) return; onComplete(`minigame-${gameId}`, game.reward); if (!rewarded) { setRewarded(true); setNewReward(true) } setResult({ summary, stars }) }
   return <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}><section ref={panel} className="minigame-modal" role="dialog" aria-modal="true" aria-labelledby="game-title"><header className="minigame-header"><span className="section-kicker">{game.tag}</span><button className="modal-close" aria-label="Đóng minigame" onClick={onClose}><X size={21} /></button><h2 id="game-title" ref={heading} tabIndex={-1}>{result ? 'Thêm một trang sử được mở!' : game.title}</h2><p>{rewarded ? 'Chơi lại để luyện tập · XP chỉ nhận một lần mỗi trò' : `Hoàn thành để nhận ${game.reward} XP · Không giới hạn lượt thử`}</p></header><div className="minigame-body">{result ? <div className="game-result"><Trophy size={50} /><div className="result-stars" aria-label={`${result.stars} trên 3 sao`}>{'★'.repeat(result.stars)}<span>{'☆'.repeat(3 - result.stars)}</span></div><h3>{newReward ? `+${game.reward} XP vào hành trình!` : 'Một lượt luyện tập thật tốt!'}</h3><p>{result.summary}</p><small>Tiến độ được lưu trên trình duyệt này. Sao phản ánh lượt chơi; không ảnh hưởng XP.</small><div className="game-controls"><button className="button-primary" onClick={() => { setResult(null); setNewReward(false); setRun(run + 1) }}><RotateCcw size={16} /> Chơi lại</button><button className="button-outline" onClick={onClose}>Khám phá trò khác</button></div></div> : <div key={run}>{gameId === 'timeline' ? <TimelineGame finish={finish} /> : gameId === 'memory' ? <MemoryGame finish={finish} /> : gameId === 'detective' ? <DetectiveGame finish={finish} /> : <StrategyGame finish={finish} />}</div>}</div></section></div>
 }

@@ -29,7 +29,7 @@ export function ActivityModal({ activity, alreadyCompleted, onComplete, onClose,
   function checkAnswer() {
     if (selected === null) return
     setChecked(true)
-    if (correct && !completedOnOpen) onComplete(activity.id, activity.reward)
+    if (correct) onComplete(activity.id, activity.reward)
   }
 
   return <div className="modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose() }}><section role="dialog" aria-modal="true" aria-labelledby="activity-title" className="activity-modal">

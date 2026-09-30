@@ -3,7 +3,7 @@ import { ArrowUpRight, Menu, X } from 'lucide-react'
 
 const links = [
   { label: 'Trang chủ', href: '/home' },
-  { label: 'Học theo lớp', href: '#classes' },
+  { label: 'Thư viện', href: '#library' },
   { label: 'Dòng thời gian', href: '#timeline' },
   { label: 'Nhân vật', href: '#characters' },
   { label: 'Thử thách', href: '#challenges' },
