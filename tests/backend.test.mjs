@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto'
 import { defaultDatasetPath, loadDataset, normalize } from '../server/dataset.mjs'
 import { handleApi } from '../server/handler.mjs'
 import { characterIndex, characterReply } from '../server/characters.mjs'
+import { augmentCharacterReply } from '../server/openai-rag.mjs'
 
 let dataset, server, base
 before(async () => {
@@ -65,6 +66,32 @@ test('every suggested question cites an exact source passage and the original PD
         assert.ok(!['question', 'exercise', 'objectives', 'intro'].includes(source.contentType))
       }
     }
+  }
+})
+
+test('RAG sends only retrieved textbook evidence and keeps the source when OpenAI fails', async () => {
+  const originalKey = process.env.OPENAI_API_KEY
+  const question = 'Ngô Quyền thắng trận Bạch Đằng năm nào?'
+  const retrieved = characterReply(dataset, 'ngo-quyen', question)
+  let request
+  const client = { responses: { create: async (body) => { request = body; return { output_text: 'Ngô Quyền chiến thắng trên sông Bạch Đằng năm 938 [1].' } } } }
+  try {
+    delete process.env.OPENAI_API_KEY
+    assert.equal((await augmentCharacterReply(retrieved, 'Ngô Quyền', question, [], client)).mode, 'textbook')
+    process.env.OPENAI_API_KEY = 'test-key-never-sent'
+    const reply = await augmentCharacterReply(retrieved, 'Ngô Quyền', question, [], client)
+    assert.equal(reply.mode, 'rag')
+    assert.deepEqual(reply.sources, retrieved.sources)
+    assert.equal(request.store, false)
+    assert.ok(request.input.includes(retrieved.sources[0].quote))
+    assert.ok(!request.input.includes('test-key-never-sent'))
+    assert.equal((await augmentCharacterReply(retrieved, 'Ngô Quyền', question, [], { responses: { create: async () => ({ output_text: 'Không có nguồn.' }) } })).mode, 'textbook')
+    assert.equal((await augmentCharacterReply(retrieved, 'Ngô Quyền', question, [], { responses: { create: async () => { throw new Error('mock offline') } } })).mode, 'textbook')
+    const unknown = characterReply(dataset, 'ngo-quyen', 'Hôm nay thời tiết thế nào?')
+    assert.equal((await augmentCharacterReply(unknown, 'Ngô Quyền', question, [], client)).kind, 'not_found')
+  } finally {
+    if (originalKey === undefined) delete process.env.OPENAI_API_KEY
+    else process.env.OPENAI_API_KEY = originalKey
   }
 })
 

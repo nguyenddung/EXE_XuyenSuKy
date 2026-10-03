@@ -2,7 +2,7 @@ import type { HistoryChunk } from './historyApi'
 
 export interface CharacterReply {
   characterId: string
-  mode: 'textbook'
+  mode: 'textbook' | 'rag'
   kind: 'grounded' | 'not_found' | 'greeting'
   answer: string
   sources: (HistoryChunk & { quote: string })[]

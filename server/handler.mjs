@@ -1,5 +1,6 @@
 import { chunkResponse, getDataset, lessonId, normalize, searchChunks } from './dataset.mjs'
 import { characterIndex, characterReply, listCharacters } from './characters.mjs'
+import { augmentCharacterReply } from './openai-rag.mjs'
 
 class HttpError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code }
@@ -72,7 +73,9 @@ export async function handleApi(req, res, datasetProvider = getDataset) {
     if (chat) {
       if (!characterIndex(data).some((entry) => entry.profile.id === parts[1])) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
       const body = await readChatBody(req)
-      result = characterReply(data, parts[1], body.message, body.history)
+      const entry = characterIndex(data).find((item) => item.profile.id === parts[1])
+      const retrieved = characterReply(data, parts[1], body.message, body.history)
+      result = await augmentCharacterReply(retrieved, entry.profile.name, body.message, body.history)
     }
     else if (route === 'characters') { const items = listCharacters(data, grade, query); result = { items, total: items.length, datasetVersion: data.metadata.version, mode: 'textbook' } }
     else if (parts[0] === 'characters' && parts.length === 2) {

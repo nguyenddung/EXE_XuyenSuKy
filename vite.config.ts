@@ -4,7 +4,9 @@ import { handleApi } from './server/handler.mjs'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  if (env.DATASET_PATH && !process.env.DATASET_PATH) process.env.DATASET_PATH = env.DATASET_PATH
+  for (const key of ['DATASET_PATH', 'OPENAI_API_KEY', 'OPENAI_MODEL']) {
+    if (env[key] && !process.env[key]) process.env[key] = env[key]
+  }
   return { plugins: [react(), {
     name: 'history-backend',
     configureServer(server) {

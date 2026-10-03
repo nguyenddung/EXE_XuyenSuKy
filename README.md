@@ -1,6 +1,6 @@
 # Xuyên Sử Kí
 
-Nền tảng học Lịch sử lớp 6–12 dùng React, TypeScript, Vite và backend Node.js. Thư viện mặc định đọc dataset SGK thật qua API: 7 sách, 130 bài, 752 mục và 2.708 chunk. Có 12 nhân vật lịch sử minh họa hoạt hình để trò chuyện và tra cứu đoạn SGK có nguồn. Minigame, bài học thử, đăng nhập và bảng xếp hạng vẫn là demo.
+Nền tảng học Lịch sử lớp 6–12 dùng React, TypeScript, Vite và backend Node.js. Thư viện mặc định đọc dataset SGK thật qua API: 7 sách, 130 bài, 752 mục và 2.708 chunk. Có 12 nhân vật lịch sử minh họa hoạt hình để trò chuyện với RAG khi cấu hình OpenAI, kèm đoạn SGK có nguồn. Minigame, bài học thử, đăng nhập và bảng xếp hạng vẫn là demo.
 
 **Bản demo:** [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app)
 
@@ -51,7 +51,13 @@ Thu hồi hook cũ trong Vercel sau khi thay secret. Các variables `VERCEL_ORG_
 
 `npm run dev` và `npm run preview` phục vụ cả frontend và API cùng origin. Chạy API độc lập bằng `npm run dev:backend`, mặc định tại `http://127.0.0.1:3001/api/health`.
 
-Backend đọc snapshot trong `data/history`, nạp một lần mỗi tiến trình và xác minh checksum, JSON Schema 2020-12, số lượng, ID duy nhất và tham chiếu chunk/bài. Nếu dữ liệu lỗi, API trả `503 DATASET_UNAVAILABLE`; giao diện cho phép thử lại hoặc chọn **Bài học thử**. API chỉ đọc, không sửa dataset gốc.
+Backend đọc snapshot trong `data/history`, nạp một lần mỗi tiến trình và xác minh checksum, JSON Schema 2020-12, số lượng, ID duy nhất và tham chiếu chunk/bài. Nếu dữ liệu lỗi, API trả `503 DATASET_UNAVAILABLE`; giao diện cho phép thử lại hoặc chọn **Bài học thử**. API không sửa dataset gốc.
+
+### Bật RAG với OpenAI
+
+Tạo API key trong [OpenAI Platform](https://platform.openai.com/api-keys). Để chạy local, thêm `OPENAI_API_KEY=...` vào `.env.local` (tệp này được Git bỏ qua), rồi khởi động lại `npm run dev`. Có thể đặt `OPENAI_MODEL=gpt-5-mini` để đổi model. Không đặt key trong biến `VITE_`, mã frontend hoặc GitHub secret của workflow deploy.
+
+Trên Vercel, vào **Project Settings → Environment Variables**, thêm `OPENAI_API_KEY` cho **Production**, rồi redeploy production. Key nằm trong môi trường của Vercel Function, không nằm trong bundle frontend. Khi không có key hoặc OpenAI gặp lỗi, chat trả trích đoạn SGK hiện có và ghi `mode: textbook`; khi OpenAI trả lời, phản hồi ghi `mode: rag`. Giao diện hiển thị nguồn bài học cho cả hai. Câu hỏi không có đoạn nguồn phù hợp không được gửi đến OpenAI.
 
 Để local đọc trực tiếp thư mục đã cung cấp, sao chép `.env.example` thành `.env.local`, thêm:
 
@@ -80,7 +86,7 @@ npm run test:backend
 
 Phân trang hỗ trợ `page >= 1`, `limit` từ 1–50. `grade` nhận 6–12; `q` tối đa 200 ký tự. `ids`/`excludeIds` lọc theo danh sách ID bài. Không có đáp án trắc nghiệm trong dataset, vì vậy bài SGK dùng đánh dấu đã đọc, tự đánh giá và ghi chú; không tự chấm hay tạo đáp án giả.
 
-Tra cứu chunk dùng từ khóa chuẩn hóa tiếng Việt, yêu cầu khớp mọi từ, ưu tiên khớp cụm từ và tên mục. Chỉ tìm `body`, `source`, `did_you_know`, `caption`; không coi câu hỏi hay bài tập là câu trả lời. Đây là tìm kiếm văn bản, chưa phải vector search hoặc chatbot RAG.
+Tra cứu chunk dùng từ khóa chuẩn hóa tiếng Việt, yêu cầu khớp mọi từ, ưu tiên khớp cụm từ và tên mục. Chỉ tìm `body`, `source`, `did_you_know`, `caption`; không coi câu hỏi hay bài tập là câu trả lời. Truy xuất hiện là tìm kiếm văn bản, chưa dùng vector search; chat nhân vật có bước RAG bằng OpenAI khi đã cấu hình key.
 
 Giữ nguyên nội dung, metadata và README của dataset. Người cung cấp đã xác nhận có quyền công bố trong phiên làm việc ngày 03/10/2026. Trích dẫn gồm sách, bộ sách, NXB và **trang trong file PDF**; PDF gốc không nằm trong dataset nên không có link tải PDF. Ghi chú/tiến độ vẫn lưu trên trình duyệt, chưa có tài khoản hay cơ sở dữ liệu người dùng trên server.
 
@@ -113,12 +119,12 @@ public/
 - Câu hỏi kiểm tra bài học yêu cầu đăng nhập; phần đọc, ghi chú và thẻ ôn tập dùng ngay không cần tài khoản; hoạt động đang chọn tự mở sau đăng nhập. Bốn minigame chơi ngay không cần tài khoản, hoàn thành nhận XP một lần mỗi trò.
 - Tiến độ, XP, huy hiệu và điểm của Minh trên bảng xếp hạng cập nhật ngay. XP chỉ nhận một lần cho mỗi hoạt động, kể cả khi chơi lại.
 - Trạng thái demo được lưu trong `localStorage`; có thể đăng xuất, đăng nhập lại hoặc dùng **Đặt lại dữ liệu demo** trong hồ sơ.
-- Nhấn **Bắt đầu trò chuyện** để hỏi nhân vật, chọn câu hỏi gợi ý và mở bài học từ nguồn trả lời. Câu hỏi gửi đến backend cùng website; không gọi nhà cung cấp AI bên ngoài.
+- Nhấn **Bắt đầu trò chuyện** để hỏi nhân vật, chọn câu hỏi gợi ý và mở bài học từ nguồn trả lời. Backend gọi OpenAI khi có key và tìm được đoạn SGK liên quan.
 - Streak và lịch học được tính từ hoạt động thực trên trình duyệt. Hồ sơ Minh, bảng xếp hạng, thống kê tổng và nội dung mẫu vẫn phục vụ bản demo.
 
 ## Hướng mở rộng
 
-Phase 2 có thể bổ sung tài khoản thật, đồng bộ tiến độ qua backend, bài học dài hơn, thêm màn chơi và nội dung theo lớp, nội dung nhân vật được kiểm duyệt và tích hợp AI khi có backend phù hợp.
+Phase 2 có thể bổ sung tài khoản thật, đồng bộ tiến độ qua backend, bài học dài hơn, thêm màn chơi, tìm kiếm vector và quy trình đánh giá câu trả lời AI.
 
 ## Trò chuyện nhân vật trong SGK
 
@@ -130,11 +136,11 @@ Danh mục có Trần Hưng Đạo, Lý Thường Kiệt, Quang Trung, Hai Bà T
 | `GET /api/characters/ngo-quyen` | Hồ sơ, chủ đề và bài học liên quan |
 | `POST /api/characters/ngo-quyen/chat` | Body JSON `{ "message": "Bạch Đằng năm nào?", "history": [] }`; trả lời, đoạn nguồn và bài học |
 
-Đây là **trò chuyện mô phỏng kết hợp tra cứu văn bản**, chưa dùng LLM hay giọng nói. Backend chọn đoạn SGK theo nhân vật/chủ đề/câu hỏi, dùng ngữ cảnh câu hỏi trước cho câu tiếp nối ngắn. Các chủ đề dễ nhầm niên đại có đoạn nguồn đã đối chiếu; nếu snapshot thay đổi, đoạn này phải còn khớp nguyên văn mới được dùng. Câu trả lời chứa trích đoạn nguyên văn, tên sách/bộ sách/NXB/trang PDF và nút mở bài. Dataset OCR có thể giữ lỗi chính tả từ bản gốc. Ngoài phạm vi hoặc chưa đủ nguồn thì trả thông báo và câu hỏi gợi ý.
+Đây là **trò chuyện mô phỏng kết hợp tra cứu văn bản và RAG tùy cấu hình**; chưa dùng giọng nói. Backend chọn đoạn SGK theo nhân vật/chủ đề/câu hỏi, dùng ngữ cảnh câu hỏi trước cho câu tiếp nối ngắn. Các chủ đề dễ nhầm niên đại có đoạn nguồn đã đối chiếu; nếu snapshot thay đổi, đoạn này phải còn khớp nguyên văn mới được dùng. Khi có OpenAI key, model viết lời giải thích ngắn từ đoạn đã chọn và dẫn [1]. Nếu thiếu key hoặc API lỗi, backend trả trích đoạn nguyên văn. Câu trả lời có nút mở bài và nguồn sách/bộ sách/NXB/trang PDF. Dataset OCR có thể giữ lỗi chính tả từ bản gốc. Ngoài phạm vi hoặc chưa đủ nguồn thì trả thông báo và câu hỏi gợi ý.
 
-API giới hạn câu hỏi 1.000 ký tự, tối đa 8 lượt ngữ cảnh (2.000 ký tự/lượt), payload 16 KB; phản hồi chat không được cache. Backend không ghi lịch sử hay sửa dataset. Lịch sử chỉ giữ trong hộp thoại đang mở và được xóa khi đóng; có nút bắt đầu cuộc trò chuyện mới, trạng thái đang tìm, gửi lại khi lỗi và hủy yêu cầu khi đóng.
+API giới hạn câu hỏi 1.000 ký tự, tối đa 8 lượt ngữ cảnh (2.000 ký tự/lượt), payload 16 KB; phản hồi chat không được cache. Lệnh OpenAI chỉ gửi câu hỏi hiện tại, tối đa 500 ký tự của câu hỏi trước và một đoạn nguồn; đặt `store: false` và giới hạn 500 output tokens. Backend không ghi lịch sử hay sửa dataset. Lịch sử chỉ giữ trong hộp thoại đang mở và được xóa khi đóng; có nút bắt đầu cuộc trò chuyện mới, trạng thái đang tìm, gửi lại khi lỗi và hủy yêu cầu khi đóng.
 
-Hồ sơ: `shared/characters.json`; chọn nguồn: `server/characters.mjs` và `server/character-evidence.mjs`; UI: `CharacterSection`, `CharacterChatModal`. Tám ảnh bổ sung được tạo bằng imagegen tích hợp, tối ưu WebP; [prompt và đường dẫn ảnh](docs/character-image-prompts.md). Kiểm thử cục bộ kiểm tra niên đại, nguồn nguyên văn, câu nối tiếp, ngoài phạm vi và giao diện; chưa chạy đánh giá bằng LLM hoặc Langfuse cloud.
+Hồ sơ: `shared/characters.json`; chọn nguồn: `server/characters.mjs` và `server/character-evidence.mjs`; tạo câu trả lời AI: `server/openai-rag.mjs`; UI: `CharacterSection`, `CharacterChatModal`. Tám ảnh bổ sung được tạo bằng imagegen tích hợp, tối ưu WebP; [prompt và đường dẫn ảnh](docs/character-image-prompts.md). Kiểm thử cục bộ kiểm tra niên đại, nguồn nguyên văn, câu nối tiếp, ngoài phạm vi, fallback khi OpenAI lỗi và giao diện; chưa chạy đánh giá bằng LLM hoặc Langfuse cloud.
 
 
 ## Phòng minigame
