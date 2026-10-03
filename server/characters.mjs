@@ -88,12 +88,17 @@ export function characterReply(dataset, characterId, message, history = []) {
   const introduction = /\b(la ai|gioi thieu|tieu su|ve ban|ve ong|ve bac|ve ba)\b/.test(q) || profile.aliases.some((alias) => q === normalize(alias))
   let terms = queryTerms(message, profile)
   const followup = /\b(them|tiep|sau do|khi do|y nghia|vi sao|the nao|o dau|do|nay)\b/.test(q) && terms.length <= 4
+  let previousTopic = ''
   if (followup) {
     const previous = [...history].reverse().find((turn) => turn.role === 'user' && queryTerms(turn.content, profile).length > 0)
-    if (previous) terms = [...new Set([...terms, ...queryTerms(previous.content, profile)])]
+    if (previous) {
+      terms = [...new Set([...terms, ...queryTerms(previous.content, profile)])]
+      // Keep the full prior question: stopword filtering drops halves of phrases like "doi do".
+      previousTopic = normalize(previous.content)
+    }
   }
   const intro = introduction
-  const contextualQuery = `${q} ${terms.join(' ')}`
+  const contextualQuery = `${q} ${previousTopic} ${terms.join(' ')}`
   const phrases = topicPhrases.filter((phrase) => contextualQuery.includes(phrase))
   const intent = /\b(bat dau)\b/.test(q) ? 'start' : /\b(nam nao|khi nao|bao gio|thoi gian)\b/.test(q) ? 'date' : /\b(vi sao|tai sao|y nghia)\b/.test(q) ? 'reason' : /\b(vai tro)\b/.test(q) ? 'role' : /\b(o dau)\b/.test(q) ? 'place' : 'fact'
   let ranked = !intro && !terms.length ? [] : related.flatMap(({ chunk }) => candidates(chunk, terms, profile, intent, phrases, intro))

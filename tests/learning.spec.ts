@@ -5,7 +5,7 @@ test('library search, grade filters, saved articles and empty state', async ({pa
  await openDemo(page); await expect(page.locator('.library-card')).toHaveCount(6)
  await page.getByRole('button',{name:/Khám phá thêm/}).click(); await expect(page.locator('.library-card')).toHaveCount(12)
  await page.getByRole('searchbox',{name:'Tìm kiếm thư viện'}).fill('co loa'); await expect(page.locator('.library-card')).toHaveCount(1); await expect(page.locator('.library-card h3')).toHaveText('Âu Lạc và thành Cổ Loa')
- await page.locator('.library-card-top button').click(); await page.getByRole('searchbox').fill(''); await page.getByRole('button',{name:'Đã lưu',exact:true}).click(); await expect(page.locator('.library-card')).toHaveCount(1)
+ await page.locator('.library-card-top button').click(); await page.getByRole('searchbox',{name:'Tìm kiếm thư viện'}).fill(''); await page.getByRole('button',{name:'Đã lưu',exact:true}).click(); await expect(page.locator('.library-card')).toHaveCount(1)
  await page.reload(); await page.getByRole('button',{name:'Đã lưu',exact:true}).click(); await expect(page.locator('.library-card')).toHaveCount(1)
  await page.getByRole('combobox',{name:'Lọc lớp học'}).selectOption('9'); await expect(page.locator('.library-empty')).toBeVisible(); await page.getByRole('button',{name:'Xem tất cả bài học'}).click(); await expect(page.locator('.library-card')).toHaveCount(6)
 })
