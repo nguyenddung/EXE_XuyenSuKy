@@ -4,7 +4,7 @@ import { useHistoryDataset } from '../hooks/useHistoryDataset'
 import { MiniGameModal } from '../components/MiniGameModal'
 import type { GameId } from '../data/minigames'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character } from '../types'
@@ -39,6 +39,17 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   })
   useEffect(() => { try { sessionStorage.setItem('xuyen-su-ky-library-source', librarySource) } catch { /* Reading still works without storage. */ } }, [librarySource])
   const [requestedLessonId, setRequestedLessonId] = useState<string | null>(null)
+  const location = useLocation()
+  // Era cards on the landing page hand over the lesson to open once the dashboard mounts.
+  useEffect(() => {
+    const request = location.state as { lessonId?: string; grade?: number } | null
+    if (landing || !request?.lessonId) return
+    if (request.grade) selectGrade(request.grade)
+    setLibrarySource('dataset')
+    setRequestedLessonId(request.lessonId)
+    navigate(location.pathname, { replace: true, state: null })
+    window.setTimeout(() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' }), 60)
+  }, [landing, location.state])
   const recommendation = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.recommendation
   const gradeRead = learning.journal.read.filter((id) => id.startsWith(`LS${session.grade}_B`)).length
   const gradeCount = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.lessonCount || 0

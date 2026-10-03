@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 import './demo.css'
-import './heritage.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>)
 
@@ -12,3 +11,4 @@ import './minigames.css'
 import './learning.css'
 import './characters.css'
 import './dashboard.css'
+import './theme.css'

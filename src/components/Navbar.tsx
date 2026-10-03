@@ -15,11 +15,11 @@ export function Navbar({ loggedIn, onLogin, onLogout }: Props) {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="site-header sticky top-0 z-40 border-b border-[#e6e9df] bg-cream/95 backdrop-blur-md">
-      <nav className="page-shell flex h-[76px] items-center justify-between gap-4" aria-label="Điều hướng chính">
-        <a href="/" className="brand flex shrink-0 items-center gap-2.5" onClick={() => setOpen(false)} aria-label="Xuyên Sử Kí, về đầu trang">
+    <header className="site-header sticky top-0 z-40 border-b backdrop-blur-md">
+      <nav className="page-shell flex h-[70px] items-center justify-between gap-4" aria-label="Điều hướng chính">
+        <a href="/" className="brand flex shrink-0 items-center gap-2.5" onClick={() => setOpen(false)} aria-label="Xuyên Sử Ký, về đầu trang">
           <span className="brand-mark" aria-hidden="true">史</span>
-          <span className="brand-text">XUYÊN SỬ KÍ<span className="brand-dot">.</span></span>
+          <span className="brand-text">Xuyên Sử Ký</span>
         </a>
         <div className="hidden items-center gap-7 lg:flex">
           {links.map((link) => <a key={link.href} className="nav-link" href={link.href}>{link.label}</a>)}
@@ -31,7 +31,7 @@ export function Navbar({ loggedIn, onLogin, onLogout }: Props) {
           {open ? <X size={23} /> : <Menu size={23} />}
         </button>
       </nav>
-      {open && <div className="mobile-menu page-shell border-t border-[#e6e9df] py-4 lg:hidden">
+      {open && <div className="mobile-menu page-shell border-t py-4 lg:hidden">
         {links.map((link) => <a key={link.href} href={link.href} onClick={() => setOpen(false)}>{link.label}</a>)}
         {loggedIn ? <><a href="/home#progress" onClick={() => setOpen(false)}>Minh · Hồ sơ</a><button type="button" onClick={() => { setOpen(false); onLogout() }}>Đăng xuất</button></> : <button type="button" onClick={() => { setOpen(false); onLogin() }}>Đăng nhập <ArrowUpRight size={16} /></button>}
       </div>}

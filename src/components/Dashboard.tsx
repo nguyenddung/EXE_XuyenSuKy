@@ -7,15 +7,7 @@ import type { GameId } from '../data/minigames'
 import type { DemoSession } from '../hooks/useDemoSession'
 import type { Character } from '../types'
 import { historyApi, type HistoryChunk, type HistoryLesson, type PageResult } from '../lib/historyApi'
-
-const eras = [
-  { title: 'Thời tiền sử', image: 'prehistoric', lessonId: 'LS6_B05', grade: 6 },
-  { title: 'Văn Lang – Âu Lạc', image: 'vanlang', lessonId: 'LS6_B14', grade: 6 },
-  { title: 'Thời Bắc thuộc', image: 'bac-thuoc', lessonId: 'LS6_B15', grade: 6 },
-  { title: 'Thời Lý', image: 'ly', lessonId: 'LS7_B15', grade: 7 },
-  { title: 'Thời Trần', image: 'tran', lessonId: 'LS7_B16', grade: 7 },
-  { title: 'Thời Lê sơ', image: 'le', lessonId: 'LS7_B20', grade: 7 },
-] as const
+import { eras } from '../data/eras'
 
 const featuredLessons = [
   { id: 'LS6_B18', image: 'bach-dang-938', eyebrow: 'Bước ngoặt độc lập', fallback: 'Bước ngoặt lịch sử đầu thế kỉ X' },

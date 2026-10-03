@@ -1,4 +1,4 @@
-# Xuyên Sử Kí
+# Xuyên Sử Ký
 
 Nền tảng học Lịch sử lớp 6–12 dùng React, TypeScript, Vite và backend Node.js. Thư viện mặc định đọc dataset SGK thật qua API: 7 sách, 130 bài, 752 mục và 2.708 chunk. Có 12 nhân vật lịch sử minh họa hoạt hình để trò chuyện với RAG khi cấu hình OpenAI, kèm đoạn SGK có nguồn. Minigame, bài học thử, đăng nhập và bảng xếp hạng vẫn là demo.
 
@@ -108,7 +108,8 @@ src/
   main.tsx     Điểm vào ứng dụng
   index.css    Tailwind và style giao diện
   demo.css     Style cho đăng nhập, bài học và thử thách
-  heritage.css Bộ nhận diện "di sản": hero, ảnh nhân vật, trang học
+  dashboard.css Giao diện dashboard ở `/home`
+  theme.css    Bộ nhận diện chung cho landing và dashboard: màu, nút, card, hero landing
 public/
   images/characters/  Minh họa nhân vật (WebP)
 ```
