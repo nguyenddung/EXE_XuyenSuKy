@@ -17,7 +17,7 @@ function readSession(): DemoSession {
     if (!saved) return initialSession
     return {
       loggedIn: saved.loggedIn === true,
-      grade: [6, 7, 8, 9].includes(saved.grade ?? 0) ? saved.grade! : 7,
+      grade: [6, 7, 8, 9, 10, 11, 12].includes(saved.grade ?? 0) ? saved.grade! : 7,
       completedActivities: Array.isArray(saved.completedActivities) ? saved.completedActivities.filter((id): id is string => typeof id === 'string') : [],
       earnedXp: typeof saved.earnedXp === 'number' && Number.isFinite(saved.earnedXp) && saved.earnedXp >= 0 ? saved.earnedXp : 0,
     }

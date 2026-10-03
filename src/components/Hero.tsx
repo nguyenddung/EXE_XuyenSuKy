@@ -10,7 +10,7 @@ export function Hero() {
           <h1 id="hero-title">Chạm vào quá khứ.<br /><em>Viết tiếp</em><br />niềm tự hào.</h1>
           <p>Đằng sau mỗi dấu mốc là một câu chuyện. Gặp gỡ những con người làm nên lịch sử và bắt đầu hành trình khám phá của riêng bạn.</p>
           <div className="hero-actions"><Link className="button-primary" to="/home">Bắt đầu khám phá <ArrowRight size={18} /></Link><a className="hero-secondary" href="#characters">Gặp gỡ nhân vật <ArrowUpRight size={18} /></a></div>
-          <div className="hero-footnote"><BookOpen size={17} /><span>Học theo lớp 6–9</span><i /><span>Khám phá qua câu chuyện</span></div>
+          <div className="hero-footnote"><BookOpen size={17} /><span>Học theo lớp 6–12</span><i /><span>Khám phá qua câu chuyện</span></div>
         </div>
         <div className="heritage-gallery">
           <div className="gallery-outline" aria-hidden="true" />

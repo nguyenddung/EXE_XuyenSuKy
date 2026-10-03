@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "XuyenSuKi chunk (1 dòng của chunks/*.jsonl)",
+  "type": "object",
+  "required": [
+    "chunk_id",
+    "grade",
+    "subject",
+    "chapter",
+    "lesson_number",
+    "lesson_title",
+    "section_index",
+    "section_title",
+    "content_type",
+    "content_types",
+    "page_start",
+    "page_end",
+    "book",
+    "book_series",
+    "publisher",
+    "source_pdf",
+    "text_source",
+    "open_flags",
+    "text"
+  ],
+  "properties": {
+    "chunk_id": {
+      "type": "string",
+      "pattern": "^LS\\d{1,2}_B\\d{2}_C\\d{3}$"
+    },
+    "grade": {
+      "type": "integer",
+      "minimum": 6,
+      "maximum": 12
+    },
+    "subject": {
+      "const": "history"
+    },
+    "chapter": {
+      "type": "string"
+    },
+    "lesson_number": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "lesson_title": {
+      "type": "string"
+    },
+    "section_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "section_title": {
+      "type": "string"
+    },
+    "content_type": {
+      "enum": [
+        "body",
+        "source",
+        "did_you_know",
+        "question",
+        "exercise",
+        "objectives",
+        "intro",
+        "caption"
+      ]
+    },
+    "content_types": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "body",
+          "source",
+          "did_you_know",
+          "question",
+          "exercise",
+          "objectives",
+          "intro",
+          "caption"
+        ]
+      },
+      "minItems": 1
+    },
+    "page_start": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "page_end": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "book": {
+      "type": "string"
+    },
+    "book_series": {
+      "type": "string"
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "source_pdf": {
+      "type": "string"
+    },
+    "text_source": {
+      "enum": [
+        "pdf_text_layer",
+        "ocr"
+      ]
+    },
+    "open_flags": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

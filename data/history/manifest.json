@@ -1,0 +1,169 @@
+{
+  "name": "XuyenSuKi - Lịch sử Việt Nam lớp 6-12",
+  "version": "1.0.0",
+  "created": "2026-10-03",
+  "license_note": "Nội dung SGK thuộc bản quyền NXB Giáo dục Việt Nam; chỉ dùng nội bộ cho học tập / nghiên cứu.",
+  "language": "vi",
+  "subject": "history",
+  "chunking": {
+    "chunk_size": 800,
+    "chunk_overlap": 150,
+    "unit": "characters"
+  },
+  "totals": {
+    "books": 7,
+    "lessons": 130,
+    "sections": 752,
+    "chunks": 2708,
+    "chunk_chars_avg": 431,
+    "chunk_chars_max": 867
+  },
+  "by_grade": {
+    "6": {
+      "chapters": 6,
+      "lessons": 21,
+      "chunks": 288
+    },
+    "7": {
+      "chapters": 6,
+      "lessons": 23,
+      "chunks": 383
+    },
+    "8": {
+      "chapters": 8,
+      "lessons": 21,
+      "chunks": 411
+    },
+    "9": {
+      "chapters": 7,
+      "lessons": 22,
+      "chunks": 505
+    },
+    "10": {
+      "chapters": 7,
+      "lessons": 13,
+      "chunks": 358
+    },
+    "11": {
+      "chapters": 6,
+      "lessons": 13,
+      "chunks": 324
+    },
+    "12": {
+      "chapters": 6,
+      "lessons": 17,
+      "chunks": 439
+    }
+  },
+  "sources": [
+    {
+      "source_pdf": "lich-su-va-dia-li-6.pdf",
+      "grade": 6,
+      "book": "Lịch sử và Địa lí 6 (Phần Lịch sử)",
+      "book_series": "Kết nối tri thức với cuộc sống"
+    },
+    {
+      "source_pdf": "lich-su-va-dia-li-7.pdf",
+      "grade": 7,
+      "book": "Lịch sử và Địa lí 7 (Phần Lịch sử)",
+      "book_series": "Chân trời sáng tạo"
+    },
+    {
+      "source_pdf": "lich-su-va-dia-li-8.pdf",
+      "grade": 8,
+      "book": "Lịch sử và Địa lí 8 (Phần Lịch sử)",
+      "book_series": "Kết nối tri thức với cuộc sống"
+    },
+    {
+      "source_pdf": "lich-su-va-dia-li-9.pdf",
+      "grade": 9,
+      "book": "Lịch sử và Địa lí 9 (Phần Lịch sử)",
+      "book_series": "Kết nối tri thức với cuộc sống"
+    },
+    {
+      "source_pdf": "lich-su-10.pdf",
+      "grade": 10,
+      "book": "Lịch sử 10",
+      "book_series": "Kết nối tri thức với cuộc sống"
+    },
+    {
+      "source_pdf": "lich-su-11.pdf",
+      "grade": 11,
+      "book": "Lịch sử 11",
+      "book_series": "Kết nối tri thức với cuộc sống"
+    },
+    {
+      "source_pdf": "lich-su-12.pdf",
+      "grade": 12,
+      "book": "Lịch sử 12",
+      "book_series": "Kết nối tri thức với cuộc sống"
+    }
+  ],
+  "verification_status": "PASSED",
+  "content_types": {
+    "body": 1572,
+    "question": 452,
+    "objectives": 133,
+    "intro": 117,
+    "did_you_know": 169,
+    "exercise": 132,
+    "source": 108,
+    "caption": 25
+  },
+  "text_quality": {
+    "lich-su-10": {
+      "qa_checked": true,
+      "flagged_lines": 667,
+      "auto_fixed_lines": 0,
+      "needs_review": 384,
+      "human_reviewed": 384,
+      "open_flags": 0
+    },
+    "lich-su-11": {
+      "qa_checked": true,
+      "flagged_lines": 821,
+      "auto_fixed_lines": 0,
+      "needs_review": 426,
+      "human_reviewed": 426,
+      "open_flags": 0
+    },
+    "lich-su-12": {
+      "qa_checked": true,
+      "flagged_lines": 866,
+      "auto_fixed_lines": 0,
+      "needs_review": 371,
+      "human_reviewed": 371,
+      "open_flags": 0
+    },
+    "lich-su-va-dia-li-6": {
+      "qa_checked": true,
+      "flagged_lines": 857,
+      "auto_fixed_lines": 0,
+      "needs_review": 451,
+      "human_reviewed": 451,
+      "open_flags": 0
+    },
+    "lich-su-va-dia-li-7": {
+      "qa_checked": true,
+      "flagged_lines": 964,
+      "auto_fixed_lines": 0,
+      "needs_review": 589,
+      "human_reviewed": 589,
+      "open_flags": 0
+    },
+    "lich-su-va-dia-li-8": {
+      "qa_checked": true,
+      "flagged_lines": 917,
+      "auto_fixed_lines": 0,
+      "needs_review": 592,
+      "human_reviewed": 592,
+      "open_flags": 0
+    }
+  },
+  "qa": {
+    "all_flagged_lines_reviewed": true,
+    "needs_review_total": 2813,
+    "human_reviewed_total": 2813,
+    "integrity_passed": true
+  }
+}

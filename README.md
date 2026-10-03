@@ -1,15 +1,15 @@
-# Xuyên Sử Kí — MVP Homepage
+# Xuyên Sử Kí
 
-Trang chủ demo cho nền tảng học Lịch sử Việt Nam dành cho học sinh THCS lớp 6–9. Dự án dùng React, TypeScript, Vite, Tailwind CSS, React Router và Lucide React. Toàn bộ nội dung hiện là dữ liệu mẫu, không có backend hay API AI.
+Nền tảng học Lịch sử lớp 6–12 dùng React, TypeScript, Vite và backend Node.js. Thư viện mặc định đọc dataset SGK thật qua API: 7 sách, 130 bài, 752 mục và 2.708 chunk. Minigame, bài học thử, đăng nhập và bảng xếp hạng vẫn là demo; chatbot nhân vật chưa dùng AI.
 
 **Bản demo:** [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app)
 
 ## Chạy dự án
 
-Yêu cầu Node.js 18 trở lên và npm.
+Yêu cầu Node.js 24 và npm.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -29,7 +29,7 @@ Production: [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app).
 [GitHub Actions](.github/workflows/deploy-vercel.yml) tự chạy khi push lên `main` hoặc mở/cập nhật pull request vào `main`:
 
 1. Cài dependencies từ lockfile bằng `npm ci`.
-2. Cài Chromium và chạy toàn bộ kiểm thử Playwright cho minigame, thư viện và sổ tay.
+2. Xác minh SHA-256/schema dataset, chạy kiểm thử API, cài Chromium và chạy Playwright cho thư viện SGK, minigame, bài học thử và sổ tay.
 3. Kiểm tra TypeScript và build Vite bằng `npm run build`.
 4. Chỉ với `main` và sau khi mọi kiểm tra thành công: gọi Vercel Deploy Hook, chờ trạng thái deployment thành công từ Vercel trên đúng commit. Pull request chỉ kiểm thử/build.
 
@@ -46,6 +46,45 @@ gh secret set VERCEL_DEPLOY_HOOK -R nguyenddung/EXE_XuyenSuKy
 ```
 
 Thu hồi hook cũ trong Vercel sau khi thay secret. Các variables `VERCEL_ORG_ID` và `VERCEL_PROJECT_ID` có thể giữ để sử dụng CLI thủ công, workflow hiện tại không cần chúng.
+
+## Backend dataset
+
+`npm run dev` và `npm run preview` phục vụ cả frontend và API cùng origin. Chạy API độc lập bằng `npm run dev:backend`, mặc định tại `http://127.0.0.1:3001/api/health`.
+
+Backend đọc snapshot trong `data/history`, nạp một lần mỗi tiến trình và xác minh checksum, JSON Schema 2020-12, số lượng, ID duy nhất và tham chiếu chunk/bài. Nếu dữ liệu lỗi, API trả `503 DATASET_UNAVAILABLE`; giao diện cho phép thử lại hoặc chọn **Bài học thử**. API chỉ đọc, không sửa dataset gốc.
+
+Để local đọc trực tiếp thư mục đã cung cấp, sao chép `.env.example` thành `.env.local`, thêm:
+
+```dotenv
+DATASET_PATH=D:/FALL2026/EXE/dataset/dataset
+```
+
+Khởi động lại server sau khi cập nhật dữ liệu. Trên Vercel dùng snapshot đi kèm Function, vì đường dẫn ổ D: chỉ tồn tại trên máy local. Đồng bộ snapshot mới trước khi commit/push:
+
+```powershell
+npm run import:dataset -- "D:\FALL2026\EXE\dataset\dataset"
+npm run check:dataset
+npm run test:backend
+```
+
+| Endpoint GET | Chức năng |
+|---|---|
+| `/api/health` | Trạng thái và thống kê dataset |
+| `/api/metadata` | Phiên bản, lớp, chương, số bài và bài gợi ý |
+| `/api/lessons?grade=7&q=bach%20dang&page=1&limit=6` | Tìm bài không dấu, lọc lớp, phân trang |
+| `/api/lessons?chapter=...&ids=LS7_B01,LS12_B01` | Lọc chương và bộ bài đã lưu |
+| `/api/lessons/LS7_B01` | Nội dung các mục và nguồn bài |
+| `/api/lessons/LS7_B01/chunks?type=body` | Chunk theo bài và loại nội dung |
+| `/api/search?q=bach%20dang&grade=7` | Đoạn tư liệu phù hợp, kèm nguồn và trang chính xác |
+| `/api/chunks/LS7_B01_C001` | Tra cứu một chunk theo ID |
+
+Phân trang hỗ trợ `page >= 1`, `limit` từ 1–50. `grade` nhận 6–12; `q` tối đa 200 ký tự. `ids`/`excludeIds` lọc theo danh sách ID bài. Không có đáp án trắc nghiệm trong dataset, vì vậy bài SGK dùng đánh dấu đã đọc, tự đánh giá và ghi chú; không tự chấm hay tạo đáp án giả.
+
+Tra cứu chunk dùng từ khóa chuẩn hóa tiếng Việt, yêu cầu khớp mọi từ, ưu tiên khớp cụm từ và tên mục. Chỉ tìm `body`, `source`, `did_you_know`, `caption`; không coi câu hỏi hay bài tập là câu trả lời. Đây là tìm kiếm văn bản, chưa phải vector search hoặc chatbot RAG.
+
+Giữ nguyên nội dung, metadata và README của dataset. Người cung cấp đã xác nhận có quyền công bố trong phiên làm việc ngày 03/10/2026. Trích dẫn gồm sách, bộ sách, NXB và **trang trong file PDF**; PDF gốc không nằm trong dataset nên không có link tải PDF. Ghi chú/tiến độ vẫn lưu trên trình duyệt, chưa có tài khoản hay cơ sở dữ liệu người dùng trên server.
+
+Backend triển khai qua [Vercel Node.js Functions](https://vercel.com/docs/functions/runtimes/node-js), validation dùng [Ajv draft 2020-12](https://ajv.js.org/json-schema.html#draft-2020-12).
 
 
 ## Cấu trúc

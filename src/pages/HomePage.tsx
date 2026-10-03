@@ -1,5 +1,6 @@
 import { LearningHub } from '../components/LearningHub'
 import { useLearningJournal, streak } from '../hooks/useLearningJournal'
+import { useHistoryDataset } from '../hooks/useHistoryDataset'
 import { MiniGameModal } from '../components/MiniGameModal'
 import type { GameId } from '../data/minigames'
 import { useEffect, useState } from 'react'
@@ -33,6 +34,15 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }, [landing])
   const { session, login, logout, selectGrade, reset, completeActivity } = useDemoSession()
   const learning = useLearningJournal()
+  const dataset = useHistoryDataset()
+  const [librarySource, setLibrarySource] = useState<'dataset' | 'demo'>(() => {
+    try { return sessionStorage.getItem('xuyen-su-ky-library-source') === 'demo' ? 'demo' : 'dataset' } catch { return 'dataset' }
+  })
+  useEffect(() => { try { sessionStorage.setItem('xuyen-su-ky-library-source', librarySource) } catch { /* Reading still works without storage. */ } }, [librarySource])
+  const [requestedLessonId, setRequestedLessonId] = useState<string | null>(null)
+  const recommendation = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.recommendation
+  const gradeRead = learning.journal.read.filter((id) => id.startsWith(`LS${session.grade}_B`)).length
+  const gradeCount = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.lessonCount || 1
   function completeLearning(id: string, reward: number) {
     completeActivity(id, reward)
     learning.record(id, id.startsWith('minigame-') ? 'game' : 'quiz')
@@ -91,11 +101,17 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
 
         {!landing && <ContinueJourney
           grade={session.grade}
-          completed={session.completedActivities.includes(`lesson-${session.grade}`)}
-          onContinue={() => openActivity(lessons[session.grade])}
+          completed={librarySource === 'dataset' ? Boolean(recommendation && learning.journal.read.includes(recommendation.id)) : session.completedActivities.includes(`lesson-${Math.min(session.grade, 9)}`)}
+          lesson={librarySource === 'dataset' ? recommendation : undefined}
+          readingProgress={librarySource === 'dataset' ? Math.min(100, Math.round(gradeRead / gradeCount * 100)) : undefined}
+          onContinue={() => {
+            if (librarySource === 'dataset' && recommendation) setRequestedLessonId(recommendation.id)
+            else if (librarySource === 'demo') openActivity(lessons[Math.min(session.grade, 9)])
+            else document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' })
+          }}
         />}
-        <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} />
-        <LearningHub learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} />
+        <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />
+        <LearningHub learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />
         <HistoryTimeline />
         <CharacterSection onChat={setActiveCharacter} />
         <ChallengeSection completedActivities={session.completedActivities} onTry={setActiveGame} />
