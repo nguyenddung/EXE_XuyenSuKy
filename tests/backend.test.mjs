@@ -7,6 +7,7 @@ import { resolve, sep } from 'node:path'
 import { createHash } from 'node:crypto'
 import { defaultDatasetPath, loadDataset, normalize } from '../server/dataset.mjs'
 import { handleApi } from '../server/handler.mjs'
+import { characterIndex, characterReply } from '../server/characters.mjs'
 
 let dataset, server, base
 before(async () => {
@@ -17,6 +18,84 @@ before(async () => {
 })
 after(async () => { await new Promise((done) => server.close(done)) })
 const get = async (path) => { const response = await fetch(`${base}${path}`); return { response, body: await response.json() } }
+const chat = async (id, body) => {
+  const response = await fetch(`${base}characters/${id}/chat`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+  return { response, body: await response.json() }
+}
+
+test('12 character profiles have real references, aliases, grade filters and lesson links', async () => {
+  const { body } = await get('characters')
+  assert.equal(body.total, 12)
+  for (const profile of body.items) {
+    assert.ok(profile.lessonCount > 0 && profile.chunkCount > 0)
+    assert.ok(profile.grades.every((grade) => grade >= 6 && grade <= 12))
+    const detail = (await get(`characters/${profile.id}`)).body
+    assert.equal(detail.lessons.length, profile.lessonCount)
+    assert.ok(detail.lessons.every((lesson) => dataset.byId.has(lesson.id)))
+    assert.ok(profile.aliases.includes(profile.name))
+  }
+  assert.equal((await get('characters?q=ly%20thai%20to')).body.items[0].id, 'ly-cong-uan')
+  assert.ok((await get('characters?grade=6')).body.items.every((profile) => profile.grades.includes(6)))
+  assert.equal((await get('characters?grade=13')).response.status, 400)
+  assert.equal((await get('characters/unknown')).response.status, 404)
+})
+
+test('popular character questions retrieve correct dates and distinguish the two Bach Dang battles', () => {
+  const expectations = ['1288', '1075', '1789', 'nam 40', '938', '1010', '1418', 'lanh dao', '1911', '1954', 'truc lam', '248']
+  characterIndex(dataset).forEach(({ profile }, index) => {
+    const reply = characterReply(dataset, profile.id, profile.suggestions[0])
+    assert.equal(reply.kind, 'grounded', profile.id)
+    assert.ok(normalize(reply.sources[0].quote).includes(expectations[index]), `${profile.id}: ${reply.sources[0].quote}`)
+    if (profile.id === 'tran-hung-dao') assert.ok(!reply.sources[0].quote.includes('938'))
+    if (profile.id === 'ngo-quyen') assert.ok(!reply.sources[0].quote.includes('1288'))
+  })
+})
+
+test('every suggested question cites an exact source passage and the original PDF page', () => {
+  for (const { profile } of characterIndex(dataset)) {
+    for (const question of profile.suggestions) {
+      const reply = characterReply(dataset, profile.id, question)
+      assert.equal(reply.kind, 'grounded', `${profile.id}: ${question}`)
+      assert.ok(reply.sources.length > 0)
+      for (const source of reply.sources) {
+        const original = dataset.chunksById.get(source.id)
+        assert.ok(original.text.includes(source.quote.replace(/…$/, '')), source.id)
+        assert.equal(source.source.pageStart, original.page_start)
+        assert.ok(dataset.byId.has(source.lessonId))
+        assert.ok(!['question', 'exercise', 'objectives', 'intro'].includes(source.contentType))
+      }
+    }
+  }
+})
+
+test('follow-up uses the prior topic; unknown facts and out-of-scope questions do not invent answers', async () => {
+  const first = (await chat('ly-cong-uan', { message: 'Lý Công Uẩn dời đô năm nào?' })).body
+  const followup = (await chat('ly-cong-uan', { message: 'Vì sao?', history: [{ role: 'user', content: 'Lý Công Uẩn dời đô năm nào?' }, { role: 'assistant', content: first.answer }] })).body
+  assert.equal(followup.kind, 'grounded')
+  assert.match(followup.answer, /rồng cuộn hổ ngồi/)
+  assert.notEqual(first.answer, followup.answer)
+  for (const question of ['Hôm nay thời tiết thế nào?', 'Bạn thích ăn pizza không?', '2 + 2 bằng mấy?', 'Ngô Quyền thắng Bạch Đằng năm 2026?', 'Vì sao?']) {
+    const reply = characterReply(dataset, 'ngo-quyen', question)
+    assert.equal(reply.kind, 'not_found', question)
+    assert.deepEqual(reply.sources, [])
+  }
+  assert.equal(characterReply(dataset, 'ngo-quyen', 'Xin chào').kind, 'greeting')
+})
+
+test('chat HTTP validation, payload bounds and cache policy work in direct and Vercel routes', async () => {
+  const valid = await chat('ngo-quyen', { message: 'Bạch Đằng diễn ra năm nào?' })
+  assert.equal(valid.response.status, 200)
+  assert.equal(valid.response.headers.get('cache-control'), 'no-store')
+  const rewrite = await fetch(`${base}dataset?route=characters/ngo-quyen/chat`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'Bạch Đằng diễn ra năm nào?' }) })
+  assert.deepEqual(await rewrite.json(), valid.body)
+  for (const body of [{}, { message: '' }, { message: 'x'.repeat(1001) }, { message: 'x', history: [{ role: 'system', content: 'x' }] }, { message: 'x', history: Array(9).fill({ role: 'user', content: 'x' }) }, { message: 'x', history: [{ role: 'user', content: 'x'.repeat(2001) }] }]) assert.equal((await chat('ngo-quyen', body)).response.status, 400)
+  assert.equal((await chat('missing', { message: 'x' })).response.status, 404)
+  assert.equal((await get('characters/ngo-quyen/chat')).response.status, 405)
+  for (const [headers, body, expected] of [[{}, 'hello', 415], [{ 'Content-Type': 'application/json' }, '{bad', 400], [{ 'Content-Type': 'application/json' }, JSON.stringify({ message: 'x'.repeat(17000) }), 413]]) {
+    const response = await fetch(`${base}characters/ngo-quyen/chat`, { method: 'POST', headers, body })
+    assert.equal(response.status, expected)
+  }
+})
 
 test('real dataset passes integrity, schema, totals and grade references', () => {
   assert.equal(dataset.metadata.totals.lessons, 130)

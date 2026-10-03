@@ -8,6 +8,7 @@ export interface SchoolClass {
 }
 
 export interface Character {
+  aliases: string[]
   id: string
   name: string
   period: string
@@ -15,6 +16,13 @@ export interface Character {
   avatar: string
   tone: 'teal' | 'gold' | 'coral' | 'violet'
   greeting: string
+  image: string
+  category: string
+  topics: string[]
+  suggestions: string[]
+  grades: number[]
+  lessonCount: number
+  chunkCount: number
 }
 
 export interface TimelineEvent {

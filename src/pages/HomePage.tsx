@@ -49,6 +49,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }
   const [activeGame, setActiveGame] = useState<GameId | null>(null)
   const [activeCharacter, setActiveCharacter] = useState<Character | null>(null)
+  const [characterCount, setCharacterCount] = useState(0)
   const [activeActivity, setActiveActivity] = useState<DemoActivity | null>(null)
   const [pendingActivity, setPendingActivity] = useState<DemoActivity | null>(null)
   const [loginOpen, setLoginOpen] = useState(false)
@@ -97,7 +98,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         }}
       />
       <main>
-        {landing ? <Hero /> : <HomeWelcome session={session} />}
+        {landing ? <Hero /> : <HomeWelcome session={session} characterCount={characterCount} />}
 
         {!landing && <ContinueJourney
           grade={session.grade}
@@ -113,7 +114,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />
         <LearningHub learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />
         <HistoryTimeline />
-        <CharacterSection onChat={setActiveCharacter} />
+        <CharacterSection onChat={setActiveCharacter} onLoaded={setCharacterCount} />
         <ChallengeSection completedActivities={session.completedActivities} onTry={setActiveGame} />
         {!landing && <UserProgress
           session={session}
@@ -132,7 +133,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       <Footer />
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} />}
+      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}

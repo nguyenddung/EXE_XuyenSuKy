@@ -10,3 +10,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><
 import './minigames.css'
 
 import './learning.css'
+import './characters.css'

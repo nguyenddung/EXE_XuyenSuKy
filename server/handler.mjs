@@ -1,4 +1,5 @@
 import { chunkResponse, getDataset, lessonId, normalize, searchChunks } from './dataset.mjs'
+import { characterIndex, characterReply, listCharacters } from './characters.mjs'
 
 class HttpError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code }
@@ -23,31 +24,63 @@ function ids(params, key) {
   if (values.some((id) => !/^LS\d{1,2}_B\d{2}$/.test(id))) badRequest(`${key} contains an invalid lesson ID.`)
   return new Set(values)
 }
-function send(res, status, data, head) {
+function send(res, status, data, head, cache = true) {
   res.statusCode = status
   res.setHeader('Content-Type', 'application/json; charset=utf-8')
   res.setHeader('X-Content-Type-Options', 'nosniff')
-  res.setHeader('Cache-Control', status === 200 ? 'public, max-age=60, s-maxage=300' : 'no-store')
+  res.setHeader('Cache-Control', status === 200 && cache ? 'public, max-age=60, s-maxage=300' : 'no-store')
   res.end(head ? undefined : JSON.stringify(data))
+}
+async function readChatBody(req) {
+  if (!req.headers['content-type']?.toLowerCase().startsWith('application/json')) throw new HttpError(415, 'UNSUPPORTED_MEDIA_TYPE', 'Use application/json.')
+  if (Number(req.headers['content-length']) > 16000) { req.resume(); throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Chat payload is too large.') }
+  let body = req.body
+  if (body === undefined) {
+    const buffers = []
+    let length = 0
+    for await (const chunk of req) { length += chunk.length; if (length <= 16000) buffers.push(Buffer.from(chunk)) }
+    if (length > 16000) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Chat payload is too large.')
+    body = Buffer.concat(buffers).toString('utf8')
+  }
+  if (typeof body === 'string') {
+    if (Buffer.byteLength(body) > 16000) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Chat payload is too large.')
+    try { body = JSON.parse(body) } catch { throw new HttpError(400, 'INVALID_BODY', 'Invalid JSON body.') }
+  }
+  if (!body || typeof body !== 'object' || Array.isArray(body) || typeof body.message !== 'string' || !body.message.trim() || body.message.length > 1000) throw new HttpError(400, 'INVALID_BODY', 'message must contain 1–1000 characters.')
+  const history = body.history ?? []
+  if (!Array.isArray(history) || history.length > 8 || history.some((turn) => !turn || !['user', 'assistant'].includes(turn.role) || typeof turn.content !== 'string' || turn.content.length > 2000)) throw new HttpError(400, 'INVALID_BODY', 'Invalid conversation history.')
+  return { message: body.message.trim(), history }
 }
 
 export async function handleApi(req, res, datasetProvider = getDataset) {
   const head = req.method === 'HEAD'
   try {
-    if (!['GET', 'HEAD'].includes(req.method)) {
-      res.setHeader('Allow', 'GET, HEAD')
-      throw new HttpError(405, 'METHOD_NOT_ALLOWED', 'This dataset API is read-only.')
-    }
     const url = new URL(req.url, 'http://localhost')
     const route = (url.searchParams.get('route') || url.pathname.replace(/^\/api\/?/, '')).replace(/^\/+|\/+$/g, '')
     const parts = route.split('/')
-    if (!['health', 'metadata', 'lessons', 'search', 'chunks'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    const chat = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'chat'
+    if (chat ? req.method !== 'POST' : !['GET', 'HEAD'].includes(req.method)) {
+      res.setHeader('Allow', chat ? 'POST' : 'GET, HEAD')
+      throw new HttpError(405, 'METHOD_NOT_ALLOWED', chat ? 'Use POST for character chat.' : 'This dataset endpoint is read-only.')
+    }
+    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     const grade = integer(url.searchParams, 'grade', undefined, 6, 12)
     const query = url.searchParams.get('q') || ''
     if (query.length > 200) badRequest('q must have at most 200 characters.')
     const data = await datasetProvider()
     let result
-    if (route === 'health') result = { status: 'ok', datasetVersion: data.metadata.version, totals: data.metadata.totals }
+    if (chat) {
+      if (!characterIndex(data).some((entry) => entry.profile.id === parts[1])) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
+      const body = await readChatBody(req)
+      result = characterReply(data, parts[1], body.message, body.history)
+    }
+    else if (route === 'characters') { const items = listCharacters(data, grade, query); result = { items, total: items.length, datasetVersion: data.metadata.version, mode: 'textbook' } }
+    else if (parts[0] === 'characters' && parts.length === 2) {
+      const entry = characterIndex(data).find((item) => item.profile.id === parts[1])
+      if (!entry) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
+      result = { ...entry.public, lessons: entry.lessons }
+    }
+    else if (route === 'health') result = { status: 'ok', datasetVersion: data.metadata.version, totals: data.metadata.totals }
     else if (route === 'metadata') result = data.metadata
     else if (route === 'lessons') {
       const q = normalize(query)
@@ -75,7 +108,7 @@ export async function handleApi(req, res, datasetProvider = getDataset) {
       result = chunkResponse(chunk)
     }
     if (!result) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
-    send(res, 200, result, head)
+    send(res, 200, result, head, !chat)
   } catch (error) {
     if (error instanceof HttpError) send(res, error.status, { error: { code: error.code, message: error.message } }, head)
     else {
