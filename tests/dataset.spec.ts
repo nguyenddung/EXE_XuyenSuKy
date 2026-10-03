@@ -28,7 +28,7 @@ test('real dataset reader keeps sources, notes, read progress and bookmarks afte
   await page.getByRole('button', { name: 'Đánh dấu đã đọc' }).click()
   await page.getByRole('dialog').getByRole('button', { name: 'Cần đọc lại', exact: true }).click()
   await page.keyboard.press('Escape')
-  await expect(page.locator('.journey-progress')).toContainText('4%')
+  await expect(page.getByRole('progressbar', { name: 'Tỉ lệ bài đã đọc của lớp hiện tại' })).toContainText('4%')
   await page.reload()
   await page.getByRole('button', { name: 'Đã lưu', exact: true }).click()
   await expect(page.locator('.dataset-card')).toHaveCount(1)

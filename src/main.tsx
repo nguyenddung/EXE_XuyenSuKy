@@ -11,3 +11,4 @@ import './minigames.css'
 
 import './learning.css'
 import './characters.css'
+import './dashboard.css'

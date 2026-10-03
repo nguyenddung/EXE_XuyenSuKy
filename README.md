@@ -4,6 +4,8 @@ Nền tảng học Lịch sử lớp 6–12 dùng React, TypeScript, Vite và ba
 
 **Bản demo:** [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app)
 
+Trang `/home` dùng dashboard theo concept học tập: sidebar, tìm kiếm SGK, banner tiếp tục học, thẻ giai đoạn, nhiệm vụ, bài đề xuất, tiến độ, nhân vật nổi bật và bảng xếp hạng demo. Các thẻ giai đoạn/bài đề xuất mở bài SGK thật; ô tìm kiếm trả đoạn tư liệu có nguồn; quiz, minigame và chat mở luồng tương ứng. Chỉ số tiến độ lấy từ nhật ký học trên trình duyệt. Minh họa mới trong `public/images/dashboard` là tranh AI tưởng tượng, đã tối ưu WebP.
+
 ## Chạy dự án
 
 Yêu cầu Node.js 24 và npm.
