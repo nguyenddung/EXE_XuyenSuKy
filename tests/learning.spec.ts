@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
-async function openDemo(page: Page, route = '/home') { await page.goto(route); await page.getByRole('button', { name: 'Bài học thử', exact: true }).click() }
+async function openDemo(page: Page) { await page.goto('/home'); await page.getByRole('button', { name: 'Bài học thử', exact: true }).click() }
 const journalKey = 'xuyen-su-ky-journal-v1'
 test('library search, grade filters, saved articles and empty state', async ({page})=>{
  await openDemo(page); await expect(page.locator('.library-card')).toHaveCount(6)
@@ -28,7 +28,7 @@ test('daily counts reset at Vietnam midnight and streak carries over',async({pag
 })
 test('mobile reader focus, no overflow, malformed storage and unavailable storage',async({page})=>{
  await page.setViewportSize({width:390,height:844}); await page.addInitScript(()=>localStorage.setItem('xuyen-su-ky-journal-v1','{broken'))
- const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await openDemo(page, '/');await page.locator('.library-open').first().click();await expect(page.locator('#reader-title')).toBeFocused();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(await page.locator('.lesson-reader').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);await page.keyboard.press('Escape');await expect(page.locator('.library-open').first()).toBeFocused();expect(errors).toEqual([])
+ const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));await openDemo(page);await page.locator('.library-open').first().click();await expect(page.locator('#reader-title')).toBeFocused();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(await page.locator('.lesson-reader').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);await page.keyboard.press('Escape');await expect(page.locator('.library-open').first()).toBeFocused();expect(errors).toEqual([])
  await page.evaluate(()=>{Storage.prototype.setItem=function(){throw new DOMException('Full','QuotaExceededError')}});await page.locator('.library-open').first().click();await page.getByLabel('Sổ tay của bạn').fill('Ghi chú vẫn có trong phiên');await expect(page.locator('.reader-notebook small')).toContainText('Chưa lưu được');expect(errors).toEqual([])
 })
 

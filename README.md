@@ -102,7 +102,7 @@ src/
   components/  Các section và thành phần giao diện
   data/        Dữ liệu mẫu cho lớp học, nhân vật, timeline, thử thách, bảng xếp hạng
   hooks/       Trạng thái demo và lưu trữ trên trình duyệt
-  pages/       HomePage (landing ở `/`, trang học ở `/home`)
+  pages/       HomePage (landing công khai ở `/`, trang học ở `/home` cần đăng nhập hoặc chế độ học thử), LoginPage (`/dang-nhap`)
   types/       Các kiểu dữ liệu chung
   App.tsx      React Router
   main.tsx     Điểm vào ứng dụng

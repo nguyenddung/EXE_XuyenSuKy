@@ -10,9 +10,9 @@ import { ImageCredits } from '../components/ImageCredits'
 import type { Character } from '../types'
 import type { DemoActivity } from '../data/demo'
 import { demoAccount } from '../data/demo'
-import { useDemoSession } from '../hooks/useDemoSession'
+import { hasAppAccess, useDemoSession } from '../hooks/useDemoSession'
 import { Navbar } from '../components/Navbar'
-import { Hero } from '../components/Hero'
+import { Hero, LandingCta } from '../components/Hero'
 import { ClassSelection } from '../components/ClassSelection'
 import { HistoryTimeline } from '../components/HistoryTimeline'
 import { CharacterSection } from '../components/CharacterSection'
@@ -31,7 +31,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     if (target) document.getElementById(target)?.scrollIntoView()
     else window.scrollTo(0, 0)
   }, [landing])
-  const { session, login, logout, selectGrade, reset, completeActivity } = useDemoSession()
+  const { session, login, startGuest, logout, selectGrade, reset, completeActivity } = useDemoSession()
+  const authenticated = hasAppAccess(session)
   const learning = useLearningJournal()
   const dataset = useHistoryDataset()
   const [librarySource, setLibrarySource] = useState<'dataset' | 'demo'>(() => {
@@ -80,13 +81,21 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     setLoginOpen(false)
     setNotice(`Chào mừng ${demoAccount.name} trở lại!`)
     if (pendingActivity) { setActiveActivity(pendingActivity); setPendingActivity(null) }
-    if (landing) navigate('/home')
     return true
+  }
+
+  function handleLogout() {
+    logout()
+    navigate('/', { replace: true })
+  }
+
+  // Lessons live in the learning app; from the landing page they go through sign-in first.
+  function openLessonFromLanding(lessonId: string) {
+    navigate('/home', { state: { lessonId } })
   }
 
   function handleSelectGrade(grade: number) {
     selectGrade(grade)
-    if (landing) { navigate('/home'); return }
     document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' })
     setNotice(`Đã chọn Lớp ${grade}. Hãy mở bài học để khám phá!`)
   }
@@ -97,8 +106,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }
 
   const sections = <>
-        <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />
-        <LearningHub learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />
+        {!landing && <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />}
+        {!landing && <LearningHub learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />}
         <HistoryTimeline />
         <CharacterSection onChat={setActiveCharacter} />
         <ChallengeSection completedActivities={session.completedActivities} onTry={setActiveGame} />
@@ -117,10 +126,10 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       </>
 
   return (
-    <div className={landing ? 'landing-page' : 'learning-page'}>
+    <div className={landing ? 'landing-page' : 'learning-page'} id={landing ? 'top' : undefined}>
       {landing ? <>
-        <Navbar loggedIn={session.loggedIn} onLogin={() => setLoginOpen(true)} onLogout={() => { logout(); setNotice('Bạn đã đăng xuất. Tiến độ demo vẫn được lưu trên trình duyệt này.') }} />
-        <main><Hero />{sections}</main><ImageCredits /><Footer />
+        <Navbar session={session} onLogout={() => { logout(); setNotice('Bạn đã đăng xuất. Tiến độ học thử vẫn được lưu trên trình duyệt này.') }} />
+        <main><Hero authenticated={authenticated} />{sections}<LandingCta authenticated={authenticated} onTryGuest={() => { startGuest(); navigate('/home') }} /></main><ImageCredits /><Footer />
       </> : <Dashboard
         session={session}
         readCount={gradeRead}
@@ -128,7 +137,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         recommendedLessonId={recommendation?.id}
         learningStreak={streak(learning.journal.events)}
         onLogin={() => setLoginOpen(true)}
-        onLogout={() => { logout(); setNotice('Bạn đã đăng xuất. Tiến độ demo vẫn được lưu trên trình duyệt này.') }}
+        onLogout={handleLogout}
         onOpenLesson={(id) => { setLibrarySource('dataset'); setRequestedLessonId(id) }}
         onSelectGrade={selectGrade}
         onQuiz={openActivity}
@@ -137,7 +146,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       >{sections}<ImageCredits /><Footer /></Dashboard>}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
+      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}

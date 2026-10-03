@@ -30,7 +30,7 @@ test('landing shares the dashboard look and its era cards open the lesson on /ho
 test('landing fits mobile without horizontal overflow', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/')
-  await expect(page.getByRole('link', { name: /Bắt đầu khám phá/ })).toBeVisible()
+  await expect(page.locator('.landing-banner .landing-gold-button')).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
 })
 

@@ -19,7 +19,11 @@
 .login-button:hover { background: var(--sky-gold); color: var(--sky-gold-ink); box-shadow: 0 9px 20px #e7a52651; }
 .mobile-menu { border-color: var(--sky-line); }
 .mobile-menu a, .mobile-menu button { color: #33496c; }
-.account-link { color: var(--sky-blue-strong); }
+.account-link { color: var(--sky-ink); }
+.account-link span { background: #ffd7b7; color: #694029; }
+.logout-button { color: var(--sky-muted); }
+.account-link:hover, .logout-button:hover { color: var(--sky-blue-strong); }
+.nav-signin { padding: 0 6px; }
 .site-footer { background: var(--sky-ink); color: #e8eef9; }
 .site-footer .brand-mark { background: #fff; color: #a53c2d; box-shadow: 0 0 0 3px #fff4df inset; }
 .site-footer .brand-text { color: #fff; }
@@ -182,4 +186,67 @@
   .landing-hero-rail { grid-template-columns: 1fr; }
   .section-space { padding-block: 52px; }
   .portrait { height: 335px; }
+}
+
+/* Closing call to action on the landing page */
+.landing-cta { padding: 8px 0 64px; background: #fff; }
+.landing-cta-card { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; overflow: hidden; padding: 34px 36px; border-radius: 18px; background: #173559 url('/images/dashboard/hero.webp') center 40% / cover no-repeat; color: #fff; }
+.landing-cta-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #0f2747f0, #0f2747b3 60%, #0f274766); }
+.landing-cta-card > * { position: relative; }
+.landing-cta-card span { color: #f5dfaa; font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+.landing-cta-card h2 { margin: 8px 0; font-size: clamp(22px, 2.4vw, 30px); font-weight: 800; letter-spacing: -.04em; }
+.landing-cta-card p { max-width: 520px; margin: 0; color: #e8eef9; font-size: 13px; line-height: 1.7; }
+.landing-cta-actions { display: flex; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
+
+/* Guest-mode notice inside the dashboard */
+.dashboard-guest-banner { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; padding: 10px 12px 10px 14px; border: 1px solid #ffe2a6; border-radius: 12px; background: #fff8e6; color: #5b4313; }
+.dashboard-guest-banner > span { display: grid; width: 28px; height: 28px; flex: 0 0 28px; place-items: center; border-radius: 8px; background: #ffe7b0; color: #b86a09; }
+.dashboard-guest-banner p { flex: 1; margin: 0; font-size: 12px; line-height: 1.5; }
+.dashboard-guest-banner button { flex-shrink: 0; min-height: 34px; padding: 0 16px; border-radius: 999px; background: var(--sky-gold); color: var(--sky-gold-ink); font-size: 12px; font-weight: 800; }
+.dashboard-account-avatar.is-guest { background: #e4edf8; color: #2c5c91; }
+.leaderboard-entry.is-me { border-radius: 10px; background: #fff4d9; }
+
+/* Sign-in page: illustrated panel beside the form, the same pairing as the dashboard sidebar */
+.auth-page { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 100vh; background: var(--sky-canvas); }
+.auth-art { position: relative; display: flex; align-items: end; overflow: hidden; background: #173559 url('/images/dashboard/hero.webp') center / cover no-repeat; color: #fff; }
+.auth-art::before { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, #0f2747f2 0%, #0f274799 45%, #0f274722 100%); }
+.auth-art-copy { position: relative; max-width: 480px; padding: 48px; }
+.auth-brand { display: inline-flex; align-items: center; gap: 11px; }
+.auth-brand strong { font-size: 18px; font-weight: 800; letter-spacing: -.06em; }
+.auth-art h2 { margin: 26px 0 18px; font-size: clamp(28px, 3vw, 40px); font-weight: 800; line-height: 1.2; letter-spacing: -.045em; }
+.auth-art ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.auth-art li { display: flex; align-items: center; gap: 12px; color: #e8eef9; font-size: 14px; }
+.auth-art li span { display: grid; width: 32px; height: 32px; flex: 0 0 32px; place-items: center; border-radius: 9px; background: #ffffff24; color: #ffd36b; }
+.auth-art-copy > p { margin: 26px 0 0; color: #f5dfaa; font-size: 13px; font-style: italic; }
+.auth-main { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 40px 24px; }
+.auth-back { display: inline-flex; align-items: center; gap: 6px; width: min(100%, 440px); color: #46617f; font-size: 12px; font-weight: 700; }
+.auth-back:hover { color: var(--sky-blue-strong); }
+.auth-card { width: min(100%, 440px); padding: 32px; border: 1px solid #edf1f5; border-radius: 18px; background: #fff; box-shadow: 0 12px 34px #19416a14; }
+.auth-card h1 { margin: 8px 0; color: var(--sky-ink); font-size: 26px; font-weight: 800; letter-spacing: -.04em; }
+.auth-card > p { margin: 0; color: var(--sky-text); font-size: 13px; line-height: 1.7; }
+.auth-card .login-form input { border-color: #d5e0ee; color: var(--sky-ink); }
+.auth-card .login-form input:focus, .login-modal .login-form input:focus { border-color: #5a9de1; box-shadow: 0 0 0 3px #6ca6e22c; }
+.login-form label { color: #33496c; }
+.demo-credentials { border-color: #d5e0ee; background: var(--sky-canvas); }
+.demo-credentials button { color: var(--sky-blue-strong); }
+.login-symbol { background: var(--sky-blue-soft); color: var(--sky-blue); }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0 14px; color: #99aac1; font-size: 11px; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--sky-line); }
+.auth-guest { width: 100%; min-height: 48px; }
+.auth-card > small { display: block; margin-top: 14px; color: var(--sky-muted); font-size: 11px; line-height: 1.6; }
+@media (max-width: 900px) {
+  .auth-page { grid-template-columns: 1fr; }
+  .auth-art { min-height: 230px; }
+  .auth-art-copy { padding: 28px 20px; }
+  .auth-art h2 { margin: 16px 0 0; font-size: 26px; }
+  .auth-art ul, .auth-art-copy > p { display: none; }
+  .auth-main { justify-content: flex-start; padding: 22px 16px 40px; }
+  .auth-card { padding: 24px 20px; }
+}
+@media (max-width: 680px) {
+  .landing-cta-card { flex-direction: column; align-items: stretch; padding: 26px 20px; }
+  .landing-cta-actions > * { flex: 1 1 auto; }
+  .dashboard-guest-banner { flex-wrap: wrap; }
+  .dashboard-guest-banner p { flex-basis: calc(100% - 44px); }
+  .dashboard-guest-banner button { width: 100%; }
 }
