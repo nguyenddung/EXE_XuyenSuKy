@@ -79,22 +79,34 @@ function candidates(chunk, terms, profile, intent, phrases, intro) {
 }
 
 export function characterReply(dataset, characterId, message, history = []) {
+  return characterRetrieval(dataset, characterId, message, history)?.reply ?? null
+}
+
+export const replyBase = (entry) => ({ characterId: entry.profile.id, mode: 'textbook', suggestions: entry.profile.suggestions, relatedLessons: entry.lessons.slice(0, 3).map(({ id, title, grade }) => ({ id, title, grade })) })
+
+// Lexical retrieval for one question. Besides the textbook reply it exposes what the RAG step reuses:
+// the intent, the chunks ranked by keyword evidence and the character's searchable scope.
+export function characterRetrieval(dataset, characterId, message, history = []) {
   const entry = characterIndex(dataset).find((item) => item.profile.id === characterId)
   if (!entry) return null
   const { profile, related, lessons } = entry
   const q = normalize(message)
-  const base = { characterId, mode: 'textbook', suggestions: profile.suggestions, relatedLessons: lessons.slice(0, 3).map(({ id, title, grade }) => ({ id, title, grade })) }
-  if (/^(xin chao|chao|hello|hi)(\s|$)/.test(q) && tokens(q).length < 7) return { ...base, answer: profile.greeting, sources: [], kind: 'greeting' }
+  const base = replyBase(entry)
+  const scopeChunkIds = related.map(({ chunk }) => chunk.chunk_id)
+  const result = (reply, extra = {}) => ({ reply, entry, intent: 'fact', rankedChunkIds: [], scopeChunkIds, previousQuestion: '', ...extra })
+  if (/^(xin chao|chao|hello|hi)(\s|$)/.test(q) && tokens(q).length < 7) return result({ ...base, answer: profile.greeting, sources: [], kind: 'greeting' })
   const introduction = /\b(la ai|gioi thieu|tieu su|ve ban|ve ong|ve bac|ve ba)\b/.test(q) || profile.aliases.some((alias) => q === normalize(alias))
   let terms = queryTerms(message, profile)
   const followup = /\b(them|tiep|sau do|khi do|y nghia|vi sao|the nao|o dau|do|nay)\b/.test(q) && terms.length <= 4
   let previousTopic = ''
+  let previousQuestion = ''
   if (followup) {
     const previous = [...history].reverse().find((turn) => turn.role === 'user' && queryTerms(turn.content, profile).length > 0)
     if (previous) {
       terms = [...new Set([...terms, ...queryTerms(previous.content, profile)])]
       // Keep the full prior question: stopword filtering drops halves of phrases like "doi do".
       previousTopic = normalize(previous.content)
+      previousQuestion = previous.content.slice(0, 500)
     }
   }
   const intro = introduction
@@ -110,8 +122,12 @@ export function characterReply(dataset, characterId, message, history = []) {
   ranked.sort((a, b) => b.score - a.score || a.chunk.chunk_id.localeCompare(b.chunk.chunk_id))
   const reviewed = !intro && reviewedPassage(dataset, characterId, contextualQuery, intent, terms.filter((term) => /^\d{3,4}$/.test(term)))
   const best = reviewed || ranked[0]
+  const rankedChunkIds = [...new Set([...(reviewed ? [reviewed.chunk.chunk_id] : []), ...ranked.map(({ chunk }) => chunk.chunk_id)])]
+  const extra = { intent, rankedChunkIds, previousQuestion }
   const selected = best ? [{ ...chunkResponse(best.chunk), quote: best.quote }] : []
-  if (!selected.length) return { ...base, answer: `Chưa tìm được đoạn sách giáo khoa đủ phù hợp để trả lời câu này về ${profile.name}. Con hãy hỏi về ${profile.topics.join(', ')} hoặc chọn một câu gợi ý bên dưới nhé.`, sources: [], kind: 'not_found' }
+  if (!selected.length) return result(notFoundReply(entry), extra)
   const answer = `${intro ? `Cùng tìm hiểu ${profile.name} qua sách giáo khoa nhé.` : 'Cùng xem những đoạn sách liên quan đến câu hỏi của con nhé.'}\n\n${selected.map((source, index) => `[${index + 1}] “${source.quote}”`).join('\n\n')}\n\nCon có thể mở bài học ở phần nguồn để đọc đầy đủ bối cảnh.`
-  return { ...base, answer, sources: selected, kind: 'grounded' }
+  return result({ ...base, answer, sources: selected, kind: 'grounded' }, extra)
 }
+
+export const notFoundReply = (entry) => ({ ...replyBase(entry), answer: `Chưa tìm được đoạn sách giáo khoa đủ phù hợp để trả lời câu này về ${entry.profile.name}. Con hãy hỏi về ${entry.profile.topics.join(', ')} hoặc chọn một câu gợi ý bên dưới nhé.`, sources: [], kind: 'not_found' })

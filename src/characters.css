@@ -27,3 +27,4 @@
 .chat-error { padding: 12px; background: #f6e9e1; color: #774733; font-size: 12px; border-radius: 10px; margin-bottom: 16px; }
 .chat-error button { text-decoration: underline; margin-top: 8px; }
 @media (max-width: 640px) { .chat-modal { width: calc(100% - 20px); max-height: 94dvh; }.chat-modal .chat-body { padding: 14px; }.chat-header { padding: 12px; }.chat-suggestions { max-height: 140px; overflow-y: auto; }.chat-sources { overflow-wrap: anywhere; } }
+.chat-notice { margin: -6px 0 14px; padding: 8px 12px; border-radius: 10px; background: #fff8e6; color: #7a5410; font-size: 12px; line-height: 1.6; }

@@ -4,7 +4,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
-    "api/dataset.js": { "includeFiles": "data/history/**" }
+    "api/dataset.js": { "includeFiles": "data/**" }
   },
   "rewrites": [
     {

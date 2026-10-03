@@ -61,6 +61,24 @@ Tạo API key trong [OpenAI Platform](https://platform.openai.com/api-keys). Đ�
 
 Trên Vercel, vào **Project Settings → Environment Variables**, thêm `OPENAI_API_KEY` cho **Production**, rồi redeploy production. Key nằm trong môi trường của Vercel Function, không nằm trong bundle frontend. Khi không có key hoặc OpenAI gặp lỗi, chat trả trích đoạn SGK hiện có và ghi `mode: textbook`; khi OpenAI trả lời, phản hồi ghi `mode: rag`. Giao diện hiển thị nguồn bài học cho cả hai. Câu hỏi không có đoạn nguồn phù hợp không được gửi đến OpenAI.
 
+### Pipeline chat (`server/rag/`)
+
+Mỗi câu hỏi đi qua các bước rẻ trước, nên phần lớn câu hỏi không tốn token:
+
+1. **Giới hạn lượt** (`limits.mjs`): quá `CHAT_RATE_PER_MINUTE` (mặc định 12) mỗi IP → `429` + `Retry-After`.
+2. **Guardrail đầu vào** (`guardrails.mjs`): xóa ký tự ẩn (zero-width, bidi), chặn prompt injection tiếng Việt/Anh ở câu hỏi và lịch sử chat (`mode: guardrail`, `kind: blocked`).
+3. **Câu mẫu không gọi AI**: chào hỏi, cảm ơn, "bạn là ai / hỏi gì được" (`kind: smalltalk`).
+4. **Truy xuất từ khóa** (`characters.mjs`) như chế độ trích SGK.
+5. **Tra cứu đơn giản**: câu hỏi năm có đoạn trích ngắn chứa năm → trả trích SGK, không gọi AI.
+6. **Cache** câu trả lời AI (6 giờ, 500 câu) cho câu hỏi lặp lại.
+7. **Hạn mức AI**: `AI_ANSWERS_PER_DAY` mỗi IP và `AI_GLOBAL_ANSWERS_PER_DAY` toàn hệ thống; vượt thì trả trích SGK kèm `notice`.
+8. **Moderation** (miễn phí) song song với **embedding** câu hỏi. Chỉ chặn nhóm không phù hợp học sinh (tình dục, tự hại, đe dọa…), không chặn "bạo lực" vì bài sử có chiến tranh.
+9. **Truy xuất lai**: gộp thứ hạng từ khóa và cosine embedding bằng RRF trong phạm vi chunk của nhân vật, lấy tối đa 3 đoạn. Ngưỡng được hiệu chỉnh trên dữ liệu thật: dưới 0,40 coi là lạc đề và không gọi AI.
+10. **Sinh câu trả lời**: câu hỏi và tư liệu được gửi dưới dạng JSON dữ liệu, kèm chỉ dẫn không làm theo lệnh nằm trong dữ liệu.
+11. **Kiểm tra đầu ra**: bắt buộc trích dẫn `[n]` hợp lệ, không có link, mọi số 3–4 chữ số (năm) phải có trong tư liệu; sai thì trả trích SGK.
+
+Chỉ mục embedding nằm ở `data/embeddings/` (`text-embedding-3-small`, 512 chiều, lượng tử int8, khoảng 1 MB). Khi dataset thay đổi, chạy lại `npm run build:embeddings`; nếu chỉ mục không khớp phiên bản dataset, chat tự dùng truy xuất từ khóa. Bộ đếm giới hạn mặc định nằm trong bộ nhớ từng instance; đặt `UPSTASH_REDIS_REST_URL` và `UPSTASH_REDIS_REST_TOKEN` để dùng chung cho mọi instance Vercel. `AI_DISABLED=1` tắt AI ngay mà không cần xóa key.
+
 Để local đọc trực tiếp thư mục đã cung cấp, sao chép `.env.example` thành `.env.local`, thêm:
 
 ```dotenv

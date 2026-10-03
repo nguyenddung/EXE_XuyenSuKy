@@ -1,6 +1,9 @@
 import { chunkResponse, getDataset, lessonId, normalize, searchChunks } from './dataset.mjs'
-import { characterIndex, characterReply, listCharacters } from './characters.mjs'
-import { augmentCharacterReply } from './openai-rag.mjs'
+import { characterIndex, listCharacters } from './characters.mjs'
+import { answerCharacterQuestion } from './rag/pipeline.mjs'
+import { clientKey, createLimiter } from './rag/limits.mjs'
+
+const defaultLimiter = createLimiter()
 
 class HttpError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code }
@@ -24,6 +27,9 @@ function ids(params, key) {
   const values = text ? text.split(',') : []
   if (values.some((id) => !/^LS\d{1,2}_B\d{2}$/.test(id))) badRequest(`${key} contains an invalid lesson ID.`)
   return new Set(values)
+}
+class RateLimitError extends HttpError {
+  constructor(retryAfter) { super(429, 'RATE_LIMITED', `Bạn đang hỏi quá nhanh. Hãy thử lại sau ${retryAfter} giây.`); this.retryAfter = retryAfter }
 }
 function send(res, status, data, head, cache = true) {
   res.statusCode = status
@@ -53,7 +59,9 @@ async function readChatBody(req) {
   return { message: body.message.trim(), history }
 }
 
-export async function handleApi(req, res, datasetProvider = getDataset) {
+// options.limiter and options.rag let tests replace the rate limiter and the OpenAI-facing dependencies.
+export async function handleApi(req, res, datasetProvider = getDataset, options = {}) {
+  const limiter = options.limiter || defaultLimiter
   const head = req.method === 'HEAD'
   try {
     const url = new URL(req.url, 'http://localhost')
@@ -71,11 +79,12 @@ export async function handleApi(req, res, datasetProvider = getDataset) {
     const data = await datasetProvider()
     let result
     if (chat) {
+      const visitor = clientKey(req)
+      const rate = await limiter.allowRequest(visitor)
+      if (!rate.allowed) { req.resume(); throw new RateLimitError(rate.retryAfter) }
       if (!characterIndex(data).some((entry) => entry.profile.id === parts[1])) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
       const body = await readChatBody(req)
-      const entry = characterIndex(data).find((item) => item.profile.id === parts[1])
-      const retrieved = characterReply(data, parts[1], body.message, body.history)
-      result = await augmentCharacterReply(retrieved, entry.profile.name, body.message, body.history)
+      result = await answerCharacterQuestion({ dataset: data, characterId: parts[1], message: body.message, history: body.history, visitor, deps: { limiter, ...options.rag } })
     }
     else if (route === 'characters') { const items = listCharacters(data, grade, query); result = { items, total: items.length, datasetVersion: data.metadata.version, mode: 'textbook' } }
     else if (parts[0] === 'characters' && parts.length === 2) {
@@ -113,6 +122,7 @@ export async function handleApi(req, res, datasetProvider = getDataset) {
     if (!result) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     send(res, 200, result, head, !chat)
   } catch (error) {
+    if (error instanceof RateLimitError) res.setHeader('Retry-After', String(error.retryAfter))
     if (error instanceof HttpError) send(res, error.status, { error: { code: error.code, message: error.message } }, head)
     else {
       console.error('[dataset-api]', error.code || error.name, error.message)
