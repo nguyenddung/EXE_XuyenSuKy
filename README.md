@@ -24,15 +24,29 @@ npm run preview
 
 ## Triển khai Vercel
 
-Mỗi lần push lên `main`, [GitHub Actions](.github/workflows/deploy-vercel.yml) sẽ build và deploy production lên Vercel. Có thể chạy lại thủ công bằng **Actions → Deploy to Vercel → Run workflow**.
+Production: [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app).
 
-Workflow dùng GitHub secret `VERCEL_TOKEN` và hai repository variables `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`. Framework là Vite, lệnh build là `npm run build`, thư mục đầu ra là `dist`. `vercel.json` cấu hình fallback về `index.html` cho React Router.
+[GitHub Actions](.github/workflows/deploy-vercel.yml) tự chạy khi push lên `main` hoặc mở/cập nhật pull request vào `main`:
 
-Tạo token tại [vercel.com/account/tokens](https://vercel.com/account/tokens) (scope là team chứa project `xuyen-su-ky`), rồi lưu vào GitHub:
+1. Cài dependencies từ lockfile bằng `npm ci`.
+2. Cài Chromium và chạy toàn bộ kiểm thử Playwright cho minigame, thư viện và sổ tay.
+3. Kiểm tra TypeScript và build Vite bằng `npm run build`.
+4. Chỉ với `main` và sau khi mọi kiểm tra thành công: gọi Vercel Deploy Hook, chờ trạng thái deployment thành công từ Vercel trên đúng commit. Pull request chỉ kiểm thử/build.
+
+Có thể chạy lại bằng **Actions → CI/CD to Vercel → Run workflow**, chọn nhánh `main`. Nếu commit đã có bản mới hơn trên `main`, workflow bỏ qua deploy bản cũ để bản mới nhất được triển khai.
+
+Project `xuyen-su-ky` đã liên kết repository `nguyenddung/EXE_XuyenSuKy`, production branch là `main`. GitHub secret `VERCEL_DEPLOY_HOOK` chứa hook riêng `github-actions-production` cho project này. URL hook là thông tin bí mật, không đưa vào source code hoặc log. CI không cần token truy cập toàn tài khoản Vercel.
+
+`git.deploymentEnabled: false` trong `vercel.json` tắt deploy trực tiếp khi push Git, để chỉ workflow đã vượt qua kiểm thử kích hoạt hook. Framework là Vite, lệnh build là `npm run build`, đầu ra là `dist`; fallback về `index.html` hỗ trợ React Router.
+
+Khi cần thay hook: vào Vercel → Project Settings → Git → Deploy Hooks, tạo hook cho `main`, rồi nhập URL qua lệnh sau (không truyền URL trên command line):
 
 ```bash
-gh secret set VERCEL_TOKEN -R nguyenddung/EXE_XuyenSuKy
+gh secret set VERCEL_DEPLOY_HOOK -R nguyenddung/EXE_XuyenSuKy
 ```
+
+Thu hồi hook cũ trong Vercel sau khi thay secret. Các variables `VERCEL_ORG_ID` và `VERCEL_PROJECT_ID` có thể giữ để sử dụng CLI thủ công, workflow hiện tại không cần chúng.
+
 
 ## Cấu trúc
 

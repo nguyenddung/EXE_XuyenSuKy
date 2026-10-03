@@ -1,7 +1,9 @@
-name: Deploy to Vercel
+﻿name: CI/CD to Vercel
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -9,24 +11,15 @@ permissions:
   contents: read
 
 concurrency:
-  group: vercel-production
+  group: vercel-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  verify:
+    name: Test and build
     runs-on: ubuntu-latest
-    env:
-      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    timeout-minutes: 15
     steps:
-      - name: Check Vercel credentials
-        run: |
-          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
-            echo "::error::Missing VERCEL_TOKEN secret or VERCEL_ORG_ID / VERCEL_PROJECT_ID variables. See README → Triển khai Vercel."
-            exit 1
-          fi
-
       - name: Check out source
         uses: actions/checkout@v4
 
@@ -36,14 +29,50 @@ jobs:
           node-version: '24'
           cache: npm
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@60.1.3
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Pull production settings
-        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
 
-      - name: Build production artifacts
-        run: vercel build --prod --token="$VERCEL_TOKEN"
+      - name: Run browser tests
+        run: npm run test:games
 
-      - name: Deploy production artifacts
-        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+      - name: Build application
+        run: npm run build
+
+      - name: Upload failed test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-test-results
+          path: test-results/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  deploy:
+    name: Deploy production
+    needs: verify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      statuses: read
+    environment:
+      name: production
+      url: https://xuyen-su-ky.vercel.app
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Deploy and wait for Vercel
+        run: node scripts/deploy-vercel.mjs
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+          GITHUB_TOKEN: ${{ github.token }}
