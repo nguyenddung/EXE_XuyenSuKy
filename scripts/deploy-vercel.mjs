@@ -1,4 +1,4 @@
-﻿import { appendFileSync } from 'node:fs'
+import { appendFileSync } from 'node:fs'
 
 const { VERCEL_DEPLOY_HOOK, GITHUB_TOKEN, GITHUB_REPOSITORY, GITHUB_SHA, GITHUB_STEP_SUMMARY } = process.env
 if (!VERCEL_DEPLOY_HOOK || !GITHUB_TOKEN || !GITHUB_REPOSITORY || !GITHUB_SHA) {
