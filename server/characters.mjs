@@ -6,7 +6,10 @@ const cache = new WeakMap()
 const tokens = (text) => normalize(text).match(/[a-z0-9]+/g) || []
 const stopwords = new Set('a ai anh ay ba bac ban bao bi cac cai can cho co con cua cung da de den dieu do duoc gi hay hoi khi la lai lam nao nay nhu nhung no noi o ong ra rang sao se su ta tai tat the thi toi trong tu ve vi voi va xin chao mot nhieu the nao nhu the nao toi muon biet tim hieu nam minh chung'.split(' '))
 const includesName = (text, alias) => (` ${text.replace(/[^a-z0-9]+/g, ' ')} `).includes(` ${normalize(alias)} `)
-const publicProfile = (profile) => { const { focus, ...publicFields } = profile; return publicFields }
+const publicProfile = (profile) => { const { focus, persona, ...publicFields } = profile; return publicFields }
+const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1)
+/** How the character refers to themself and to the student, e.g. { self: 'Ta', address: 'con' }. */
+export const voiceOf = (profile) => ({ self: profile.persona.self, Self: capitalize(profile.persona.self), address: profile.persona.address, Address: capitalize(profile.persona.address) })
 
 export function characterIndex(dataset) {
   if (cache.has(dataset)) return cache.get(dataset)
@@ -126,8 +129,12 @@ export function characterRetrieval(dataset, characterId, message, history = []) 
   const extra = { intent, rankedChunkIds, previousQuestion }
   const selected = best ? [{ ...chunkResponse(best.chunk), quote: best.quote }] : []
   if (!selected.length) return result(notFoundReply(entry), extra)
-  const answer = `${intro ? `Cùng tìm hiểu ${profile.name} qua sách giáo khoa nhé.` : 'Cùng xem những đoạn sách liên quan đến câu hỏi của con nhé.'}\n\n${selected.map((source, index) => `[${index + 1}] “${source.quote}”`).join('\n\n')}\n\nCon có thể mở bài học ở phần nguồn để đọc đầy đủ bối cảnh.`
+  const { self, Self, address, Address } = voiceOf(profile)
+  const answer = `${intro ? `${Self} kể ${address} nghe về mình qua những trang sách giáo khoa nhé:` : `Để ${self} kể ${address} nghe điều sách giáo khoa còn ghi lại:`}\n\n${selected.map((source, index) => `[${index + 1}] “${source.quote}”`).join('\n\n')}\n\n${Address} mở bài học ở phần nguồn để đọc trọn câu chuyện, rồi hỏi ${self} thêm nhé.`
   return result({ ...base, answer, sources: selected, kind: 'grounded' }, extra)
 }
 
-export const notFoundReply = (entry) => ({ ...replyBase(entry), answer: `Chưa tìm được đoạn sách giáo khoa đủ phù hợp để trả lời câu này về ${entry.profile.name}. Con hãy hỏi về ${entry.profile.topics.join(', ')} hoặc chọn một câu gợi ý bên dưới nhé.`, sources: [], kind: 'not_found' })
+export const notFoundReply = (entry) => {
+  const { self, Self, address, Address } = voiceOf(entry.profile)
+  return { ...replyBase(entry), answer: `${Self} lật mãi mà chưa thấy trang sách giáo khoa nào ghi lại điều ${address} hỏi, nên ${self} không dám kể sai. ${Address} hỏi ${self} về ${entry.profile.topics.join(', ')} hoặc chọn một câu gợi ý bên dưới nhé.`, sources: [], kind: 'not_found' }
+}

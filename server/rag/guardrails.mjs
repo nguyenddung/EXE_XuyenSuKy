@@ -33,10 +33,11 @@ export function inspectInput(message, history = []) {
   return { kind: 'ok' }
 }
 
-export const blockedAnswer = 'Mình chỉ trò chuyện về lịch sử dựa trên sách giáo khoa, nên không làm theo yêu cầu thay đổi cách trả lời hay tiết lộ cấu hình. Con hãy hỏi một câu về nhân vật hoặc sự kiện lịch sử nhé.'
-export const moderationAnswer = 'Câu hỏi này nằm ngoài phạm vi trò chuyện học tập. Con hãy hỏi về nhân vật, sự kiện hoặc bài học lịch sử nhé.'
-export const thanksAnswer =(name) => `Rất vui được trò chuyện cùng con! Nếu còn tò mò điều gì về ${name}, con cứ hỏi tiếp hoặc chọn một câu gợi ý bên dưới nhé.`
-export const metaAnswer = (profile) => `Mình là trợ lý học tập mô phỏng cuộc trò chuyện với ${profile.name}, trả lời dựa trên sách giáo khoa Lịch sử lớp 6–12 và luôn ghi nguồn. Con có thể hỏi về ${profile.topics.join(', ')}, hoặc chọn một câu gợi ý bên dưới.`
+// Template answers keep the character's voice (see voiceOf in characters.mjs) without claiming more than a simulation.
+export const blockedAnswer = (profile, { self, Self, address, Address }) => `${Self} chỉ kể chuyện lịch sử theo những gì sách giáo khoa ghi lại, nên không đổi vai, không bỏ quy tắc và không tiết lộ cách ${self} được thiết lập. ${Address} hỏi ${self} về ${profile.topics.join(', ')} nhé, ${self} sẵn lòng kể ${address} nghe.`
+export const moderationAnswer = (profile, { self, Address }) => `Câu hỏi này nằm ngoài những gì ${self} có thể trò chuyện trong giờ học sử. ${Address} hỏi ${self} về ${profile.topics.join(', ')} hoặc một bài học lịch sử nhé.`
+export const thanksAnswer = (profile, { self, Self, address }) => `${Self} cũng vui được trò chuyện cùng ${address}! Còn điều gì tò mò, ${address} cứ hỏi tiếp, hoặc chọn một câu gợi ý bên dưới để ${self} kể thêm nhé.`
+export const metaAnswer = (profile, { self, Self, address, Address }) => `${Self} là ${profile.name} trong Xuyên Sử Ký, một nhân vật mô phỏng: ${self} chỉ kể những gì sách giáo khoa Lịch sử lớp 6–12 ghi lại và luôn chỉ rõ trang sách cho ${address} đối chiếu. ${Address} có thể hỏi ${self} về ${profile.topics.join(', ')}.`
 
 /**
  * Checks a model answer against the passages it was given. Rejected answers fall back to the textbook quote.
