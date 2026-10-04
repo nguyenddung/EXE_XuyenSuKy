@@ -99,3 +99,25 @@ test('mobile chat fits viewport, traps focus and Escape restores the trigger', a
   await expect(page.locator('.character-card').filter({ has: page.getByRole('heading', { name: 'Võ Nguyên Giáp', exact: true }) }).getByRole('button')).toBeFocused()
   expect(errors).toEqual([])
 })
+
+test('rate-limited chat locks every way of asking and counts down until the server allows it again', async ({ page }) => {
+  let requests = 0
+  await page.route('**/api/characters/ngo-quyen/chat', async (route) => {
+    requests++
+    if (requests === 1) await route.fulfill({ status: 429, headers: { 'Retry-After': '2' }, contentType: 'application/json', body: '{"error":{"code":"RATE_LIMITED"}}' })
+    else await route.continue()
+  })
+  await openCharacter(page, 'Ngô Quyền')
+  await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('Hãy chờ')
+  await expect(page.locator('.chat-cooldown')).toContainText('giây')
+  await expect(page.locator('.chat-suggestions button').first()).toBeDisabled()
+  await expect(page.getByRole('button', { name: /Gửi lại sau/ })).toBeDisabled()
+  await page.locator('#chat-input').fill('Bạch Đằng diễn ra năm nào?')
+  await expect(page.getByRole('button', { name: 'Gửi câu hỏi' })).toBeDisabled()
+  expect(requests).toBe(1)
+  await expect(page.locator('.chat-cooldown')).toHaveCount(0, { timeout: 5000 })
+  await page.getByRole('button', { name: 'Thử gửi lại' }).click()
+  await expect(page.locator('.chat-answer')).toContainText('938')
+  expect(requests).toBe(2)
+})

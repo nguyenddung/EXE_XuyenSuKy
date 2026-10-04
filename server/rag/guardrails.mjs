@@ -40,20 +40,61 @@ export const thanksAnswer = (profile, { self, Self, address }) => `${Self} cũng
 export const metaAnswer = (profile, { self, Self, address, Address }) => `${Self} là ${profile.name} trong Xuyên Sử Ký, một nhân vật mô phỏng: ${self} chỉ kể những gì sách giáo khoa Lịch sử lớp 6–12 ghi lại và luôn chỉ rõ trang sách cho ${address} đối chiếu. ${Address} có thể hỏi ${self} về ${profile.topics.join(', ')}.`
 
 /**
- * Checks a model answer against the passages it was given. Rejected answers fall back to the textbook quote.
- * Years and other 3–4 digit numbers must appear in the passages: the model may rephrase, never add facts.
+ * Proper names (capitalised words that do not start a sentence) the evidence never mentions, such as a river the
+ * model made up. Evidence is the passages plus the question, so a corrected false premise is not flagged.
  */
-export function validateAnswer(answer, passages) {
+export function unknownNames(answer, evidence, allowed = []) {
+  const known = normalize(evidence)
+  const exempt = new Set(allowed.map((word) => normalize(word)))
+  const names = []
+  for (const sentence of answer.replace(/\[\d{1,2}\]/g, ' ').split(/[.!?…:;]\s+|\n+|\s[—–-]\s/)) {
+    const words = sentence.trim().replace(/^[“"'(]+/, '').split(/\s+/).slice(1)
+    // Joined names such as "Tốt Động–Chúc Động" are checked part by part.
+    for (const word of words.flatMap((raw) => raw.split(/[–—\-/]/)).map((part) => part.replace(/^[“"'(]+|[”"'),.!?…:;]+$/g, ''))) {
+      if (!/^\p{Lu}/u.test(word) || word.length < 2 || exempt.has(normalize(word))) continue
+      if (!new RegExp(`(^|[^a-z0-9])${normalize(word)}([^a-z0-9]|$)`).test(known)) names.push(word)
+    }
+  }
+  return [...new Set(names)]
+}
+
+export const maxAnswerCharacters = 700
+
+/**
+ * Normalises a model answer for display: drops markdown the prompt forbids and, past maxAnswerCharacters, keeps
+ * whole sentences only (at least one with a citation), so an over-long answer is shortened instead of wasted.
+ */
+export function tidyAnswer(answer) {
+  let text = (answer || '').replace(/\*\*|__|^#+\s*|^\s*[-•*]\s+/gm, '').replace(/[ \t]+/g, ' ').replace(/\n{2,}/g, '\n').trim()
+  if (text.length <= maxAnswerCharacters) return text
+  const sentences = text.match(/[^.!?…]+[.!?…]+(\s*\[\d{1,2}\])*\s*/g) || [text]
+  let kept = ''
+  for (const sentence of sentences) {
+    if ((kept + sentence).length > maxAnswerCharacters && /\[\d{1,2}\]/.test(kept)) break
+    kept += sentence
+  }
+  return kept.trim()
+}
+
+/**
+ * Checks a model answer against the passages it was given. Rejected answers fall back to the textbook quote.
+ * The model may rephrase and add feeling, never facts: years (3–4 digit numbers) and proper names must appear in
+ * the passages or the question. `allowed` lists words the character uses for themself and the student.
+ */
+export function validateAnswer(answer, passages, { question = '', allowed = [] } = {}) {
   const text = answer?.trim() || ''
   if (!text) return { ok: false, reason: 'empty' }
   if (text.length > 1500) return { ok: false, reason: 'too long' }
   if (/https?:\/\/|www\.|\]\(/i.test(text)) return { ok: false, reason: 'link' }
   if (/system prompt|chỉ dẫn hệ thống|openai_api_key|<\/?(system|assistant)/i.test(text)) return { ok: false, reason: 'prompt leak' }
+  if (/\b(là (một )?(ai|trí tuệ nhân tạo|mô hình ngôn ngữ|trợ lý ảo)|as an ai|language model)\b/i.test(text)) return { ok: false, reason: 'broke character' }
   const cited = [...text.matchAll(/\[(\d{1,2})\]/g)].map((match) => Number(match[1]))
   if (!cited.length) return { ok: false, reason: 'missing citation' }
   if (cited.some((index) => index < 1 || index > passages.length)) return { ok: false, reason: 'unknown citation' }
   const evidence = passages.map((passage) => passage.text).join('\n')
   const invented = (text.replace(/\[\d{1,2}\]/g, ' ').match(/\b\d{3,4}\b/g) || []).filter((number) => !evidence.includes(number))
   if (invented.length) return { ok: false, reason: `number not in sources: ${invented.join(', ')}` }
+  const names = unknownNames(text, `${evidence}\n${question}`, allowed)
+  if (names.length) return { ok: false, reason: `name not in sources: ${names.join(', ')}` }
   return { ok: true, cited: [...new Set(cited)] }
 }

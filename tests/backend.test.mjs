@@ -9,7 +9,7 @@ import { defaultDatasetPath, loadDataset, normalize } from '../server/dataset.mj
 import { handleApi } from '../server/handler.mjs'
 import { characterIndex, characterReply } from '../server/characters.mjs'
 import { answerCharacterQuestion, generationRequest } from '../server/rag/pipeline.mjs'
-import { inspectInput, validateAnswer } from '../server/rag/guardrails.mjs'
+import { inspectInput, maxAnswerCharacters, tidyAnswer, validateAnswer } from '../server/rag/guardrails.mjs'
 import { createAnswerCache, createLimiter, memoryStore } from '../server/rag/limits.mjs'
 import { loadEmbeddingIndex, quantize, vectorSearch } from '../server/rag/embeddings.mjs'
 
@@ -103,6 +103,31 @@ test('answer validation rejects invented years, unknown citations, links and unc
   assert.equal(validateAnswer('Ngô Quyền thắng năm 938 [2].', passages).ok, false)
   assert.equal(validateAnswer('Xem thêm https://example.com [1]', passages).ok, false)
   assert.equal(validateAnswer('Ngô Quyền thắng năm 938.', passages).ok, false)
+})
+
+test('output control: invented names are rejected, long answers trimmed to whole cited sentences, tokens capped', () => {
+  const passages = [{ text: 'Đêm 30 Tết, quân Tây Sơn vượt sông Gián Khẩu, tiêu diệt đồn tiền tiêu rồi vây đồn Hà Hồi.' }]
+  assert.equal(validateAnswer('Ta cho quân vượt sông Gián Khẩu, vây đồn Hà Hồi [1]. Con nhớ lấy nhé.', passages, { allowed: ['ta', 'con'] }).ok, true)
+  assert.match(validateAnswer('Ta cho quân vượt sông Đáy rồi vây Hà Nội [1].', passages, { allowed: ['ta'] }).reason, /Đáy/)
+  assert.equal(validateAnswer('Ngô Quyền không đánh ở đây; ta vượt sông Gián Khẩu [1].', passages, { question: 'Ngô Quyền đánh ở đâu?', allowed: ['ta'] }).ok, true)
+  assert.match(validateAnswer('Là một AI, ta vượt sông Gián Khẩu [1].', passages).reason, /broke character/)
+
+  const long = Array.from({ length: 12 }, (_, index) => `Câu thứ ${index + 1} kể về trận đánh ở sông Gián Khẩu rất dài dòng [1].`).join(' ')
+  const tidy = tidyAnswer(`**Mở đầu**\n- ${long}`)
+  assert.ok(tidy.length <= maxAnswerCharacters && /\[1\]\.?$/.test(tidy) && !tidy.includes('**') && !tidy.startsWith('-'), tidy)
+
+  const request = generationRequest('gpt-5-mini', characterIndex(dataset)[0].profile, '', 'Câu hỏi', [{ chunk: dataset.searchableChunks[0].chunk, text: 'x' }])
+  assert.ok(request.max_output_tokens <= 1000)
+  assert.deepEqual(request.reasoning, { effort: 'low' }, 'minimal reasoning invented facts in testing')
+  assert.deepEqual(request.text, { verbosity: 'low' })
+})
+
+test('visitors are warned as their daily AI answers run out', async () => {
+  const fake = fakeOpenAI()
+  const nearlyOut = createLimiter(memoryStore(), () => ({ perMinute: 1e9, aiPerDay: 3, aiGlobalPerDay: 1e9 }))
+  const first = await ask('ly-cong-uan', 'Vì sao Lý Công Uẩn dời đô?', ragDeps(fake, { limiter: nearlyOut }))
+  assert.equal(first.mode, 'rag')
+  assert.match(first.notice, /còn 2 lượt/)
 })
 
 test('cheap paths never call OpenAI: guardrails, small talk, simple date lookups and missing key', async () => {

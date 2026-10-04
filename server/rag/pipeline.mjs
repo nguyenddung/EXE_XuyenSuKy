@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 import { chunkResponse, normalize } from '../dataset.mjs'
 import { characterRetrieval, replyBase, voiceOf } from '../characters.mjs'
-import { blockedAnswer, inspectInput, metaAnswer, moderationAnswer, sanitizeText, thanksAnswer, validateAnswer } from './guardrails.mjs'
+import { blockedAnswer, inspectInput, metaAnswer, moderationAnswer, sanitizeText, thanksAnswer, tidyAnswer, validateAnswer } from './guardrails.mjs'
 import { embedQuery, loadEmbeddingIndex, vectorSearch } from './embeddings.mjs'
 import { createAnswerCache, createLimiter } from './limits.mjs'
 
@@ -72,23 +72,32 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     if (!passages.length) return textbook
 
     const response = await openai.responses.create(generationRequest(deps.model(), entry.profile, retrieval.previousQuestion, question, passages))
-    const verdict = validateAnswer(response.output_text, passages)
+    const usage = response.usage
+    // One line per AI answer so token spend can be followed in the Vercel logs.
+    if (usage) console.info('[character-rag] tokens', JSON.stringify({ character: characterId, input: usage.input_tokens, output: usage.output_tokens, reasoning: usage.output_tokens_details?.reasoning_tokens ?? 0, status: response.status }))
+    const draft = tidyAnswer(response.output_text)
+    const verdict = validateAnswer(draft, passages, { question, allowed: [voice.self, voice.address, ...voice.self.split(' '), ...entry.profile.aliases] })
     if (!verdict.ok) {
       console.warn('[character-rag] Answer rejected:', response.status === 'incomplete' ? `incomplete (${response.incomplete_details?.reason})` : verdict.reason)
       return textbook
     }
     // Keep only cited passages and renumber citations to match the source list shown to the student.
     const order = new Map(verdict.cited.sort((a, b) => a - b).map((index, position) => [index, position + 1]))
-    const answer = response.output_text.trim().replace(/\[(\d{1,2})\]/g, (_, index) => `[${order.get(Number(index))}]`)
+    const answer = draft.replace(/\[(\d{1,2})\]/g, (_, index) => `[${order.get(Number(index))}]`)
     const sources = verdict.cited.map((index) => { const { chunk } = passages[index - 1]; return { ...chunkResponse(chunk), quote: chunk.text } })
     const reply = { ...replyBase(entry), kind: 'grounded', mode: 'rag', answer, sources }
     deps.cache.set(cacheKey, reply)
-    return reply
+    return withQuotaNotice(reply, budget.remaining)
   } catch (error) {
     console.warn('[character-rag] OpenAI request failed:', error?.status || error?.code || error?.name || 'unknown')
     return textbook
   }
 }
+
+// Warn before a visitor's daily AI answers run out; the cached reply itself stays notice-free.
+const withQuotaNotice = (reply, remaining) => remaining !== undefined && remaining <= 5
+  ? { ...reply, notice: remaining === 0 ? 'Đây là lượt trả lời bằng AI cuối cùng của bạn hôm nay. Sau đó câu trả lời sẽ được trích trực tiếp từ sách giáo khoa.' : `Bạn còn ${remaining} lượt trả lời bằng AI hôm nay.` }
+  : reply
 
 /** Reciprocal rank fusion of keyword ranks and embedding similarity, limited to the character's chunks. */
 export function selectPassages(dataset, retrieval, index, queryVector) {
@@ -112,9 +121,12 @@ export function generationRequest(model, profile, previousQuestion, question, pa
   return {
     model,
     store: false,
-    // Reasoning tokens count toward max_output_tokens; rewording a few passages needs little reasoning.
+    // Output budget. Reasoning stays at "low": "minimal" halved the tokens but invented places (a river the
+    // passages never name). Measured with gpt-5-mini: 250–400 reasoning + ~200 answer tokens, so 1000 is a hard
+    // ceiling with headroom; hitting it returns "incomplete" and the reply falls back to the textbook quote.
     ...(/^(gpt-5|o\d)/.test(model) ? { reasoning: { effort: 'low' } } : {}),
-    max_output_tokens: 2000,
+    ...(/^gpt-5/.test(model) ? { text: { verbosity: 'low' } } : {}),
+    max_output_tokens: 1000,
     instructions: `Bạn nhập vai ${profile.name} (${profile.period}) đang trò chuyện với một học sinh trong ứng dụng học Lịch sử Xuyên Sử Ký. Ứng dụng đã ghi rõ đây là nhân vật mô phỏng.
 
 GIỌNG NHÂN VẬT

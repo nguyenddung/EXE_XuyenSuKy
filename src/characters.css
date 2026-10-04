@@ -28,3 +28,4 @@
 .chat-error button { text-decoration: underline; margin-top: 8px; }
 @media (max-width: 640px) { .chat-modal { width: calc(100% - 20px); max-height: 94dvh; }.chat-modal .chat-body { padding: 14px; }.chat-header { padding: 12px; }.chat-suggestions { max-height: 140px; overflow-y: auto; }.chat-sources { overflow-wrap: anywhere; } }
 .chat-notice { margin: -6px 0 14px; padding: 8px 12px; border-radius: 10px; background: #fff8e6; color: #7a5410; font-size: 12px; line-height: 1.6; }
+.chat-cooldown { margin: 0; padding: 8px 16px; border-top: 1px solid #ffe2a6; background: #fff8e6; color: #7a5410; font-size: 12px; font-weight: 600; }

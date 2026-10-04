@@ -73,9 +73,10 @@ export function createLimiter(store = defaultStore(), limits = chatLimits) {
     async allowAiAnswer(key) {
       const { aiPerDay, aiGlobalPerDay } = limits()
       const today = dayKey()
-      if ((await store.increment(`ai:day:${today}:${key}`, day)).count > aiPerDay) return { allowed: false, reason: 'visitor' }
+      const used = (await store.increment(`ai:day:${today}:${key}`, day)).count
+      if (used > aiPerDay) return { allowed: false, reason: 'visitor' }
       if ((await store.increment(`ai:day:${today}:all`, day)).count > aiGlobalPerDay) return { allowed: false, reason: 'global' }
-      return { allowed: true }
+      return { allowed: true, remaining: Math.max(0, Math.floor(aiPerDay - used)) }
     },
   }
 }
