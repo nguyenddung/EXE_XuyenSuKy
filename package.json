@@ -11,7 +11,7 @@
     "check:dataset": "node --env-file-if-exists=.env.local scripts/check-dataset.mjs",
     "import:dataset": "node --env-file-if-exists=.env.local scripts/import-dataset.mjs",
     "build:embeddings": "node --env-file-if-exists=.env.local scripts/build-embeddings.mjs",
-    "test:backend": "node --test tests/backend.test.mjs",
+    "test:backend": "node --test tests/backend.test.mjs tests/speech.test.mjs",
     "test:games": "playwright test"
   },
   "dependencies": {

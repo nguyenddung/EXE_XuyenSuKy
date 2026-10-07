@@ -12,7 +12,7 @@ export const leaderboard: LeaderboardEntry[] = [
 export function rankingsFor(session: DemoSession): (LeaderboardEntry & { isMe: boolean })[] {
   return leaderboard
     .map((entry) => entry.name !== demoAccount.name ? { ...entry, isMe: false }
-      : session.loggedIn ? { ...entry, xp: demoAccount.leaderboardXp + session.earnedXp, isMe: true }
+      : session.loggedIn ? { ...entry, name: session.name || entry.name, avatar: session.name?.slice(0, 1).toUpperCase() || entry.avatar, xp: (session.name && session.name !== demoAccount.name ? 0 : demoAccount.leaderboardXp) + session.earnedXp, isMe: true }
       : { name: 'Bạn (khách)', avatar: 'B', xp: session.earnedXp, isMe: true })
     .sort((a, b) => b.xp - a.xp)
 }

@@ -28,4 +28,20 @@
 .chat-error button { text-decoration: underline; margin-top: 8px; }
 @media (max-width: 640px) { .chat-modal { width: calc(100% - 20px); max-height: 94dvh; }.chat-modal .chat-body { padding: 14px; }.chat-header { padding: 12px; }.chat-suggestions { max-height: 140px; overflow-y: auto; }.chat-sources { overflow-wrap: anywhere; } }
 .chat-notice { margin: -6px 0 14px; padding: 8px 12px; border-radius: 10px; background: #fff8e6; color: #7a5410; font-size: 12px; line-height: 1.6; }
+.chat-voice-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #e9eee7; font-size: 12px; color: #345d4a; }
+.chat-voice-controls label, .chat-voice-controls button, .chat-voice-controls span { display: inline-flex; align-items: center; gap: 6px; }
+.chat-voice-controls input { accent-color: #345d4a; }
+.chat-voice-controls span { margin-left: auto; font-size: 11px; }
+.chat-voice-controls button { text-decoration: underline; padding: 4px; }
+.chat-voice-notice { margin: 0; padding: 8px 16px; background: #fff8e6; color: #7a5410; font-size: 12px; line-height: 1.6; }
+.chat-listen { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding: 4px 0; font-size: 11px; font-weight: 700; color: #345d4a; }
+.chat-listen:disabled { opacity: .5; }
+.chat-form .chat-mic { background: #eaf2eb; color: #345d4a; }
+.chat-form .chat-mic.is-listening { background: #b54837; color: white; box-shadow: 0 0 0 3px #b5483726; }
+.chat-form button:focus-visible, .chat-listen:focus-visible, .chat-voice-controls button:focus-visible { outline: 2px solid #345d4a; outline-offset: 3px; }
+.chat-avatar.is-speaking { outline: 2px solid #4c9585; animation: character-speaking 1s ease-in-out infinite alternate; }
+.voice-spinner { animation: voice-spin 1s linear infinite; }
+@keyframes character-speaking { from { box-shadow: 0 0 0 3px #4c958533; filter: brightness(1); } to { box-shadow: 0 0 18px 5px #4c958580; filter: brightness(1.12); } }
+@keyframes voice-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .chat-avatar.is-speaking, .voice-spinner { animation: none; } .chat-avatar.is-speaking { box-shadow: 0 0 12px 3px #4c958566; } }
 .chat-cooldown { margin: 0; padding: 8px 16px; border-top: 1px solid #ffe2a6; background: #fff8e6; color: #7a5410; font-size: 12px; font-weight: 600; }

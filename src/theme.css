@@ -250,3 +250,11 @@
   .dashboard-guest-banner p { flex-basis: calc(100% - 44px); }
   .dashboard-guest-banner button { width: 100%; }
 }
+
+.auth-tabs { display:flex; gap:12px; margin:20px 0; }
+.auth-tabs button,.grade-options button { border:1px solid #d8dce5; background:white; border-radius:12px; padding:14px 20px; color:#29344b; font-weight:700; }
+.auth-tabs button[aria-selected=true],.grade-options button[aria-pressed=true] { background:#273d65; color:white; border-color:#273d65; }
+.grade-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:28px 0; }
+.grade-onboarding { width:min(100%,560px); }
+.recommendation-grade { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.recommendation-grade select { padding:8px 14px; border:1px solid #d8dce5; border-radius:8px; background:white; }

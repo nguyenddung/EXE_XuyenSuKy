@@ -58,7 +58,7 @@ function DatasetReader({ lesson, learning, onClose }: { lesson: LessonDetail; le
 export function DatasetLibrary({ metadata, learning, grade, requestedLessonId, onRequestHandled }: Props) {
   const [query, setQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
-  const [filterGrade, setFilterGrade] = useState('all')
+  const [filterGrade, setFilterGrade] = useState(String(grade))
   const [chapter, setChapter] = useState('')
   const [filter, setFilter] = useState('all')
   const [mode, setMode] = useState<'lessons' | 'search'>('lessons')
@@ -73,6 +73,7 @@ export function DatasetLibrary({ metadata, learning, grade, requestedLessonId, o
   const [readerError, setReaderError] = useState('')
   const { journal, bookmark } = learning
   const collectionIds = (filter === 'saved' ? journal.bookmarks : filter === 'notes' ? Object.keys(journal.notes).filter((id) => journal.notes[id].trim()) : filter === 'review' ? Object.keys(journal.review).filter((id) => journal.review[id] === 'again') : filter === 'unread' ? journal.read : []).filter((id) => /^LS\d{1,2}_B\d{2}$/.test(id)).join(',')
+  useEffect(() => { setFilterGrade(String(grade)); setChapter(''); setPage(1) }, [grade])
   useEffect(() => setPage(1), [collectionIds])
   useEffect(() => { const timer = setTimeout(() => setDebouncedQuery(query), 250); return () => clearTimeout(timer) }, [query])
   useEffect(() => {

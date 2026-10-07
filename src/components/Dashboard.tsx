@@ -9,12 +9,6 @@ import type { Character } from '../types'
 import { historyApi, type HistoryChunk, type HistoryLesson, type PageResult } from '../lib/historyApi'
 import { eras } from '../data/eras'
 
-const featuredLessons = [
-  { id: 'LS6_B18', image: 'bach-dang-938', eyebrow: 'Bước ngoặt độc lập', fallback: 'Bước ngoặt lịch sử đầu thế kỉ X' },
-  { id: 'LS7_B15', image: 'ly', eyebrow: 'Đại Việt thời Lý', fallback: 'Công cuộc xây dựng và bảo vệ đất nước thời Lý' },
-  { id: 'LS8_B08', image: 'tay-son', eyebrow: 'Phong trào Tây Sơn', fallback: 'Phong trào Tây Sơn' },
-] as const
-
 const navigation = [
   { label: 'Trang chủ', href: '#dashboard', icon: Home },
   { label: 'Học tập', href: '#library', icon: BookOpen },
@@ -50,7 +44,10 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
   const [searchError, setSearchError] = useState('')
   const [searchResults, setSearchResults] = useState<HistoryChunk[]>([])
   const [featured, setFeatured] = useState<Character | null>(null)
-  const [lessons, setLessons] = useState<Record<string, HistoryLesson>>({})
+  const [lessons, setLessons] = useState<HistoryLesson[]>([])
+  const [lessonError, setLessonError] = useState('')
+  const [lessonLoading, setLessonLoading] = useState(true)
+  const [retry, setRetry] = useState(0)
   const percent = gradeCount ? Math.min(100, Math.round(readCount / gradeCount * 100)) : 0
   const gameCount = session.completedActivities.filter((id) => id.startsWith('minigame-')).length
   const ranks = rankingsFor(session)
@@ -58,9 +55,19 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
   useEffect(() => {
     const controller = new AbortController()
     historyApi<{ items: Character[] }>('characters', controller.signal).then((data) => setFeatured(data.items.find((item) => item.id === 'tran-hung-dao') || data.items[0] || null)).catch(() => {})
-    historyApi<PageResult<HistoryLesson>>(`lessons?ids=${featuredLessons.map((item) => item.id).join(',')}`, controller.signal).then((data) => setLessons(Object.fromEntries(data.items.map((lesson) => [lesson.id, lesson])))).catch(() => {})
+
     return () => controller.abort()
   }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    setLessons([]); setLessonError(''); setLessonLoading(true)
+    historyApi<PageResult<HistoryLesson>>(`lessons?grade=${session.grade}&limit=3`, controller.signal)
+      .then(data => { if (!controller.signal.aborted) setLessons(data.items) })
+      .catch(error => { if (!controller.signal.aborted) setLessonError(error.message) })
+      .finally(() => { if (!controller.signal.aborted) setLessonLoading(false) })
+    return () => controller.abort()
+  }, [session.grade, retry])
 
   async function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -96,7 +103,7 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
       <header className="dashboard-topbar">
         <button className="dashboard-menu-button" type="button" aria-label="Mở menu" onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
         <form className="dashboard-search" role="search" onSubmit={submitSearch}><Search size={19} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} onFocus={() => { if (searchResults.length || searchError) setSearchOpen(true) }} onKeyDown={(event) => { if (event.key === 'Escape') setSearchOpen(false) }} aria-label="Tìm sự kiện, nhân vật, thời kỳ" placeholder="Tìm kiếm sự kiện, nhân vật, thời kỳ..." /><button type="submit">Tìm</button></form>
-        <div className="dashboard-top-actions"><a className="dashboard-notification" href="#daily-missions" aria-label="Xem nhiệm vụ hôm nay"><Bell size={21} /><i /></a><div className="dashboard-account"><button type="button" className="dashboard-account-button" aria-expanded={profileOpen} aria-label="Tài khoản" onClick={() => setProfileOpen(!profileOpen)}><span className={`dashboard-account-avatar ${session.loggedIn ? '' : 'is-guest'}`}>{session.loggedIn ? demoAccount.avatar : 'K'}</span><span><strong>{session.loggedIn ? demoAccount.name : 'Khách'}</strong><small>{session.loggedIn ? `Học sinh lớp ${session.grade}` : `Học thử · Lớp ${session.grade}`}</small></span><ChevronDown size={16} /></button>{profileOpen && <div className="dashboard-account-menu"><a href="#progress" onClick={() => setProfileOpen(false)}>Xem tiến độ</a>{!session.loggedIn && <button onClick={() => { onLogin(); setProfileOpen(false) }}>Đăng nhập để lưu tiến độ</button>}<a href="/" onClick={(event) => { event.preventDefault(); setProfileOpen(false); onLogout() }}>{session.loggedIn ? 'Đăng xuất' : 'Thoát chế độ học thử'}</a></div>}</div></div>
+        <div className="dashboard-top-actions"><a className="dashboard-notification" href="#daily-missions" aria-label="Xem nhiệm vụ hôm nay"><Bell size={21} /><i /></a><div className="dashboard-account"><button type="button" className="dashboard-account-button" aria-expanded={profileOpen} aria-label="Tài khoản" onClick={() => setProfileOpen(!profileOpen)}><span className={`dashboard-account-avatar ${session.loggedIn ? '' : 'is-guest'}`}>{session.loggedIn ? (session.name?.slice(0, 1).toUpperCase() || demoAccount.avatar) : 'K'}</span><span><strong>{session.loggedIn ? (session.name || demoAccount.name) : 'Khách'}</strong><small>{session.loggedIn ? `Học sinh lớp ${session.grade}` : `Học thử · Lớp ${session.grade}`}</small></span><ChevronDown size={16} /></button>{profileOpen && <div className="dashboard-account-menu"><a href="#progress" onClick={() => setProfileOpen(false)}>Xem tiến độ</a>{!session.loggedIn && <button onClick={() => { onLogin(); setProfileOpen(false) }}>Đăng nhập để lưu tiến độ</button>}<a href="/" onClick={(event) => { event.preventDefault(); setProfileOpen(false); onLogout() }}>{session.loggedIn ? 'Đăng xuất' : 'Thoát chế độ học thử'}</a></div>}</div></div>
         {searchOpen && <div className="dashboard-search-results" role="region" aria-label="Kết quả tìm kiếm"><div className="dashboard-search-results-head"><strong>Kết quả trong sách giáo khoa</strong><button type="button" aria-label="Đóng kết quả tìm kiếm" onClick={() => setSearchOpen(false)}><X size={17} /></button></div>{searchBusy ? <p>Đang tìm tư liệu…</p> : searchError ? <p role="alert">{searchError}</p> : searchResults.length ? searchResults.map((result) => <button type="button" key={result.id} onClick={() => openLesson(result.lessonId)}><BookOpen size={16} /><span><strong>{result.lessonTitle}</strong><small>Lớp {result.grade} · {result.sectionTitle}</small></span><ArrowRight size={15} /></button>) : <p>Chưa tìm thấy tư liệu. Thử từ khóa khác nhé.</p>}</div>}
       </header>
 
@@ -110,7 +117,7 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
 
             <section className="dashboard-section" id="daily-missions" aria-labelledby="missions-title"><div className="dashboard-section-heading"><h2 id="missions-title">Nhiệm vụ hôm nay</h2></div><div className="dashboard-mission-grid"><button className="dashboard-mission mission-blue" onClick={() => openLesson(`LS${session.grade}_B01`)}><span><BookOpen size={27} /></span><strong>Hoàn thành<br />bài học</strong><small>Mở bài lớp {session.grade}</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-orange" onClick={() => onQuiz(challengeActivities.quiz)}><span><Check size={26} /></span><strong>Làm câu quiz</strong><small>Ôn tập kiến thức</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-purple" onClick={() => featured ? onChat(featured) : document.getElementById('characters')?.scrollIntoView({ behavior: 'smooth' })}><span><MessageCircle size={27} /></span><strong>Trò chuyện với<br />nhân vật AI</strong><small>Đặt một câu hỏi</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-teal" onClick={() => onGame('timeline')}><span><Trophy size={27} /></span><strong>Tham gia thử thách</strong><small>Thử thách tuần</small><ArrowRight size={17} /></button></div></section>
 
-            <section className="dashboard-section" aria-labelledby="lessons-title"><div className="dashboard-section-heading"><h2 id="lessons-title">Bài học đề xuất</h2><a href="#library">Xem tất cả <ArrowRight size={15} /></a></div><div className="dashboard-lesson-grid">{featuredLessons.map((item) => <button type="button" className="dashboard-lesson" key={item.id} onClick={() => openLesson(item.id)}><div className="dashboard-lesson-image"><img src={`/images/dashboard/${item.image}.webp`} alt="" loading="lazy" /><span>{item.eyebrow}</span></div><div className="dashboard-lesson-copy"><strong>{lessons[item.id]?.title || item.fallback}</strong><small>SGK lớp {lessons[item.id]?.grade || Number(item.id.slice(2, 3))} · Đọc bài và lưu ghi chú</small><span><ArrowRight size={18} /></span></div></button>)}</div></section>
+            <section className="dashboard-section" aria-labelledby="lessons-title"><div className="dashboard-section-heading"><h2 id="lessons-title">Bài học đề xuất · Lớp {session.grade}</h2><a href="#library">Xem tất cả <ArrowRight size={15} /></a></div><label className="recommendation-grade">Lớp học <select aria-label="Đổi lớp đề xuất" value={session.grade} onChange={event => onSelectGrade(Number(event.target.value))}>{[6, 7, 8, 9, 10, 11, 12].map(grade => <option key={grade} value={grade}>Lớp {grade}</option>)}</select></label>{lessonLoading && <p role="status">Đang tải bài giảng…</p>}{lessonError && <p role="alert">{lessonError} <button onClick={() => setRetry(value => value + 1)}>Thử lại</button></p>}{!lessonLoading && !lessonError && !lessons.length && <p>Chưa có bài giảng cho lớp này.</p>}<div className="dashboard-lesson-grid">{lessons.map((item) => <button type="button" className="dashboard-lesson" key={item.id} onClick={() => openLesson(item.id)}><div className="dashboard-lesson-image"><img src={`/images/dashboard/${['bach-dang-938', 'ly', 'tay-son'][item.number % 3]}.webp`} alt="" loading="lazy" /><span>Lớp {item.grade} · Bài {item.number}</span></div><div className="dashboard-lesson-copy"><strong>{item.title}</strong><small>SGK lớp {item.grade} · Đọc bài và lưu ghi chú</small><span><ArrowRight size={18} /></span></div></button>)}</div></section>
           </div>
 
           <div className="dashboard-rail">

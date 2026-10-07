@@ -61,6 +61,27 @@ Tạo API key trong [OpenAI Platform](https://platform.openai.com/api-keys). Đ�
 
 Trên Vercel, vào **Project Settings → Environment Variables**, thêm `OPENAI_API_KEY` cho **Production**, rồi redeploy production. Key nằm trong môi trường của Vercel Function, không nằm trong bundle frontend. Khi không có key hoặc OpenAI gặp lỗi, chat trả trích đoạn SGK hiện có và ghi `mode: textbook`; khi OpenAI trả lời, phản hồi ghi `mode: rag`. Giao diện hiển thị nguồn bài học cho cả hai. Câu hỏi không có đoạn nguồn phù hợp không được gửi đến OpenAI.
 
+### Giọng nói nhân vật
+
+Chat có nút **Nói câu hỏi** để nhập tiếng Việt bằng Web Speech API, **Nghe câu trả lời / Dừng đọc** và tùy chọn **Tự đọc câu trả lời** (bật mặc định). Câu hỏi từ mic được đưa vào ô nhập để kiểm tra trước khi gửi. Trình duyệt cần hỗ trợ SpeechRecognition và được cấp quyền microphone; dùng HTTPS hoặc localhost. Khi chưa hỗ trợ mic, nhập văn bản vẫn hoạt động.
+
+Để bật Azure TTS, thêm vào `.env.local`, rồi khởi động lại Vite/backend:
+
+```dotenv
+AZURE_SPEECH_KEY=<key của Azure Speech resource>
+AZURE_SPEECH_REGION=southeastasia
+```
+
+Region phải đúng với resource của bạn. Trên Vercel, thêm hai biến này vào Environment Variables và redeploy. Key chỉ được gửi từ backend đến Azure; không thêm tiền tố `VITE_`. Endpoint `POST /api/characters/:id/speech` nhận `{ "text": "Câu trả lời" }`, trả MP3. Backend tự chọn giọng theo nhân vật, escape văn bản thành SSML và bỏ dấu trích dẫn `[n]` khi đọc; nội dung/nguồn trên màn hình vẫn giữ nguyên. Tích hợp theo [Azure TTS REST API](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/rest-text-to-speech).
+
+Chỉnh cấu hình của 12 nhân vật trong `shared/character-voices.json`: `voice`, `rate` (1 là tốc độ mặc định), `pitch` (1 là cao độ mặc định). Nam dùng `vi-VN-NamMinhNeural`, nữ dùng `vi-VN-HoaiMyNeural`, khác nhau về tốc độ/cao độ. Đây là giọng mô phỏng, không phải bản sao giọng thật của nhân vật lịch sử. Khi âm thanh thực sự phát, chân dung sáng lên; dừng, đóng chat, mở bài học hoặc bắt đầu cuộc trò chuyện mới sẽ hủy phần đọc. Người bật giảm chuyển động nhận hiệu ứng sáng tĩnh.
+
+Khi chưa cấu hình Azure, giao diện thử giọng tiếng Việt cài trên trình duyệt/hệ điều hành. Nếu không có giọng tiếng Việt, giao diện báo cách khắc phục; không tự chọn giọng ngôn ngữ khác. Giọng dự phòng phụ thuộc máy và có thể dùng chung một giọng nền cho nhiều nhân vật. Khi Azure đã cấu hình nhưng lỗi/quá hạn mức, giao diện báo lỗi và giữ câu trả lời văn bản.
+
+Giới hạn mặc định: 6.000 ký tự mỗi lần đọc, 12 lượt/phút, 40 lần tạo âm thanh/ngày mỗi khách, 500 lần/ngày toàn hệ thống (ngày Việt Nam). Điều chỉnh bằng `SPEECH_RATE_PER_MINUTE`, `SPEECH_REQUESTS_PER_DAY`, `SPEECH_GLOBAL_REQUESTS_PER_DAY`. Phát lại âm thanh trong cache một giờ của cùng server instance không gọi lại Azure; cache tối đa 32 mục/24 MB. Các request đồng thời chưa có cache vẫn được tính riêng. Có thể dùng cấu hình Upstash ở trên để chia sẻ bộ đếm giữa các instance Vercel. Không có cơ sở dữ liệu âm thanh lâu dài.
+
+Kiểm thử: `npm run test:backend` và `npx playwright test tests/characters.spec.ts tests/character-voice.spec.ts`. Các test giọng nói dùng Azure/audio/microphone giả lập, không gọi dịch vụ trả phí.
+
 ### Pipeline chat (`server/rag/`)
 
 Mỗi câu hỏi đi qua các bước rẻ trước, nên phần lớn câu hỏi không tốn token:
@@ -198,3 +219,13 @@ Bộ kiểm thử bao gồm bốn game, đáp án sai, gợi ý, hoàn thành, c
 - Có thông báo nếu trình duyệt chặn hoặc hết dung lượng lưu trữ. Đặt lại dữ liệu demo cần xác nhận và xóa cả phiên học, sổ tay, yêu thích, ghi chú.
 
 `npm run test:games` chạy cả kiểm thử minigame lẫn thư viện: lưu dữ liệu, bộ lọc, ghi chú, XP, mốc nửa đêm theo giờ Việt Nam, bàn phím, mobile và lỗi lưu trữ.
+
+## Chọn lớp và tài khoản demo
+
+Đăng nhập hoặc đăng ký lần đầu mở màn chọn lớp 6–12. Dashboard đề xuất ba bài SGK theo lớp đã chọn; đổi lớp cập nhật đề xuất và bộ lọc thư viện. Lựa chọn được lưu khi tải lại trang; phiên đăng nhập cũ giữ lớp và tiến độ. Đặt lại tiến độ giữ lựa chọn lớp.
+
+Đăng ký tạo một tài khoản demo trên trình duyệt hiện tại, lưu email và bản băm mật khẩu có salt. Đây chưa phải xác thực máy chủ hoặc đồng bộ đa thiết bị; không dùng mật khẩu thật. Tài khoản mẫu vẫn hoạt động.
+
+Minigame lưu kỷ lục 1–3 sao cho mỗi trò. Chơi lại chỉ cập nhật kỷ lục nếu tốt hơn và không cộng trùng XP.
+
+Kiểm thử luồng mới: `npx playwright test tests/auth.spec.ts tests/onboarding.spec.ts tests/minigames.spec.ts tests/dashboard.spec.ts tests/dataset.spec.ts tests/learning.spec.ts`.

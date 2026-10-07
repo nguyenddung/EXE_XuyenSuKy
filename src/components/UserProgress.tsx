@@ -22,12 +22,12 @@ export function UserProgress({ session, learningStreak, onLogin, onReset }: Prop
           <div className="flex items-start justify-between gap-4">
             <div>
               <span className="section-kicker">GÓC NHÀ SỬ HỌC</span>
-              <h2 id="progress-title">{session.loggedIn ? <>Xin chào, {demoAccount.name}! <span>✦</span></> : 'Tiến độ học thử của bạn'}</h2>
+              <h2 id="progress-title">{session.loggedIn ? <>Xin chào, {(session.name || demoAccount.name)}! <span>✦</span></> : 'Tiến độ học thử của bạn'}</h2>
               <p>{session.loggedIn
                 ? `Lớp ${session.grade} · ${session.completedActivities.length} hoạt động đã hoàn thành`
                 : `Lớp ${session.grade} · ${session.completedActivities.length} hoạt động. Tiến độ chỉ lưu trên trình duyệt này; đăng nhập để giữ hồ sơ và làm quiz.`}</p>
             </div>
-            <div className="profile-avatar">{session.loggedIn ? demoAccount.avatar : 'B'}</div>
+            <div className="profile-avatar">{session.loggedIn ? (session.name?.slice(0, 1).toUpperCase() || demoAccount.avatar) : 'B'}</div>
           </div>
           <div className="level-panel">
             <span className="level-icon"><Star size={23} fill="currentColor" /></span>

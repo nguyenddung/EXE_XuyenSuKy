@@ -1,3 +1,4 @@
+import { GradeOnboarding } from '../components/GradeOnboarding'
 import { LearningHub } from '../components/LearningHub'
 import { useLearningJournal, streak } from '../hooks/useLearningJournal'
 import { useHistoryDataset } from '../hooks/useHistoryDataset'
@@ -9,7 +10,6 @@ import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character } from '../types'
 import type { DemoActivity } from '../data/demo'
-import { demoAccount } from '../data/demo'
 import { hasAppAccess, useDemoSession } from '../hooks/useDemoSession'
 import { Navbar } from '../components/Navbar'
 import { Hero, LandingCta } from '../components/Hero'
@@ -31,7 +31,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     if (target) document.getElementById(target)?.scrollIntoView()
     else window.scrollTo(0, 0)
   }, [landing])
-  const { session, login, startGuest, logout, selectGrade, reset, completeActivity } = useDemoSession()
+  const { session, login, startGuest, logout, selectGrade, reset, completeActivity, recordGame } = useDemoSession()
   const authenticated = hasAppAccess(session)
   const learning = useLearningJournal()
   const dataset = useHistoryDataset()
@@ -76,13 +76,19 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     else { setPendingActivity(activity); setLoginOpen(true) }
   }
 
-  function handleLogin(email: string, password: string) {
-    if (!login(email, password)) return false
+  async function handleLogin(email: string, password: string) {
+    if (!await login(email, password)) return false
     setLoginOpen(false)
-    setNotice(`Chào mừng ${demoAccount.name} trở lại!`)
-    if (pendingActivity) { setActiveActivity(pendingActivity); setPendingActivity(null) }
+    setNotice(`Chào mừng ${email.trim().split('@')[0]} trở lại!`)
+
     return true
   }
+
+  useEffect(() => {
+    if (session.loggedIn && session.gradeSelected && pendingActivity && !loginOpen) {
+      setActiveActivity(pendingActivity); setPendingActivity(null)
+    }
+  }, [session.loggedIn, session.gradeSelected, pendingActivity, loginOpen])
 
   function handleLogout() {
     logout()
@@ -125,6 +131,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         <StatsSection />
       </>
 
+  if (!landing && authenticated && !session.gradeSelected) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={selectGrade} /></main></div>
+
   return (
     <div className={landing ? 'landing-page' : 'learning-page'} id={landing ? 'top' : undefined}>
       {landing ? <>
@@ -145,7 +153,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         onChat={setActiveCharacter}
       >{sections}<ImageCredits /><Footer /></Dashboard>}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
-      {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
+      {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
       {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal

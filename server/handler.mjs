@@ -2,6 +2,7 @@ import { chunkResponse, getDataset, lessonId, normalize, searchChunks } from './
 import { characterIndex, listCharacters } from './characters.mjs'
 import { answerCharacterQuestion } from './rag/pipeline.mjs'
 import { clientKey, createLimiter } from './rag/limits.mjs'
+import { SpeechError, synthesizeSpeech } from './speech.mjs'
 
 const defaultLimiter = createLimiter()
 
@@ -38,22 +39,28 @@ function send(res, status, data, head, cache = true) {
   res.setHeader('Cache-Control', status === 200 && cache ? 'public, max-age=60, s-maxage=300' : 'no-store')
   res.end(head ? undefined : JSON.stringify(data))
 }
-async function readChatBody(req) {
+async function readJsonBody(req, maxBytes = 16000) {
   if (!req.headers['content-type']?.toLowerCase().startsWith('application/json')) throw new HttpError(415, 'UNSUPPORTED_MEDIA_TYPE', 'Use application/json.')
-  if (Number(req.headers['content-length']) > 16000) { req.resume(); throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Chat payload is too large.') }
+  if (Number(req.headers['content-length']) > maxBytes) { req.resume(); throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Payload is too large.') }
   let body = req.body
   if (body === undefined) {
     const buffers = []
     let length = 0
-    for await (const chunk of req) { length += chunk.length; if (length <= 16000) buffers.push(Buffer.from(chunk)) }
-    if (length > 16000) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Chat payload is too large.')
+    for await (const chunk of req) { length += chunk.length; if (length <= maxBytes) buffers.push(Buffer.from(chunk)) }
+    if (length > maxBytes) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Payload is too large.')
     body = Buffer.concat(buffers).toString('utf8')
   }
   if (typeof body === 'string') {
-    if (Buffer.byteLength(body) > 16000) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Chat payload is too large.')
+    if (Buffer.byteLength(body) > maxBytes) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Payload is too large.')
     try { body = JSON.parse(body) } catch { throw new HttpError(400, 'INVALID_BODY', 'Invalid JSON body.') }
   }
-  if (!body || typeof body !== 'object' || Array.isArray(body) || typeof body.message !== 'string' || !body.message.trim() || body.message.length > 1000) throw new HttpError(400, 'INVALID_BODY', 'message must contain 1–1000 characters.')
+  if (!body || typeof body !== 'object' || Array.isArray(body)) throw new HttpError(400, 'INVALID_BODY', 'Expected a JSON object.')
+  if (Buffer.byteLength(JSON.stringify(body)) > maxBytes) throw new HttpError(413, 'PAYLOAD_TOO_LARGE', 'Payload is too large.')
+  return body
+}
+async function readChatBody(req) {
+  const body = await readJsonBody(req)
+  if (typeof body.message !== 'string' || !body.message.trim() || body.message.length > 1000) throw new HttpError(400, 'INVALID_BODY', 'message must contain 1–1000 characters.')
   const history = body.history ?? []
   if (!Array.isArray(history) || history.length > 8 || history.some((turn) => !turn || !['user', 'assistant'].includes(turn.role) || typeof turn.content !== 'string' || turn.content.length > 2000)) throw new HttpError(400, 'INVALID_BODY', 'Invalid conversation history.')
   return { message: body.message.trim(), history }
@@ -68,11 +75,22 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
     const route = (url.searchParams.get('route') || url.pathname.replace(/^\/api\/?/, '')).replace(/^\/+|\/+$/g, '')
     const parts = route.split('/')
     const chat = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'chat'
-    if (chat ? req.method !== 'POST' : !['GET', 'HEAD'].includes(req.method)) {
-      res.setHeader('Allow', chat ? 'POST' : 'GET, HEAD')
-      throw new HttpError(405, 'METHOD_NOT_ALLOWED', chat ? 'Use POST for character chat.' : 'This dataset endpoint is read-only.')
+    const speech = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'speech'
+    if (chat || speech ? req.method !== 'POST' : !['GET', 'HEAD'].includes(req.method)) {
+      res.setHeader('Allow', chat || speech ? 'POST' : 'GET, HEAD')
+      throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : 'This dataset endpoint is read-only.')
     }
     if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    if (speech) {
+      const body = await readJsonBody(req, 32000)
+      const audio = await (options.speech || synthesizeSpeech)({ characterId: parts[1], text: body.text, visitor: clientKey(req) })
+      res.statusCode = 200
+      res.setHeader('Content-Type', 'audio/mpeg')
+      res.setHeader('Cache-Control', 'no-store')
+      res.setHeader('X-Content-Type-Options', 'nosniff')
+      res.end(audio)
+      return
+    }
     const grade = integer(url.searchParams, 'grade', undefined, 6, 12)
     const query = url.searchParams.get('q') || ''
     if (query.length > 200) badRequest('q must have at most 200 characters.')
@@ -122,6 +140,11 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
     if (!result) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     send(res, 200, result, head, !chat)
   } catch (error) {
+    if (error instanceof SpeechError) {
+      if (error.retryAfter) res.setHeader('Retry-After', String(error.retryAfter))
+      send(res, error.status, { error: { code: error.code, message: error.message } }, head)
+      return
+    }
     if (error instanceof RateLimitError) res.setHeader('Retry-After', String(error.retryAfter))
     if (error instanceof HttpError) send(res, error.status, { error: { code: error.code, message: error.message } }, head)
     else {

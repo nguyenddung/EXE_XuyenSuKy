@@ -1,5 +1,6 @@
 import { ArrowLeft, ArrowRight, BookOpen, MessageCircle, Trophy } from 'lucide-react'
 import { Link, Navigate, useLocation, useNavigate, type Location } from 'react-router-dom'
+import { GradeOnboarding } from '../components/GradeOnboarding'
 import { LoginForm } from '../components/LoginForm'
 import { hasAppAccess, useDemoSession } from '../hooks/useDemoSession'
 
@@ -10,13 +11,15 @@ const perks = [
 ]
 
 export function LoginPage() {
-  const { session, login, startGuest } = useDemoSession()
+  const { session, login, startGuest, selectGrade } = useDemoSession()
   const navigate = useNavigate()
   const location = useLocation()
   // A protected page that sent the visitor here; sign-in returns there with its state (e.g. a lesson to open).
   const from = (location.state as { from?: Location } | null)?.from
-  const destination = from ? `${from.pathname}${from.hash}` : '/home'
+  const destination = from ? `${from.pathname}${from.search}${from.hash}` : '/home'
   const enter = () => navigate(destination, { replace: true, state: from?.state })
+
+  if (hasAppAccess(session) && !session.gradeSelected) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={grade => { selectGrade(grade); enter() }} /></main></div>
 
   if (hasAppAccess(session)) return <Navigate to={destination} replace state={from?.state} />
 
@@ -35,9 +38,9 @@ export function LoginPage() {
         <span className="section-kicker">TÀI KHOẢN HỌC SINH</span>
         <h1 id="auth-title">Đăng nhập Xuyên Sử Ký</h1>
         <p>Tiếp tục hành trình học sử, giữ tiến độ, XP và ghi chú của bạn.</p>
-        <LoginForm onLogin={(email, password) => { if (!login(email, password)) return false; enter(); return true }} />
+        <LoginForm onLogin={async (email, password) => { if (!await login(email, password)) return false; return true }} />
         <div className="auth-divider"><span>hoặc</span></div>
-        <button type="button" className="button-outline auth-guest" onClick={() => { startGuest(); enter() }}>Học thử không cần tài khoản <ArrowRight size={17} /></button>
+        <button type="button" className="button-outline auth-guest" onClick={() => { startGuest() }}>Học thử không cần tài khoản <ArrowRight size={17} /></button>
         <small>Chế độ học thử lưu tiến độ trên trình duyệt này. Quiz và hồ sơ cần đăng nhập. Đây là bản demo, không dùng xác thực thật.</small>
       </section>
     </main>

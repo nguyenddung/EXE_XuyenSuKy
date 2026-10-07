@@ -1,0 +1,14 @@
+{
+  "tran-hung-dao": { "voice": "vi-VN-NamMinhNeural", "rate": 0.88, "pitch": 0.94 },
+  "ly-thuong-kiet": { "voice": "vi-VN-NamMinhNeural", "rate": 1.02, "pitch": 0.98 },
+  "quang-trung": { "voice": "vi-VN-NamMinhNeural", "rate": 1.08, "pitch": 1.04 },
+  "hai-ba-trung": { "voice": "vi-VN-HoaiMyNeural", "rate": 0.98, "pitch": 0.98 },
+  "ngo-quyen": { "voice": "vi-VN-NamMinhNeural", "rate": 0.92, "pitch": 0.96 },
+  "ly-cong-uan": { "voice": "vi-VN-NamMinhNeural", "rate": 0.90, "pitch": 1.00 },
+  "le-loi": { "voice": "vi-VN-NamMinhNeural", "rate": 0.96, "pitch": 0.95 },
+  "nguyen-trai": { "voice": "vi-VN-NamMinhNeural", "rate": 0.92, "pitch": 1.03 },
+  "ho-chi-minh": { "voice": "vi-VN-NamMinhNeural", "rate": 0.90, "pitch": 1.02 },
+  "vo-nguyen-giap": { "voice": "vi-VN-NamMinhNeural", "rate": 0.95, "pitch": 0.98 },
+  "tran-nhan-tong": { "voice": "vi-VN-NamMinhNeural", "rate": 0.86, "pitch": 1.00 },
+  "ba-trieu": { "voice": "vi-VN-HoaiMyNeural", "rate": 1.04, "pitch": 0.96 }
+}
