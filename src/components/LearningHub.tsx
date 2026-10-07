@@ -3,6 +3,7 @@ import { ArrowRight, Bookmark, BookOpen, Check, Flame, Search, Target, X } from 
 import { libraryLessons, normalizeSearch, type LibraryLesson } from '../data/library'
 import { dayKey, shiftDay, streak, type Journal, type useLearningJournal } from '../hooks/useLearningJournal'
 import type { DemoActivity } from '../data/demo'
+import type { LessonCollection } from './StudyPlan'
 import { DatasetLibrary } from './DatasetLibrary'
 import type { useHistoryDataset } from '../hooks/useHistoryDataset'
 type Learning = ReturnType<typeof useLearningJournal>
@@ -45,17 +46,19 @@ interface HubProps extends Props {
   dataset: ReturnType<typeof useHistoryDataset>
   source: 'dataset' | 'demo'
   onSourceChange: (source: 'dataset' | 'demo') => void
+  onCollectionHandled: () => void
+  requestedCollection: { filter: LessonCollection; token: number } | null
   requestedLessonId: string | null
   onRequestHandled: () => void
 }
-export function LearningHub({ dataset, source, onSourceChange, requestedLessonId, onRequestHandled, ...props }: HubProps) {
+export function LearningHub({ dataset, source, onSourceChange, onCollectionHandled, requestedCollection, requestedLessonId, onRequestHandled, ...props }: HubProps) {
   return <>
     <div className="page-shell library-source-switch" role="group" aria-label="Nguồn thư viện">
       <button className="button-outline" aria-pressed={source === 'dataset'} onClick={() => onSourceChange('dataset')}>Sách giáo khoa lớp 6–12</button>
       <button className="button-outline" aria-pressed={source === 'demo'} onClick={() => onSourceChange('demo')}>Bài học thử</button>
     </div>
     {source === 'demo' ? <DemoLearningHub {...props} grade={Math.min(props.grade, 9)} /> : <section id="library" className="section-space library-section" aria-labelledby="dataset-library-title"><div className="page-shell"><div className="section-heading"><div><span className="section-kicker">TỦ SÁCH XUYÊN THỜI GIAN</span><h2 id="dataset-library-title">Đọc sử, từ nguồn gốc.</h2><p>Khám phá bài học theo lớp, tìm tư liệu có trích nguồn và lưu điều bạn muốn nhớ.</p></div></div>
-      {dataset.loading ? <p className="dataset-status" role="status">Đang kết nối thư viện…</p> : dataset.error ? <div className="dataset-status" role="alert"><p>{dataset.error}</p><button className="button-outline" onClick={dataset.retry}>Kết nối lại</button><button className="button-outline" onClick={() => onSourceChange('demo')}>Mở bài học thử</button></div> : dataset.metadata && <DatasetLibrary metadata={dataset.metadata} learning={props.learning} grade={props.grade} requestedLessonId={requestedLessonId} onRequestHandled={onRequestHandled} />}
+      {dataset.loading ? <p className="dataset-status" role="status">Đang kết nối thư viện…</p> : dataset.error ? <div className="dataset-status" role="alert"><p>{dataset.error}</p><button className="button-outline" onClick={dataset.retry}>Kết nối lại</button><button className="button-outline" onClick={() => onSourceChange('demo')}>Mở bài học thử</button></div> : dataset.metadata && <DatasetLibrary onCollectionHandled={onCollectionHandled} requestedCollection={requestedCollection} metadata={dataset.metadata} learning={props.learning} grade={props.grade} requestedLessonId={requestedLessonId} onRequestHandled={onRequestHandled} />}
     </div></section>}
   </>
 }

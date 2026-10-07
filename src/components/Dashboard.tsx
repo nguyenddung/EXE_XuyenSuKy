@@ -1,8 +1,11 @@
-import { useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
 import { ArrowRight, Bell, BookOpen, Check, ChevronDown, Compass, Flame, Home, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Trophy, UserRound, X } from 'lucide-react'
 import { challengeActivities, demoAccount } from '../data/demo'
 import { rankingsFor } from '../data/leaderboard'
 import type { DemoActivity } from '../data/demo'
+import { games } from '../data/minigames'
+import { StudyPlan, type LessonCollection } from './StudyPlan'
+import type { useLearningJournal } from '../hooks/useLearningJournal'
 import type { GameId } from '../data/minigames'
 import type { DemoSession } from '../hooks/useDemoSession'
 import type { Character } from '../types'
@@ -19,6 +22,8 @@ const navigation = [
 ] as const
 
 interface Props {
+  learning: ReturnType<typeof useLearningJournal>
+  onCollection: (filter: LessonCollection) => void
   children: ReactNode
   session: DemoSession
   readCount: number
@@ -34,7 +39,7 @@ interface Props {
   onChat: (character: Character) => void
 }
 
-export function Dashboard({ children, session, readCount, gradeCount, recommendedLessonId, learningStreak, onLogin, onLogout, onOpenLesson, onSelectGrade, onQuiz, onGame, onChat }: Props) {
+export function Dashboard({ learning, onCollection, children, session, readCount, gradeCount, recommendedLessonId, learningStreak, onLogin, onLogout, onOpenLesson, onSelectGrade, onQuiz, onGame, onChat }: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [activeHref, setActiveHref] = useState('#dashboard')
@@ -50,6 +55,13 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
   const [retry, setRetry] = useState(0)
   const percent = gradeCount ? Math.min(100, Math.round(readCount / gradeCount * 100)) : 0
   const gameCount = session.completedActivities.filter((id) => id.startsWith('minigame-')).length
+  const unread = lessons.filter(lesson => !learning.journal.read.includes(lesson.id))
+  const recommended = (unread.length ? unread : lessons).slice(0, 3)
+  const resume = Object.entries(learning.journal.reading).filter(([id, item]) => item.grade === session.grade && !learning.journal.read.includes(id)).sort((a, b) => b[1].openedAt.localeCompare(a[1].openedAt))[0]
+  const nextLessonId = resume?.[0] || recommended[0]?.id || recommendedLessonId || 'LS' + session.grade + '_B01'
+  const nextGame = games.find(game => !session.completedActivities.includes('minigame-' + game.id)) || [...games].sort((a, b) => (session.gameRecords[a.id] || 0) - (session.gameRecords[b.id] || 0))[0]
+  const searchInput = useRef<HTMLInputElement>(null)
+  const searchRequest = useRef<AbortController | null>(null)
   const ranks = rankingsFor(session)
 
   useEffect(() => {
@@ -62,22 +74,48 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
   useEffect(() => {
     const controller = new AbortController()
     setLessons([]); setLessonError(''); setLessonLoading(true)
-    historyApi<PageResult<HistoryLesson>>(`lessons?grade=${session.grade}&limit=3`, controller.signal)
+    historyApi<PageResult<HistoryLesson>>(`lessons?grade=${session.grade}&limit=50`, controller.signal)
       .then(data => { if (!controller.signal.aborted) setLessons(data.items) })
       .catch(error => { if (!controller.signal.aborted) setLessonError(error.message) })
       .finally(() => { if (!controller.signal.aborted) setLessonLoading(false) })
     return () => controller.abort()
   }, [session.grade, retry])
 
+  useEffect(() => {
+    function keyboard(event: KeyboardEvent) {
+      if (event.key === 'Escape') { setSearchOpen(false); setProfileOpen(false); setMenuOpen(false) }
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k' && !document.querySelector('dialog[open], [aria-modal="true"]')) {
+        event.preventDefault(); searchInput.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', keyboard)
+    return () => { document.removeEventListener('keydown', keyboard); searchRequest.current?.abort() }
+  }, [])
+
+  useEffect(() => {
+    function updateActive() {
+      const sections = navigation.map(item => ({ href: item.href, node: document.querySelector(item.href) })).filter(item => item.node)
+      const current = [...sections].reverse().find(item => item.node!.getBoundingClientRect().top <= 140)
+      setActiveHref(current?.href || '#dashboard')
+    }
+    let frame = 0
+    const onScroll = () => { if (!frame) frame = window.requestAnimationFrame(() => { frame = 0; updateActive() }) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    updateActive()
+    return () => { window.removeEventListener('scroll', onScroll); window.cancelAnimationFrame(frame) }
+  }, [])
+
   async function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (query.trim().length < 2) { setSearchError('Nhập ít nhất 2 ký tự để tìm kiếm.'); setSearchOpen(true); return }
+    searchRequest.current?.abort()
+    if (query.trim().length < 2) { setSearchBusy(false); setSearchResults([]); setSearchError('Nhập ít nhất 2 ký tự để tìm kiếm.'); setSearchOpen(true); return }
+    const controller = new AbortController(); searchRequest.current = controller
     setSearchBusy(true); setSearchOpen(true); setSearchError(''); setSearchResults([])
     try {
-      const data = await historyApi<PageResult<HistoryChunk>>(`search?q=${encodeURIComponent(query.trim())}&limit=5`)
-      setSearchResults(data.items)
-    } catch (error) { setSearchError((error as Error).message) }
-    finally { setSearchBusy(false) }
+      const data = await historyApi<PageResult<HistoryChunk>>(`search?q=${encodeURIComponent(query.trim())}&limit=5`, controller.signal)
+      if (!controller.signal.aborted) setSearchResults(data.items)
+    } catch (error) { if (!controller.signal.aborted) setSearchError((error as Error).message) }
+    finally { if (!controller.signal.aborted) setSearchBusy(false) }
   }
 
   function openLesson(id: string) {
@@ -91,7 +129,7 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
     openLesson(lessonId)
   }
 
-  return <div className="dashboard-app" id="top">
+  return <div className="dashboard-app" id="top"><a className="skip-learning-link" href="#dashboard">Đi đến nội dung học</a>
     {menuOpen && <button className="dashboard-scrim" type="button" aria-label="Đóng menu" onClick={() => setMenuOpen(false)} />}
     <aside className={`dashboard-sidebar ${menuOpen ? 'is-open' : ''}`} aria-label="Điều hướng học tập">
       <a href="#dashboard" className="dashboard-brand" onClick={() => setMenuOpen(false)}><span className="dashboard-brand-mark">史</span><strong>Xuyên Sử Ký</strong></a>
@@ -102,22 +140,24 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
     <div className="dashboard-main">
       <header className="dashboard-topbar">
         <button className="dashboard-menu-button" type="button" aria-label="Mở menu" onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
-        <form className="dashboard-search" role="search" onSubmit={submitSearch}><Search size={19} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} onFocus={() => { if (searchResults.length || searchError) setSearchOpen(true) }} onKeyDown={(event) => { if (event.key === 'Escape') setSearchOpen(false) }} aria-label="Tìm sự kiện, nhân vật, thời kỳ" placeholder="Tìm kiếm sự kiện, nhân vật, thời kỳ..." /><button type="submit">Tìm</button></form>
+        <form className="dashboard-search" role="search" onSubmit={submitSearch}><Search size={19} /><input ref={searchInput} type="search" value={query} onChange={(event) => { searchRequest.current?.abort(); setSearchBusy(false); setSearchResults([]); setSearchError(''); setQuery(event.target.value) }} onFocus={() => { if (searchResults.length || searchError) setSearchOpen(true) }} onKeyDown={(event) => { if (event.key === 'Escape') setSearchOpen(false) }} aria-label="Tìm sự kiện, nhân vật, thời kỳ" placeholder="Tìm kiếm sự kiện, nhân vật, thời kỳ..." /><kbd className="search-shortcut" aria-hidden="true">Ctrl K</kbd><button type="submit">Tìm</button></form>
         <div className="dashboard-top-actions"><a className="dashboard-notification" href="#daily-missions" aria-label="Xem nhiệm vụ hôm nay"><Bell size={21} /><i /></a><div className="dashboard-account"><button type="button" className="dashboard-account-button" aria-expanded={profileOpen} aria-label="Tài khoản" onClick={() => setProfileOpen(!profileOpen)}><span className={`dashboard-account-avatar ${session.loggedIn ? '' : 'is-guest'}`}>{session.loggedIn ? (session.name?.slice(0, 1).toUpperCase() || demoAccount.avatar) : 'K'}</span><span><strong>{session.loggedIn ? (session.name || demoAccount.name) : 'Khách'}</strong><small>{session.loggedIn ? `Học sinh lớp ${session.grade}` : `Học thử · Lớp ${session.grade}`}</small></span><ChevronDown size={16} /></button>{profileOpen && <div className="dashboard-account-menu"><a href="#progress" onClick={() => setProfileOpen(false)}>Xem tiến độ</a>{!session.loggedIn && <button onClick={() => { onLogin(); setProfileOpen(false) }}>Đăng nhập để lưu tiến độ</button>}<a href="/" onClick={(event) => { event.preventDefault(); setProfileOpen(false); onLogout() }}>{session.loggedIn ? 'Đăng xuất' : 'Thoát chế độ học thử'}</a></div>}</div></div>
         {searchOpen && <div className="dashboard-search-results" role="region" aria-label="Kết quả tìm kiếm"><div className="dashboard-search-results-head"><strong>Kết quả trong sách giáo khoa</strong><button type="button" aria-label="Đóng kết quả tìm kiếm" onClick={() => setSearchOpen(false)}><X size={17} /></button></div>{searchBusy ? <p>Đang tìm tư liệu…</p> : searchError ? <p role="alert">{searchError}</p> : searchResults.length ? searchResults.map((result) => <button type="button" key={result.id} onClick={() => openLesson(result.lessonId)}><BookOpen size={16} /><span><strong>{result.lessonTitle}</strong><small>Lớp {result.grade} · {result.sectionTitle}</small></span><ArrowRight size={15} /></button>) : <p>Chưa tìm thấy tư liệu. Thử từ khóa khác nhé.</p>}</div>}
       </header>
 
-      <main className="dashboard-overview" id="dashboard">
+      <main className="dashboard-overview" id="dashboard" tabIndex={-1}>
         {!session.loggedIn && <div className="dashboard-guest-banner" role="status"><span><Sparkles size={16} /></span><p><strong>Bạn đang học thử.</strong> Tiến độ chỉ lưu trên trình duyệt này; quiz và hồ sơ cần tài khoản.</p><button type="button" onClick={onLogin}>Đăng nhập</button></div>}
         <div className="dashboard-overview-grid">
           <div className="dashboard-primary">
-            <section className="dashboard-hero" aria-labelledby="dashboard-title"><div className="dashboard-hero-copy"><span>CHÀO MỪNG ĐẾN VỚI XUYÊN SỬ KÝ</span><h1 id="dashboard-title">Hành trình khám phá<br />Lịch sử Việt Nam</h1><p>Khám phá quá khứ để hiểu hiện tại,<br />kiến tạo tương lai.</p><button type="button" onClick={() => openLesson(recommendedLessonId || `LS${session.grade}_B01`)}>Tiếp tục học <ArrowRight size={18} /></button></div><div className="dashboard-hero-quote">“Lịch sử không chỉ để nhớ,<br />mà để sống cùng.”</div></section>
+            <section className="dashboard-hero" aria-labelledby="dashboard-title"><div className="dashboard-hero-copy"><span>CHÀO MỪNG ĐẾN VỚI XUYÊN SỬ KÝ</span><h1 id="dashboard-title">Hành trình khám phá<br />Lịch sử Việt Nam</h1><p>Khám phá quá khứ để hiểu hiện tại,<br />kiến tạo tương lai.</p><button type="button" onClick={() => openLesson(nextLessonId || `LS${session.grade}_B01`)}>Tiếp tục học <ArrowRight size={18} /></button></div><div className="dashboard-hero-quote">“Lịch sử không chỉ để nhớ,<br />mà để sống cùng.”</div></section>
+
+            <StudyPlan learning={learning} grade={session.grade} nextLesson={recommended[0]} onOpenLesson={openLesson} onCollection={onCollection} />
 
             <section className="dashboard-section" aria-labelledby="era-title"><div className="dashboard-section-heading"><h2 id="era-title">Chọn giai đoạn lịch sử</h2><a href="#timeline">Xem tất cả <ArrowRight size={15} /></a></div><div className="dashboard-era-grid">{eras.map((era) => <button type="button" className="dashboard-era" key={era.title} onClick={() => openEra(era.grade, era.lessonId)}><img src={`/images/dashboard/${era.image}.webp`} alt="" loading="lazy" /><strong>{era.title}</strong></button>)}</div></section>
 
-            <section className="dashboard-section" id="daily-missions" aria-labelledby="missions-title"><div className="dashboard-section-heading"><h2 id="missions-title">Nhiệm vụ hôm nay</h2></div><div className="dashboard-mission-grid"><button className="dashboard-mission mission-blue" onClick={() => openLesson(`LS${session.grade}_B01`)}><span><BookOpen size={27} /></span><strong>Hoàn thành<br />bài học</strong><small>Mở bài lớp {session.grade}</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-orange" onClick={() => onQuiz(challengeActivities.quiz)}><span><Check size={26} /></span><strong>Làm câu quiz</strong><small>Ôn tập kiến thức</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-purple" onClick={() => featured ? onChat(featured) : document.getElementById('characters')?.scrollIntoView({ behavior: 'smooth' })}><span><MessageCircle size={27} /></span><strong>Trò chuyện với<br />nhân vật AI</strong><small>Đặt một câu hỏi</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-teal" onClick={() => onGame('timeline')}><span><Trophy size={27} /></span><strong>Tham gia thử thách</strong><small>Thử thách tuần</small><ArrowRight size={17} /></button></div></section>
+            <section className="dashboard-section" id="daily-missions" aria-labelledby="missions-title"><div className="dashboard-section-heading"><h2 id="missions-title">Nhiệm vụ hôm nay</h2></div><div className="dashboard-mission-grid"><button className="dashboard-mission mission-blue" onClick={() => openLesson(`LS${session.grade}_B01`)}><span><BookOpen size={27} /></span><strong>Hoàn thành<br />bài học</strong><small>Mở bài lớp {session.grade}</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-orange" onClick={() => onQuiz(challengeActivities.quiz)}><span><Check size={26} /></span><strong>Làm câu quiz</strong><small>Ôn tập kiến thức</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-purple" onClick={() => featured ? onChat(featured) : document.getElementById('characters')?.scrollIntoView({ behavior: 'smooth' })}><span><MessageCircle size={27} /></span><strong>Trò chuyện với<br />nhân vật AI</strong><small>Đặt một câu hỏi</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-teal" onClick={() => onGame(nextGame.id)}><span><Trophy size={27} /></span><strong>Tham gia thử thách</strong><small>{nextGame.title}</small><ArrowRight size={17} /></button></div></section>
 
-            <section className="dashboard-section" aria-labelledby="lessons-title"><div className="dashboard-section-heading"><h2 id="lessons-title">Bài học đề xuất · Lớp {session.grade}</h2><a href="#library">Xem tất cả <ArrowRight size={15} /></a></div><label className="recommendation-grade">Lớp học <select aria-label="Đổi lớp đề xuất" value={session.grade} onChange={event => onSelectGrade(Number(event.target.value))}>{[6, 7, 8, 9, 10, 11, 12].map(grade => <option key={grade} value={grade}>Lớp {grade}</option>)}</select></label>{lessonLoading && <p role="status">Đang tải bài giảng…</p>}{lessonError && <p role="alert">{lessonError} <button onClick={() => setRetry(value => value + 1)}>Thử lại</button></p>}{!lessonLoading && !lessonError && !lessons.length && <p>Chưa có bài giảng cho lớp này.</p>}<div className="dashboard-lesson-grid">{lessons.map((item) => <button type="button" className="dashboard-lesson" key={item.id} onClick={() => openLesson(item.id)}><div className="dashboard-lesson-image"><img src={`/images/dashboard/${['bach-dang-938', 'ly', 'tay-son'][item.number % 3]}.webp`} alt="" loading="lazy" /><span>Lớp {item.grade} · Bài {item.number}</span></div><div className="dashboard-lesson-copy"><strong>{item.title}</strong><small>SGK lớp {item.grade} · Đọc bài và lưu ghi chú</small><span><ArrowRight size={18} /></span></div></button>)}</div></section>
+            <section className="dashboard-section" aria-labelledby="lessons-title"><div className="dashboard-section-heading"><h2 id="lessons-title">Bài học đề xuất · Lớp {session.grade}</h2><a href="#library">Xem tất cả <ArrowRight size={15} /></a></div><label className="recommendation-grade">Lớp học <select aria-label="Đổi lớp đề xuất" value={session.grade} onChange={event => onSelectGrade(Number(event.target.value))}>{[6, 7, 8, 9, 10, 11, 12].map(grade => <option key={grade} value={grade}>Lớp {grade}</option>)}</select></label>{lessonLoading && <p role="status">Đang tải bài giảng…</p>}{lessonError && <p role="alert">{lessonError} <button onClick={() => setRetry(value => value + 1)}>Thử lại</button></p>}{!lessonLoading && !lessonError && !lessons.length && <p>Chưa có bài giảng cho lớp này.</p>}<div className="dashboard-lesson-grid">{recommended.map((item) => <button type="button" className="dashboard-lesson" key={item.id} onClick={() => openLesson(item.id)}><div className="dashboard-lesson-image"><img src={`/images/dashboard/${['bach-dang-938', 'ly', 'tay-son'][item.number % 3]}.webp`} alt="" loading="lazy" /><span>Lớp {item.grade} · Bài {item.number}</span></div><div className="dashboard-lesson-copy"><strong>{item.title}</strong><small>SGK lớp {item.grade} · {item.minutes} phút đọc</small><small className="recommendation-reason">{learning.journal.read.includes(item.id) ? "Ôn lại kiến thức đã đọc" : "Bài mới trong lộ trình của bạn"}</small><span><ArrowRight size={18} /></span></div></button>)}</div></section>
           </div>
 
           <div className="dashboard-rail">
@@ -128,9 +168,10 @@ export function Dashboard({ children, session, readCount, gradeCount, recommende
             <section className="dashboard-panel dashboard-ranking" aria-labelledby="dash-ranking-title"><div className="dashboard-panel-heading"><h2 id="dash-ranking-title">Bảng xếp hạng</h2><a href="#progress">Xem tất cả <ArrowRight size={14} /></a></div>{ranks.map((entry, index) => <div className={`dashboard-rank ${entry.isMe ? 'is-me' : ''}`} key={entry.name}><span className="dashboard-rank-number">{index + 1}</span><span className="dashboard-rank-avatar">{entry.avatar}</span><strong>{entry.name}</strong><span>{entry.xp.toLocaleString('vi-VN')}</span></div>)}</section>
           </div>
         </div>
-        <section className="dashboard-weekly"><span className="dashboard-weekly-icon"><Trophy size={25} /></span><div><small>THỬ THÁCH ĐẶC BIỆT</small><strong>Khám phá các dấu mốc lịch sử Việt Nam</strong><p>Hoàn thành minigame để nhận XP và khám phá điều mới.</p></div><div className="dashboard-weekly-progress"><div><span style={{ width: `${gameCount / 4 * 100}%` }} /></div><small>{gameCount}/4</small></div><div className="dashboard-weekly-badges" aria-label={`${gameCount} trong 4 thử thách đã hoàn thành`}>{Array.from({ length: 4 }, (_, index) => <span className={index < gameCount ? 'earned' : ''} key={index}>{index < gameCount ? <Check size={16} /> : <Sparkles size={16} />}</span>)}</div><button type="button" className="dashboard-yellow-button" onClick={() => onGame('timeline')}>Tham gia ngay <ArrowRight size={17} /></button></section>
+        <section className="dashboard-weekly"><span className="dashboard-weekly-icon"><Trophy size={25} /></span><div><small>THỬ THÁCH ĐẶC BIỆT</small><strong>Khám phá các dấu mốc lịch sử Việt Nam</strong><p>Hoàn thành minigame để nhận XP và khám phá điều mới.</p></div><div className="dashboard-weekly-progress"><div><span style={{ width: `${gameCount / 4 * 100}%` }} /></div><small>{gameCount}/4</small></div><div className="dashboard-weekly-badges" aria-label={`${gameCount} trong 4 thử thách đã hoàn thành`}>{Array.from({ length: 4 }, (_, index) => <span className={index < gameCount ? 'earned' : ''} key={index}>{index < gameCount ? <Check size={16} /> : <Sparkles size={16} />}</span>)}</div><button type="button" className="dashboard-yellow-button" onClick={() => onGame(nextGame.id)}>Tham gia ngay <ArrowRight size={17} /></button></section>
       </main>
       <div className="dashboard-deeper">{children}</div>
+      <nav className="mobile-learning-nav" aria-label="Điều hướng nhanh">{navigation.filter(item => ['#dashboard', '#library', '#characters', '#challenges'].includes(item.href)).map(({ href, label, icon: Icon }) => <a key={href} href={href} aria-current={activeHref === href ? 'page' : undefined} onClick={() => { setActiveHref(href); setMenuOpen(false) }}><Icon size={20} /><span>{label}</span></a>)}</nav>
     </div>
   </div>
 }

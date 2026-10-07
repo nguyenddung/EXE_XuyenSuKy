@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, Bookmark, BookOpen, Check, Search, X } from 'lucide-react'
 import { historyApi, sourceLabel, type DatasetMetadata, type HistoryChunk, type HistoryLesson, type LessonDetail, type PageResult } from '../lib/historyApi'
+import { useReaderPreferences } from '../hooks/useReaderPreferences'
+import type { LessonCollection } from './StudyPlan'
 import { dayKey, streak, type useLearningJournal } from '../hooks/useLearningJournal'
 
 type Learning = ReturnType<typeof useLearningJournal>
 interface Props {
+  onCollectionHandled: () => void
+  requestedCollection: { filter: LessonCollection; token: number } | null
   metadata: DatasetMetadata
   learning: Learning
   grade: number
@@ -23,7 +27,28 @@ function DatasetDailyGoal({ learning }: { learning: Learning }) {
 function DatasetReader({ lesson, learning, onClose }: { lesson: LessonDetail; learning: Learning; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const title = useRef<HTMLHeadingElement>(null)
-  const [large, setLarge] = useState(false)
+  const { large, focused, toggleLarge, toggleFocus } = useReaderPreferences()
+  const savedSection = useRef(Math.min(learning.journal.reading[lesson.id]?.section || 0, lesson.sections.length - 1))
+  const [activeSection, setActiveSection] = useState(savedSection.current)
+  const currentSection = useRef(savedSection.current)
+  const restored = useRef(false)
+  const remember = useRef(learning.rememberLesson); remember.current = learning.rememberLesson
+  function goToSection(index: number, behavior: ScrollBehavior = 'smooth') {
+    const element = dialog.current
+    const section = element?.querySelector<HTMLElement>('#dataset-section-' + index)
+    if (!element || !section) return
+    const top = section.getBoundingClientRect().top - element.getBoundingClientRect().top + element.scrollTop - 68
+    element.scrollTo({ top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : behavior })
+  }
+  function trackSection() {
+    if (!restored.current || !dialog.current) return
+    const edge = dialog.current.getBoundingClientRect().top + 100
+    const sections = Array.from(dialog.current.querySelectorAll<HTMLElement>('.dataset-section'))
+    const index = Math.max(0, sections.reduce((last, section, index) => section.getBoundingClientRect().top <= edge ? index : last, 0))
+    if (index !== currentSection.current) {
+      currentSection.current = index; setActiveSection(index); remember.current(lesson, index)
+    }
+  }
   const [readNow, setReadNow] = useState(false)
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
@@ -32,19 +57,24 @@ function DatasetReader({ lesson, learning, onClose }: { lesson: LessonDetail; le
     const element = dialog.current
     element?.showModal()
     title.current?.focus()
-    return () => { element?.close(); document.body.style.overflow = overflow; previous?.focus() }
+    const frame = window.requestAnimationFrame(() => {
+      if (savedSection.current > 0) goToSection(savedSection.current, 'auto')
+      restored.current = true
+      remember.current(lesson, savedSection.current)
+    })
+    return () => { window.cancelAnimationFrame(frame); element?.close(); document.body.style.overflow = overflow; previous?.focus() }
   }, [])
   const { journal, bookmark, note, markRead, rate, storageError } = learning
-  return <dialog ref={dialog} className="lesson-reader dataset-reader" aria-modal="true" aria-labelledby="dataset-reader-title" onCancel={(event) => { event.preventDefault(); onClose() }}>
+  return <dialog ref={dialog} onScroll={trackSection} className={"lesson-reader dataset-reader" + (focused ? " is-focused" : "")} aria-modal="true" aria-labelledby="dataset-reader-title" onCancel={(event) => { event.preventDefault(); onClose() }}>
     <header>
       <span className="section-kicker">SÁCH GIÁO KHOA · LỚP {lesson.grade}</span>
-      <button className="reader-close" aria-label="Đóng bài đọc" onClick={onClose}><X size={22} /></button>
       <h2 id="dataset-reader-title" ref={title} tabIndex={-1}>{lesson.title}</h2>
       <p className="dataset-citation">{sourceLabel(lesson.source)}</p>
-      <div className="reader-tools"><span>{lesson.minutes} phút đọc · {lesson.sectionCount} mục</span><button aria-pressed={large} onClick={() => setLarge(!large)}>Aa · {large ? 'Cỡ thường' : 'Chữ lớn'}</button><button aria-pressed={journal.bookmarks.includes(lesson.id)} onClick={() => bookmark(lesson.id)}><Bookmark size={16} /> {journal.bookmarks.includes(lesson.id) ? 'Đã lưu' : 'Lưu bài'}</button></div>
+      <div className="reader-tools"><span>{lesson.minutes} phút đọc · {lesson.sectionCount} mục</span><button aria-pressed={large} onClick={toggleLarge}>Aa · {large ? 'Cỡ thường' : 'Chữ lớn'}</button><button aria-pressed={focused} onClick={toggleFocus}>Chế độ tập trung</button><button aria-pressed={journal.bookmarks.includes(lesson.id)} onClick={() => bookmark(lesson.id)}><Bookmark size={16} /> {journal.bookmarks.includes(lesson.id) ? 'Đã lưu' : 'Lưu bài'}</button></div>
     </header>
+    <div className="reader-position-bar"><span>Mục {activeSection + 1}/{lesson.sections.length}<small>Vị trí đọc tự động lưu</small></span><div><button aria-label="Mục trước" disabled={activeSection === 0} onClick={() => goToSection(activeSection - 1)}>←</button><button aria-label="Mục sau" disabled={activeSection >= lesson.sections.length - 1} onClick={() => goToSection(activeSection + 1)}>→</button><button aria-label="Đóng bài đọc" onClick={onClose}><X size={20} /></button></div></div>
     <div className="reader-content">
-      <nav className="dataset-toc" aria-label="Mục lục bài học">{lesson.sections.map((section, index) => <a href={`#dataset-section-${index}`} key={index}>{section.title}</a>)}</nav>
+      <details className="reader-toc-container" open={!focused && !window.matchMedia('(max-width: 680px)').matches}><summary>Mục lục bài học</summary><nav className="dataset-toc" aria-label="Mục lục bài học">{lesson.sections.map((section, index) => <a href={`#dataset-section-${index}`} key={index} aria-current={activeSection === index ? 'location' : undefined} onClick={event => { event.preventDefault(); goToSection(index) }}>{section.title}</a>)}</nav></details>
       <div className={`reader-prose ${large ? 'large' : ''}`}>{lesson.sections.map((section, index) => <section className="dataset-section" key={index} id={`dataset-section-${index}`}><h3>{section.title}</h3><small>Trang PDF {section.pageStart}{section.pageEnd !== section.pageStart ? `–${section.pageEnd}` : ''}</small>{section.content.split('\n').filter(Boolean).map((paragraph, line) => <p key={line}>{paragraph}</p>)}</section>)}</div>
       <button className="button-outline mark-read" onClick={() => { markRead(lesson.id); setReadNow(true) }}><Check size={16} /> {readNow ? 'Đã ghi nhận hôm nay' : journal.read.includes(lesson.id) ? 'Ghi nhận đọc lại hôm nay' : 'Đánh dấu đã đọc'}</button>
       {readNow && <p className="reader-status" role="status">Đã cập nhật mục tiêu học tập. Đọc lại cùng ngày không tăng trùng lượt.</p>}
@@ -55,7 +85,7 @@ function DatasetReader({ lesson, learning, onClose }: { lesson: LessonDetail; le
   </dialog>
 }
 
-export function DatasetLibrary({ metadata, learning, grade, requestedLessonId, onRequestHandled }: Props) {
+export function DatasetLibrary({ onCollectionHandled, requestedCollection, metadata, learning, grade, requestedLessonId, onRequestHandled }: Props) {
   const [query, setQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const [filterGrade, setFilterGrade] = useState(String(grade))
@@ -74,6 +104,12 @@ export function DatasetLibrary({ metadata, learning, grade, requestedLessonId, o
   const { journal, bookmark } = learning
   const collectionIds = (filter === 'saved' ? journal.bookmarks : filter === 'notes' ? Object.keys(journal.notes).filter((id) => journal.notes[id].trim()) : filter === 'review' ? Object.keys(journal.review).filter((id) => journal.review[id] === 'again') : filter === 'unread' ? journal.read : []).filter((id) => /^LS\d{1,2}_B\d{2}$/.test(id)).join(',')
   useEffect(() => { setFilterGrade(String(grade)); setChapter(''); setPage(1) }, [grade])
+  useEffect(() => {
+    if (!requestedCollection) return
+    setFilter(requestedCollection.filter); setMode('lessons'); setQuery(''); setChapter(''); setPage(1)
+    setFilterGrade(requestedCollection.filter === 'review' ? String(grade) : 'all')
+    onCollectionHandled()
+  }, [requestedCollection])
   useEffect(() => setPage(1), [collectionIds])
   useEffect(() => { const timer = setTimeout(() => setDebouncedQuery(query), 250); return () => clearTimeout(timer) }, [query])
   useEffect(() => {
@@ -86,7 +122,7 @@ export function DatasetLibrary({ metadata, learning, grade, requestedLessonId, o
     if (chapter && mode === 'lessons') params.set('chapter', chapter)
     if (mode === 'lessons' && ['saved', 'notes', 'review'].includes(filter)) params.set('ids', collectionIds)
     if (mode === 'lessons' && filter === 'unread' && collectionIds) params.set('excludeIds', collectionIds)
-    const promise = mode === 'lessons' ? historyApi<PageResult<HistoryLesson>>(`lessons?${params}`, controller.signal).then(setResult) : historyApi<PageResult<HistoryChunk>>(`search?${params}`, controller.signal).then(setSources)
+    const promise = mode === 'lessons' ? historyApi<PageResult<HistoryLesson>>(`lessons?${params}`, controller.signal).then(data => { if (!controller.signal.aborted) setResult(data) }) : historyApi<PageResult<HistoryChunk>>(`search?${params}`, controller.signal).then(data => { if (!controller.signal.aborted) setSources(data) })
     promise.catch((failure: Error) => { if (!controller.signal.aborted) setError(failure.message) }).finally(() => { if (!controller.signal.aborted) setLoading(false) })
     return () => controller.abort()
   }, [page, filterGrade, chapter, debouncedQuery, filter, collectionIds, mode, retry])
@@ -95,7 +131,7 @@ export function DatasetLibrary({ metadata, learning, grade, requestedLessonId, o
     if (!selectedId) return
     const controller = new AbortController()
     setActive(null); setReaderError('')
-    historyApi<LessonDetail>(`lessons/${selectedId}`, controller.signal).then(setActive).catch((failure: Error) => { if (!controller.signal.aborted) setReaderError(failure.message) })
+    historyApi<LessonDetail>(`lessons/${selectedId}`, controller.signal).then(data => { if (!controller.signal.aborted) setActive(data) }).catch((failure: Error) => { if (!controller.signal.aborted) setReaderError(failure.message) })
     return () => controller.abort()
   }, [selectedId])
   const changeFilter = (value: string) => { setFilter(value); setPage(1) }

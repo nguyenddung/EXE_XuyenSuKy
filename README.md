@@ -229,3 +229,13 @@ Bộ kiểm thử bao gồm bốn game, đáp án sai, gợi ý, hoàn thành, c
 Minigame lưu kỷ lục 1–3 sao cho mỗi trò. Chơi lại chỉ cập nhật kỷ lục nếu tốt hơn và không cộng trùng XP.
 
 Kiểm thử luồng mới: `npx playwright test tests/auth.spec.ts tests/onboarding.spec.ts tests/minigames.spec.ts tests/dashboard.spec.ts tests/dataset.spec.ts tests/learning.spec.ts`.
+
+## Trải nghiệm học cá nhân
+
+Dashboard có kế hoạch học hôm nay, mục tiêu 1/3/5 hoạt động, bài đang đọc dở theo lớp và lối vào nhanh bài cần đọc lại, đã lưu hoặc có ghi chú. Đề xuất ưu tiên bài SGK chưa đọc; khi đã đọc hết lớp, đề xuất chuyển sang ôn lại. Mở bài không tự tăng XP hoặc chuỗi ngày học.
+
+Màn đọc SGK lưu mục đang xem, khôi phục khi mở lại và ghi nhớ tùy chọn chữ lớn/chế độ tập trung trên trình duyệt. Thanh chuyển mục và nút đóng luôn có thể dùng khi cuộn; mục lục thu gọn mặc định trên điện thoại. Có thể tải sổ tay thành tệp TXT để giữ ghi chú.
+
+Điện thoại có thanh điều hướng dưới cùng; desktop hỗ trợ Ctrl/Cmd + K để tìm kiếm. Tìm kiếm hủy yêu cầu cũ để tránh hiển thị kết quả của từ khóa trước. Thử thách ưu tiên trò chưa hoàn thành, sau đó ưu tiên kỷ lục sao thấp hơn.
+
+Kiểm thử: npx playwright test tests/study-experience.spec.ts và npm run test:games.

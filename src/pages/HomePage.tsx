@@ -6,6 +6,7 @@ import { MiniGameModal } from '../components/MiniGameModal'
 import type { GameId } from '../data/minigames'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import type { LessonCollection } from '../components/StudyPlan'
 import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character } from '../types'
@@ -39,6 +40,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     try { return sessionStorage.getItem('xuyen-su-ky-library-source') === 'demo' ? 'demo' : 'dataset' } catch { return 'dataset' }
   })
   useEffect(() => { try { sessionStorage.setItem('xuyen-su-ky-library-source', librarySource) } catch { /* Reading still works without storage. */ } }, [librarySource])
+  const [requestedCollection, setRequestedCollection] = useState<{ filter: LessonCollection; token: number } | null>(null)
   const [requestedLessonId, setRequestedLessonId] = useState<string | null>(null)
   const location = useLocation()
   // Era cards on the landing page hand over the lesson to open once the dashboard mounts.
@@ -113,10 +115,10 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
 
   const sections = <>
         {!landing && <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />}
-        {!landing && <LearningHub learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />}
+        {!landing && <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />}
         <HistoryTimeline />
         <CharacterSection onChat={setActiveCharacter} />
-        <ChallengeSection completedActivities={session.completedActivities} onTry={setActiveGame} />
+        <ChallengeSection records={session.gameRecords} completedActivities={session.completedActivities} onTry={setActiveGame} />
         {!landing && <UserProgress
           session={session}
           learningStreak={streak(learning.journal.events)}
@@ -139,6 +141,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         <Navbar session={session} onLogout={() => { logout(); setNotice('Bạn đã đăng xuất. Tiến độ học thử vẫn được lưu trên trình duyệt này.') }} />
         <main><Hero authenticated={authenticated} />{sections}<LandingCta authenticated={authenticated} onTryGuest={() => { startGuest(); navigate('/home') }} /></main><ImageCredits /><Footer />
       </> : <Dashboard
+        learning={learning}
+        onCollection={filter => { setLibrarySource('dataset'); setRequestedCollection({ filter, token: Date.now() }); window.setTimeout(() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' }), 60) }}
         session={session}
         readCount={gradeRead}
         gradeCount={gradeCount}
