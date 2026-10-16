@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 async function openCharacter(page: import('@playwright/test').Page, name: string) {
   await page.goto('/home#characters')
-  await page.locator('.character-card').filter({ has: page.getByRole('heading', { name, exact: true }) }).getByRole('button').click()
+  await page.locator('.character-card').filter({ has: page.getByRole('heading', { name, exact: true }) }).getByRole('button', { name: 'Nhắn tin', exact: true }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
   await expect(page.locator('#chat-input')).toBeFocused()
 }
@@ -96,7 +96,7 @@ test('mobile chat fits viewport, traps focus and Escape restores the trigger', a
   }
   await page.keyboard.press('Escape')
   await expect(page.locator('.chat-modal')).toHaveCount(0)
-  await expect(page.locator('.character-card').filter({ has: page.getByRole('heading', { name: 'Võ Nguyên Giáp', exact: true }) }).getByRole('button')).toBeFocused()
+  await expect(page.locator('.character-card').filter({ has: page.getByRole('heading', { name: 'Võ Nguyên Giáp', exact: true }) }).getByRole('button', { name: 'Nhắn tin', exact: true })).toBeFocused()
   expect(errors).toEqual([])
 })
 

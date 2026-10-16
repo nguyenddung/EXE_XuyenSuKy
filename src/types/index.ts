@@ -7,6 +7,8 @@ export interface SchoolClass {
   theme: 'amber' | 'mint' | 'peach' | 'blue'
 }
 
+export type CharacterInteractionMode = 'chat' | 'voice'
+
 export interface Character {
   aliases: string[]
   id: string

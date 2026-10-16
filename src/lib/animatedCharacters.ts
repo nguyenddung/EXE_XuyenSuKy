@@ -1,4 +1,5 @@
-// The first two characters with an articulated, live conversation portrait.
-export const hasAnimatedCharacter = (id: string) => id === 'tran-hung-dao' || id === 'ngo-quyen'
+import { characterPortraits } from '../data/characterPortraits'
+
+export const hasAnimatedCharacter = (id: string) => Object.prototype.hasOwnProperty.call(characterPortraits, id)
 
 export type CharacterActivity = 'idle' | 'listening' | 'thinking' | 'loading' | 'speaking'

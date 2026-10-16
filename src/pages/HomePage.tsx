@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import type { LessonCollection } from '../components/StudyPlan'
 import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
-import type { Character } from '../types'
+import type { Character, CharacterInteractionMode } from '../types'
 import type { DemoActivity } from '../data/demo'
 import { hasAppAccess, useDemoSession } from '../hooks/useDemoSession'
 import { Navbar } from '../components/Navbar'
@@ -62,6 +62,10 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }
   const [activeGame, setActiveGame] = useState<GameId | null>(null)
   const [activeCharacter, setActiveCharacter] = useState<Character | null>(null)
+  const [characterMode, setCharacterMode] = useState<CharacterInteractionMode>('chat')
+  function openCharacter(character: Character, mode: CharacterInteractionMode = 'chat') {
+    setCharacterMode(mode); setActiveCharacter(character)
+  }
   const [activeActivity, setActiveActivity] = useState<DemoActivity | null>(null)
   const [pendingActivity, setPendingActivity] = useState<DemoActivity | null>(null)
   const [loginOpen, setLoginOpen] = useState(false)
@@ -117,7 +121,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         {!landing && <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />}
         {!landing && <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />}
         <HistoryTimeline />
-        <CharacterSection onChat={setActiveCharacter} />
+        <CharacterSection onChat={openCharacter} />
         <ChallengeSection records={session.gameRecords} completedActivities={session.completedActivities} onTry={setActiveGame} />
         {!landing && <UserProgress
           session={session}
@@ -154,11 +158,11 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         onSelectGrade={selectGrade}
         onQuiz={openActivity}
         onGame={setActiveGame}
-        onChat={setActiveCharacter}
+        onChat={openCharacter}
       >{sections}<ImageCredits /><Footer /></Dashboard>}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
+      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}

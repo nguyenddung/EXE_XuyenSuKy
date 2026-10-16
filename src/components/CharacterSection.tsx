@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
-import type { Character } from '../types'
+import type { Character, CharacterInteractionMode } from '../types'
 import { CharacterCard } from './CharacterCard'
 import { historyApi } from '../lib/historyApi'
 import { normalizeSearch } from '../data/library'
 
-interface Props { onChat: (character: Character) => void; onLoaded?: (count: number) => void }
+interface Props { onChat: (character: Character, mode?: CharacterInteractionMode) => void; onLoaded?: (count: number) => void }
 
 export function CharacterSection({ onChat, onLoaded }: Props) {
   const [characters, setCharacters] = useState<Character[]>([])
