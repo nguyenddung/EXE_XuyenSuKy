@@ -63,6 +63,10 @@ Trên Vercel, vào **Project Settings → Environment Variables**, thêm `OPENAI
 
 ### Giọng nói nhân vật
 
+Trần Hưng Đạo và Ngô Quyền có khung nhân vật hoạt hoạ 2D lớn trong cửa sổ trò chuyện, với bối cảnh sông Bạch Đằng, trang phục và nét mặt riêng. Nhân vật chớp mắt và thở nhẹ khi chờ, nghiêng đầu/gật đầu khi bật mic, suy nghĩ khi đang tra cứu, cử động miệng và tay khi âm thanh thực sự phát. Đây là hoạt hoạ theo trạng thái phát âm thanh, chưa đồng bộ khẩu hình theo từng âm vị. Tắt đọc, hết âm thanh, bắt đầu dùng mic hoặc tạo cuộc trò chuyện mới sẽ kết thúc trạng thái nói. Các nhân vật còn lại giữ giao diện chat hiện có.
+
+Vào **Nhân vật**, chọn **Trần Hưng Đạo** hoặc **Ngô Quyền** (nhãn **Hoạt hoạ · Nói & lắng nghe**), rồi nhấn **Nói câu hỏi**. Sau khi nhận dạng, kiểm tra nội dung và nhấn **Gửi câu hỏi**; câu trả lời tự phát khi bật **Tự đọc câu trả lời**. Khung hoạt hoạ hiển thị cạnh hội thoại trên máy tính và phía trên hội thoại trên điện thoại. Cài đặt giảm chuyển động của hệ điều hành tắt các vòng lặp hoạt hoạ nhưng vẫn hiển thị trạng thái bằng chữ. Không cần thêm dịch vụ hoạt hoạ hay khoá API ngoài cấu hình giọng nói bên dưới.
+
 Chat có nút **Nói câu hỏi** để nhập tiếng Việt bằng Web Speech API, **Nghe câu trả lời / Dừng đọc** và tùy chọn **Tự đọc câu trả lời** (bật mặc định). Câu hỏi từ mic được đưa vào ô nhập để kiểm tra trước khi gửi. Trình duyệt cần hỗ trợ SpeechRecognition và được cấp quyền microphone; dùng HTTPS hoặc localhost. Khi chưa hỗ trợ mic, nhập văn bản vẫn hoạt động.
 
 Để bật Azure TTS, thêm vào `.env.local`, rồi khởi động lại Vite/backend:

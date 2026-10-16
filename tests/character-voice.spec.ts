@@ -1,14 +1,14 @@
 import { expect, test, type Page } from '@playwright/test'
 
-async function installVoiceMocks(page: Page, hasVietnameseVoice = true, hasMic = true) {
-  await page.addInitScript(({ hasVietnameseVoice, hasMic }) => {
-    const state = { played: 0, paused: 0, canceled: 0, micAborted: 0, utterances: [] as { text: string; lang: string; rate: number; pitch: number }[], transcript: (_text: string) => {}, micError: (_error: string) => {}, finishAudio: () => {} }
+async function installVoiceMocks(page: Page, hasVietnameseVoice = true, hasMic = true, deferPlayback = false) {
+  await page.addInitScript(({ hasVietnameseVoice, hasMic, deferPlayback }) => {
+    const state = { played: 0, paused: 0, canceled: 0, micAborted: 0, utterances: [] as { text: string; lang: string; rate: number; pitch: number }[], transcript: (_text: string) => {}, micError: (_error: string) => {}, startAudio: () => {}, finishAudio: () => {} }
     Object.defineProperty(window, '__voiceTest', { value: state })
     class MockAudio {
       onplaying: (() => void) | null = null
       onended: (() => void) | null = null
       onerror: (() => void) | null = null
-      async play() { state.played++; this.onplaying?.(); state.finishAudio = () => this.onended?.() }
+      async play() { state.played++; state.startAudio = () => this.onplaying?.(); if (!deferPlayback) state.startAudio(); state.finishAudio = () => this.onended?.() }
       pause() { state.paused++ }
       removeAttribute() {}
       load() {}
@@ -41,7 +41,7 @@ async function installVoiceMocks(page: Page, hasVietnameseVoice = true, hasMic =
     }
     Object.defineProperty(window, 'SpeechRecognition', { value: hasMic ? MockRecognition : undefined })
     Object.defineProperty(window, 'webkitSpeechRecognition', { value: undefined })
-  }, { hasVietnameseVoice, hasMic })
+  }, { hasVietnameseVoice, hasMic, deferPlayback })
 }
 
 const stats = (page: Page) => page.evaluate(() => (window as unknown as { __voiceTest: { played: number; paused: number; canceled: number; micAborted: number; utterances: { text: string; lang: string; rate: number; pitch: number }[] } }).__voiceTest)
@@ -181,4 +181,75 @@ test('Azure quota errors leave citations and text visible without a browser fall
   await expect(page.locator('.chat-sources')).toBeVisible()
   expect((await stats(page)).played).toBe(0)
   expect((await stats(page)).utterances).toHaveLength(0)
+})
+
+for (const name of ['Ngô Quyền', 'Trần Hưng Đạo']) {
+  test(`${name} animates listening, waits for actual playback, and returns to rest on stop/end/reset`, async ({ page }) => {
+    await installVoiceMocks(page, true, true, true)
+    await mockAzure(page)
+    let release = () => {}
+    const gate = new Promise<void>((resolve) => { release = resolve })
+    await page.route('**/api/characters/*/chat', async (route) => { await gate; await route.continue() })
+    await openCharacter(page, name)
+    const stage = page.locator('.character-stage')
+    await expect(stage).toHaveAttribute('data-activity', 'idle')
+    await expect(stage.getByRole('img')).toHaveAccessibleName(new RegExp(name))
+    await page.getByRole('button', { name: 'Nói câu hỏi', exact: true }).click()
+    await expect(stage).toHaveAttribute('data-activity', 'listening')
+    expect(await stage.locator('.actor-head').evaluate((node) => getComputedStyle(node).animationName)).toBe('actor-listen')
+    expect(await stage.locator('.actor-mouth-open').evaluate((node) => getComputedStyle(node).opacity)).toBe('0')
+    await page.evaluate(() => (window as unknown as { __voiceTest: { transcript: (text: string) => void } }).__voiceTest.transcript('Bạch Đằng diễn ra năm nào?'))
+    await expect(stage).toHaveAttribute('data-activity', 'idle')
+    await expect(page.locator('.chat-exchange')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Gửi câu hỏi', exact: true }).click()
+    await expect(stage).toHaveAttribute('data-activity', 'thinking')
+    release()
+    await expect(page.locator('.chat-answer')).toBeVisible()
+    await expect(stage).toHaveAttribute('data-activity', 'loading')
+    await expect.poll(async () => (await stats(page)).played).toBe(1)
+    await page.evaluate(() => (window as unknown as { __voiceTest: { startAudio: () => void } }).__voiceTest.startAudio())
+    await expect(stage).toHaveAttribute('data-activity', 'speaking')
+    expect(await stage.locator('.actor-mouth-open').evaluate((node) => getComputedStyle(node).animationName)).toBe('actor-talk')
+    expect(await stage.locator('.actor-forearm').evaluate((node) => getComputedStyle(node).animationName)).toBe('actor-gesture')
+    await page.screenshot({ path: `test-results/animated-${name === 'Ngô Quyền' ? 'ngo-quyen' : 'tran-hung-dao'}-desktop.png` })
+    await page.evaluate(() => (window as unknown as { __voiceTest: { finishAudio: () => void } }).__voiceTest.finishAudio())
+    await expect(stage).toHaveAttribute('data-activity', 'idle')
+    await page.getByRole('button', { name: 'Nghe câu trả lời 1', exact: true }).click()
+    await expect.poll(async () => (await stats(page)).played).toBe(2)
+    await page.evaluate(() => (window as unknown as { __voiceTest: { startAudio: () => void } }).__voiceTest.startAudio())
+    await expect(stage).toHaveAttribute('data-activity', 'speaking')
+    await page.getByRole('button', { name: 'Nói câu hỏi', exact: true }).click()
+    await expect(stage).toHaveAttribute('data-activity', 'listening')
+    await expect(page.locator('.chat-avatar')).not.toHaveClass(/is-speaking/)
+    await page.getByRole('button', { name: 'Bắt đầu cuộc trò chuyện mới' }).click()
+    await expect(stage).toHaveAttribute('data-activity', 'idle')
+    await expect(page.locator('.chat-exchange')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Đóng trò chuyện', exact: true }).click()
+    await expect(stage).toHaveCount(0)
+    expect((await stats(page)).paused).toBe(2)
+  })
+}
+
+test('animated mobile conversation keeps the character, input and mic visible with reduced motion', async ({ page }) => {
+  await installVoiceMocks(page)
+  await mockAzure(page)
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await openCharacter(page)
+  const stage = page.locator('.character-stage')
+  await question(page)
+  await expect(stage).toHaveAttribute('data-activity', 'speaking')
+  expect(await stage.locator('.actor-mouth-open').evaluate((node) => getComputedStyle(node).animationName)).toBe('none')
+  await page.getByRole('button', { name: 'Nói câu hỏi', exact: true }).click()
+  await expect(stage).toHaveAttribute('data-activity', 'listening')
+  await expect(stage).toBeInViewport()
+  await expect(page.locator('#chat-input')).toBeInViewport()
+  await expect(page.getByRole('button', { name: 'Dừng microphone', exact: true })).toBeInViewport()
+  expect(await page.locator('.chat-modal').evaluate((node) => node.scrollWidth <= node.clientWidth)).toBe(true)
+  await page.screenshot({ path: 'test-results/animated-character-mobile.png' })
+  await page.setViewportSize({ width: 360, height: 640 })
+  await expect(page.locator('#chat-input')).toBeInViewport()
+  await expect(page.getByRole('button', { name: 'Đóng trò chuyện', exact: true })).toBeInViewport()
+  await page.keyboard.press('Escape')
+  expect((await stats(page)).micAborted).toBeGreaterThan(0)
 })

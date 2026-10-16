@@ -45,3 +45,109 @@
 @keyframes voice-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .chat-avatar.is-speaking, .voice-spinner { animation: none; } .chat-avatar.is-speaking { box-shadow: 0 0 12px 3px #4c958566; } }
 .chat-cooldown { margin: 0; padding: 8px 16px; border-top: 1px solid #ffe2a6; background: #fff8e6; color: #7a5410; font-size: 12px; font-weight: 600; }
+
+.chat-conversation { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; overflow: hidden; }
+.chat-modal--animated { width: min(1080px, calc(100% - 48px)); height: min(800px, 92dvh); max-height: 92dvh; flex-direction: row; }
+.chat-modal--animated .chat-conversation { height: 100%; }
+.chat-modal--animated .chat-body { min-height: 80px; overscroll-behavior: contain; }
+.chat-modal--animated .chat-header { padding: 15px 18px; }
+.chat-modal--animated .chat-voice-controls { gap: 8px; }
+.chat-modal--animated .chat-suggestions { padding: 10px 14px; }
+.chat-modal--animated .chat-form { align-items: center; }
+.character-animation-intro { margin: 0 0 22px; padding: 13px 16px; border: 1px solid #d1dfd4; border-radius: 12px; color: #3c6556; background: #edf2e9; font-size: 13px; line-height: 1.8; }
+.character-animation-intro > span { display: inline-block; margin-right: 9px; padding: 0 7px; border-radius: 5px; background: #315f4f; color: #fff4da; font-size: 9px; font-weight: 800; letter-spacing: .08em; vertical-align: 1px; }
+.character-card .photo-type--animated { background: #224f43; color: #fff1c9; font-size: 8px; letter-spacing: .06em; }
+.character-stage { position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: center; flex: 0 0 43%; min-width: 0; overflow: hidden; color: #24443b; border-right: 1px solid #c9d3bc; background: #e8dbb7; }
+.stage-landscape { position: absolute; z-index: -2; inset: 0; }
+.stage-landscape svg { width: 100%; height: 100%; }
+.character-stage::after { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, #f8edcf66, transparent 30%, transparent 60%, #143c35f2 88%); pointer-events: none; }
+.stage-topline { display: flex; justify-content: space-between; gap: 10px; align-items: center; width: 100%; padding: 22px; color: #46604c; font-size: 8px; letter-spacing: .11em; font-weight: 800; }
+.stage-topline > span:first-child { display: inline-flex; align-items: center; gap: 6px; }
+.stage-topline > span:last-child { font-size: 7px; border: 1px solid #7b8a6466; border-radius: 4px; padding: 4px 5px; white-space: nowrap; }
+.stage-live-dot { width: 5px; height: 5px; border-radius: 50%; background: #42684e; }
+.stage-portrait-wrap { position: absolute; inset: 57px -4% 102px; display: flex; align-items: flex-end; justify-content: center; }
+.stage-character { display: block; width: 100%; height: 100%; max-height: 660px; overflow: visible; }
+.stage-caption { position: relative; margin-top: auto; width: 100%; padding: 35px 20px 14px; text-align: center; color: #fff5d7; background: linear-gradient(transparent, #193f36b3 55%); }
+.stage-caption > span { display: block; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: #e5ce9d; }
+.stage-caption > strong { display: block; margin: 7px 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(26px, 3vw, 36px); font-weight: 500; line-height: 1.2; }
+.stage-caption > p { margin: 0; color: #d2ddc8; font-size: 10px; letter-spacing: .03em; }
+.stage-status { position: relative; display: flex; align-items: center; gap: 9px; justify-content: center; margin: 5px 18px 0; padding: 11px 14px; max-width: calc(100% - 36px); border: 1px solid #e2d9b52b; border-radius: 10px; background: #f7ebc310; color: #f5ebcf; font-size: 12px; }
+.stage-sound { display: flex; gap: 3px; height: 17px; align-items: center; margin-left: 3px; }
+.stage-sound i { display: block; width: 3px; height: 4px; border-radius: 2px; background: #e7c98a; }
+.stage-disclaimer { position: relative; margin: 12px 0 15px; font-size: 9px; color: #b6c4b0; }
+.actor-breathe { transform-origin: 250px 590px; animation: actor-breathe 4.5s ease-in-out infinite; }
+.actor-head { transform-origin: 250px 272px; animation: actor-look 7s ease-in-out infinite; }
+.actor-eyes { transform-box: fill-box; transform-origin: center; animation: actor-blink 5.6s linear infinite; }
+.actor-cape { transform-origin: 250px 300px; animation: actor-cape 6s ease-in-out infinite; }
+.actor-forearm { transform-origin: 387px 479px; transform: rotate(32deg); }
+.actor-gesture-arm { transform-origin: 354px 324px; }
+.actor-mouth-open { opacity: 0; transform-origin: 251px 203px; }
+.stage-character--veteran .actor-eyes { animation-delay: 1.2s; }
+.character-stage[data-activity='listening'] .actor-head { animation: actor-listen 2.2s ease-in-out infinite; }
+.character-stage[data-activity='listening'] .actor-breathe { animation-duration: 3.2s; }
+.character-stage[data-activity='listening'] .stage-status { border-color: #ead6a77a; background: #e4c78620; }
+.character-stage[data-activity='speaking'] .actor-mouth-closed { opacity: 0; }
+.character-stage[data-activity='speaking'] .actor-mouth-open { opacity: 1; animation: actor-talk .68s linear infinite; }
+.character-stage[data-activity='speaking'] .actor-head { animation: actor-explain 2.8s ease-in-out infinite; }
+.character-stage[data-activity='speaking'] .actor-forearm { animation: actor-gesture 3.4s ease-in-out infinite; }
+.character-stage[data-activity='speaking'] .actor-gesture-arm { animation: actor-shoulder 3.4s ease-in-out infinite; }
+.character-stage[data-activity='thinking'] .actor-head, .character-stage[data-activity='loading'] .actor-head { animation: actor-think 4s ease-in-out infinite; }
+.character-stage[data-activity='speaking'] .stage-sound i, .character-stage[data-activity='listening'] .stage-sound i { animation: stage-wave .8s ease-in-out infinite alternate; }
+.stage-sound i:nth-child(2) { animation-delay: -.4s !important; }
+.stage-sound i:nth-child(3) { animation-delay: -.2s !important; }
+.stage-sound i:nth-child(4) { animation-delay: -.6s !important; }
+.stage-sound i:nth-child(5) { animation-delay: -.3s !important; }
+@keyframes actor-breathe { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-2px) scaleY(1.006); } }
+@keyframes actor-look { 0%, 30%, 100% { transform: rotate(0); } 52%, 70% { transform: rotate(-1.2deg); } }
+@keyframes actor-blink { 0%, 42%, 46%, 93%, 97%, 100% { transform: scaleY(1); } 44%, 95% { transform: scaleY(.06); } }
+@keyframes actor-cape { 0%, 100% { transform: skewX(0); } 50% { transform: skewX(.7deg); } }
+@keyframes actor-listen { 0%, 100% { transform: rotate(3deg) translateY(0); } 45% { transform: rotate(5deg) translateY(3px); } 70% { transform: rotate(3.5deg) translateY(0); } }
+@keyframes actor-explain { 0%, 100% { transform: rotate(-1deg); } 35% { transform: rotate(1.5deg) translateY(2px); } 70% { transform: rotate(-1.5deg) translateY(-1px); } }
+@keyframes actor-talk { 0%, 100% { transform: scaleY(.12) scaleX(1); } 16% { transform: scaleY(.8) scaleX(.9); } 31% { transform: scaleY(.25) scaleX(1); } 48% { transform: scaleY(1) scaleX(.85); } 65% { transform: scaleY(.15) scaleX(1); } 82% { transform: scaleY(.65) scaleX(.95); } }
+@keyframes actor-gesture { 0%, 100% { transform: rotate(16deg); } 30%, 50% { transform: rotate(-12deg); } 74% { transform: rotate(2deg); } }
+@keyframes actor-shoulder { 0%, 100% { transform: rotate(0); } 40% { transform: rotate(-3deg); } }
+@keyframes actor-think { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(-4deg) translateY(-2px); } }
+@keyframes stage-wave { from { transform: scaleY(.7); } to { transform: scaleY(3.6); } }
+@media (max-width: 760px) {
+  .chat-modal--animated { width: calc(100% - 20px); height: 94dvh; max-height: 94dvh; flex-direction: column; }
+  .chat-modal--animated .chat-conversation { height: auto; }
+  .character-stage { flex: 0 0 205px; width: 100%; border-right: 0; border-bottom: 1px solid #c9d3bc; align-items: flex-end; }
+  .stage-topline { padding: 12px 14px; font-size: 7px; }
+  .stage-topline > span:last-child { display: none; }
+  .stage-portrait-wrap { inset: 16px auto auto -5px; width: 49%; height: 255px; }
+  .stage-character { height: 100%; }
+  .character-stage::after { background: linear-gradient(90deg, transparent 20%, #173e35ba 62%, #173e35d9); }
+  .stage-caption { width: 54%; padding: 0 12px 6px 0; background: none; }
+  .stage-caption > span { font-size: 8px; letter-spacing: .06em; }
+  .stage-caption > strong { font-size: 25px; margin: 5px 0; }
+  .stage-caption > p { font-size: 9px; line-height: 1.6; }
+  .stage-status { width: 51%; max-width: none; margin: 4px 12px 0 0; padding: 8px 5px; gap: 5px; font-size: 10px; }
+  .stage-status > svg { width: 13px; flex-shrink: 0; }
+  .stage-sound { gap: 2px; margin-left: 0; }
+  .stage-sound i { width: 2px; }
+  .stage-disclaimer { width: 54%; text-align: center; font-size: 7px; margin: 8px 0 10px; }
+  .chat-modal--animated .chat-header { padding: 9px 12px; gap: 8px; }
+  .chat-modal--animated .chat-avatar { width: 36px; height: 36px; flex-basis: 36px; }
+  .chat-modal--animated .chat-voice-controls { padding: 7px 12px; font-size: 11px; gap: 6px; }
+  .chat-modal--animated .chat-voice-controls span { font-size: 10px; }
+  .chat-modal--animated .chat-suggestions { flex-wrap: nowrap; overflow-x: auto; max-height: none; flex-shrink: 0; }
+  .chat-modal--animated .chat-suggestions button { flex: 0 0 auto; max-width: 235px; }
+  .chat-modal--animated .chat-body { min-height: 60px; padding: 12px; }
+  .chat-modal--animated .chat-form { padding: 10px; }
+  .chat-modal--animated .chat-form textarea { font-size: 16px; }
+}
+@media (max-height: 650px) {
+  .chat-modal--animated .chat-suggestions { display: none; }
+  .chat-modal--animated .character-stage { flex-basis: 160px; }
+  .chat-modal--animated .stage-portrait-wrap { top: 10px; height: 215px; }
+}
+@media (max-height: 650px) and (min-width: 761px) {
+  .chat-modal--animated .character-stage { flex-basis: 40%; }
+  .chat-modal--animated .stage-portrait-wrap { inset: 30px -4% 80px; height: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .character-stage *, .character-stage[data-activity] * { animation: none !important; }
+  .character-stage[data-activity='speaking'] .actor-mouth-open { transform: scaleY(.5); }
+  .character-stage[data-activity='listening'] .actor-head { transform: rotate(4deg); }
+  .character-stage[data-activity='speaking'] .stage-sound i { height: 11px; }
+}

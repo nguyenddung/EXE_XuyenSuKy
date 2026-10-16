@@ -5,6 +5,8 @@ import { askCharacter, RateLimitError, type CharacterReply } from '../lib/charac
 import { sourceLabel } from '../lib/historyApi'
 import { useCharacterSpeech } from '../lib/useCharacterSpeech'
 import { useVoiceInput } from '../lib/useVoiceInput'
+import { hasAnimatedCharacter, type CharacterActivity } from '../lib/animatedCharacters'
+import { CharacterStage } from './CharacterStage'
 
 interface Props { character: Character; onClose: () => void; onOpenLesson: (id: string) => void }
 interface Exchange { question: string; reply?: CharacterReply; error?: string; rateLimited?: boolean }
@@ -26,6 +28,8 @@ export function CharacterChatModal({ character, onClose, onOpenLesson }: Props) 
   const dialog = useRef<HTMLDialogElement>(null)
   const bottom = useRef<HTMLDivElement>(null)
   const pending = useRef<AbortController | null>(null)
+  const animated = hasAnimatedCharacter(character.id)
+  const activity: CharacterActivity = mic.listening ? 'listening' : busy ? 'thinking' : speech.phase === 'loading' ? 'loading' : speech.phase === 'speaking' ? 'speaking' : 'idle'
 
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
@@ -106,7 +110,9 @@ export function CharacterChatModal({ character, onClose, onOpenLesson }: Props) 
     </button>
   }
 
-  return <dialog ref={dialog} aria-modal="true" aria-labelledby="chat-title" className="chat-modal" onKeyDown={trapFocus} onCancel={(event) => { event.preventDefault(); onClose() }}>
+  return <dialog ref={dialog} aria-modal="true" aria-labelledby="chat-title" className={`chat-modal${animated ? ' chat-modal--animated' : ''}`} onKeyDown={trapFocus} onCancel={(event) => { event.preventDefault(); onClose() }}>
+    {animated && <CharacterStage character={character} activity={activity} />}
+    <div className="chat-conversation">
     <div className="chat-header"><div className={`chat-avatar portrait-${character.tone}${speech.phase === 'speaking' ? ' is-speaking' : ''}`}><img src={character.image} alt="" /></div><div><span>TRÒ CHUYỆN CÙNG</span><h2 id="chat-title">{character.name}</h2></div><button type="button" disabled={busy} onClick={() => { speech.stop(); mic.stop(); speech.clearError(); mic.clearError(); setMessages([]); setInput(''); inputRef.current?.focus() }} aria-label="Bắt đầu cuộc trò chuyện mới"><RotateCcw size={18} /></button><button type="button" onClick={onClose} aria-label="Đóng trò chuyện"><X size={21} /></button></div>
     <div className="chat-voice-controls">
       <label><input type="checkbox" checked={autoRead} onChange={(event) => { autoReadRef.current = event.target.checked; setAutoRead(event.target.checked); if (!event.target.checked) speech.stop() }} /> Tự đọc câu trả lời</label>
@@ -118,5 +124,6 @@ export function CharacterChatModal({ character, onClose, onOpenLesson }: Props) 
     <div className="chat-suggestions" aria-label="Câu hỏi gợi ý">{character.suggestions.map((question) => <button key={question} type="button" disabled={locked} onClick={() => sendMessage(question)}>{question}</button>)}</div>
     {cooldown > 0 && <p className="chat-cooldown" role="status">Bạn đang hỏi hơi nhanh. Có thể hỏi tiếp sau {cooldown} giây.</p>}
     <form onSubmit={(event) => { event.preventDefault(); sendMessage() }} className="chat-form"><label htmlFor="chat-input" className="sr-only">Nhập câu hỏi cho nhân vật</label><textarea id="chat-input" ref={inputRef} value={input} readOnly={mic.listening} maxLength={1000} rows={2} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); sendMessage() } }} placeholder="Hãy hỏi một điều bạn tò mò…" /><button type="button" className={`chat-mic${mic.listening ? ' is-listening' : ''}`} aria-label={mic.listening ? 'Dừng microphone' : 'Nói câu hỏi'} aria-pressed={mic.listening} title={mic.supported ? 'Nhập câu hỏi bằng giọng nói' : 'Trình duyệt chưa hỗ trợ nhận dạng giọng nói'} disabled={busy || !mic.supported} onClick={() => { speech.stop(); speech.clearError(); if (mic.listening) mic.stop(); else mic.start(input) }}><Mic size={20} /></button><button type="submit" aria-label="Gửi câu hỏi" disabled={locked || !input.trim()}><ArrowUp size={20} /></button></form>
+    </div>
   </dialog>
 }
