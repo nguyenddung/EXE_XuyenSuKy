@@ -54,8 +54,6 @@
 .chat-modal--animated .chat-voice-controls { gap: 8px; }
 .chat-modal--animated .chat-suggestions { padding: 10px 14px; }
 .chat-modal--animated .chat-form { align-items: center; }
-.character-animation-intro { margin: 0 0 22px; padding: 13px 16px; border: 1px solid #d1dfd4; border-radius: 12px; color: #3c6556; background: #edf2e9; font-size: 13px; line-height: 1.8; }
-.character-animation-intro > span { display: inline-block; margin-right: 9px; padding: 0 7px; border-radius: 5px; background: #315f4f; color: #fff4da; font-size: 9px; font-weight: 800; letter-spacing: .08em; vertical-align: 1px; }
 .character-card .photo-type--animated { background: #224f43; color: #fff1c9; font-size: 8px; letter-spacing: .06em; }
 .character-stage { position: relative; isolation: isolate; display: flex; flex-direction: column; align-items: center; flex: 0 0 43%; min-width: 0; overflow: hidden; color: #24443b; border-right: 1px solid #c9d3bc; background: #e8dbb7; }
 .stage-landscape { position: absolute; z-index: -2; inset: 0; }
@@ -81,13 +79,16 @@
 .actor-cape { transform-origin: 250px 300px; animation: actor-cape 6s ease-in-out infinite; }
 .actor-forearm { transform-origin: 387px 479px; transform: rotate(32deg); }
 .actor-gesture-arm { transform-origin: 354px 324px; }
-.actor-mouth-open { opacity: 0; transform-origin: 251px 203px; }
+.actor-mouth-closed { opacity: 1; }
+.actor-mouth-open { opacity: 0; transform-origin: 251px 203px; transform: scaleY(0); animation: none; }
 .stage-character--veteran .actor-eyes { animation-delay: 1.2s; }
 .character-stage[data-activity='listening'] .actor-head { animation: actor-listen 2.2s ease-in-out infinite; }
 .character-stage[data-activity='listening'] .actor-breathe { animation-duration: 3.2s; }
 .character-stage[data-activity='listening'] .stage-status { border-color: #ead6a77a; background: #e4c78620; }
-.character-stage[data-activity='speaking'] .actor-mouth-closed { opacity: 0; }
-.character-stage[data-activity='speaking'] .actor-mouth-open { opacity: 1; animation: actor-talk .68s linear infinite; }
+.character-stage[data-mouth='speaking'] .actor-mouth-closed, .character-stage[data-mouth='responding'] .actor-mouth-closed { opacity: 0; }
+.character-stage[data-mouth='speaking'] .actor-mouth-open { opacity: 1; animation: actor-talk .68s linear infinite; }
+.character-stage[data-mouth='responding'] .actor-mouth-open { opacity: 1; animation: actor-listen-mouth .95s ease-in-out infinite; }
+.character-stage[data-activity='listening'] .actor-forearm { animation: actor-listen-hand 3.6s ease-in-out infinite; }
 .character-stage[data-activity='speaking'] .actor-head { animation: actor-explain 2.8s ease-in-out infinite; }
 .character-stage[data-activity='speaking'] .actor-forearm { animation: actor-gesture 3.4s ease-in-out infinite; }
 .character-stage[data-activity='speaking'] .actor-gesture-arm { animation: actor-shoulder 3.4s ease-in-out infinite; }
@@ -104,6 +105,8 @@
 @keyframes actor-listen { 0%, 100% { transform: rotate(3deg) translateY(0); } 45% { transform: rotate(5deg) translateY(3px); } 70% { transform: rotate(3.5deg) translateY(0); } }
 @keyframes actor-explain { 0%, 100% { transform: rotate(-1deg); } 35% { transform: rotate(1.5deg) translateY(2px); } 70% { transform: rotate(-1.5deg) translateY(-1px); } }
 @keyframes actor-talk { 0%, 100% { transform: scaleY(.12) scaleX(1); } 16% { transform: scaleY(.8) scaleX(.9); } 31% { transform: scaleY(.25) scaleX(1); } 48% { transform: scaleY(1) scaleX(.85); } 65% { transform: scaleY(.15) scaleX(1); } 82% { transform: scaleY(.65) scaleX(.95); } }
+@keyframes actor-listen-mouth { 0%, 55%, 100% { transform: scaleY(.06); } 20% { transform: scaleY(.45) scaleX(.95); } 37% { transform: scaleY(.2); } 76% { transform: scaleY(.3) scaleX(.97); } }
+@keyframes actor-listen-hand { 0%, 100% { transform: rotate(25deg); } 45%, 65% { transform: rotate(14deg); } }
 @keyframes actor-gesture { 0%, 100% { transform: rotate(16deg); } 30%, 50% { transform: rotate(-12deg); } 74% { transform: rotate(2deg); } }
 @keyframes actor-shoulder { 0%, 100% { transform: rotate(0); } 40% { transform: rotate(-3deg); } }
 @keyframes actor-think { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(-4deg) translateY(-2px); } }
@@ -147,7 +150,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .character-stage *, .character-stage[data-activity] * { animation: none !important; }
-  .character-stage[data-activity='speaking'] .actor-mouth-open { transform: scaleY(.5); }
+  .character-stage[data-mouth='speaking'] .actor-mouth-open { transform: scaleY(.5); }
+  .character-stage[data-mouth='responding'] .actor-mouth-open { transform: scaleY(.2); }
   .character-stage[data-activity='listening'] .actor-head { transform: rotate(4deg); }
   .character-stage[data-activity='speaking'] .stage-sound i { height: 11px; }
 }

@@ -7,6 +7,8 @@ interface Recognition {
   onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null
   onerror: ((event: { error: string }) => void) | null
   onend: (() => void) | null
+  onspeechstart: (() => void) | null
+  onspeechend: (() => void) | null
   start: () => void
   abort: () => void
 }
@@ -18,16 +20,23 @@ function recognitionConstructor() {
 
 export function useVoiceInput(onTranscript: (text: string) => void) {
   const [listening, setListening] = useState(false)
+  const [hearingSpeech, setHearingSpeech] = useState(false)
   const [error, setError] = useState('')
   const active = useRef<Recognition | null>(null)
+  const quietTimer = useRef<number | undefined>(undefined)
   const callback = useRef(onTranscript)
   callback.current = onTranscript
-  const release = useCallback(() => {
+  const release = useCallback((abort = true) => {
+    window.clearTimeout(quietTimer.current)
     const recognition = active.current
     active.current = null
-    if (recognition) { recognition.onresult = null; recognition.onerror = null; recognition.onend = null; recognition.abort() }
+    if (recognition) {
+      recognition.onresult = null; recognition.onerror = null; recognition.onend = null
+      recognition.onspeechstart = null; recognition.onspeechend = null
+      if (abort) recognition.abort()
+    }
   }, [])
-  const stop = useCallback(() => { release(); setListening(false) }, [release])
+  const stop = useCallback(() => { release(); setListening(false); setHearingSpeech(false) }, [release])
   useEffect(() => release, [release])
 
   function start(existingText: string) {
@@ -35,11 +44,31 @@ export function useVoiceInput(onTranscript: (text: string) => void) {
     const Constructor = recognitionConstructor()
     if (!Constructor) { setError('Trình duyệt chưa hỗ trợ nhập bằng mic. Bạn vẫn có thể nhập câu hỏi.'); return }
     const recognition = new Constructor()
+    let tracksSpeech = false
     active.current = recognition
     recognition.lang = 'vi-VN'; recognition.continuous = false; recognition.interimResults = true
+    const speechEnded = () => {
+      if (active.current !== recognition) return
+      window.clearTimeout(quietTimer.current)
+      setHearingSpeech(false)
+    }
+    recognition.onspeechstart = () => {
+      if (active.current !== recognition) return
+      tracksSpeech = true
+      window.clearTimeout(quietTimer.current)
+      setHearingSpeech(true)
+    }
+    recognition.onspeechend = () => { tracksSpeech = true; speechEnded() }
     recognition.onresult = (event) => {
       if (active.current !== recognition) return
+      // Some recognizers omit speechstart/speechend. Interim results still give feedback,
+      // with a short quiet timeout so the mouth cannot stay open after recognition stalls.
       const transcript = Array.from(event.results).map((result) => result[0]?.transcript || '').join(' ')
+      if (!tracksSpeech && transcript.trim()) {
+        setHearingSpeech(true)
+        window.clearTimeout(quietTimer.current)
+        quietTimer.current = window.setTimeout(speechEnded, 1000)
+      }
       callback.current(`${existingText.trim()}${existingText.trim() ? ' ' : ''}${transcript}`.slice(0, 1000))
     }
     recognition.onerror = (event) => {
@@ -54,9 +83,12 @@ export function useVoiceInput(onTranscript: (text: string) => void) {
       if (event.error !== 'aborted') setError(messages[event.error] || 'Chưa nhận dạng được câu hỏi. Bạn có thể nhập bằng bàn phím.')
       stop()
     }
-    recognition.onend = () => { if (active.current === recognition) { active.current = null; setListening(false) } }
+    recognition.onend = () => {
+      if (active.current !== recognition) return
+      release(false); setListening(false); setHearingSpeech(false)
+    }
     try { recognition.start(); setListening(true) } catch { stop(); setError('Chưa bật được mic. Hãy kiểm tra quyền microphone rồi thử lại.') }
   }
 
-  return { supported: !!recognitionConstructor(), listening, error, start, stop, clearError: () => setError('') }
+  return { supported: !!recognitionConstructor(), listening, hearingSpeech, error, start, stop, clearError: () => setError('') }
 }

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import profiles from '../../shared/character-voices.json'
 
-type Phase = 'idle' | 'loading' | 'speaking'
+type Phase = 'idle' | 'loading' | 'speaking' | 'paused'
 const spokenText = (text: string) => text.replace(/\[\d+\]/g, '').trim()
 
 // Voice lists can arrive asynchronously on first use in Chrome.
@@ -24,7 +24,7 @@ export function useCharacterSpeech(characterId: string) {
   const [phase, setPhase] = useState<Phase>('idle')
   const [activeMessage, setActiveMessage] = useState<number | null>(null)
   const [error, setError] = useState('')
-  const [provider, setProvider] = useState<'azure' | 'browser' | null>(null)
+  const [provider, setProvider] = useState<'server' | 'browser' | null>(null)
   const generation = useRef(0)
   const pending = useRef<AbortController | null>(null)
   const audio = useRef<HTMLAudioElement | null>(null)
@@ -35,9 +35,9 @@ export function useCharacterSpeech(characterId: string) {
   const release = useCallback(() => {
     generation.current++
     pending.current?.abort(); pending.current = null
-    if (audio.current) { audio.current.onplaying = null; audio.current.onended = null; audio.current.onerror = null; audio.current.pause(); audio.current.removeAttribute('src'); audio.current.load(); audio.current = null }
+    if (audio.current) { audio.current.onplaying = null; audio.current.onended = null; audio.current.onerror = null; audio.current.onpause = null; audio.current.pause(); audio.current.removeAttribute('src'); audio.current.load(); audio.current = null }
     if (objectUrl.current) { URL.revokeObjectURL(objectUrl.current); objectUrl.current = null }
-    if (utterance.current) { utterance.current.onstart = null; utterance.current.onend = null; utterance.current.onerror = null; utterance.current = null; window.speechSynthesis.cancel() }
+    if (utterance.current) { utterance.current.onstart = null; utterance.current.onend = null; utterance.current.onerror = null; utterance.current.onpause = null; utterance.current.onresume = null; utterance.current = null; window.speechSynthesis.cancel() }
   }, [])
   const stop = useCallback(() => { release(); setPhase('idle'); setActiveMessage(null) }, [release])
   useEffect(() => { browserOnly.current = false; return release }, [characterId, release])
@@ -56,10 +56,10 @@ export function useCharacterSpeech(characterId: string) {
     let timeout: number | undefined
 
     async function playBrowser() {
-      if (!('speechSynthesis' in window)) throw new Error('Trình duyệt chưa hỗ trợ đọc giọng nói. Hãy cấu hình Azure để sử dụng chức năng này.')
+      if (!('speechSynthesis' in window)) throw new Error('Trình duyệt chưa hỗ trợ đọc giọng nói. Hãy cấu hình ElevenLabs hoặc Azure để sử dụng chức năng này.')
       const voice = await vietnameseVoice(controller.signal)
       if (!current()) return
-      if (!voice) throw new Error('Máy chưa có giọng đọc tiếng Việt. Hãy cài giọng tiếng Việt hoặc cấu hình Azure Speech.')
+      if (!voice) throw new Error('Máy chưa có giọng đọc tiếng Việt. Hãy cài giọng tiếng Việt hoặc cấu hình ElevenLabs hoặc Azure Speech.')
       setProvider('browser')
       // Short utterances avoid the long-text cutoff in some browser speech engines.
       const words = text.split(/\s+/)
@@ -75,12 +75,22 @@ export function useCharacterSpeech(characterId: string) {
         if (index === chunks.length) { finish(); return }
         const speech = new SpeechSynthesisUtterance(chunks[index])
         utterance.current = speech
+        const isActive = () => current() && utterance.current === speech
         speech.voice = voice!; speech.lang = 'vi-VN'; speech.rate = profile?.rate ?? 1; speech.pitch = profile?.pitch ?? 1
-        speech.onstart = () => { if (current()) setPhase('speaking') }
-        speech.onend = () => next(index + 1)
-        speech.onerror = () => { if (current()) { setError('Chưa phát được giọng đọc. Hãy nhấn Nghe câu trả lời để thử lại.'); finish() } }
+        speech.onstart = () => { if (isActive()) setPhase('speaking') }
+        speech.onpause = () => { if (isActive()) setPhase('paused') }
+        speech.onresume = () => { if (isActive()) setPhase('speaking') }
+        speech.onend = () => {
+          if (!isActive()) return
+          speech.onstart = null; speech.onend = null; speech.onerror = null; speech.onpause = null; speech.onresume = null
+          utterance.current = null
+          // Continue the same reading session across chunks. Only the final end closes the mouth.
+          next(index + 1)
+        }
+        speech.onerror = () => { if (isActive()) { setError('Chưa phát được giọng đọc. Hãy nhấn Nghe câu trả lời để thử lại.'); finish() } }
         window.speechSynthesis.speak(speech)
       }
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume()
       next(0)
     }
 
@@ -94,6 +104,7 @@ export function useCharacterSpeech(characterId: string) {
         if (!current()) return
         if (response.status === 503 && body?.error?.code === 'SPEECH_NOT_CONFIGURED') {
           browserOnly.current = true
+          clearTimeout(timeout)
           await playBrowser(); return
         }
         throw new Error(body?.error?.message || 'Chưa tạo được giọng đọc. Hãy thử lại sau.')
@@ -106,8 +117,9 @@ export function useCharacterSpeech(characterId: string) {
       objectUrl.current = url
       const player = new Audio(url)
       audio.current = player
-      setProvider('azure')
+      setProvider('server')
       player.onplaying = () => { if (current()) setPhase('speaking') }
+      player.onpause = () => { if (current()) setPhase('paused') }
       player.onended = finish
       player.onerror = () => { if (current()) { setError('Không phát được âm thanh. Hãy nhấn Nghe câu trả lời để thử lại.'); finish() } }
       await player.play()

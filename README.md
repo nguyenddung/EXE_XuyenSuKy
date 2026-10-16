@@ -65,11 +65,25 @@ Trên Vercel, vào **Project Settings → Environment Variables**, thêm `OPENAI
 
 Trần Hưng Đạo và Ngô Quyền có khung nhân vật hoạt hoạ 2D lớn trong cửa sổ trò chuyện, với bối cảnh sông Bạch Đằng, trang phục và nét mặt riêng. Nhân vật chớp mắt và thở nhẹ khi chờ, nghiêng đầu/gật đầu khi bật mic, suy nghĩ khi đang tra cứu, cử động miệng và tay khi âm thanh thực sự phát. Đây là hoạt hoạ theo trạng thái phát âm thanh, chưa đồng bộ khẩu hình theo từng âm vị. Tắt đọc, hết âm thanh, bắt đầu dùng mic hoặc tạo cuộc trò chuyện mới sẽ kết thúc trạng thái nói. Các nhân vật còn lại giữ giao diện chat hiện có.
 
+Khi đọc bằng giọng trình duyệt, nhân vật giữ hoạt hoạ nói qua tất cả các đoạn của câu trả lời; đọc xong đoạn cuối, dừng, tạm dừng hoặc gặp lỗi sẽ khép miệng về bình thường. Khi nghe học sinh nói, nhân vật có cử động miệng nhẹ kèm gật đầu và cử chỉ tay. Miệng khép lại khi học sinh ngừng nói, tắt mic hoặc mic gặp lỗi. Trình duyệt thiếu sự kiện phát hiện giọng nói dùng kết quả nhận dạng tạm thời và tự kết thúc cử động sau khoảng một giây không có kết quả mới.
+
 Vào **Nhân vật**, chọn **Trần Hưng Đạo** hoặc **Ngô Quyền** (nhãn **Hoạt hoạ · Nói & lắng nghe**), rồi nhấn **Nói câu hỏi**. Sau khi nhận dạng, kiểm tra nội dung và nhấn **Gửi câu hỏi**; câu trả lời tự phát khi bật **Tự đọc câu trả lời**. Khung hoạt hoạ hiển thị cạnh hội thoại trên máy tính và phía trên hội thoại trên điện thoại. Cài đặt giảm chuyển động của hệ điều hành tắt các vòng lặp hoạt hoạ nhưng vẫn hiển thị trạng thái bằng chữ. Không cần thêm dịch vụ hoạt hoạ hay khoá API ngoài cấu hình giọng nói bên dưới.
 
 Chat có nút **Nói câu hỏi** để nhập tiếng Việt bằng Web Speech API, **Nghe câu trả lời / Dừng đọc** và tùy chọn **Tự đọc câu trả lời** (bật mặc định). Câu hỏi từ mic được đưa vào ô nhập để kiểm tra trước khi gửi. Trình duyệt cần hỗ trợ SpeechRecognition và được cấp quyền microphone; dùng HTTPS hoặc localhost. Khi chưa hỗ trợ mic, nhập văn bản vẫn hoạt động.
 
-Để bật Azure TTS, thêm vào `.env.local`, rồi khởi động lại Vite/backend:
+Để dùng ElevenLabs, phần cấu hình sau đã được thêm vào `.env.local`. Điền **secret API key** vào `ELEVENLABS_API_KEY` (không dùng Key ID), rồi khởi động lại Vite/backend:
+
+```dotenv
+SPEECH_PROVIDER=elevenlabs
+ELEVENLABS_API_KEY=<secret API key>
+ELEVENLABS_MODEL=eleven_flash_v2_5
+ELEVENLABS_VOICE_TRAN_HUNG_DAO=JBFqnCBsd6RMkjVDRZzb
+ELEVENLABS_VOICE_NGO_QUYEN=onwK4e9ZLuTAKqWW03F9
+```
+
+Trên Vercel, thêm các biến này vào **Environment Variables → Production** rồi redeploy; `.env.local` chỉ dùng trên máy và không được đưa lên Git. Backend gọi [ElevenLabs Text to Speech](https://elevenlabs.io/docs/api-reference/text-to-speech/convert) bằng header `xi-api-key`, dùng model Flash v2.5 hỗ trợ tiếng Việt và trả MP3 cho cùng luồng hoạt hoạ. Trần Hưng Đạo dùng George, Ngô Quyền dùng Daniel với tốc độ riêng; có thể thay các Voice ID bằng giọng tiếng Việt của tài khoản. `ELEVENLABS_VOICE_ID` và `ELEVENLABS_FEMALE_VOICE_ID` thay giọng nam/nữ mặc định; `ELEVENLABS_VOICE_<ID_NHÂN_VẬT_VIẾT_HOA_VỚI_DẤU_GẠCH_DƯỚI>` thay riêng từng nhân vật. Khi chưa có secret key, giao diện vẫn thử giọng Việt trên trình duyệt. Khi key sai hoặc dịch vụ hết hạn mức, giao diện thông báo lỗi và giữ nội dung văn bản, không tự phát sinh lượt gọi sang nhà cung cấp khác. `SPEECH_DISABLED=1` tắt giọng máy chủ, dùng giọng trình duyệt; Playwright luôn bật biến này để không sử dụng key và hạn mức thật khi kiểm thử.
+
+Để dùng Azure TTS, đặt `SPEECH_PROVIDER=azure`, thêm vào `.env.local`, rồi khởi động lại Vite/backend:
 
 ```dotenv
 AZURE_SPEECH_KEY=<key của Azure Speech resource>
@@ -80,7 +94,7 @@ Region phải đúng với resource của bạn. Trên Vercel, thêm hai biến 
 
 Chỉnh cấu hình của 12 nhân vật trong `shared/character-voices.json`: `voice`, `rate` (1 là tốc độ mặc định), `pitch` (1 là cao độ mặc định). Nam dùng `vi-VN-NamMinhNeural`, nữ dùng `vi-VN-HoaiMyNeural`, khác nhau về tốc độ/cao độ. Đây là giọng mô phỏng, không phải bản sao giọng thật của nhân vật lịch sử. Khi âm thanh thực sự phát, chân dung sáng lên; dừng, đóng chat, mở bài học hoặc bắt đầu cuộc trò chuyện mới sẽ hủy phần đọc. Người bật giảm chuyển động nhận hiệu ứng sáng tĩnh.
 
-Khi chưa cấu hình Azure, giao diện thử giọng tiếng Việt cài trên trình duyệt/hệ điều hành. Nếu không có giọng tiếng Việt, giao diện báo cách khắc phục; không tự chọn giọng ngôn ngữ khác. Giọng dự phòng phụ thuộc máy và có thể dùng chung một giọng nền cho nhiều nhân vật. Khi Azure đã cấu hình nhưng lỗi/quá hạn mức, giao diện báo lỗi và giữ câu trả lời văn bản.
+Khi chưa cấu hình dịch vụ giọng nói, giao diện thử giọng tiếng Việt cài trên trình duyệt/hệ điều hành. Nếu không có giọng tiếng Việt, giao diện báo cách khắc phục; không tự chọn giọng ngôn ngữ khác. Giọng dự phòng phụ thuộc máy và có thể dùng chung một giọng nền cho nhiều nhân vật. Khi dịch vụ đã cấu hình nhưng lỗi/quá hạn mức, giao diện báo lỗi và giữ câu trả lời văn bản.
 
 Giới hạn mặc định: 6.000 ký tự mỗi lần đọc, 12 lượt/phút, 40 lần tạo âm thanh/ngày mỗi khách, 500 lần/ngày toàn hệ thống (ngày Việt Nam). Điều chỉnh bằng `SPEECH_RATE_PER_MINUTE`, `SPEECH_REQUESTS_PER_DAY`, `SPEECH_GLOBAL_REQUESTS_PER_DAY`. Phát lại âm thanh trong cache một giờ của cùng server instance không gọi lại Azure; cache tối đa 32 mục/24 MB. Các request đồng thời chưa có cache vẫn được tính riêng. Có thể dùng cấu hình Upstash ở trên để chia sẻ bộ đếm giữa các instance Vercel. Không có cơ sở dữ liệu âm thanh lâu dài.
 

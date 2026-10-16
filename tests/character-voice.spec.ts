@@ -1,14 +1,18 @@
 import { expect, test, type Page } from '@playwright/test'
 
+type VoiceAction = 'beginStudentSpeech' | 'endStudentSpeech' | 'interimTranscript' | 'endMic' | 'lateMicSpeech' | 'finishUtterance' | 'pauseUtterance' | 'resumeUtterance' | 'failUtterance' | 'repeatFirstEnd' | 'lateUtteranceEvents' | 'pauseAudio'
+const voiceAction = (page: Page, action: VoiceAction, text = '') => page.evaluate(({ action, text }) => (window as unknown as { __voiceTest: Record<VoiceAction, (text: string) => void> }).__voiceTest[action](text), { action, text })
+
 async function installVoiceMocks(page: Page, hasVietnameseVoice = true, hasMic = true, deferPlayback = false) {
   await page.addInitScript(({ hasVietnameseVoice, hasMic, deferPlayback }) => {
-    const state = { played: 0, paused: 0, canceled: 0, micAborted: 0, utterances: [] as { text: string; lang: string; rate: number; pitch: number }[], transcript: (_text: string) => {}, micError: (_error: string) => {}, startAudio: () => {}, finishAudio: () => {} }
+    const state = { played: 0, paused: 0, canceled: 0, micAborted: 0, utterances: [] as { text: string; lang: string; rate: number; pitch: number }[], transcript: (_text: string) => {}, micError: (_error: string) => {}, startAudio: () => {}, finishAudio: () => {}, pauseAudio: () => {}, finishUtterance: () => {}, pauseUtterance: () => {}, resumeUtterance: () => {}, failUtterance: () => {}, repeatFirstEnd: () => {}, lateUtteranceEvents: () => {}, beginStudentSpeech: () => {}, endStudentSpeech: () => {}, interimTranscript: (_text: string) => {}, endMic: () => {}, lateMicSpeech: () => {} }
     Object.defineProperty(window, '__voiceTest', { value: state })
     class MockAudio {
       onplaying: (() => void) | null = null
       onended: (() => void) | null = null
       onerror: (() => void) | null = null
-      async play() { state.played++; state.startAudio = () => this.onplaying?.(); if (!deferPlayback) state.startAudio(); state.finishAudio = () => this.onended?.() }
+      onpause: (() => void) | null = null
+      async play() { state.played++; state.startAudio = () => this.onplaying?.(); if (!deferPlayback) state.startAudio(); state.finishAudio = () => this.onended?.(); state.pauseAudio = () => this.onpause?.() }
       pause() { state.paused++ }
       removeAttribute() {}
       load() {}
@@ -21,11 +25,25 @@ async function installVoiceMocks(page: Page, hasVietnameseVoice = true, hasMic =
       onstart: (() => void) | null = null
       onend: (() => void) | null = null
       onerror: (() => void) | null = null
+      onpause: (() => void) | null = null
+      onresume: (() => void) | null = null
     }
     Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: MockUtterance })
-    const synth = new EventTarget() as EventTarget & { getVoices: () => unknown[]; speak: (utterance: MockUtterance) => void; cancel: () => void }
+    const synth = new EventTarget() as EventTarget & { getVoices: () => unknown[]; speak: (utterance: MockUtterance) => void; cancel: () => void; paused: boolean; resume: () => void }
     synth.getVoices = () => hasVietnameseVoice ? [{ name: 'Vietnamese demo', lang: 'vi-VN' }] : [{ name: 'English demo', lang: 'en-US' }]
-    synth.speak = (utterance) => { state.utterances.push({ text: utterance.text, lang: utterance.lang, rate: utterance.rate, pitch: utterance.pitch }); utterance.onstart?.() }
+    synth.paused = false
+    synth.resume = () => { synth.paused = false }
+    synth.speak = (utterance) => {
+      state.utterances.push({ text: utterance.text, lang: utterance.lang, rate: utterance.rate, pitch: utterance.pitch })
+      state.finishUtterance = () => utterance.onend?.()
+      state.pauseUtterance = () => { synth.paused = true; utterance.onpause?.() }
+      state.resumeUtterance = () => { synth.paused = false; utterance.onresume?.() }
+      state.failUtterance = () => utterance.onerror?.()
+      const end = utterance.onend, start = utterance.onstart, resume = utterance.onresume
+      if (state.utterances.length === 1) state.repeatFirstEnd = () => end?.()
+      state.lateUtteranceEvents = () => { start?.(); resume?.(); end?.() }
+      utterance.onstart?.()
+    }
     synth.cancel = () => { state.canceled++ }
     Object.defineProperty(window, 'speechSynthesis', { value: synth })
     class MockRecognition {
@@ -33,9 +51,17 @@ async function installVoiceMocks(page: Page, hasVietnameseVoice = true, hasMic =
       onresult: ((event: { results: { transcript: string }[][] }) => void) | null = null
       onerror: ((event: { error: string }) => void) | null = null
       onend: (() => void) | null = null
+      onspeechstart: (() => void) | null = null
+      onspeechend: (() => void) | null = null
       start() {
         state.transcript = (text) => { this.onresult?.({ results: [[{ transcript: text }]] }); this.onend?.() }
         state.micError = (error) => { this.onerror?.({ error }) }
+        state.beginStudentSpeech = () => this.onspeechstart?.()
+        state.endStudentSpeech = () => this.onspeechend?.()
+        state.interimTranscript = (text) => this.onresult?.({ results: [[{ transcript: text }]] })
+        state.endMic = () => this.onend?.()
+        const speechStart = this.onspeechstart
+        state.lateMicSpeech = () => speechStart?.()
       }
       abort() { state.micAborted++ }
     }
@@ -55,6 +81,13 @@ async function mockAzure(page: Page) {
 }
 async function mockUnconfigured(page: Page) {
   await page.route('**/api/characters/*/speech', (route) => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: { code: 'SPEECH_NOT_CONFIGURED' } }) }))
+}
+
+async function expectClosedMouth(page: Page) {
+  await expect(page.locator('.character-stage')).toHaveAttribute('data-mouth', 'closed')
+  await expect(page.locator('.actor-mouth-closed')).toHaveCSS('opacity', '1')
+  await expect(page.locator('.actor-mouth-open')).toHaveCSS('opacity', '0')
+  await expect(page.locator('.actor-mouth-open')).toHaveCSS('animation-name', 'none')
 }
 
 test('auto-read sends the grounded answer without citation markers, glows only during playback and stops/replays', async ({ page }) => {
@@ -196,8 +229,20 @@ for (const name of ['Ngô Quyền', 'Trần Hưng Đạo']) {
     await expect(stage.getByRole('img')).toHaveAccessibleName(new RegExp(name))
     await page.getByRole('button', { name: 'Nói câu hỏi', exact: true }).click()
     await expect(stage).toHaveAttribute('data-activity', 'listening')
+    await expectClosedMouth(page)
     expect(await stage.locator('.actor-head').evaluate((node) => getComputedStyle(node).animationName)).toBe('actor-listen')
-    expect(await stage.locator('.actor-mouth-open').evaluate((node) => getComputedStyle(node).opacity)).toBe('0')
+    await voiceAction(page, 'beginStudentSpeech')
+    await expect(stage).toHaveAttribute('data-mouth', 'responding')
+    await expect(stage.locator('.actor-mouth-open')).toHaveCSS('animation-name', 'actor-listen-mouth')
+    const mouthTransform = await stage.locator('.actor-mouth-open').evaluate((node) => getComputedStyle(node).transform)
+    await expect.poll(() => stage.locator('.actor-mouth-open').evaluate((node) => getComputedStyle(node).transform)).not.toBe(mouthTransform)
+    await stage.screenshot({ path: `test-results/listening-response-${name === 'Ngô Quyền' ? 'ngo-quyen' : 'tran-hung-dao'}.png` })
+    await voiceAction(page, 'endStudentSpeech')
+    await expectClosedMouth(page)
+    await expect(stage).toHaveAttribute('data-activity', 'listening')
+    // A final recognition result can arrive after speechend, while the mic is still open.
+    await voiceAction(page, 'interimTranscript', 'Bạch Đằng diễn ra năm nào?')
+    await expectClosedMouth(page)
     await page.evaluate(() => (window as unknown as { __voiceTest: { transcript: (text: string) => void } }).__voiceTest.transcript('Bạch Đằng diễn ra năm nào?'))
     await expect(stage).toHaveAttribute('data-activity', 'idle')
     await expect(page.locator('.chat-exchange')).toHaveCount(0)
@@ -209,11 +254,17 @@ for (const name of ['Ngô Quyền', 'Trần Hưng Đạo']) {
     await expect.poll(async () => (await stats(page)).played).toBe(1)
     await page.evaluate(() => (window as unknown as { __voiceTest: { startAudio: () => void } }).__voiceTest.startAudio())
     await expect(stage).toHaveAttribute('data-activity', 'speaking')
+    await expect(stage).toHaveAttribute('data-mouth', 'speaking')
     expect(await stage.locator('.actor-mouth-open').evaluate((node) => getComputedStyle(node).animationName)).toBe('actor-talk')
     expect(await stage.locator('.actor-forearm').evaluate((node) => getComputedStyle(node).animationName)).toBe('actor-gesture')
     await page.screenshot({ path: `test-results/animated-${name === 'Ngô Quyền' ? 'ngo-quyen' : 'tran-hung-dao'}-desktop.png` })
+    await voiceAction(page, 'pauseAudio')
+    await expectClosedMouth(page)
+    await page.evaluate(() => (window as unknown as { __voiceTest: { startAudio: () => void } }).__voiceTest.startAudio())
+    await expect(stage).toHaveAttribute('data-mouth', 'speaking')
     await page.evaluate(() => (window as unknown as { __voiceTest: { finishAudio: () => void } }).__voiceTest.finishAudio())
     await expect(stage).toHaveAttribute('data-activity', 'idle')
+    await expectClosedMouth(page)
     await page.getByRole('button', { name: 'Nghe câu trả lời 1', exact: true }).click()
     await expect.poll(async () => (await stats(page)).played).toBe(2)
     await page.evaluate(() => (window as unknown as { __voiceTest: { startAudio: () => void } }).__voiceTest.startAudio())
@@ -228,7 +279,104 @@ for (const name of ['Ngô Quyền', 'Trần Hưng Đạo']) {
     await expect(stage).toHaveCount(0)
     expect((await stats(page)).paused).toBe(2)
   })
+
+  test(`${name} reads every browser speech chunk and closes the mouth only after the final chunk`, async ({ page }) => {
+    await installVoiceMocks(page)
+    await mockUnconfigured(page)
+    const answer = `${'Chiến thắng Bạch Đằng cho thấy trí tuệ và tinh thần đoàn kết của nhân dân. '.repeat(12)}Câu chuyện đến đây là hết. [1]`
+    await page.route('**/api/characters/*/chat', (route) => route.fulfill({ json: { characterId: name === 'Ngô Quyền' ? 'ngo-quyen' : 'tran-hung-dao', mode: 'textbook', kind: 'grounded', answer, sources: [], suggestions: [], relatedLessons: [] } }))
+    await openCharacter(page, name)
+    await page.locator('.chat-suggestions button').first().click()
+    const stage = page.locator('.character-stage')
+    await expect(stage).toHaveAttribute('data-mouth', 'speaking')
+    await voiceAction(page, 'finishUtterance')
+    await expect.poll(async () => (await stats(page)).utterances.length).toBe(2)
+    await voiceAction(page, 'repeatFirstEnd')
+    expect((await stats(page)).utterances).toHaveLength(2)
+    await expect(stage).toHaveAttribute('data-mouth', 'speaking')
+    await voiceAction(page, 'pauseUtterance')
+    await expectClosedMouth(page)
+    await voiceAction(page, 'resumeUtterance')
+    await expect(stage).toHaveAttribute('data-mouth', 'speaking')
+    for (let i = 0; i < 15; i++) {
+      const count = (await stats(page)).utterances.length
+      await voiceAction(page, 'finishUtterance')
+      await expect.poll(async () => await stage.getAttribute('data-mouth') === 'closed' || (await stats(page)).utterances.length > count).toBe(true)
+      if (await stage.getAttribute('data-mouth') === 'closed') break
+      await expect(stage).toHaveAttribute('data-mouth', 'speaking')
+    }
+    await expectClosedMouth(page)
+    await expect(stage).toHaveAttribute('data-activity', 'idle')
+    expect((await stats(page)).utterances.map((utterance) => utterance.text).join(' ')).toBe(answer.replace(/\[\d+\]/g, '').trim())
+    await voiceAction(page, 'lateUtteranceEvents')
+    await expectClosedMouth(page)
+    await page.screenshot({ path: `test-results/finished-reading-${name === 'Ngô Quyền' ? 'ngo-quyen' : 'tran-hung-dao'}.png` })
+  })
 }
+
+test('browser speech stop and errors close the mouth and ignore late playback callbacks', async ({ page }) => {
+  await installVoiceMocks(page)
+  await mockUnconfigured(page)
+  await openCharacter(page)
+  await page.getByRole('button', { name: 'Nghe lời chào', exact: true }).click()
+  await expect(page.locator('.character-stage')).toHaveAttribute('data-mouth', 'speaking')
+  await voiceAction(page, 'pauseUtterance')
+  await expectClosedMouth(page)
+  await page.getByRole('button', { name: 'Dừng giọng nói', exact: true }).click()
+  await voiceAction(page, 'lateUtteranceEvents')
+  await expectClosedMouth(page)
+  await page.getByRole('button', { name: 'Nghe lời chào', exact: true }).click()
+  await expect(page.locator('.character-stage')).toHaveAttribute('data-mouth', 'speaking')
+  await voiceAction(page, 'failUtterance')
+  await expectClosedMouth(page)
+  await expect(page.locator('.chat-voice-notice')).toContainText('Chưa phát được giọng đọc')
+  await voiceAction(page, 'lateUtteranceEvents')
+  await expectClosedMouth(page)
+})
+
+test('native audio playback automatically restores the normal mouth at the real ended event', async ({ page }) => {
+  // One second of silent PCM exercises real browser media events, without a paid TTS call.
+  const wav = Buffer.alloc(44 + 8000 * 2)
+  wav.write('RIFF', 0); wav.writeUInt32LE(wav.length - 8, 4); wav.write('WAVEfmt ', 8)
+  wav.writeUInt32LE(16, 16); wav.writeUInt16LE(1, 20); wav.writeUInt16LE(1, 22)
+  wav.writeUInt32LE(8000, 24); wav.writeUInt32LE(16000, 28); wav.writeUInt16LE(2, 32); wav.writeUInt16LE(16, 34)
+  wav.write('data', 36); wav.writeUInt32LE(wav.length - 44, 40)
+  await page.route('**/api/characters/*/speech', (route) => route.fulfill({ contentType: 'audio/wav', body: wav }))
+  await openCharacter(page)
+  await page.getByRole('button', { name: 'Nghe lời chào', exact: true }).click()
+  await expect(page.locator('.character-stage')).toHaveAttribute('data-mouth', 'speaking')
+  await expectClosedMouth(page)
+  await expect(page.locator('.character-stage')).toHaveAttribute('data-activity', 'idle')
+  await expect(page.getByRole('button', { name: 'Nghe lời chào', exact: true })).toBeVisible()
+})
+
+test('interim recognition animates listening without speech events and clears on silence, mic end and denial', async ({ page }) => {
+  await installVoiceMocks(page)
+  await openCharacter(page)
+  const stage = page.locator('.character-stage')
+  await page.getByRole('button', { name: 'Nói câu hỏi', exact: true }).click()
+  await expectClosedMouth(page)
+  await voiceAction(page, 'interimTranscript', 'Cho em hỏi về Bạch Đằng')
+  await expect(stage).toHaveAttribute('data-mouth', 'responding')
+  await expectClosedMouth(page)
+  await expect(stage).toHaveAttribute('data-activity', 'listening')
+  await voiceAction(page, 'interimTranscript', 'Trận Bạch Đằng diễn ra')
+  await expect(stage).toHaveAttribute('data-mouth', 'responding')
+  await voiceAction(page, 'endMic')
+  await expectClosedMouth(page)
+  await expect(stage).toHaveAttribute('data-activity', 'idle')
+  await voiceAction(page, 'lateMicSpeech')
+  await expectClosedMouth(page)
+  await page.getByRole('button', { name: 'Nói câu hỏi', exact: true }).click()
+  await voiceAction(page, 'beginStudentSpeech')
+  await expect(stage).toHaveAttribute('data-mouth', 'responding')
+  await page.evaluate(() => (window as unknown as { __voiceTest: { micError: (error: string) => void } }).__voiceTest.micError('not-allowed'))
+  await expectClosedMouth(page)
+  await voiceAction(page, 'lateMicSpeech')
+  await expectClosedMouth(page)
+  expect((await stats(page)).played).toBe(0)
+  expect((await stats(page)).utterances).toHaveLength(0)
+})
 
 test('animated mobile conversation keeps the character, input and mic visible with reduced motion', async ({ page }) => {
   await installVoiceMocks(page)

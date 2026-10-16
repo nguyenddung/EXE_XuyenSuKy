@@ -3,7 +3,7 @@ import { Headphones, Mic, Sparkles, Volume2 } from 'lucide-react'
 import type { Character } from '../types'
 import type { CharacterActivity } from '../lib/animatedCharacters'
 
-interface Props { character: Character; activity: CharacterActivity }
+interface Props { character: Character; activity: CharacterActivity; studentSpeaking: boolean }
 
 const activityLabels: Record<CharacterActivity, string> = {
   idle: 'Sẵn sàng trò chuyện',
@@ -14,13 +14,14 @@ const activityLabels: Record<CharacterActivity, string> = {
 }
 
 /** An articulated SVG portrait. Speech motion follows actual playback, never request time. */
-export function CharacterStage({ character, activity }: Props) {
+export function CharacterStage({ character, activity, studentSpeaking }: Props) {
   const id = useId().replace(/:/g, '')
   const veteran = character.id === 'tran-hung-dao'
   const paint = (name: string) => `url(#${id}-${name})`
   const Icon = activity === 'listening' ? Mic : activity === 'speaking' ? Volume2 : activity === 'idle' ? Headphones : Sparkles
+  const mouth = activity === 'speaking' ? 'speaking' : activity === 'listening' && studentSpeaking ? 'responding' : 'closed'
 
-  return <aside className={`character-stage character-stage--${character.id}`} data-activity={activity} aria-label={`Nhân vật hoạt hoạ ${character.name}`}>
+  return <aside className={`character-stage character-stage--${character.id}`} data-activity={activity} data-mouth={mouth} aria-label={`Nhân vật hoạt hoạ ${character.name}`}>
     <div className="stage-topline"><span><span className="stage-live-dot" /> GẶP GỠ LỊCH SỬ</span><span>HOẠT HOẠ 2D</span></div>
     <div className="stage-landscape" aria-hidden="true">
       <svg viewBox="0 0 600 760" preserveAspectRatio="xMidYMid slice">

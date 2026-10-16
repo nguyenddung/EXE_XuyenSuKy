@@ -12,7 +12,17 @@ const numberEnv = (name, fallback) => {
   const value = Number(process.env[name])
   return Number.isFinite(value) && value > 0 ? value : fallback
 }
-const configuration = () => ({ key: process.env.AZURE_SPEECH_KEY, region: process.env.AZURE_SPEECH_REGION })
+const configuration = (characterId) => {
+  const provider = process.env.SPEECH_PROVIDER || (process.env.ELEVENLABS_API_KEY ? 'elevenlabs' : 'azure')
+  if (provider !== 'elevenlabs') return { provider, key: process.env.AZURE_SPEECH_KEY, region: process.env.AZURE_SPEECH_REGION }
+  const female = voices[characterId].voice === 'vi-VN-HoaiMyNeural'
+  const defaultVoice = female ? process.env.ELEVENLABS_FEMALE_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' : process.env.ELEVENLABS_VOICE_ID || (characterId === 'ngo-quyen' ? 'onwK4e9ZLuTAKqWW03F9' : 'JBFqnCBsd6RMkjVDRZzb')
+  return {
+    provider, key: process.env.ELEVENLABS_API_KEY,
+    voiceId: process.env[`ELEVENLABS_VOICE_${characterId.replaceAll('-', '_').toUpperCase()}`] || defaultVoice,
+    model: process.env.ELEVENLABS_MODEL || 'eleven_flash_v2_5',
+  }
+}
 const escapeXml = (value) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[char])
 
 // Speak the answer itself, omitting visual citation markers; never accept SSML from the browser.
@@ -31,28 +41,35 @@ export function createSpeechService({ config = configuration, fetchAudio = fetch
   return async ({ characterId, text, visitor }) => {
     if (!Object.hasOwn(voices, characterId)) throw new SpeechError(404, 'CHARACTER_NOT_FOUND', 'Không tìm thấy giọng của nhân vật.')
     if (typeof text !== 'string' || !spokenText(text) || text.length > 6000) throw new SpeechError(400, 'INVALID_BODY', 'Nội dung đọc phải có từ 1 đến 6000 ký tự.')
-    const { key, region } = config()
-    if (!key || !region) throw new SpeechError(503, 'SPEECH_NOT_CONFIGURED', 'Chưa cấu hình giọng Azure.')
-    if (!/^[a-z0-9-]{1,50}$/.test(region)) throw new SpeechError(503, 'SPEECH_CONFIGURATION_INVALID', 'Cấu hình vùng Azure chưa hợp lệ.')
+    if (process.env.SPEECH_DISABLED === '1') throw new SpeechError(503, 'SPEECH_NOT_CONFIGURED', 'Giọng máy chủ đang tắt. Bạn có thể dùng giọng đọc của trình duyệt.')
+    const { provider = 'azure', key, region, voiceId, model = 'eleven_flash_v2_5' } = config(characterId)
+    if (!['azure', 'elevenlabs'].includes(provider)) throw new SpeechError(503, 'SPEECH_CONFIGURATION_INVALID', 'Dịch vụ giọng nói chưa được cấu hình hợp lệ.')
+    if (!key || (provider === 'azure' && !region)) throw new SpeechError(503, 'SPEECH_NOT_CONFIGURED', 'Chưa cấu hình dịch vụ giọng nói.')
+    if (provider === 'azure' && !/^[a-z0-9-]{1,50}$/.test(region)) throw new SpeechError(503, 'SPEECH_CONFIGURATION_INVALID', 'Cấu hình vùng Azure chưa hợp lệ.')
+    if (provider === 'elevenlabs' && (!/^[a-zA-Z0-9_-]{1,80}$/.test(voiceId || '') || !/^eleven_[a-zA-Z0-9_]{1,60}$/.test(model))) throw new SpeechError(503, 'SPEECH_CONFIGURATION_INVALID', 'Cấu hình giọng ElevenLabs chưa hợp lệ.')
     const quota = limits()
     const minute = await store.increment(`speech:min:${visitor}`, 60_000)
     if (minute.count > quota.perMinute) throw new SpeechError(429, 'SPEECH_RATE_LIMITED', 'Bạn đang nghe quá nhanh. Hãy thử lại sau.', Math.max(1, Math.ceil((minute.resetAt - Date.now()) / 1000)))
-    const ssml = speechSsml(characterId, text)
-    const cacheKey = createHash('sha256').update(`${region}:${ssml}`).digest('hex')
+    const body = provider === 'elevenlabs' ? JSON.stringify({ text: spokenText(text), model_id: model, language_code: 'vi', voice_settings: { stability: 0.65, similarity_boost: 0.75, speed: voices[characterId].rate } }) : speechSsml(characterId, text)
+    const url = provider === 'elevenlabs' ? `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128` : `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`
+    const headers = provider === 'elevenlabs' ? { 'xi-api-key': key, 'Content-Type': 'application/json', Accept: 'audio/mpeg' } : { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'XuyenSuKy' }
+    const cacheKey = createHash('sha256').update(`${url}:${key}:${body}`).digest('hex')
     // Bound both total memory and entry count. Cache audio for one hour per server instance.
     for (const [id, entry] of cache) if (entry.expires <= Date.now()) { cache.delete(id); cacheBytes -= entry.audio.length }
     const cached = cache.get(cacheKey)
     if (cached) { cache.delete(cacheKey); cache.set(cacheKey, cached); return cached.audio }
     const today = new Date(Date.now() + 7 * 3600_000).toISOString().slice(0, 10)
     if ((await store.increment(`speech:day:${today}:${visitor}`, 86400_000)).count > quota.perDay || (await store.increment(`speech:day:${today}:all`, 86400_000)).count > quota.globalPerDay) {
-      throw new SpeechError(429, 'SPEECH_QUOTA_EXCEEDED', 'Đã hết lượt đọc Azure hôm nay. Bạn vẫn có thể đọc câu trả lời trên màn hình.')
+      throw new SpeechError(429, 'SPEECH_QUOTA_EXCEEDED', 'Đã hết lượt đọc hôm nay. Bạn vẫn có thể đọc câu trả lời trên màn hình.')
     }
     try {
-      const response = await fetchAudio(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
-        method: 'POST', signal: AbortSignal.timeout(15000),
-        headers: { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'XuyenSuKy' }, body: ssml,
-      })
-      if (!response.ok) { await response.body?.cancel(); throw new SpeechError(502, 'SPEECH_UPSTREAM_ERROR', 'Dịch vụ giọng nói đang bận hoặc cấu hình chưa đúng. Hãy thử lại sau.') }
+      const response = await fetchAudio(url, { method: 'POST', signal: AbortSignal.timeout(15000), headers, body })
+      if (!response.ok) {
+        await response.body?.cancel()
+        if (provider === 'elevenlabs' && [400, 401, 403].includes(response.status)) throw new SpeechError(502, 'SPEECH_UPSTREAM_ERROR', 'Chưa tạo được giọng ElevenLabs. Hãy kiểm tra Secret API Key, quyền tạo giọng và Voice ID trong cấu hình máy chủ.')
+        if (response.status === 429) throw new SpeechError(429, 'SPEECH_PROVIDER_LIMITED', 'Dịch vụ giọng nói đang giới hạn lượt đọc. Hãy thử lại sau.', 60)
+        throw new SpeechError(502, 'SPEECH_UPSTREAM_ERROR', 'Dịch vụ giọng nói đang bận hoặc cấu hình chưa đúng. Hãy thử lại sau.')
+      }
       if (!response.headers.get('Content-Type')?.startsWith('audio/')) { await response.body?.cancel(); throw new SpeechError(502, 'SPEECH_INVALID_AUDIO', 'Chưa nhận được âm thanh phù hợp.') }
       const audio = Buffer.from(await response.arrayBuffer())
       if (!audio.length || audio.length > 2 * 1024 * 1024) throw new SpeechError(502, 'SPEECH_INVALID_AUDIO', 'Chưa nhận được âm thanh phù hợp.')
