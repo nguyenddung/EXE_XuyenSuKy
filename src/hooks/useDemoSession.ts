@@ -4,6 +4,8 @@ import { demoAccount } from '../data/demo'
 
 export interface DemoSession {
   name?: string
+  /** Stable identity of the signed-in demo account (normalised email); never the display name. Absent for guests and for sessions saved before it existed. */
+  userId?: string
   loggedIn: boolean
   /** Explicit "learn without an account" mode; it opens the app but never borrows the demo member's profile. */
   guest: boolean
@@ -24,6 +26,7 @@ export function readSession(): DemoSession {
     const loggedIn = saved.loggedIn === true
     return {
       loggedIn,
+      userId: loggedIn && typeof saved.userId === 'string' && saved.userId ? saved.userId : undefined,
       name: typeof saved.name === 'string' ? saved.name : undefined,
       gradeSelected: saved.gradeSelected === true || (saved.gradeSelected === undefined && loggedIn && [6, 7, 8, 9, 10, 11, 12].includes(saved.grade ?? 0)),
       gameRecords: Object.fromEntries(Object.entries(saved.gameRecords || {}).filter(([id, stars]) => ['timeline', 'memory', 'detective', 'strategy'].includes(id) && Number.isInteger(stars) && stars >= 1 && stars <= 3)),
@@ -37,6 +40,9 @@ export function readSession(): DemoSession {
 
 /** Whether the learning app at /home may open: a signed-in member or a visitor who chose guest mode. */
 export const hasAppAccess = (session: DemoSession) => session.loggedIn || session.guest
+
+/** Owner of locally stored per-user data: the account id, 'guest' in guest mode, or null when the identity is unknown (legacy session). */
+export const storageOwner = (session: DemoSession) => session.loggedIn ? session.userId ?? null : session.guest ? 'guest' : null
 
 export function useDemoSession() {
   const [session, setSession] = useState<DemoSession>(readSession)
@@ -52,15 +58,16 @@ export function useDemoSession() {
 
   async function login(email: string, password: string) {
     if (!(email.trim().toLowerCase() === demoAccount.email && password === demoAccount.password) && !await verifyLocal(email, password)) return false
-    update((previous) => ({ ...previous, loggedIn: true, guest: false, name: email.trim().toLowerCase() === demoAccount.email ? demoAccount.name : email.trim().split('@')[0] }))
+    const normalized = email.trim().toLowerCase()
+    update((previous) => ({ ...previous, loggedIn: true, guest: false, userId: normalized, name: normalized === demoAccount.email ? demoAccount.name : email.trim().split('@')[0] }))
     return true
   }
 
-  function startGuest() { update((previous) => ({ ...previous, loggedIn: false, guest: true })) }
-  function logout() { update((previous) => ({ ...previous, loggedIn: false, guest: false })) }
+  function startGuest() { update((previous) => ({ ...previous, loggedIn: false, guest: true, userId: undefined })) }
+  function logout() { update((previous) => ({ ...previous, loggedIn: false, guest: false, userId: undefined })) }
   function selectGrade(grade: number) { if (![6, 7, 8, 9, 10, 11, 12].includes(grade)) return; update((previous) => ({ ...previous, grade, gradeSelected: true })) }
   function recordGame(id: string, stars: number) { update(previous => ({ ...previous, gameRecords: { ...previous.gameRecords, [id]: Math.max(previous.gameRecords[id] || 0, stars) } })) }
-  function reset() { update((previous) => ({ ...initialSession, loggedIn: previous.loggedIn, guest: previous.guest, name: previous.name, grade: previous.grade, gradeSelected: previous.gradeSelected })) }
+  function reset() { update((previous) => ({ ...initialSession, loggedIn: previous.loggedIn, guest: previous.guest, name: previous.name, userId: previous.userId, grade: previous.grade, gradeSelected: previous.gradeSelected })) }
 
   function completeActivity(id: string, reward: number) {
     update((previous) => previous.completedActivities.includes(id) ? previous : {

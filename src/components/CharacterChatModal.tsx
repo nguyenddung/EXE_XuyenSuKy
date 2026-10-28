@@ -1,22 +1,37 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { ArrowUp, BookOpen, LoaderCircle, MessageCircle, Mic, RotateCcw, Square, Volume2, X } from 'lucide-react'
 import type { Character, CharacterInteractionMode } from '../types'
-import { askCharacter, RateLimitError, type CharacterReply } from '../lib/characterApi'
+import { askCharacter, RateLimitError } from '../lib/characterApi'
 import { sourceLabel } from '../lib/historyApi'
+import { apiContext, newExchangeId, toChatReply, type ChatExchange } from '../lib/chatHistory'
+import { useChatHistory } from '../hooks/useChatHistory'
 import { useCharacterSpeech } from '../lib/useCharacterSpeech'
 import { useVoiceInput } from '../lib/useVoiceInput'
 import type { CharacterActivity } from '../lib/animatedCharacters'
 import { CharacterVoicePanel } from './CharacterVoicePanel'
 
-interface Props { character: Character; initialMode?: CharacterInteractionMode; onClose: () => void; onOpenLesson: (id: string) => void }
-interface Exchange { question: string; reply?: CharacterReply; error?: string; rateLimited?: boolean }
+/** `historyOwner` is the stable id of the signed-in demo account ('guest' for guests); null means the chat works but is not stored. */
+interface Props { character: Character; historyOwner: string | null; initialMode?: CharacterInteractionMode; onClose: () => void; onOpenLesson: (id: string) => void }
 
-export function CharacterChatModal({ character, initialMode = 'chat', onClose, onOpenLesson }: Props) {
+const timeLabel = (at?: number) => at && at > 0 ? new Date(at).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : ''
+const historyNoteFor = (notice: ReturnType<typeof useChatHistory>['notice']) =>
+  notice.save === 'failed' ? 'Không lưu được lịch sử vào trình duyệt (bộ nhớ đầy hoặc bị chặn). Bạn vẫn trò chuyện được, nhưng cuộc trò chuyện sẽ mất khi đóng trang.'
+    : notice.save === 'trimmed' ? 'Bộ nhớ trình duyệt gần đầy nên chỉ lưu các lượt gần nhất.'
+    : notice.save === 'unavailable' ? 'Chưa xác định được tài khoản nên cuộc trò chuyện này không được lưu. Hãy đăng nhập lại để lưu lịch sử.'
+    : notice.discarded ? 'Lịch sử cũ bị lỗi hoặc không còn tương thích nên đã được bỏ qua. Cuộc trò chuyện mới bắt đầu.'
+    : notice.restored ? 'Đã khôi phục cuộc trò chuyện trước đó trên trình duyệt này.' : ''
+
+export function CharacterChatModal({ character, historyOwner, initialMode = 'chat', onClose, onOpenLesson }: Props) {
   const [mode, setMode] = useState<CharacterInteractionMode>(initialMode)
   const modeRef = useRef(initialMode)
   const [voiceMessage, setVoiceMessage] = useState<number | null>(null)
   const [input, setInput] = useState('')
-  const [messages, setMessages] = useState<Exchange[]>([])
+  const history = useChatHistory(historyOwner, character.id)
+  const messages = history.messages
+  const historyNote = historyNoteFor(history.notice)
+  // Replies are applied through the token they were requested under; see useChatHistory.
+  const tokenRef = useRef(history.token)
+  tokenRef.current = history.token
   const [busy, setBusy] = useState(false)
   // After HTTP 429 every way of asking stays locked until the server's Retry-After has passed.
   const [cooldownUntil, setCooldownUntil] = useState(0)
@@ -43,6 +58,8 @@ export function CharacterChatModal({ character, initialMode = 'chat', onClose, o
     document.body.style.overflow = 'hidden'
     return () => { pending.current?.abort(); element?.close(); document.body.style.overflow = previousOverflow; previous?.focus() }
   }, [])
+  // A different owner, character or a fresh conversation invalidates any request still on its way.
+  useEffect(() => () => { pending.current?.abort() }, [history.token])
   useEffect(() => { if (mode === 'chat') inputRef.current?.focus(); else micRef.current?.focus() }, [mode])
   useEffect(() => { bottom.current?.scrollIntoView({ block: 'end' }) }, [messages, busy, mode])
   useEffect(() => {
@@ -65,42 +82,46 @@ export function CharacterChatModal({ character, initialMode = 'chat', onClose, o
     else if (!event.shiftKey && (active === last || !dialog.current.contains(active))) { event.preventDefault(); first.focus() }
   }
 
-  async function requestReply(question: string, index: number) {
+  async function requestReply(question: string, id: string, index: number) {
     if (pending.current || cooldownUntil > Date.now()) return
     speech.stop(); mic.stop(); speech.clearError(); mic.clearError()
+    const token = history.token
     const controller = new AbortController()
     pending.current = controller
     setBusy(true)
     const timeout = window.setTimeout(() => controller.abort(), 20000)
-    const history = messages.slice(0, index).filter((message) => message.reply).slice(-3).flatMap((message) => [{ role: 'user' as const, content: message.question }, { role: 'assistant' as const, content: message.reply!.answer.slice(0, 2000) }])
+    const context = apiContext(messages.slice(0, index))
+    const settle = (change: (message: ChatExchange) => ChatExchange) => history.update(token, (previous) => previous.map((message) => message.id === id ? change(message) : message))
     try {
-      const reply = await askCharacter(character.id, question, history, controller.signal)
-      if (!controller.signal.aborted) {
-        setMessages((previous) => previous.map((message, item) => item === index ? { question, reply } : message))
+      const reply = await askCharacter(character.id, question, context, controller.signal)
+      if (!controller.signal.aborted && tokenRef.current === token) {
+        settle((message) => ({ id: message.id, question: message.question, askedAt: message.askedAt, reply: toChatReply(reply), answeredAt: Date.now() }))
         if (autoReadRef.current && modeRef.current === 'voice') void speech.play(reply.answer, index)
       }
     } catch (failure) {
+      if (tokenRef.current !== token) return
       if (failure instanceof RateLimitError) {
         setCooldownUntil(Date.now() + failure.retryAfter * 1000)
         setNow(Date.now())
-        setMessages((previous) => previous.map((message, item) => item === index ? { question, error: failure.message, rateLimited: true } : message))
+        settle((message) => ({ id: message.id, question: message.question, askedAt: message.askedAt, error: failure.message, rateLimited: true }))
         return
       }
       // A closed modal is unmounted; an aborted timeout still presents a retry.
-      setMessages((previous) => previous.map((message, item) => item === index ? { question, error: controller.signal.aborted ? 'Kết nối mất quá nhiều thời gian. Bạn có thể gửi lại câu hỏi.' : (failure as Error).message } : message))
+      settle((message) => ({ id: message.id, question: message.question, askedAt: message.askedAt, error: controller.signal.aborted ? 'Kết nối mất quá nhiều thời gian. Bạn có thể gửi lại câu hỏi.' : (failure as Error).message }))
     } finally {
       clearTimeout(timeout)
-      pending.current = null
-      setBusy(false)
+      // Only the request that owns the busy state may release it; a superseded one must not unlock a newer request.
+      if (pending.current === controller) { pending.current = null; setBusy(false) }
     }
   }
   function sendMessage(question = input.trim()) {
     if (!question || question.length > 1000 || pending.current || cooldownUntil > Date.now()) return
     const index = messages.length
-    setMessages((previous) => [...previous, { question }])
+    const id = newExchangeId()
+    history.update(history.token, (previous) => [...previous, { id, question, askedAt: Date.now() }])
     setVoiceMessage(index)
     setInput('')
-    void requestReply(question, index)
+    void requestReply(question, id, index)
   }
 
   function listen(answer: string, index: number) {
@@ -118,7 +139,7 @@ export function CharacterChatModal({ character, initialMode = 'chat', onClose, o
   }
   function resetConversation() {
     speech.stop(); mic.stop(); speech.clearError(); mic.clearError()
-    setMessages([]); setVoiceMessage(null); setInput('')
+    history.clear(); setVoiceMessage(null); setInput('')
     if (modeRef.current === 'chat') inputRef.current?.focus(); else micRef.current?.focus()
   }
   function startMicrophone() {
@@ -127,15 +148,15 @@ export function CharacterChatModal({ character, initialMode = 'chat', onClose, o
   }
   function retryMessage(index: number) {
     if (locked) return
-    const question = messages[index]?.question
-    if (!question) return
-    setMessages((previous) => previous.map((value, item) => item === index ? { question: value.question } : value))
-    void requestReply(question, index)
+    const target = messages[index]
+    if (!target) return
+    history.update(history.token, (previous) => previous.map((value) => value.id === target.id ? { id: value.id, question: value.question, askedAt: value.askedAt } : value))
+    void requestReply(target.question, target.id, index)
   }
   const voiceIndex = voiceMessage ?? (messages.length - 1)
   const voiceExchange = messages[voiceIndex]
   const voiceAnswer = voiceExchange?.reply?.answer || character.greeting
-  const voiceNotice = mic.listening ? 'Đang nghe… Nói câu hỏi, kiểm tra nội dung rồi nhấn Gửi.' : mic.error || speech.error || (!mic.supported ? 'Trình duyệt này chưa hỗ trợ mic. Chuyển sang Nhắn tin để nhập câu hỏi.' : '')
+  const voiceNotice = mic.listening ? 'Đang nghe… Nói câu hỏi, kiểm tra nội dung rồi nhấn Gửi.' : mic.error || speech.error || (!mic.supported ? 'Trình duyệt này chưa hỗ trợ mic. Chuyển sang Nhắn tin để nhập câu hỏi.' : '') || historyNote
   function listenButton(answer: string, index: number) {
     const active = speech.activeMessage === index
     return <button type="button" className="chat-listen" disabled={busy} onClick={() => listen(answer, index)} aria-label={active ? 'Dừng đọc' : index === -1 ? 'Nghe lời chào' : `Nghe câu trả lời ${index + 1}`}>
@@ -163,7 +184,7 @@ export function CharacterChatModal({ character, initialMode = 'chat', onClose, o
         <div className="chat-voice-controls"><label><input type="checkbox" checked={autoRead} onChange={(event) => { autoReadRef.current = event.target.checked; setAutoRead(event.target.checked); if (!event.target.checked) speech.stop() }} /> Tự đọc câu trả lời</label>{speech.phase !== 'idle' && <button type="button" onClick={speech.stop} aria-label="Dừng giọng nói"><Square size={13} /> Dừng</button>}<span role="status">{speech.phase === 'loading' ? 'Đang tạo giọng đọc…' : speech.phase === 'paused' ? 'Giọng đọc đang tạm dừng' : speech.phase === 'speaking' ? `${character.name} đang nói…` : speech.provider === 'browser' ? 'Giọng đọc của trình duyệt' : 'Giọng mô phỏng'}</span></div>
       </div>
     </> : <div className="chat-conversation">
-    <div className="chat-body" role="log" aria-live="polite" aria-label="Nội dung trò chuyện"><div className="chat-note"><MessageCircle size={14} /> Nhân vật mô phỏng · Tra cứu sách giáo khoa</div><div className="chat-bubble character-bubble">{character.greeting}{listenButton(character.greeting, -1)}</div>{messages.map((message, index) => <div className="chat-exchange" key={index}><div className="chat-bubble user-bubble">{message.question}</div>{message.reply && <><div className="chat-bubble character-bubble chat-answer">{message.reply.answer}{listenButton(message.reply.answer, index)}</div>{message.reply.notice && <p className="chat-notice" role="note">{message.reply.notice}</p>}{message.reply.sources.length > 0 && <div className="chat-sources"><h3>Nguồn trong bài học · {message.reply.mode === 'rag' ? 'AI tóm tắt' : 'Trích đoạn gốc'}</h3>{message.reply.sources.map((source, number) => <article key={source.id}><strong>[{number + 1}] {source.lessonTitle}</strong><small>{sourceLabel(source.source)}</small><button type="button" onClick={() => onOpenLesson(source.lessonId)}><BookOpen size={14} /> Đọc bài học nguồn</button></article>)}</div>}</>}{message.error && <div className="chat-error" role="alert"><p>{message.rateLimited ? (cooldown > 0 ? `${message.error} Hãy chờ ${cooldown} giây rồi gửi lại nhé.` : `${message.error} Giờ bạn có thể gửi lại.`) : message.error}</p><button type="button" disabled={locked} onClick={() => { setMessages((previous) => previous.map((value, item) => item === index ? { question: value.question } : value)); void requestReply(message.question, index) }}>{cooldown > 0 && message.rateLimited ? `Gửi lại sau ${cooldown}s` : 'Thử gửi lại'}</button></div>}</div>)}{busy && <p className="chat-loading" role="status">Đang tìm đoạn sách phù hợp…</p>}<div ref={bottom} /></div>
+    <div className="chat-body" role="log" aria-live="polite" aria-label="Nội dung trò chuyện"><div className="chat-note"><MessageCircle size={14} /> Nhân vật mô phỏng · Tra cứu sách giáo khoa</div>{historyNote && <p className="chat-history-note" role="status">{historyNote}</p>}<div className="chat-bubble character-bubble">{character.greeting}{listenButton(character.greeting, -1)}</div>{messages.map((message, index) => <div className="chat-exchange" key={message.id}><div className="chat-bubble user-bubble">{message.question}</div>{timeLabel(message.askedAt) && <time className="chat-time" dateTime={new Date(message.askedAt).toISOString()}>{timeLabel(message.askedAt)}</time>}{message.reply && <><div className="chat-bubble character-bubble chat-answer">{message.reply.answer}{listenButton(message.reply.answer, index)}</div>{message.reply.notice && <p className="chat-notice" role="note">{message.reply.notice}</p>}{message.reply.sources.length > 0 && <div className="chat-sources"><h3>Nguồn trong bài học · {message.reply.mode === 'rag' ? 'AI tóm tắt' : 'Trích đoạn gốc'}</h3>{message.reply.sources.map((source, number) => <article key={source.id}><strong>[{number + 1}] {source.lessonTitle}</strong><small>{sourceLabel(source.source)}</small><button type="button" onClick={() => onOpenLesson(source.lessonId)}><BookOpen size={14} /> Đọc bài học nguồn</button></article>)}</div>}</>}{message.error && <div className="chat-error" role="alert"><p>{message.rateLimited ? (cooldown > 0 ? `${message.error} Hãy chờ ${cooldown} giây rồi gửi lại nhé.` : `${message.error} Giờ bạn có thể gửi lại.`) : message.error}</p><button type="button" disabled={locked} onClick={() => retryMessage(index)}>{cooldown > 0 && message.rateLimited ? `Gửi lại sau ${cooldown}s` : 'Thử gửi lại'}</button></div>}</div>)}{busy && <p className="chat-loading" role="status">Đang tìm đoạn sách phù hợp…</p>}<div ref={bottom} /></div>
     <div className="chat-suggestions" aria-label="Câu hỏi gợi ý">{character.suggestions.map((question) => <button key={question} type="button" disabled={locked} onClick={() => sendMessage(question)}>{question}</button>)}</div>
     {cooldown > 0 && <p className="chat-cooldown" role="status">Bạn đang hỏi hơi nhanh. Có thể hỏi tiếp sau {cooldown} giây.</p>}
     <form onSubmit={(event) => { event.preventDefault(); sendMessage() }} className="chat-form"><label htmlFor="chat-input" className="sr-only">Nhập câu hỏi cho nhân vật</label><textarea id="chat-input" ref={inputRef} value={input} maxLength={1000} rows={2} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); sendMessage() } }} placeholder="Hãy hỏi một điều bạn tò mò…" /><button type="submit" aria-label="Gửi câu hỏi" disabled={locked || !input.trim()}><ArrowUp size={20} /></button></form>

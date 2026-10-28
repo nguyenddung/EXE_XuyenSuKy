@@ -11,7 +11,7 @@ import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character, CharacterInteractionMode } from '../types'
 import type { DemoActivity } from '../data/demo'
-import { hasAppAccess, useDemoSession } from '../hooks/useDemoSession'
+import { hasAppAccess, storageOwner, useDemoSession } from '../hooks/useDemoSession'
 import { Navbar } from '../components/Navbar'
 import { Hero, LandingCta } from '../components/Hero'
 import { ClassSelection } from '../components/ClassSelection'
@@ -34,6 +34,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }, [landing])
   const { session, login, startGuest, logout, selectGrade, reset, completeActivity, recordGame } = useDemoSession()
   const authenticated = hasAppAccess(session)
+  const chatOwner = storageOwner(session)
   const learning = useLearningJournal()
   const dataset = useHistoryDataset()
   const [librarySource, setLibrarySource] = useState<'dataset' | 'demo'>(() => {
@@ -162,7 +163,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       >{sections}<ImageCredits /><Footer /></Dashboard>}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
+      {activeCharacter && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}
