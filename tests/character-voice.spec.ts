@@ -251,7 +251,8 @@ test('browser fallback uses Vietnamese and per-character prosody, and stops when
   expect(utterance.text).not.toContain('[1]')
   await page.getByRole('button', { name: 'Xem văn bản và nguồn' }).click()
   await page.locator('.chat-sources button').first().click()
-  await expect(page.getByRole('dialog')).toHaveCount(0)
+  // The chat closes and the cited lesson opens in the reader (itself a dialog), so wait for the chat specifically.
+  await expect(page.locator('dialog.chat-modal')).toHaveCount(0)
   expect((await stats(page)).canceled).toBe(1)
 })
 

@@ -268,3 +268,29 @@ Màn đọc SGK lưu mục đang xem, khôi phục khi mở lại và ghi nhớ 
 Điện thoại có thanh điều hướng dưới cùng; desktop hỗ trợ Ctrl/Cmd + K để tìm kiếm. Tìm kiếm hủy yêu cầu cũ để tránh hiển thị kết quả của từ khóa trước. Thử thách ưu tiên trò chưa hoàn thành, sau đó ưu tiên kỷ lục sao thấp hơn.
 
 Kiểm thử: npx playwright test tests/study-experience.spec.ts và npm run test:games.
+
+## Hành trình game hóa
+
+Mục **Hành trình** ở `/home` chạy các hành trình do `course_builder` (repo pipeline OCR) biên soạn: hành trình = 1 chương, chặng = 1 bài, nhiệm vụ = 1 mục tiêu học. Lớp 6 có 5 hành trình (`data/journeys/lop6_chuong1.json` … `lop6_chuong5.json`), học sinh chọn chương ở thanh "Chọn chương" (app nhớ chương đã chọn theo lớp):
+
+| Hành trình | Chặng (bài) | Nhiệm vụ |
+|---|---|---|
+| Chương 1 · Thám tử thời gian | Bài 1–3 | 7 |
+| Chương 2 · Buổi bình minh của loài người | Bài 4–6 | 8 |
+| Chương 3 · Những nền văn minh cổ đại | Bài 7–10 | 14 |
+| Chương 4 · Đông Nam Á: ngã tư đường của thế giới | Bài 11–13 | 7 |
+| Chương 5 · Hành trình giữ nước | Bài 14, 16, 18 (Bài 15, 17, 19, 20 đang biên soạn) | 13 |
+
+Các bài chưa biên soạn hiện trên bản đồ với nhãn "đang được biên soạn". Học sinh lớp khác thấy ghi chú và vẫn đi thử được. Tên Chương 3 trong dataset còn lỗi OCR ("XÃ HỘI CỔ ĐẠI KẾT"); hành trình dùng `chapter_title` để hiển thị đúng, nên sửa thêm ở `corrections/` của pipeline.
+
+- Nhiệm vụ 5 bước: nhận nhiệm vụ → kiến thức (video nếu có, rồi thẻ kiến thức kèm trang SGK) → khám phá (tư liệu, dòng thời gian, phỏng vấn nhân vật mở thẳng phòng trò chuyện nếu nhân vật đã có) → thử thách → kết quả.
+- Sai không mất lượt: gợi ý 3 bậc mở dần, sai lần 2 đổi sang câu tương đương cùng mục tiêu. XP, mốc ôn tập (1, 3, 7, 14 ngày), điều kiện nắm vững và tỉ lệ qua chặng (80%) lấy từ trường `rules` của file hành trình.
+- Mảnh Sử Ký và huy hiệu chỉ trao khi **nắm vững** (đúng ngay lần đầu ở 2 câu khác nhau vào 2 ngày khác nhau); XP thưởng công sức và được cộng vào tổng XP ở dashboard.
+- Video nhiệm vụ (hiện có ở "Nhà nước Văn Lang ra đời", 51 giây) là animation vẽ bằng SVG trong `JourneyVideo.tsx`: mỗi cảnh dùng một mẫu `tieu_de` / `bieu_tuong` / `song_nuoc`, phụ đề = lời thuyết minh kèm trang SGK, tua và chọn cảnh được, thuyết minh bằng giọng tiếng Việt của trình duyệt nếu máy có. Khung hình là hàm thuần theo thời gian nên có thể xuất MP4 sau này (Remotion). Chữ trên hình và lời thuyết minh của từng cảnh được `course_builder` kiểm theo câu trích của chính cảnh đó.
+- Thuyết minh video được thu sẵn bằng ElevenLabs: `npm run build:narration` (cần `ELEVENLABS_API_KEY`, giọng ở `ELEVENLABS_NARRATOR_VOICE_ID` trong `.env.local`) ghi MP3 vào `public/audio/journeys/<hành trình>/` và dấu băm từng câu vào `data/journeys/narration/`. Chỉ cảnh mới hoặc đổi lời mới bị thu lại; server chỉ gắn âm thanh khi câu vẫn khớp, cảnh lệch tự quay về giọng trình duyệt. Học sinh nghe file tĩnh nên không tốn lượt gọi dịch vụ. Gói Free chỉ gọi được giọng premade (hiện dùng George). Khi có giọng thu sẵn, mỗi cảnh dài bằng câu đọc + 0,6 giây (độ dài đo từ file MP3, `scripts/mp3-duration.mjs`), nên giữa các câu chỉ có quãng ngắt ngắn. Cảnh có thể có người Việt cổ minh hoạ (`cast`, vẽ trong `videoPeople.tsx`): tụ họp, làm ruộng, đào mương, cầm vũ khí, chèo thuyền, cấy lúa, đánh trống.
+- Chặng mở khi qua chặng trước; chặng đã có tiến độ thì không bị khoá lại khi biên soạn thêm bài phía trước.
+- Tiến độ lưu `localStorage` khóa `xuyen-su-ky-journey-v1`. "Công cụ học thử" có nút sang ngày hôm sau, mở khóa mọi chặng (quyền giáo viên) và xóa tiến độ hành trình.
+
+API: `GET /api/journeys?grade=6` (danh sách), `GET /api/journeys/<id>` (nội dung, chỉ kèm `chunk_id` và trang, không gửi câu trích SGK). Khi server đọc file, mọi câu trích phải có nguyên văn trong chunk được dẫn của đúng lớp và đúng trang; sai một chỗ thì cả hành trình không được phục vụ. `npm run check:dataset` kiểm tra cả hành trình.
+
+Cập nhật sau khi biên soạn thêm: chạy `python -m course_builder.build` ở repo pipeline, rồi `npm run import:journey -- <đường dẫn>/course/<id>.json`. Kiểm thử: `node --test tests/journey.test.mjs` và `npx playwright test tests/journey.spec.ts`.

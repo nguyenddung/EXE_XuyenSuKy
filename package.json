@@ -10,8 +10,10 @@
     "dev:backend": "node --env-file-if-exists=.env.local server/index.mjs",
     "check:dataset": "node --env-file-if-exists=.env.local scripts/check-dataset.mjs",
     "import:dataset": "node --env-file-if-exists=.env.local scripts/import-dataset.mjs",
+    "import:journey": "node --env-file-if-exists=.env.local scripts/import-journey.mjs",
+    "build:narration": "node --env-file-if-exists=.env.local scripts/build-narration.mjs",
     "build:embeddings": "node --env-file-if-exists=.env.local scripts/build-embeddings.mjs",
-    "test:backend": "node --test tests/backend.test.mjs tests/speech.test.mjs tests/chat-history.test.mjs",
+    "test:backend": "node --test tests/backend.test.mjs tests/speech.test.mjs tests/chat-history.test.mjs tests/journey.test.mjs",
     "test:games": "playwright test"
   },
   "dependencies": {

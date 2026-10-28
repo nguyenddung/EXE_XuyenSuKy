@@ -24,6 +24,8 @@ import { StatsSection } from '../components/StatsSection'
 import { Footer } from '../components/Footer'
 import { LoginModal } from '../components/LoginModal'
 import { ActivityModal } from '../components/ActivityModal'
+import { JourneySection } from '../components/JourneySection'
+import { useJourney } from '../hooks/useJourney'
 
 export function HomePage({ landing = false }: { landing?: boolean }) {
   const navigate = useNavigate()
@@ -57,6 +59,9 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   const recommendation = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.recommendation
   const gradeRead = learning.journal.read.filter((id) => id.startsWith(`LS${session.grade}_B`)).length
   const gradeCount = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.lessonCount || 0
+  const journey = useJourney(session.grade)
+  // Journey XP is earned per answer and stored with the journey progress; progress panels show it with activity XP.
+  const progressSession = { ...session, earnedXp: session.earnedXp + journey.totalXp }
   function completeLearning(id: string, reward: number) {
     completeActivity(id, reward)
     learning.record(id, id.startsWith('minigame-') ? 'game' : 'quiz')
@@ -120,18 +125,20 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
 
   const sections = <>
         {!landing && <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />}
+        {!landing && <JourneySection state={journey} grade={session.grade} onChat={openCharacter} onNotice={setNotice} onRecord={learning.record} />}
         {!landing && <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />}
         <HistoryTimeline />
         <CharacterSection onChat={openCharacter} />
         <ChallengeSection records={session.gameRecords} completedActivities={session.completedActivities} onTry={setActiveGame} />
         {!landing && <UserProgress
-          session={session}
+          session={progressSession}
           learningStreak={streak(learning.journal.events)}
           onLogin={() => setLoginOpen(true)}
           onReset={() => {
             if (!window.confirm('Đặt lại toàn bộ tiến độ, bài đã lưu và ghi chú trên trình duyệt này?')) return
             reset()
             learning.resetJournal()
+            journey.reset()
             setNotice('Đã đặt lại hành trình demo của Minh.')
           }}
         />}
@@ -148,7 +155,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       </> : <Dashboard
         learning={learning}
         onCollection={filter => { setLibrarySource('dataset'); setRequestedCollection({ filter, token: Date.now() }); window.setTimeout(() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' }), 60) }}
-        session={session}
+        session={progressSession}
         readCount={gradeRead}
         gradeCount={gradeCount}
         recommendedLessonId={recommendation?.id}
