@@ -37,6 +37,8 @@ test('conversation survives reload, close and source lessons, and text and voice
   // Opening the source lesson and coming back.
   await page.locator('.chat-sources button').first().click()
   await expect(page.locator('.chat-modal')).toHaveCount(0)
+  // The lesson loads before the reader opens; closing it any earlier lets it open later over the character cards.
+  await expect(page.locator('.lesson-reader')).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(page.locator('.lesson-reader')).toHaveCount(0)
   await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
