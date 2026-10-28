@@ -1,0 +1,110 @@
+{
+  "journey": "lop6_chuong2",
+  "provider": "elevenlabs",
+  "scenes": {
+    "b4_m1.video.s1": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s1.mp3",
+      "sha256": "1e67110d32c666bcaad4e54a904006d4645622049b0592921d2c3cfa16f6081a",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 74857,
+      "seconds": 9.35
+    },
+    "b4_m1.video.s2": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s2.mp3",
+      "sha256": "fc7bf0007fc93cb2d4dff64db2b64bbc74b57b4ffaaa4e7190e411ad8e55f5cf",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 47272,
+      "seconds": 5.9
+    },
+    "b4_m1.video.s3": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s3.mp3",
+      "sha256": "bd682fe1effe63b90f5f82b5071a767b57411584d29dc2c876afeed96abaa913",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 53332,
+      "seconds": 6.66
+    },
+    "b4_m1.video.s4": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s4.mp3",
+      "sha256": "f2b21c19ad6e666a19f807cb5a95d64fbd8e90ccce7794aead9b5b51e28bbd9c",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 51034,
+      "seconds": 6.37
+    },
+    "b4_m1.video.s5": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s5.mp3",
+      "sha256": "dd359f036fb53faa4074ca5027554ec04fb7f35d77f9dfdd1b46cc28e23dd253",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 74439,
+      "seconds": 9.3
+    },
+    "b4_m1.video.s6": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s6.mp3",
+      "sha256": "086440d486eefc1bdbcc96b3f6cce7755dd8fac3dd2451932518fbe5f3917d8a",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 31389,
+      "seconds": 3.92
+    },
+    "b4_m1.video.s7": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s7.mp3",
+      "sha256": "e673a108f45ea078eae385504d60f43e45f996be432b0fc1aeb3f88564e988ae",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 67752,
+      "seconds": 8.46
+    },
+    "b4_m1.video.s8": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s8.mp3",
+      "sha256": "bd87c09ee67e4a680be2fc9abee48470834c5204606ec3201f38c4e10500aacc",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 89695,
+      "seconds": 11.21
+    },
+    "b4_m1.video.s9": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s9.mp3",
+      "sha256": "8311b121124e067e5cec6fb1cb06ed0fd0e68d9009d85c690397a247b07aa180",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 90740,
+      "seconds": 11.34
+    },
+    "b4_m1.video.s10": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s10.mp3",
+      "sha256": "ba3cdc2adee431a6ee605ec892ef1d7bbae4b5ab2ec3b9b7c4389309f39e34dc",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 55840,
+      "seconds": 6.97
+    },
+    "b4_m1.video.s11": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s11.mp3",
+      "sha256": "adffa999340ecd1b16efc40c83fdb7a510b7fe9f43d7cdcc0d1ca0d87b60c2f9",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 81963,
+      "seconds": 10.24
+    },
+    "b4_m1.video.s12": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s12.mp3",
+      "sha256": "7cf8faad718e96d9983803efae21d533ca81faa09d7f7b65bd8ebc269a6878a5",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 77783,
+      "seconds": 9.72
+    },
+    "b4_m1.video.s13": {
+      "file": "/audio/journeys/lop6_chuong2/b4_m1.video.s13.mp3",
+      "sha256": "413886e32080f9e5018e4995c2e7ce435899232c076d975b98aad8bff2caeee4",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 54795,
+      "seconds": 6.84
+    }
+  }
+}

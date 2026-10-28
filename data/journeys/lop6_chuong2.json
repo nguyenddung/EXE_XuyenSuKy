@@ -103,7 +103,468 @@
           "intro": {
             "speaker": "linh_vat",
             "hu_cau": true,
-            "text": "Ba dạng người đang đứng xếp hàng: Vượn người, Người tối cổ, Người tinh khôn. Ai xuất hiện trước, ai xuất hiện sau?"
+            "text": "Ba dạng người đang đứng xếp hàng: Vượn người, Người tối cổ, Người tinh khôn. Ai xuất hiện trước, ai xuất hiện sau? Xem đoạn phim ngắn rồi lật các thẻ kiến thức để tìm câu trả lời."
+          },
+          "video": {
+            "id": "b4_m1.video",
+            "title": "Từ Vượn người đến Người tinh khôn",
+            "style": "tien_su",
+            "scenes": [
+              {
+                "id": "b4_m1.video.s1",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Từ Vượn người đến Người tinh khôn",
+                "label": "Hành trình hàng triệu năm",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Người châu Phi, châu Á và châu Âu có cùng chung một nguồn gốc hay không? Câu trả lời nằm trong quá trình tiến hoá từ Vượn người thành người, diễn ra cách đây hàng triệu năm.",
+                "sources": [
+                  {
+                    "quote": "Người châu Phi, châu Á và châu Âu có màu da như thế nào? Liệu họ có cùng chung một nguồn gốc hay không?",
+                    "chunk_id": "LS6_B04_C002",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "intro"
+                  },
+                  {
+                    "quote": "Quá trình tiến hoá từ Vượn người thành người đã diễn ra cách đây hàng triệu năm.",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s2",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Đông Phi",
+                "label": "Một trong những \"cái nôi\" của loài người",
+                "cast": [
+                  "ghe_da"
+                ],
+                "caption": "Những phát hiện gần đây ở Đông Phi đã dẫn tới quan điểm cho rằng nơi đây là một trong những cái nôi của loài người.",
+                "sources": [
+                  {
+                    "quote": "Những phát hiện gần đây ở Đông, Phi đã dẫn tới quan điểm cho rằng nơi đây là một trong những \"cái nôi\"\" của loài người.",
+                    "chunk_id": "LS6_B04_C003",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s3",
+                "kind": "tien_hoa",
+                "duration": 8,
+                "forms": [
+                  "vuon_nguoi"
+                ],
+                "label": "Khoảng 5 - 6 triệu năm trước",
+                "caption": "Ở chặng đầu của quá trình tiến hoá, cách ngày nay khoảng 5 đến 6 triệu năm, đã có một loài Vượn người sinh sống.",
+                "sources": [
+                  {
+                    "quote": "Ở chặng đầu của quá trình đó, cách ngày nay khoảng 5 - 6 triệu năm, đã có một loài Vượn người sinh sống.",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s4",
+                "kind": "tien_hoa",
+                "duration": 8,
+                "forms": [
+                  "vuon_nguoi",
+                  "nguoi_toi_co"
+                ],
+                "label": "Khoảng 4 triệu năm trước",
+                "caption": "Từ loài Vượn người, một nhánh đã phát triển lên thành Người tối cổ. Dạng người này xuất hiện khoảng 4 triệu năm trước.",
+                "sources": [
+                  {
+                    "quote": "Từ loài Vượn người, một nhánh đã phát triển lên thành người tối cổ.",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Dạng người này xuất hiện khoảng 4 triệu năm trước",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s5",
+                "kind": "bieu_tuong",
+                "duration": 12,
+                "cast": [
+                  "ghe_da"
+                ],
+                "items": [
+                  {
+                    "icon": "hai_chan",
+                    "label": "Đi, đứng bằng hai chân"
+                  },
+                  {
+                    "icon": "ban_tay",
+                    "label": "Hai tay cầm nắm"
+                  },
+                  {
+                    "icon": "bo_nao",
+                    "label": "Sọ não lớn hơn"
+                  },
+                  {
+                    "icon": "tieng_noi",
+                    "label": "Trung tâm phát tiếng nói"
+                  }
+                ],
+                "caption": "Người tối cổ thường xuyên đi, đứng bằng hai chân; hai chi trước thành hai tay, có thể cầm nắm; thể tích sọ não lớn hơn và đã hình thành trung tâm phát tiếng nói trong não.",
+                "sources": [
+                  {
+                    "quote": "Người tối cổ thường xuyên đi, đứng bằng hai chân, hai chi trước thành hai tay, có thể cầm nắm, thể tích sọ não lớn hơn và đã hình thành trung tâm phát tiếng nói trong não.",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s6",
+                "kind": "tien_hoa",
+                "duration": 9,
+                "forms": [
+                  "vuon_nguoi",
+                  "nguoi_toi_co",
+                  "nguoi_tinh_khon"
+                ],
+                "label": "Khoảng 15 vạn năm trước",
+                "caption": "Đến khoảng 15 vạn năm trước, Người tối cổ biến đổi thành Người tinh khôn.",
+                "sources": [
+                  {
+                    "quote": "đến khoảng 15 vạn năm trước thì biến đổi thành người tinh khôn",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s7",
+                "kind": "moc_thoi_gian",
+                "duration": 10,
+                "events": [
+                  {
+                    "time": "5 - 6 triệu năm trước",
+                    "label": "Vượn người",
+                    "form": "vuon_nguoi"
+                  },
+                  {
+                    "time": "4 triệu năm trước",
+                    "label": "Người tối cổ",
+                    "form": "nguoi_toi_co"
+                  },
+                  {
+                    "time": "15 vạn năm trước",
+                    "label": "Người tinh khôn",
+                    "form": "nguoi_tinh_khon"
+                  }
+                ],
+                "caption": "Nhìn lại cả chặng đường: Vượn người, rồi Người tối cổ, rồi Người tinh khôn. Quá trình tiến hoá từ Vượn người thành người đã diễn ra cách đây hàng triệu năm.",
+                "sources": [
+                  {
+                    "quote": "cách ngày nay khoảng 5 - 6 triệu năm, đã có một loài Vượn người sinh sống",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Dạng người này xuất hiện khoảng 4 triệu năm trước, đến khoảng 15 vạn năm trước thì biến đổi thành người tinh khôn.",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Quá trình tiến hoá từ Vượn người thành người đã diễn ra cách đây hàng triệu năm.",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s8",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "hoa_thach",
+                    "label": "Di cốt hoá thạch"
+                  },
+                  {
+                    "find": "cong_cu_da",
+                    "label": "Công cụ đá"
+                  }
+                ],
+                "caption": "Ở Đông Nam Á, quá trình tiến hoá từ Vượn người thành người diễn ra từ rất sớm. Dấu tích của Người tối cổ có ở khắp Đông Nam Á và cả Việt Nam: đó là di cốt hoá thạch và công cụ đá.",
+                "sources": [
+                  {
+                    "quote": "Tại khu vực Đông Nam Á đã diễn ra quá trình tiến hoá từ Vượn người thành người từ rất sớm.",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Dấu tích của Người tối cổ đã được tìm thấy ở khắp Đông Nam Á và cả Việt Nam.",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đó là những di cốt hoá thạch và công cụ đá do con người chế tạo ra.",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s9",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "hoa_thach",
+                    "label": "Mi-an-ma, In-đô-nê-xi-a: di cốt Vượn người"
+                  },
+                  {
+                    "find": "hoa_thach",
+                    "label": "Đảo Gia-va: hoá thạch Người tối cổ"
+                  }
+                ],
+                "caption": "Di cốt Vượn người khoảng 5 triệu năm được tìm thấy ở Mi-an-ma và In-đô-nê-xi-a. Hoá thạch trên đảo Gia-va, khoảng 2 triệu năm trước, là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á.",
+                "sources": [
+                  {
+                    "quote": "Di cốt của loài Vượn người sống cách ngày nay khoảng 5 triệu năm đã được tìm thấy ở Mi-an-ma và In-đô-nê-xi-a.",
+                    "chunk_id": "LS6_B04_C007",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "hoá thạch phát hiện trên đảo Gia-va (In-đô-nê-xi-a) có niên đại khoảng 2 triệu năm trước là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á",
+                    "chunk_id": "LS6_B04_C007",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s10",
+                "kind": "phat_hien",
+                "duration": 8,
+                "finds": [
+                  {
+                    "find": "so",
+                    "label": "Hang Ni-a (Ma-lai-xi-a): sọ Người tinh khôn"
+                  }
+                ],
+                "caption": "Ở hang Ni-a, Ma-lai-xi-a, người ta tìm thấy chiếc sọ của Người tinh khôn, có niên đại cách ngày nay khoảng 4 vạn năm.",
+                "sources": [
+                  {
+                    "quote": "Chiếc sọ Người tinh khôn tìm thấy ở hang Ni-a (Ma-lai-xi-a) có niên đại cách ngày nay khoảng 4 vạn năm.",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s11",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "rang",
+                    "label": "Thẩm Khuyên, Thẩm Hai (Lạng Sơn): răng Người tối cổ"
+                  },
+                  {
+                    "find": "cong_cu_da",
+                    "label": "Núi Đọ (Thanh Hoá): công cụ đá"
+                  }
+                ],
+                "caption": "Ở Việt Nam, răng của Người tối cổ được phát hiện ở Thẩm Khuyên, Thẩm Hai, Lạng Sơn. Công cụ đá ghè đẽo thô sơ có ở An Khê, Núi Đọ, Xuân Lộc, An Lộc.",
+                "sources": [
+                  {
+                    "quote": "Ở Việt Nam cũng đã phát hiện răng của Người tối cổ ở Thẩm Khuyên, Thẩm Hai (Lạng Sơn)",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Những công cụ đá được ghẻ đẽo thô sơ của Người tối cổ cũng đã có mặt ở An Khê (Gia Lai), Núi Đọ (Thanh Hoá), Xuân Lộc (Đồng Nai), An Lộc",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s12",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "riu_tay",
+                    "label": "An Khê (Gia Lai): trên 3 000 hiện vật đá"
+                  }
+                ],
+                "caption": "Tại di chỉ An Khê, Gia Lai, người ta tìm được trên 3 000 hiện vật đá có niên đại 80 vạn năm. Đây là dấu tích cổ xưa nhất về người nguyên thuỷ trên đất nước Việt Nam.",
+                "sources": [
+                  {
+                    "quote": "người ta đã phát hiện được trên 3 000 hiện vật đá (gồm rìu tay, công cụ ghè đẽo thô sơ,...) có niên đại cách ngày nay 80 vạn năm",
+                    "chunk_id": "LS6_B04_C009",
+                    "lesson_number": 4,
+                    "pages": [
+                      20,
+                      20
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "Đây là dấu tích cổ xưa nhất chứng tỏ sự xuất hiện sớm của người nguyên thuỷ",
+                    "chunk_id": "LS6_B04_C009",
+                    "lesson_number": 4,
+                    "pages": [
+                      20,
+                      20
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "Rìu tay tìm thấy ở di chỉ An Khê (Gia Lai)",
+                    "chunk_id": "LS6_B04_C010",
+                    "lesson_number": 4,
+                    "pages": [
+                      20,
+                      20
+                    ],
+                    "content_type": "caption"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m1.video.s13",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Người xưa trên đất Việt",
+                "label": "Xuất hiện từ rất sớm",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Từ những chiếc răng, mảnh xương hoá thạch và công cụ đá nhỏ bé, chúng ta biết người nguyên thuỷ đã xuất hiện rất sớm trên đất nước Việt Nam.",
+                "sources": [
+                  {
+                    "quote": "Đó là những di cốt hoá thạch và công cụ đá do con người chế tạo ra.",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đây là dấu tích cổ xưa nhất chứng tỏ sự xuất hiện sớm của người nguyên thuỷ",
+                    "chunk_id": "LS6_B04_C009",
+                    "lesson_number": 4,
+                    "pages": [
+                      20,
+                      20
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ]
+              }
+            ]
           },
           "cards": [
             {

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { VideoCast } from '../lib/journey'
+import { isPrehistoryCast, PrehistoryCast } from './videoPrehistory'
 
 // Illustrated Việt cổ figures for the mission videos, drawn after the textbook's description (Bài 14): men in a loincloth
 // with hair in a bun, women in skirt and halter top, feather headdresses at festivals, as on Đông Sơn drums.
@@ -107,15 +108,18 @@ function Festival({ t, cx }: { t: number; cx: number }) {
 }
 
 /** People acting on a strip of ground below the scene's words: one or two little scenes side by side. */
-export function CastBand({ cast, t }: { cast: VideoCast[]; t: number }) {
+export function CastBand({ cast, t, prehistoric = false }: { cast: VideoCast[]; t: number; prehistoric?: boolean }) {
   const appear = ease(t / 0.6)
   const centers = cast.length > 1 ? [430, 1170] : [800]
+  // Green fields for the Việt cổ, dry savanna earth for prehistoric scenes.
+  const [near, far] = prehistoric ? ['#6b4a26', '#553a1e'] : ['#244a33', '#1d3d2a']
   return <g opacity={appear}>
-    <path d="M 0 700 C 300 650 600 690 800 670 S 1300 640 1600 690 L 1600 900 L 0 900 Z" fill="#244a33" />
-    <path d="M 0 760 C 400 730 900 760 1600 740 L 1600 900 L 0 900 Z" fill="#1d3d2a" />
+    <path d="M 0 700 C 300 650 600 690 800 670 S 1300 640 1600 690 L 1600 900 L 0 900 Z" fill={near} />
+    <path d="M 0 760 C 400 730 900 760 1600 740 L 1600 900 L 0 900 Z" fill={far} />
     {cast.map((item, index) => {
       const cx = centers[index]
       const local = t + index * 0.4
+      if (isPrehistoryCast(item)) return <PrehistoryCast key={item} item={item} t={local} cx={cx} />
       if (item === 'tu_hop') return <Gathering key={item} t={local} cx={cx} />
       if (item === 'lam_ruong') return <Farming key={item} t={local} cx={cx} />
       if (item === 'dao_muong') return <Canal key={item} t={local} cx={cx} />

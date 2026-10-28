@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react'
 import { clockLabel, pagesLabel, sceneAt, videoLength, type MissionVideo, type VideoIcon, type VideoScene } from '../lib/journey'
 import { CastBand, RiverCast } from './videoPeople'
+import { DiscoveryScene, EvolutionScene, PrehistoryBackdrop, prehistoryIcons, SunEmblem, TimelineScene } from './videoPrehistory'
 
 // Code-drawn animation for a mission. Every frame is a pure function of the time t, so the same scenes can later be
 // rendered to MP4 (e.g. Remotion: t = frame / fps) without changing them. Words on screen and the narration come from
@@ -50,6 +51,7 @@ function wrap(text: string, max: number) {
 }
 
 const icons: Record<VideoIcon, ReactNode> = {
+  ...prehistoryIcons,
   riu_dong: <g><rect x={-9} y={-95} width={18} height={190} rx={8} fill="#7a4b22" transform="rotate(-18)" /><path d="M -2 -62 C 52 -82 96 -40 92 18 C 66 2 34 -2 4 4 Z" fill={bronze} stroke={bronzeDark} strokeWidth={5} /><path d="M 30 -46 C 52 -40 70 -20 74 4" fill="none" stroke={bronzeDark} strokeWidth={4} /></g>,
   luoi_sat: <g><rect x={-80} y={46} width={92} height={20} rx={10} fill="#7a4b22" transform="rotate(-38)" /><path d="M -6 34 C -16 -48 52 -96 96 -48 C 54 -60 18 -36 18 30 Z" fill="#a9b4c2" stroke="#56606d" strokeWidth={5} /></g>,
   lua: <g fill="none" strokeLinecap="round"><path d="M -40 92 C -30 20 -10 -30 40 -70" stroke="#5f8f3a" strokeWidth={8} /><path d="M -34 60 C -70 20 -80 -10 -78 -40" stroke="#5f8f3a" strokeWidth={6} /><path d="M -20 30 C 20 10 50 20 70 40" stroke="#5f8f3a" strokeWidth={6} />{[0, 1, 2, 3, 4, 5].map((index) => <ellipse key={index} cx={-6 + index * 9} cy={-34 - index * 7} rx={9} ry={15} fill={bronze} stroke={bronzeDark} strokeWidth={3} transform={`rotate(${50 + index * 4} ${-6 + index * 9} ${-34 - index * 7})`} />)}</g>,
@@ -69,14 +71,14 @@ function Backdrop({ t }: { t: number }) {
 }
 
 // With people (cast) the words move up and the lower third becomes a strip of ground where the figures act.
-function TitleScene({ scene, local, band }: { scene: Extract<VideoScene, { kind: 'tieu_de' }>; local: number; band: boolean }) {
+function TitleScene({ scene, local, band, prehistoric }: { scene: Extract<VideoScene, { kind: 'tieu_de' }>; local: number; band: boolean; prehistoric: boolean }) {
   const drum = enter(local, 0.1, 1.4)
   const title = enter(local, 0.6)
   const label = enter(local, 1.2)
   const width = (scene.label?.length || 0) * 21 + 90
   const [drumY, drumR, titleY, labelY] = band ? [205, 115, 420, 500] : [320, 170, 610, 690]
   return <g>
-    <g transform={`translate(800 ${drumY}) scale(${0.55 + 0.45 * drum}) rotate(${local * 5})`} opacity={drum}><DrumFace radius={drumR} /></g>
+    <g transform={`translate(800 ${drumY}) scale(${0.55 + 0.45 * drum}) rotate(${local * 5})`} opacity={drum}>{prehistoric ? <SunEmblem radius={drumR * 0.8} t={local} /> : <DrumFace radius={drumR} />}</g>
     <text x={800} y={titleY + (1 - title) * 30} textAnchor="middle" fontSize={band ? 80 : 88} fontWeight={800} fill={cream} opacity={title}>{scene.title}</text>
     {scene.label && <g opacity={label} transform={`translate(800 ${labelY + (1 - label) * 20})`}><rect x={-width / 2} y={-38} width={width} height={68} rx={34} fill={bronze} /><text y={10} textAnchor="middle" fontSize={38} fontWeight={700} fill={ink}>{scene.label}</text></g>}
   </g>
@@ -140,14 +142,18 @@ export function VideoFrame({ video, t, still = false }: { video: MissionVideo; t
   const shown = still ? scene.duration : local
   const last = index === video.scenes.length - 1
   const fade = still ? 1 : Math.min(clamp(local / 0.45), last ? 1 : clamp((scene.duration - local) / 0.45))
+  const prehistoric = video.style === 'tien_su'
   return <>
     <defs><linearGradient id="jv-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#0f2747" /><stop offset="1" stopColor="#1c4a7d" /></linearGradient></defs>
-    <Backdrop t={t} />
+    {prehistoric ? <PrehistoryBackdrop t={t} /> : <Backdrop t={t} />}
     <g opacity={fade}>
-      {scene.kind === 'tieu_de' && <TitleScene scene={scene} local={shown} band={!!scene.cast?.length} />}
+      {scene.kind === 'tieu_de' && <TitleScene scene={scene} local={shown} band={!!scene.cast?.length} prehistoric={prehistoric} />}
       {scene.kind === 'bieu_tuong' && <IconScene scene={scene} local={shown} band={!!scene.cast?.length} />}
-      {scene.kind !== 'song_nuoc' && !!scene.cast?.length && <CastBand cast={scene.cast} t={shown} />}
+      {(scene.kind === 'tieu_de' || scene.kind === 'bieu_tuong') && !!scene.cast?.length && <CastBand cast={scene.cast} t={shown} prehistoric={prehistoric} />}
       {scene.kind === 'song_nuoc' && <RiverScene scene={scene} local={shown} />}
+      {scene.kind === 'tien_hoa' && <EvolutionScene scene={scene} local={shown} />}
+      {scene.kind === 'moc_thoi_gian' && <TimelineScene scene={scene} local={shown} />}
+      {scene.kind === 'phat_hien' && <DiscoveryScene scene={scene} local={shown} />}
     </g>
     <text x={48} y={70} fontSize={28} fontWeight={700} fill={cream} opacity={0.75}>{video.title}</text>
     <text x={W - 48} y={70} textAnchor="end" fontSize={26} fill={cream} opacity={0.75}>{index + 1}/{video.scenes.length}</text>

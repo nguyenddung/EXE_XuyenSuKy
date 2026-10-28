@@ -66,6 +66,7 @@ if (!/^[a-zA-Z0-9_-]{1,80}$/.test(voiceId)) {
         characters += scene.caption.length
         console.log(`  ${scene.id}: ${audio.length} bytes`)
       }
+      if (!Object.keys(scenes).length) continue // No video in this journey yet: no manifest to keep.
       await writeFile(manifestFile, `${JSON.stringify({ journey: journey.id, provider: 'elevenlabs', scenes }, null, 2)}\n`)
       console.log(`${journey.id}: ${Object.keys(scenes).length} scenes with narration`)
     }

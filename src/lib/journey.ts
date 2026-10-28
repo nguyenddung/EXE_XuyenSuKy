@@ -19,16 +19,23 @@ export type Explore =
   | { type: 'phong_van'; character: string; prompt: string; suggested_questions: string[] }
 /** Mascot narration is fiction by design (hu_cau); the UI labels it as such. */
 export interface Narration { speaker: string; hu_cau: true; text: string }
-export type VideoIcon = 'riu_dong' | 'luoi_sat' | 'lua' | 'nguoi' | 'thuy_loi' | 'khien' | 'trong_dong' | 'nha_san'
+export type VideoIcon = 'riu_dong' | 'luoi_sat' | 'lua' | 'nguoi' | 'thuy_loi' | 'khien' | 'trong_dong' | 'nha_san' | 'hai_chan' | 'ban_tay' | 'bo_nao' | 'tieng_noi'
+/** Stages of human evolution drawn by the tien_hoa and moc_thoi_gian templates. */
+export type HumanForm = 'vuon_nguoi' | 'nguoi_toi_co' | 'nguoi_tinh_khon'
+export type VideoFind = 'hoa_thach' | 'rang' | 'so' | 'riu_tay' | 'cong_cu_da'
 /** Illustrated people acting in a scene (river scenes: cheo_thuyen, cay_lua; others: the rest). */
-export type VideoCast = 'tu_hop' | 'lam_ruong' | 'dao_muong' | 'cam_vu_khi' | 'danh_trong' | 'cheo_thuyen' | 'cay_lua'
+export type VideoCast = 'tu_hop' | 'lam_ruong' | 'dao_muong' | 'cam_vu_khi' | 'danh_trong' | 'cheo_thuyen' | 'cay_lua' | 'ghe_da' | 'di_bo'
 /** One animated scene: a template the app draws, on-screen words and a narration line, all checked against its quotes. */
 export type VideoScene = { id: string; duration: number; caption: string; sources: SourceRef[]; /** Pre-recorded narration, present only while it matches the caption. */ audio?: string; cast?: VideoCast[] } & (
   | { kind: 'tieu_de'; title: string; label?: string }
   | { kind: 'bieu_tuong'; items: { icon: VideoIcon; label: string }[] }
   | { kind: 'song_nuoc'; labels: string[] }
+  | { kind: 'tien_hoa'; forms: HumanForm[]; label?: string }
+  | { kind: 'moc_thoi_gian'; events: { time: string; label: string; form?: HumanForm }[] }
+  | { kind: 'phat_hien'; finds: { find: VideoFind; label: string }[] }
 )
-export interface MissionVideo { id: string; title: string; scenes: VideoScene[] }
+/** style: dong_son (bronze-drum backdrop, default) or tien_su (dusk sky and sun, for prehistoric lessons). */
+export interface MissionVideo { id: string; title: string; style?: 'dong_son' | 'tien_su'; scenes: VideoScene[] }
 export interface Mission {
   id: string
   title: string

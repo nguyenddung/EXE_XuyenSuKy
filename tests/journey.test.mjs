@@ -260,3 +260,20 @@ test('the grade 6 chapters 1-4 are fully written, sourced from their own lessons
   }
   assert.equal((await get('journeys/lop6_chuong3')).body.chapter, 'Chương 3: XÃ HỘI CỔ ĐẠI')
 })
+
+test('the Bài 4 video uses the prehistory templates, validated like the others, and lasts about two minutes', async () => {
+  const chapter2 = JSON.parse(await readFile(resolve(defaultJourneyPath, 'lop6_chuong2.json'), 'utf8'))
+  const prehistory = (change, pattern) => { const journey = structuredClone(chapter2); change(journey.stages.find((stage) => stage.id === 'b4').missions[0].video); assert.throws(() => validateJourney(journey, dataset), pattern) }
+  assert.doesNotThrow(() => validateJourney(structuredClone(chapter2), dataset))
+  prehistory((video) => { video.scenes.find((scene) => scene.kind === 'tien_hoa' && scene.forms.length === 2).forms.reverse() }, /evolutionary order/)
+  prehistory((video) => { video.scenes.find((scene) => scene.kind === 'phat_hien').finds[0].find = 'kho_bau' }, /known finds/)
+  prehistory((video) => { video.scenes.find((scene) => scene.kind === 'moc_thoi_gian').events.splice(1) }, /2–5 events/)
+  prehistory((video) => { video.scenes.find((scene) => scene.kind === 'tien_hoa').cast = ['ghe_da'] }, /cast needs/)
+  prehistory((video) => { video.style = 'hien_dai' }, /unknown video style/)
+  const { body } = await get('journeys/lop6_chuong2')
+  const video = body.stages[0].missions[0].video
+  assert.equal(video.style, 'tien_su')
+  assert.equal(video.scenes.length, 13)
+  assert.ok(video.scenes.every((scene) => scene.audio && scene.sources.every((source) => source.lesson_number === 4)))
+  assert.ok(videoLength(video) >= 100 && videoLength(video) <= 125, `about two minutes, got ${videoLength(video)} s`)
+})
