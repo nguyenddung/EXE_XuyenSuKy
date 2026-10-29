@@ -277,3 +277,25 @@ test('the Bài 4 video uses the prehistory templates, validated like the others,
   assert.ok(video.scenes.every((scene) => scene.audio && scene.sources.every((source) => source.lesson_number === 4)))
   assert.ok(videoLength(video) >= 100 && videoLength(video) <= 125, `about two minutes, got ${videoLength(video)} s`)
 })
+
+test('every Chương 2 mission has a narrated video of about two minutes, quoting Bài 4-6', async () => {
+  const { body } = await get('journeys/lop6_chuong2')
+  const missions = body.stages.flatMap((stage) => stage.missions)
+  assert.deepEqual(missions.map((mission) => mission.video?.id), missions.map((mission) => `${mission.id}.video`))
+  for (const mission of missions) {
+    const { video } = mission
+    assert.ok(video.scenes.length >= 13, `${mission.id} tells its story in many scenes`)
+    assert.ok(video.scenes.every((scene) => scene.audio === `/audio/journeys/lop6_chuong2/${scene.id}.mp3`), `${mission.id} is fully narrated`)
+    assert.ok(video.scenes.every((scene) => scene.sources.every((source) => [4, 5, 6].includes(source.lesson_number))), `${mission.id} quotes this chapter`)
+    assert.ok(videoLength(video) >= 110 && videoLength(video) <= 125, `${mission.id} lasts about two minutes, got ${videoLength(video)} s`)
+  }
+  assert.equal(missions.find((mission) => mission.id === 'b6_m3').video.style, 'dong_son')
+  // The new primitive-society and metal-age drawings are validated like the older ones.
+  const chapter2 = JSON.parse(await readFile(resolve(defaultJourneyPath, 'lop6_chuong2.json'), 'utf8'))
+  const scenesOf = (journey, id) => journey.stages.flatMap((stage) => stage.missions).find((mission) => mission.id === id).video.scenes
+  const reject = (id, change, pattern) => { const journey = structuredClone(chapter2); change(scenesOf(journey, id)); assert.throws(() => validateJourney(journey, dataset), pattern) }
+  reject('b6_m3', (scenes) => { scenes.find((scene) => scene.kind === 'song_nuoc').labels.push('Sông Cửu Long') }, /1–4 labels/)
+  reject('b5_m3', (scenes) => { scenes.find((scene) => scene.kind === 'phat_hien').finds[0].find = 'vang' }, /known finds/)
+  reject('b5_m1', (scenes) => { scenes.find((scene) => scene.kind === 'bieu_tuong').items[0].icon = 'lua_trai' }, /known icons/)
+  reject('b6_m1', (scenes) => { scenes[0].cast = ['luyen_kim', 'bay_len_troi'] }, /cast needs/)
+})

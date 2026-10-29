@@ -873,6 +873,434 @@
             "hu_cau": true,
             "text": "Một chiếc răng trong hang ở Lạng Sơn, một chiếc rìu đá ở Gia Lai: những bằng chứng nhỏ bé ấy kể rằng người xưa đã có mặt trên đất Việt từ rất sớm."
           },
+          "video": {
+            "id": "b4_m2.video",
+            "title": "Dấu tích người xưa ở Đông Nam Á và Việt Nam",
+            "style": "tien_su",
+            "scenes": [
+              {
+                "id": "b4_m2.video.s1",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Dấu tích người xưa",
+                "label": "Đông Nam Á và Việt Nam",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Tại khu vực Đông Nam Á, quá trình tiến hoá từ Vượn người thành người đã diễn ra từ rất sớm. Bằng chứng nằm ở những dấu tích mà người xưa để lại dưới lòng đất.",
+                "sources": [
+                  {
+                    "quote": "Tại khu vực Đông Nam Á đã diễn ra quá trình tiến hoá từ Vượn người thành người từ rất sớm",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s2",
+                "kind": "phat_hien",
+                "duration": 9,
+                "finds": [
+                  {
+                    "find": "hoa_thach",
+                    "label": "Di cốt hoá thạch"
+                  },
+                  {
+                    "find": "cong_cu_da",
+                    "label": "Công cụ đá"
+                  }
+                ],
+                "caption": "Dấu tích của Người tối cổ đã được tìm thấy ở khắp Đông Nam Á và cả Việt Nam. Đó là những di cốt hoá thạch và công cụ đá do con người chế tạo ra.",
+                "sources": [
+                  {
+                    "quote": "Dấu tích của Người tối cổ đã được tìm thấy ở khắp Đông Nam Á và cả Việt Nam. Đó là những di cốt hoá thạch và công cụ đá do con người chế tạo ra",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s3",
+                "kind": "tien_hoa",
+                "duration": 7,
+                "forms": [
+                  "vuon_nguoi"
+                ],
+                "label": "Mi-an-ma, In-đô-nê-xi-a: khoảng 5 triệu năm",
+                "caption": "Xưa nhất là di cốt của loài Vượn người sống cách ngày nay khoảng 5 triệu năm, được tìm thấy ở Mi-an-ma và In-đô-nê-xi-a.",
+                "sources": [
+                  {
+                    "quote": "Di cốt của loài Vượn người sống cách ngày nay khoảng 5 triệu năm đã được tìm thấy ở Mi-an-ma và In-đô-nê-xi-a",
+                    "chunk_id": "LS6_B04_C007",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s4",
+                "kind": "phat_hien",
+                "duration": 9,
+                "finds": [
+                  {
+                    "find": "hoa_thach",
+                    "label": "Đảo Gia-va (In-đô-nê-xi-a): khoảng 2 triệu năm trước"
+                  }
+                ],
+                "caption": "Đặc biệt, hoá thạch phát hiện trên đảo Gia-va, In-đô-nê-xi-a, có niên đại khoảng 2 triệu năm trước. Đó là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á.",
+                "sources": [
+                  {
+                    "quote": "hoá thạch phát hiện trên đảo Gia-va (In-đô-nê-xi-a) có niên đại khoảng 2 triệu năm trước là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á",
+                    "chunk_id": "LS6_B04_C007",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s5",
+                "kind": "phat_hien",
+                "duration": 7,
+                "finds": [
+                  {
+                    "find": "hoa_thach",
+                    "label": "Thái Lan"
+                  },
+                  {
+                    "find": "cong_cu_da",
+                    "label": "Phi-líp-pin"
+                  },
+                  {
+                    "find": "hoa_thach",
+                    "label": "Ma-lai-xi-a"
+                  }
+                ],
+                "caption": "Di cốt, mảnh di cốt và những công cụ đá của Người tối cổ còn được tìm thấy ở Thái Lan, Phi-líp-pin và Ma-lai-xi-a.",
+                "sources": [
+                  {
+                    "quote": "Di cốt, mảnh di cốt và những công cụ đá của Người tối cổ còn được tìm thấy ở Thái Lan, Phi-líp-pin, Ma-lai-xi-a",
+                    "chunk_id": "LS6_B04_C007",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s6",
+                "kind": "phat_hien",
+                "duration": 8,
+                "finds": [
+                  {
+                    "find": "so",
+                    "label": "Hang Ni-a (Ma-lai-xi-a): sọ Người tinh khôn, khoảng 4 vạn năm"
+                  }
+                ],
+                "caption": "Không chỉ có Người tối cổ. Chiếc sọ Người tinh khôn tìm thấy ở hang Ni-a, Ma-lai-xi-a, có niên đại cách ngày nay khoảng 4 vạn năm.",
+                "sources": [
+                  {
+                    "quote": "Chiếc sọ Người tinh khôn tìm thấy ở hang Ni-a (Ma-lai-xi-a) có niên đại cách ngày nay khoảng 4 vạn năm",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s7",
+                "kind": "moc_thoi_gian",
+                "duration": 11,
+                "events": [
+                  {
+                    "time": "5 triệu năm trước",
+                    "label": "Vượn người",
+                    "form": "vuon_nguoi"
+                  },
+                  {
+                    "time": "2 triệu năm trước",
+                    "label": "Người tối cổ",
+                    "form": "nguoi_toi_co"
+                  },
+                  {
+                    "time": "4 vạn năm trước",
+                    "label": "Người tinh khôn",
+                    "form": "nguoi_tinh_khon"
+                  }
+                ],
+                "caption": "Xếp các dấu tích theo thời gian, ta thấy ở Đông Nam Á có đủ cả Vượn người, Người tối cổ và Người tinh khôn. Quá trình tiến hoá từ Vượn người thành người đã diễn ra ngay tại khu vực này.",
+                "sources": [
+                  {
+                    "quote": "Vượn người sống cách ngày nay khoảng 5 triệu năm",
+                    "chunk_id": "LS6_B04_C007",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "có niên đại khoảng 2 triệu năm trước là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á",
+                    "chunk_id": "LS6_B04_C007",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Chiếc sọ Người tinh khôn tìm thấy ở hang Ni-a (Ma-lai-xi-a) có niên đại cách ngày nay khoảng 4 vạn năm",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Tại khu vực Đông Nam Á đã diễn ra quá trình tiến hoá từ Vượn người thành người",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s8",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Trên đất nước Việt Nam",
+                "label": "Răng và công cụ của Người tối cổ",
+                "cast": [
+                  "ghe_da"
+                ],
+                "caption": "Còn trên đất nước ta thì sao? Ở Việt Nam cũng đã phát hiện răng của Người tối cổ, cùng những công cụ đá được ghè đẽo thô sơ của họ.",
+                "sources": [
+                  {
+                    "quote": "Ở Việt Nam cũng đã phát hiện răng của Người tối cổ",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Những công cụ đá được ghẻ đẽo thô sơ của Người tối cổ",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s9",
+                "kind": "phat_hien",
+                "duration": 9,
+                "finds": [
+                  {
+                    "find": "rang",
+                    "label": "Thẩm Khuyên (Lạng Sơn)"
+                  },
+                  {
+                    "find": "rang",
+                    "label": "Thẩm Hai (Lạng Sơn)"
+                  }
+                ],
+                "caption": "Răng của Người tối cổ được phát hiện ở Thẩm Khuyên và Thẩm Hai, tỉnh Lạng Sơn. Sách giáo khoa có in hình chiếc răng hoá thạch tìm thấy ở hang Thẩm Khuyên.",
+                "sources": [
+                  {
+                    "quote": "Ở Việt Nam cũng đã phát hiện răng của Người tối cổ ở Thẩm Khuyên, Thẩm Hai (Lạng Sơn)",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Răng hoá thạch của Người tối cổ được tìm thấy ở hang Thẩm Khuyên (Lạng Sơn)",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s10",
+                "kind": "phat_hien",
+                "duration": 9,
+                "finds": [
+                  {
+                    "find": "cong_cu_da",
+                    "label": "Núi Đọ (Thanh Hoá)"
+                  },
+                  {
+                    "find": "cong_cu_da",
+                    "label": "Xuân Lộc (Đồng Nai)"
+                  },
+                  {
+                    "find": "cong_cu_da",
+                    "label": "An Lộc (Bình Phước)"
+                  }
+                ],
+                "caption": "Công cụ đá ghè đẽo thô sơ của Người tối cổ đã có mặt ở nhiều nơi: Núi Đọ ở Thanh Hoá, Xuân Lộc ở Đồng Nai, An Lộc ở Bình Phước, và An Khê ở Gia Lai.",
+                "sources": [
+                  {
+                    "quote": "Những công cụ đá được ghẻ đẽo thô sơ của Người tối cổ cũng đã có mặt ở An Khê (Gia Lai), Núi Đọ (Thanh Hoá), Xuân Lộc (Đồng Nai), An Lộc (Binh Phước)",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Công cụ đá núi Đọ (Thanh Hoá)",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s11",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "riu_tay",
+                    "label": "An Khê (Gia Lai): trên 3 000 hiện vật đá, 80 vạn năm"
+                  }
+                ],
+                "caption": "Tại di chỉ An Khê, Gia Lai, người ta đã phát hiện được trên 3 000 hiện vật đá, gồm rìu tay và công cụ ghè đẽo thô sơ, có niên đại cách ngày nay 80 vạn năm.",
+                "sources": [
+                  {
+                    "quote": "Tại di chỉ An Khê (thị xã An Khê, tỉnh Gia Lai), người ta đã phát hiện được trên 3 000 hiện vật đá (gồm rìu tay, công cụ ghè đẽo thô sơ,...) có niên đại cách ngày nay 80 vạn năm",
+                    "chunk_id": "LS6_B04_C009",
+                    "lesson_number": 4,
+                    "pages": [
+                      20,
+                      20
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "Rìu tay tìm thấy ở di chỉ An Khê (Gia Lai)",
+                    "chunk_id": "LS6_B04_C010",
+                    "lesson_number": 4,
+                    "pages": [
+                      20,
+                      20
+                    ],
+                    "content_type": "caption"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s12",
+                "kind": "tieu_de",
+                "duration": 6,
+                "title": "80 vạn năm",
+                "label": "Dấu tích cổ xưa nhất trên đất Việt",
+                "cast": [
+                  "ghe_da"
+                ],
+                "caption": "Đây là dấu tích cổ xưa nhất, chứng tỏ sự xuất hiện sớm của người nguyên thuỷ trên đất nước Việt Nam.",
+                "sources": [
+                  {
+                    "quote": "Đây là dấu tích cổ xưa nhất chứng tỏ sự xuất hiện sớm của người nguyên thuỷ",
+                    "chunk_id": "LS6_B04_C009",
+                    "lesson_number": 4,
+                    "pages": [
+                      20,
+                      20
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ]
+              },
+              {
+                "id": "b4_m2.video.s13",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Những dấu tích ấy nói gì?",
+                "label": "Tiến hoá ngay tại Đông Nam Á",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Răng, xương hoá thạch và công cụ đá là những bằng chứng cho thấy quá trình chuyển biến từ Vượn người thành người đã diễn ra ở Đông Nam Á và trên đất nước Việt Nam.",
+                "sources": [
+                  {
+                    "quote": "Những dấu tích của quá trình chuyển biến từ vượn người thành người ở Đông Nam Á và Việt Nam",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đó là những di cốt hoá thạch và công cụ đá do con người chế tạo ra",
+                    "chunk_id": "LS6_B04_C006",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      19
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b4_m2.c1",
@@ -1327,6 +1755,462 @@
             "hu_cau": true,
             "text": "Xã hội nguyên thuỷ kéo dài hàng triệu năm và trải qua hai giai đoạn. Em hãy so sánh hai giai đoạn ấy."
           },
+          "video": {
+            "id": "b5_m1.video",
+            "title": "Bầy người và công xã thị tộc",
+            "style": "tien_su",
+            "scenes": [
+              {
+                "id": "b5_m1.video.s1",
+                "kind": "tieu_de",
+                "duration": 11,
+                "title": "Bầy người và công xã thị tộc",
+                "label": "Xã hội nguyên thuỷ",
+                "cast": [
+                  "san_bat"
+                ],
+                "caption": "Có người cho rằng người nguyên thuỷ sống như những bầy động vật hoang dã, lang thang trong rừng rậm, không có tổ chức, ăn sống nuốt tươi. Liệu thực tế có đúng như vậy không?",
+                "sources": [
+                  {
+                    "quote": "Một số người cho rằng người nguyên thuỷ sống như những bầy động vật hoang dã, lang thang trong các khu rừng rậm, không có tổ chức, ăn sống nuốt tươi, Liệu trong thực tế có đúng như vậy không?",
+                    "chunk_id": "LS6_B05_C002",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "intro"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s2",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "tranh_vach",
+                    "label": "Vách hang Lột Ca-ba-lôt"
+                  },
+                  {
+                    "icon": "san_bat",
+                    "label": "Cảnh đi săn"
+                  }
+                ],
+                "caption": "Trên vách hang Lột Ca-ba-lôt ở Tây Ban Nha có một bức tranh được cho là của người nguyên thuỷ, vẽ cảnh đi săn, với niên đại khoảng 10 000 năm trước.",
+                "sources": [
+                  {
+                    "quote": "Có một bức tranh được cho là của người nguyên thuỷ vẽ cảnh đi săn trên vách hang Lột Ca-ba-lôt (Tây Ban Nha); với niên đại khoảng 10 000 năm trước",
+                    "chunk_id": "LS6_B05_C002",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "intro"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s3",
+                "kind": "moc_thoi_gian",
+                "duration": 7,
+                "events": [
+                  {
+                    "time": "Giai đoạn đầu",
+                    "label": "Bầy người nguyên thuỷ",
+                    "form": "nguoi_toi_co"
+                  },
+                  {
+                    "time": "Giai đoạn sau",
+                    "label": "Công xã thị tộc",
+                    "form": "nguoi_tinh_khon"
+                  }
+                ],
+                "caption": "Xã hội nguyên thuỷ kéo dài hàng triệu năm, trải qua hai giai đoạn: bầy người nguyên thuỷ và công xã thị tộc.",
+                "sources": [
+                  {
+                    "quote": "Xã hội nguyên thuỷ kéo dài hàng triệu năm, trải qua hai giai đoạn: bầy người nguyên thuỷ và công xã thị tộc",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s4",
+                "kind": "tien_hoa",
+                "duration": 8,
+                "forms": [
+                  "nguoi_toi_co"
+                ],
+                "label": "Bầy người nguyên thuỷ: Người tối cổ",
+                "caption": "Giai đoạn đầu là bầy người nguyên thuỷ, gắn với Người tối cổ. Họ sống trong hang, động và kiếm sống dựa vào săn bắt, hái lượm.",
+                "sources": [
+                  {
+                    "quote": "Bầy người nguyên thuỷ Dạng người Đời sống vật chất Tổ chức xã hội Đời sống tinh thần Người tối cổ Sống trong hang, động, dựa vào săn bắt và hái lượm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s5",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "hang_dong",
+                    "label": "Sống trong hang, động"
+                  },
+                  {
+                    "icon": "san_bat",
+                    "label": "Săn bắt"
+                  },
+                  {
+                    "icon": "hai_luom",
+                    "label": "Hái lượm"
+                  }
+                ],
+                "cast": [
+                  "hai_luom"
+                ],
+                "caption": "Hang động là nơi ở. Thức ăn có được nhờ săn bắt và hái lượm, tức là con người tìm và lấy những gì tự nhiên có sẵn.",
+                "sources": [
+                  {
+                    "quote": "Sống trong hang, động, dựa vào săn bắt và hái lượm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s6",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "nguoi",
+                    "label": "Sống thành bầy, có người đứng đầu"
+                  },
+                  {
+                    "icon": "ban_tay",
+                    "label": "Phân công lao động"
+                  },
+                  {
+                    "icon": "gia_dinh",
+                    "label": "Cùng chăm sóc con cái"
+                  }
+                ],
+                "cast": [
+                  "san_bat"
+                ],
+                "caption": "Nhưng họ không sống lộn xộn. Người tối cổ sống thành bầy, có người đứng đầu, có sự phân công lao động và cùng chăm sóc con cái.",
+                "sources": [
+                  {
+                    "quote": "Sống thành bầy, có người đứng đầu, có sự phân công lao động và cùng chăm sóc con cái",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s7",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "trang_suc",
+                    "label": "Làm đồ trang sức"
+                  },
+                  {
+                    "icon": "tranh_vach",
+                    "label": "Vẽ tranh trên vách đá"
+                  }
+                ],
+                "caption": "Ngay từ giai đoạn này, con người đã biết làm đồ trang sức và vẽ tranh trên vách đá. Đó là đời sống tinh thần của bầy người nguyên thuỷ.",
+                "sources": [
+                  {
+                    "quote": "Biết làm đồ trang sức, vẽ tranh trên vách đá",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s8",
+                "kind": "tien_hoa",
+                "duration": 8,
+                "forms": [
+                  "nguoi_toi_co",
+                  "nguoi_tinh_khon"
+                ],
+                "label": "Công xã thị tộc: Người tinh khôn",
+                "caption": "Giai đoạn sau là công xã thị tộc, gắn với Người tinh khôn. Lúc này đã hình thành ba chủng tộc lớn: da vàng, da trắng và da đen.",
+                "sources": [
+                  {
+                    "quote": "Công xã thị tộc Người tinh khôn Hình thành ba chủng tộc lớn: da vàng, da trắng và da đen",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s9",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "lua",
+                    "label": "Trồng trọt"
+                  },
+                  {
+                    "icon": "chan_nuoi",
+                    "label": "Chăn nuôi"
+                  },
+                  {
+                    "icon": "det_vai",
+                    "label": "Dệt vải"
+                  },
+                  {
+                    "icon": "gom",
+                    "label": "Làm gốm"
+                  }
+                ],
+                "cast": [
+                  "lam_gom"
+                ],
+                "caption": "Người tinh khôn biết trồng trọt, chăn nuôi, dệt vải và làm gốm. Con người không chỉ lấy thức ăn có sẵn trong tự nhiên mà đã tự làm ra thức ăn và đồ dùng.",
+                "sources": [
+                  {
+                    "quote": "Biết trồng trọt, chăn nuôi, dệt vải và làm gốm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s10",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "gia_dinh",
+                    "label": "2, 3 thế hệ"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Cùng dòng máu"
+                  },
+                  {
+                    "icon": "cua_cai",
+                    "label": "Làm chung, hưởng chung"
+                  }
+                ],
+                "caption": "Thị tộc là một nhóm người gồm 2, 3 thế hệ có cùng dòng máu, sống quần tụ với nhau. Trong công xã thị tộc, mọi người làm chung và hưởng chung.",
+                "sources": [
+                  {
+                    "quote": "Thị tộc là một nhóm người, gồm khoảng 2 - 3 thế hệ có cùng dòng máu, sống quần tụ với nhau",
+                    "chunk_id": "LS6_B05_C005",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "Công xã thị tộc gồm 2, 3 thế hệ, có cùng dòng máu, làm chung và hưởng chung",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s11",
+                "kind": "bieu_tuong",
+                "duration": 6,
+                "items": [
+                  {
+                    "icon": "gia_dinh",
+                    "label": "Nhiều thị tộc"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Bộ lạc"
+                  }
+                ],
+                "caption": "Nhiều thị tộc sống cạnh nhau, có quan hệ họ hàng và gắn bó với nhau thì hợp thành bộ lạc.",
+                "sources": [
+                  {
+                    "quote": "Nhiều thị tộc sống cạnh nhau, có quan hệ họ hàng và gắn bó với nhau hợp thành bộ lạc",
+                    "chunk_id": "LS6_B05_C005",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s12",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "trang_suc",
+                    "label": "Trang sức tinh tế hơn"
+                  },
+                  {
+                    "icon": "tuong",
+                    "label": "Tượng đá, đất nung"
+                  },
+                  {
+                    "icon": "mo_tang",
+                    "label": "Tục chôn người chết"
+                  }
+                ],
+                "caption": "Đời sống tinh thần cũng phong phú hơn: đồ trang sức tinh tế hơn, có tượng bằng đá hoặc đất nung, và đã có tục chôn người chết cùng đời sống tâm linh.",
+                "sources": [
+                  {
+                    "quote": "Biết làm đồ trang sức tinh tế hơn. làm tượng bằng đá hoặc đất nung,... Đã có tục chôn người chết và đời sống tâm linh",
+                    "chunk_id": "LS6_B05_C004",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s13",
+                "kind": "moc_thoi_gian",
+                "duration": 10,
+                "events": [
+                  {
+                    "time": "Hang động",
+                    "label": "Săn bắt, hái lượm",
+                    "form": "nguoi_toi_co"
+                  },
+                  {
+                    "time": "Thị tộc",
+                    "label": "Trồng trọt, làm gốm",
+                    "form": "nguoi_tinh_khon"
+                  }
+                ],
+                "caption": "So sánh hai giai đoạn: từ cuộc sống trong hang động, dựa vào săn bắt, hái lượm, con người đã tiến tới trồng trọt, chăn nuôi, dệt vải, làm gốm và sống thành thị tộc.",
+                "sources": [
+                  {
+                    "quote": "Sống trong hang, động, dựa vào săn bắt và hái lượm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Biết trồng trọt, chăn nuôi, dệt vải và làm gốm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m1.video.s14",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Không phải bầy thú hoang",
+                "label": "Xã hội có tổ chức",
+                "cast": [
+                  "san_bat",
+                  "lam_gom"
+                ],
+                "caption": "Vậy người nguyên thuỷ không hề sống như bầy động vật hoang dã. Từ bầy người đến công xã thị tộc, họ luôn sống cùng nhau, có tổ chức và biết chăm lo cho nhau.",
+                "sources": [
+                  {
+                    "quote": "người nguyên thuỷ sống như những bầy động vật hoang dã",
+                    "chunk_id": "LS6_B05_C002",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "intro"
+                  },
+                  {
+                    "quote": "Sống thành bầy, có người đứng đầu, có sự phân công lao động và cùng chăm sóc con cái",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Công xã thị tộc gồm 2, 3 thế hệ, có cùng dòng máu, làm chung và hưởng chung",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b5_m1.c1",
@@ -1603,6 +2487,451 @@
             "hu_cau": true,
             "text": "Đôi bàn tay em khéo léo như hôm nay là nhờ đâu? Câu trả lời bắt đầu từ những viên đá được ghè đẽo hàng triệu năm trước."
           },
+          "video": {
+            "id": "b5_m2.video",
+            "title": "Lao động làm nên con người",
+            "style": "tien_su",
+            "scenes": [
+              {
+                "id": "b5_m2.video.s1",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Lao động làm nên con người",
+                "label": "Hàng triệu năm thay đổi",
+                "cast": [
+                  "ghe_da"
+                ],
+                "caption": "Đôi bàn tay khéo léo của chúng ta hôm nay có từ đâu? Câu trả lời bắt đầu từ lao động của người nguyên thuỷ, trong suốt hàng triệu năm.",
+                "sources": [
+                  {
+                    "quote": "Trong quá trình lao động, tìm kiếm thức ăn, đôi bàn tay của người nguyên thuỷ dần trở nên khéo léo hơn",
+                    "chunk_id": "LS6_B05_C006",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Xã hội nguyên thuỷ kéo dài hàng triệu năm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s2",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "san_bat",
+                    "label": "Săn bắt"
+                  },
+                  {
+                    "icon": "hai_luom",
+                    "label": "Hái lượm"
+                  }
+                ],
+                "cast": [
+                  "hai_luom"
+                ],
+                "caption": "Để sống, người nguyên thuỷ phải lao động mỗi ngày. Người tối cổ dựa vào săn bắt và hái lượm, tìm kiếm thức ăn trong tự nhiên.",
+                "sources": [
+                  {
+                    "quote": "Người tối cổ Sống trong hang, động, dựa vào săn bắt và hái lượm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Trong quá trình lao động, tìm kiếm thức ăn",
+                    "chunk_id": "LS6_B05_C006",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s3",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Chế tạo công cụ đá",
+                "label": "Ghè đá vào đá",
+                "cast": [
+                  "ghe_da"
+                ],
+                "caption": "Muốn săn bắt và hái lượm, họ cần công cụ. Sách giáo khoa có hình ảnh thực nghiệm cách chế tạo công cụ đá của người nguyên thuỷ: ghè đá vào đá cho sắc cạnh.",
+                "sources": [
+                  {
+                    "quote": "Hình ảnh thực nghiệm cách chế tạo công cụ đá của người nguyên thuỷ",
+                    "chunk_id": "LS6_B05_C006",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s4",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "ban_tay",
+                    "label": "Đôi tay khéo léo hơn"
+                  },
+                  {
+                    "icon": "hai_chan",
+                    "label": "Cơ thể dần biến đổi"
+                  }
+                ],
+                "cast": [
+                  "ghe_da"
+                ],
+                "caption": "Trong quá trình lao động, tìm kiếm thức ăn, đôi bàn tay của người nguyên thuỷ dần trở nên khéo léo hơn, cơ thể cũng dần biến đổi.",
+                "sources": [
+                  {
+                    "quote": "Trong quá trình lao động, tìm kiếm thức ăn, đôi bàn tay của người nguyên thuỷ dần trở nên khéo léo hơn, cơ thể cũng dần biến đổi",
+                    "chunk_id": "LS6_B05_C006",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s5",
+                "kind": "tien_hoa",
+                "duration": 8,
+                "forms": [
+                  "vuon_nguoi",
+                  "nguoi_toi_co"
+                ],
+                "label": "Đi, đứng bằng hai chân",
+                "caption": "Như em đã học ở Bài 4, Người tối cổ thường xuyên đi, đứng bằng hai chân. Hai chi trước đã trở thành hai tay, có thể cầm nắm công cụ.",
+                "sources": [
+                  {
+                    "quote": "Người tối cổ thường xuyên đi, đứng bằng hai chân, hai chi trước thành hai tay, có thể cầm nắm",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s6",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "bo_nao",
+                    "label": "Sọ não lớn hơn"
+                  },
+                  {
+                    "icon": "tieng_noi",
+                    "label": "Trung tâm phát tiếng nói"
+                  }
+                ],
+                "caption": "Thể tích sọ não của Người tối cổ cũng lớn hơn, và trong não đã hình thành trung tâm phát tiếng nói. Đó là những thay đổi lớn của cơ thể con người.",
+                "sources": [
+                  {
+                    "quote": "thể tích sọ não lớn hơn và đã hình thành trung tâm phát tiếng nói trong não",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s7",
+                "kind": "tien_hoa",
+                "duration": 9,
+                "forms": [
+                  "vuon_nguoi",
+                  "nguoi_toi_co",
+                  "nguoi_tinh_khon"
+                ],
+                "label": "Đến Người tinh khôn, rồi Người hiện đại",
+                "caption": "Lao động cứ thế tiếp diễn. Người tối cổ dần biến đổi thành Người tinh khôn, và cơ thể con người tiếp tục biến đổi để trở thành Người hiện đại.",
+                "sources": [
+                  {
+                    "quote": "đến khoảng 15 vạn năm trước thì biến đổi thành người tinh khôn",
+                    "chunk_id": "LS6_B04_C004",
+                    "lesson_number": 4,
+                    "pages": [
+                      18,
+                      18
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "cơ thể cũng dần biến đổi để trở thành Người hiện đại",
+                    "chunk_id": "LS6_B05_C006",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s8",
+                "kind": "moc_thoi_gian",
+                "duration": 9,
+                "events": [
+                  {
+                    "time": "Người tối cổ",
+                    "label": "Săn bắt, hái lượm",
+                    "form": "nguoi_toi_co"
+                  },
+                  {
+                    "time": "Người tinh khôn",
+                    "label": "Trồng trọt, chăn nuôi",
+                    "form": "nguoi_tinh_khon"
+                  }
+                ],
+                "caption": "Cách lao động cũng ngày càng tiến bộ. Người tối cổ chỉ săn bắt, hái lượm. Người tinh khôn đã biết trồng trọt và chăn nuôi, tự làm ra thức ăn cho mình.",
+                "sources": [
+                  {
+                    "quote": "Người tối cổ Sống trong hang, động, dựa vào săn bắt và hái lượm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Biết trồng trọt, chăn nuôi, dệt vải và làm gốm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s9",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "det_vai",
+                    "label": "Dệt vải"
+                  },
+                  {
+                    "icon": "gom",
+                    "label": "Làm gốm"
+                  },
+                  {
+                    "icon": "trang_suc",
+                    "label": "Trang sức tinh tế hơn"
+                  }
+                ],
+                "cast": [
+                  "lam_gom"
+                ],
+                "caption": "Họ còn biết dệt vải, làm gốm, làm đồ trang sức tinh tế hơn và làm tượng bằng đá hoặc đất nung. Đời sống nhờ đó mà ngày càng phong phú.",
+                "sources": [
+                  {
+                    "quote": "Biết trồng trọt, chăn nuôi, dệt vải và làm gốm",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Biết làm đồ trang sức tinh tế hơn. làm tượng bằng đá hoặc đất nung",
+                    "chunk_id": "LS6_B05_C004",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s10",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "cong_cu_da",
+                    "label": "Núi Đọ: ghè đẽo thô sơ"
+                  },
+                  {
+                    "find": "riu_mai",
+                    "label": "Bắc Sơn: rìu mài lưỡi"
+                  }
+                ],
+                "caption": "Trên đất nước ta, công cụ cũng tiến bộ dần. Từ những công cụ đá ghè đẽo thô sơ như ở Núi Đọ, người nguyên thuỷ đã biết mài đá, như chiếc rìu mài lưỡi Bắc Sơn ở Lạng Sơn.",
+                "sources": [
+                  {
+                    "quote": "Công cụ đá núi Đọ (Thanh Hoá)",
+                    "chunk_id": "LS6_B04_C008",
+                    "lesson_number": 4,
+                    "pages": [
+                      19,
+                      20
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Ở Việt Nam, người nguyên thuỷ đã biết mài đá",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Rìu mài lưỡi Bắc Sơn (Lạng Sơn)",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s11",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "hai_luom",
+                    "label": "Cây ăn quả, rau đậu"
+                  },
+                  {
+                    "icon": "chan_nuoi",
+                    "label": "Gia súc"
+                  },
+                  {
+                    "icon": "lua",
+                    "label": "Bước đầu làm nông nghiệp"
+                  }
+                ],
+                "cast": [
+                  "hai_luom"
+                ],
+                "caption": "Trong các hang động thuộc văn hoá Hoà Bình còn có xương gia súc và dấu vết cây ăn quả, rau đậu. Cư dân Hoà Bình đã bước đầu biết làm nông nghiệp.",
+                "sources": [
+                  {
+                    "quote": "Trong các hang động thuộc văn hoá Hoà Bình đã tìm thấy nhiều xương của một số loại gia súc và dấu vết của các loại cây ăn quả, rau đậu, chứng tỏ cư dân Hoà Bình đã bước đầu biết làm nông nghiệp",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s12",
+                "kind": "tieu_de",
+                "duration": 12,
+                "title": "Nhờ có lao động",
+                "label": "Con người tự cải biến mình",
+                "cast": [
+                  "ghe_da",
+                  "lam_gom"
+                ],
+                "caption": "Nhờ có lao động, con người đã từng bước tự cải biến, hoàn thiện mình và làm cho đời sống ngày càng phong phú hơn. Lao động không chỉ làm ra thức ăn, công cụ, mà còn thay đổi chính con người.",
+                "sources": [
+                  {
+                    "quote": "Nhờ có lao động, con người đã từng bước tự cải biến, hoàn thiện mình và làm cho đời sống ngày càng phong phú hơn",
+                    "chunk_id": "LS6_B05_C006",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m2.video.s13",
+                "kind": "tieu_de",
+                "duration": 9,
+                "title": "Đôi bàn tay hôm nay",
+                "label": "Kết quả của hàng triệu năm lao động",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Đôi bàn tay khéo léo của em hôm nay là kết quả của hàng triệu năm lao động. Lao động đã làm thay đổi cả con người lẫn cuộc sống của người nguyên thuỷ.",
+                "sources": [
+                  {
+                    "quote": "đôi bàn tay của người nguyên thuỷ dần trở nên khéo léo hơn",
+                    "chunk_id": "LS6_B05_C006",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "lao động có vai trò như thế nào trong việc làm thay đổi con người và cuộc sống của người nguyên thuỷ",
+                    "chunk_id": "LS6_B05_C014",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "question"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b5_m2.c1",
@@ -1788,6 +3117,460 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Trong những hang động ở Hoà Bình, Bắc Sơn còn lưu lại xương thú, hạt cây, rìu đá, vỏ ốc. Em hãy đọc chúng như đọc một cuốn nhật kí."
+          },
+          "video": {
+            "id": "b5_m3.video",
+            "title": "Người nguyên thuỷ trên đất Việt Nam",
+            "style": "tien_su",
+            "scenes": [
+              {
+                "id": "b5_m3.video.s1",
+                "kind": "tieu_de",
+                "duration": 11,
+                "title": "Người nguyên thuỷ trên đất Việt",
+                "label": "Đời sống vật chất và tinh thần",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Ở Hoà Bình, Bắc Sơn, Quỳnh Văn và nhiều di chỉ khác còn lưu lại rìu đá, đồ gốm, xương gia súc, vỏ ốc. Mỗi hiện vật kể một câu chuyện về người nguyên thuỷ trên đất nước Việt Nam.",
+                "sources": [
+                  {
+                    "quote": "Rìu mài lưỡi Bắc Sơn (Lạng Sơn)",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Trong các hang động thuộc văn hoá Hoà Bình đã tìm thấy nhiều xương của một số loại gia súc",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "nhiều vỏ ốc biển được mài thủng",
+                    "chunk_id": "LS6_B05_C009",
+                    "lesson_number": 5,
+                    "pages": [
+                      23,
+                      24
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Văn hoá Quỳnh Văn tập trung chủ yếu ở vùng ven biển Quỳnh Lưu (Nghệ An)",
+                    "chunk_id": "LS6_B05_C011",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s2",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "riu_mai",
+                    "label": "Rìu mài lưỡi Bắc Sơn (Lạng Sơn)"
+                  }
+                ],
+                "caption": "Người nguyên thuỷ ở Việt Nam đã biết mài đá. Chiếc rìu mài lưỡi Bắc Sơn, Lạng Sơn, có lưỡi được mài nhẵn, khác hẳn những công cụ chỉ ghè đẽo thô sơ trước đó.",
+                "sources": [
+                  {
+                    "quote": "Ở Việt Nam, người nguyên thuỷ đã biết mài đá",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Rìu mài lưỡi Bắc Sơn (Lạng Sơn)",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Em nhận thấy kĩ thuật chế tác công cụ Bắc Sơn có điểm gì tiến bộ hơn so với Núi Đọ?",
+                    "chunk_id": "LS6_B05_C012",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "caption"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 10,
+                "items": [
+                  {
+                    "icon": "ban_tay",
+                    "label": "Rìu, bôn, chày, cuốc đá"
+                  },
+                  {
+                    "icon": "san_bat",
+                    "label": "Mũi tên, mũi lao"
+                  },
+                  {
+                    "icon": "gom",
+                    "label": "Đồ gốm có hoa văn"
+                  }
+                ],
+                "caption": "Họ tạo ra nhiều loại công cụ khác nhau như rìu, bôn, chày, cuốc đá, và vũ khí như mũi tên, mũi lao. Đồ gốm cũng dần phổ biến, với hoa văn trang trí phong phú.",
+                "sources": [
+                  {
+                    "quote": "Ở Việt Nam, người nguyên thuỷ đã biết mài đá, tạo ra nhiều loại công cụ khác nhau (rìu, bôn, chày, cuốc đá) và vũ khí (mũi tên, mũi lao). Đồ gốm đã dần phổ biến với hoa văn trang trí phong phú",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s4",
+                "kind": "tieu_de",
+                "duration": 9,
+                "title": "Văn hoá Hoà Bình",
+                "label": "Dấu vết trong các hang động",
+                "cast": [
+                  "hai_luom"
+                ],
+                "caption": "Trong các hang động thuộc văn hoá Hoà Bình, người ta đã tìm thấy nhiều xương của một số loại gia súc và dấu vết của các loại cây ăn quả, rau đậu.",
+                "sources": [
+                  {
+                    "quote": "Trong các hang động thuộc văn hoá Hoà Bình đã tìm thấy nhiều xương của một số loại gia súc và dấu vết của các loại cây ăn quả, rau đậu",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s5",
+                "kind": "phat_hien",
+                "duration": 8,
+                "finds": [
+                  {
+                    "find": "hoa_thach",
+                    "label": "Xương gia súc"
+                  },
+                  {
+                    "find": "hat",
+                    "label": "Cây ăn quả, rau đậu"
+                  }
+                ],
+                "caption": "Những dấu vết ấy chứng tỏ cư dân Hoà Bình đã bước đầu biết làm nông nghiệp: không chỉ hái lượm, họ đã tự trồng trọt và chăn nuôi.",
+                "sources": [
+                  {
+                    "quote": "chứng tỏ cư dân Hoà Bình đã bước đầu biết làm nông nghiệp",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nguồn thức ăn bao gồm cả những sản phẩm săn bắn, hái lượm và tự trồng trọt, chăn nuôi",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s6",
+                "kind": "bieu_tuong",
+                "duration": 6,
+                "items": [
+                  {
+                    "icon": "hang_dong",
+                    "label": "Hang động, mái đá"
+                  },
+                  {
+                    "icon": "leu",
+                    "label": "Túp lều lợp cỏ, lá cây"
+                  }
+                ],
+                "caption": "Họ sống chủ yếu trong các hang động, mái đá, hoặc trong những túp lều lợp bằng cỏ khô hay lá cây.",
+                "sources": [
+                  {
+                    "quote": "Họ sống chủ yếu trong các hang động, mái đá hoặc các túp lều lợp bằng cỏ khô hay lá cây",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s7",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "san_bat",
+                    "label": "Săn bắn"
+                  },
+                  {
+                    "icon": "hai_luom",
+                    "label": "Hái lượm"
+                  },
+                  {
+                    "icon": "lua",
+                    "label": "Trồng trọt"
+                  },
+                  {
+                    "icon": "chan_nuoi",
+                    "label": "Chăn nuôi"
+                  }
+                ],
+                "cast": [
+                  "san_bat"
+                ],
+                "caption": "Nguồn thức ăn của họ bao gồm cả những sản phẩm săn bắn, hái lượm và những thứ do chính họ tự trồng trọt, chăn nuôi.",
+                "sources": [
+                  {
+                    "quote": "Nguồn thức ăn bao gồm cả những sản phẩm săn bắn, hái lượm và tự trồng trọt, chăn nuôi",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s8",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "chuoi_dat",
+                    "label": "Viên đất nung xâu chuỗi"
+                  },
+                  {
+                    "find": "vo_oc",
+                    "label": "Vỏ ốc biển mài thủng"
+                  }
+                ],
+                "caption": "Đời sống tinh thần cũng phong phú. Trong các di chỉ có nhiều viên đất nung được dùi lỗ, xâu thành chuỗi, và nhiều vỏ ốc biển được mài thủng để xâu dây làm đồ trang sức.",
+                "sources": [
+                  {
+                    "quote": "Trong các di chỉ, người ta đã tìm thấy nhiều viên đất nung có dùi lỗ và xâu thành chuỗi, nhiều vỏ ốc biển được mài thủng, có thể xâu dây làm đồ trang sức",
+                    "chunk_id": "LS6_B05_C009",
+                    "lesson_number": 5,
+                    "pages": [
+                      23,
+                      24
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s9",
+                "kind": "phat_hien",
+                "duration": 7,
+                "finds": [
+                  {
+                    "find": "dan_da",
+                    "label": "Bộ đàn đá"
+                  },
+                  {
+                    "find": "vong_tay",
+                    "label": "Vòng tay"
+                  }
+                ],
+                "caption": "Người ta còn tìm thấy những bộ đàn đá và vòng tay. Hoa văn trên đồ gốm cũng dần mang tính chất nghệ thuật, trang trí.",
+                "sources": [
+                  {
+                    "quote": "những bộ đàn đá, vòng tay,... Hoa văn trên đồ gốm cũng dần mang tính chất nghệ thuật, trang trí",
+                    "chunk_id": "LS6_B05_C009",
+                    "lesson_number": 5,
+                    "pages": [
+                      23,
+                      24
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s10",
+                "kind": "phat_hien",
+                "duration": 7,
+                "finds": [
+                  {
+                    "find": "manh_gom",
+                    "label": "Gốm Quỳnh Văn (Nghệ An)"
+                  }
+                ],
+                "caption": "Văn hoá Quỳnh Văn tập trung chủ yếu ở vùng ven biển Quỳnh Lưu, Nghệ An. Người Quỳnh Văn có nghề làm gốm rất phát triển.",
+                "sources": [
+                  {
+                    "quote": "Văn hoá Quỳnh Văn tập trung chủ yếu ở vùng ven biển Quỳnh Lưu (Nghệ An) Người Quỳnh Văn có nghề làm gốm rất phát triển",
+                    "chunk_id": "LS6_B05_C011",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "Gốm Quỳnh Văn",
+                    "chunk_id": "LS6_B05_C012",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "caption"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s11",
+                "kind": "phat_hien",
+                "duration": 8,
+                "finds": [
+                  {
+                    "find": "mat_nguoi",
+                    "label": "Mặt người khắc trên vách hang Đồng Nội (Hoà Bình)"
+                  }
+                ],
+                "caption": "Trên vách hang Đồng Nội, Hoà Bình, còn có hình mặt người được khắc vào đá. Người nguyên thuỷ đã biết thể hiện mình bằng nghệ thuật.",
+                "sources": [
+                  {
+                    "quote": "Hình mặt người khắc trên vách hang Đồng Nội (Hoà Bình)",
+                    "chunk_id": "LS6_B05_C010",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s12",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "mo_tang",
+                    "label": "Mộ táng trong hang"
+                  },
+                  {
+                    "icon": "ban_tay",
+                    "label": "Chôn theo công cụ"
+                  },
+                  {
+                    "icon": "trang_suc",
+                    "label": "Chôn theo đồ trang sức"
+                  }
+                ],
+                "caption": "Trong nhiều hang động, người ta đã phát hiện các mộ táng, có chôn theo công cụ và đồ trang sức cho người đã mất.",
+                "sources": [
+                  {
+                    "quote": "Trong nhiều hang động, người ta đã phát hiện các mộ táng, có chôn theo công cụ và đồ trang sức",
+                    "chunk_id": "LS6_B05_C010",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b5_m3.video.s13",
+                "kind": "tieu_de",
+                "duration": 11,
+                "title": "Cuộc sống ngày càng phong phú",
+                "label": "Vật chất và tinh thần",
+                "cast": [
+                  "hai_luom",
+                  "lam_gom"
+                ],
+                "caption": "Mài đá, làm gốm, bước đầu trồng trọt, chăn nuôi, làm đồ trang sức và chôn cất người chết: người nguyên thuỷ trên đất nước Việt Nam đã có đời sống vật chất và tinh thần khá phong phú.",
+                "sources": [
+                  {
+                    "quote": "Ở Việt Nam, người nguyên thuỷ đã biết mài đá",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "chứng tỏ cư dân Hoà Bình đã bước đầu biết làm nông nghiệp",
+                    "chunk_id": "LS6_B05_C008",
+                    "lesson_number": 5,
+                    "pages": [
+                      22,
+                      22
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Trong nhiều hang động, người ta đã phát hiện các mộ táng, có chôn theo công cụ và đồ trang sức",
+                    "chunk_id": "LS6_B05_C010",
+                    "lesson_number": 5,
+                    "pages": [
+                      24,
+                      24
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
           },
           "cards": [
             {
@@ -2207,6 +3990,494 @@
             "hu_cau": true,
             "text": "Một đám cháy, những thỏi đồng chảy ra vón cục: phát minh lớn đôi khi bắt đầu từ một tình cờ."
           },
+          "video": {
+            "id": "b6_m1.video",
+            "title": "Phát hiện ra kim loại",
+            "style": "tien_su",
+            "scenes": [
+              {
+                "id": "b6_m1.video.s1",
+                "kind": "tieu_de",
+                "duration": 12,
+                "title": "Phát hiện ra kim loại",
+                "label": "Từ đồ đá đến đồ kim loại",
+                "cast": [
+                  "luyen_kim"
+                ],
+                "caption": "Hằng ngày, chúng ta dùng rất nhiều vật dụng làm từ đồng và sắt. Các nguyên liệu ấy được phát hiện như thế nào, từ bao giờ, và đã làm thay đổi đời sống xã hội ra sao? Hãy cùng trở về thời nguyên thuỷ.",
+                "sources": [
+                  {
+                    "quote": "Em có biết các nguyên liệu đồng và sắt được phát hiện như thế nào, từ bao giờ và chúng đã làm thay đổi đời sống xã hội ra sao?",
+                    "chunk_id": "LS6_B06_C002",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "intro"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s2",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Thiên niên kỉ IV TCN",
+                "label": "Một nguyên liệu mới",
+                "cast": [
+                  "ghe_da"
+                ],
+                "caption": "Vào khoảng thiên niên kỉ IV trước Công nguyên, người nguyên thuỷ đã phát hiện ra một loại nguyên liệu mới để chế tạo công cụ và vũ khí thay thế cho đồ đá. Đó là kim loại.",
+                "sources": [
+                  {
+                    "quote": "Vào khoảng thiên niên kỉ IV TCN, người nguyên thuỷ đã phát hiện ra một loại nguyên liệu mới để chế tạo công cụ và vũ khí thay thế cho đồ đá. Đó là kim loại",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "lua_chay",
+                    "label": "Từ các đám cháy"
+                  },
+                  {
+                    "icon": "dong_do",
+                    "label": "Đồng đỏ"
+                  }
+                ],
+                "caption": "Đồng được phát hiện một cách ngẫu nhiên, từ các đám cháy. Những thỏi đồng nóng chảy, vón cục lại chính là đồng đỏ, tức là đồng nguyên chất.",
+                "sources": [
+                  {
+                    "quote": "Đồng được phát hiện một cách ngẫu nhiên, tìm thấy từ các đám cháy Những thỏi đồng nóng chảy, vón cục là đồng đỏ (đồng nguyên chất)",
+                    "chunk_id": "LS6_B06_C003",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s4",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "dong_do",
+                    "label": "Đồng đỏ"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Người Tây Á, Ai Cập"
+                  }
+                ],
+                "caption": "Người Tây Á và Ai Cập đã biết dùng đồng đỏ. Từ một phát hiện tình cờ, con người bắt đầu làm ra công cụ và vũ khí bằng kim loại, thay cho đồ đá.",
+                "sources": [
+                  {
+                    "quote": "Người Tây Á và Ai Cập đã biết dùng đồng đỏ",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đồng được phát hiện một cách ngẫu nhiên",
+                    "chunk_id": "LS6_B06_C003",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s5",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "dong_do",
+                    "label": "Đồng đỏ"
+                  },
+                  {
+                    "icon": "dong_thau",
+                    "label": "Pha chế ra đồng thau"
+                  }
+                ],
+                "cast": [
+                  "luyen_kim"
+                ],
+                "caption": "Sau đó, người ta biết pha chế để tạo ra đồng thau. Cư dân nhiều nơi đã biết dùng đồng thau. Nghề luyện kim và chế tạo đồ đồng đòi hỏi kĩ thuật cao.",
+                "sources": [
+                  {
+                    "quote": "Sau đó, người ta biết pha chế,... để tạo ra đồng thau",
+                    "chunk_id": "LS6_B06_C003",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Cư dân nhiều nơi đã biết dùng đồng thau",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nghề luyện kim và chế tạo đồ đồng yêu cầu kĩ thuật cao",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s6",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "dong_thau",
+                    "label": "Đồng"
+                  },
+                  {
+                    "icon": "luoi_sat",
+                    "label": "Sắt cứng hơn đồng"
+                  }
+                ],
+                "caption": "Sắt được phát hiện muộn hơn đồng. Vì sắt cứng hơn đồng nên được sử dụng rộng rãi. Con người đã biết chế tạo các công cụ bằng sắt.",
+                "sources": [
+                  {
+                    "quote": "Sắt được phát hiện muộn hơn, do cứng hơn đồng nên được sử dụng rộng rãi",
+                    "chunk_id": "LS6_B06_C003",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Con người biết chế tạo các công cụ bằng sắt",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s7",
+                "kind": "moc_thoi_gian",
+                "duration": 8,
+                "events": [
+                  {
+                    "time": "Trước đó",
+                    "label": "Đồ đá"
+                  },
+                  {
+                    "time": "Đầu tiên",
+                    "label": "Đồng đỏ"
+                  },
+                  {
+                    "time": "Sau đó",
+                    "label": "Đồng thau"
+                  },
+                  {
+                    "time": "Muộn hơn",
+                    "label": "Sắt"
+                  }
+                ],
+                "caption": "Nhìn lại quá trình ấy: từ đồ đá, con người tìm ra đồng đỏ, rồi pha chế ra đồng thau, và muộn hơn nữa là sắt. Kim loại dần thay thế đồ đá.",
+                "sources": [
+                  {
+                    "quote": "Những thỏi đồng nóng chảy, vón cục là đồng đỏ (đồng nguyên chất). Sau đó, người ta biết pha chế,... để tạo ra đồng thau",
+                    "chunk_id": "LS6_B06_C003",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Sắt được phát hiện muộn hơn",
+                    "chunk_id": "LS6_B06_C003",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "để chế tạo công cụ và vũ khí thay thế cho đồ đá",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s8",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "cay",
+                    "label": "Lưỡi cày"
+                  },
+                  {
+                    "icon": "cuoc",
+                    "label": "Cuốc"
+                  },
+                  {
+                    "icon": "riu_dong",
+                    "label": "Rìu"
+                  }
+                ],
+                "caption": "Nhờ có công cụ mới bằng kim loại như lưỡi cày, cuốc, rìu, con người có thể khai hoang, mở rộng diện tích trồng trọt.",
+                "sources": [
+                  {
+                    "quote": "Nhờ có công cụ mới bằng kim loại như lưỡi cày, cuốc, rìu,... con người có thể khai hoang, mở rộng diện tích trồng trọt",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s9",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "cay",
+                    "label": "Nông nghiệp dùng cày"
+                  },
+                  {
+                    "icon": "chan_nuoi",
+                    "label": "Chăn nuôi"
+                  }
+                ],
+                "cast": [
+                  "lam_ruong"
+                ],
+                "caption": "Nông nghiệp dùng cày và chăn nuôi cũng có bước phát triển. Với công cụ kim loại, ruộng đồng được mở rộng hơn trước rất nhiều.",
+                "sources": [
+                  {
+                    "quote": "Nông nghiệp dùng cày và chăn nuôi cũng có bước phát triển",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "con người có thể khai hoang, mở rộng diện tích trồng trọt",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s10",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "riu_dong",
+                    "label": "Luyện kim, đúc đồng"
+                  },
+                  {
+                    "icon": "det_vai",
+                    "label": "Dệt vải"
+                  },
+                  {
+                    "icon": "gom",
+                    "label": "Làm gốm"
+                  },
+                  {
+                    "icon": "nha_san",
+                    "label": "Làm mộc"
+                  }
+                ],
+                "caption": "Nghề luyện kim và chế tạo đồ đồng, cùng với nghề dệt vải, làm đồ gốm, đồ mộc, dần trở thành những ngành sản xuất riêng.",
+                "sources": [
+                  {
+                    "quote": "Nghề luyện kim và chế tạo đồ đồng yêu cầu kĩ thuật cao, cùng với nghề dệt vải, làm đồ gốm, đồ mộc",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "dần trở thành ngành sản xuất riêng",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s11",
+                "kind": "tieu_de",
+                "duration": 9,
+                "title": "Chuyên môn hoá",
+                "label": "Năng suất lao động tăng",
+                "cast": [
+                  "luyen_kim",
+                  "lam_gom"
+                ],
+                "caption": "Mỗi người, mỗi nhóm chuyên làm một nghề. Quá trình chuyên môn hoá ấy thúc đẩy năng suất lao động, tạo ra sản phẩm ngày càng nhiều cho xã hội.",
+                "sources": [
+                  {
+                    "quote": "Quá trình chuyên môn hoá trong sản xuất lại có tác dụng thúc đẩy năng suất lao động, tạo ra sản phẩm ngày càng nhiều cho xã hội",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s12",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "lua",
+                    "label": "Đủ ăn"
+                  },
+                  {
+                    "icon": "cua_cai",
+                    "label": "Của cải dư thừa"
+                  }
+                ],
+                "caption": "Kết quả là con người không chỉ đủ ăn mà còn có của cải dư thừa. Chính của cải dư thừa sẽ làm thay đổi cả đời sống xã hội.",
+                "sources": [
+                  {
+                    "quote": "Con người không chỉ đủ ăn mà còn có của cải dư thừa",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Sự thay đổi trong đời sống xã hội",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m1.video.s13",
+                "kind": "tieu_de",
+                "duration": 12,
+                "title": "Kim loại xuất hiện",
+                "label": "Đời sống vật chất đổi thay",
+                "cast": [
+                  "luyen_kim"
+                ],
+                "caption": "Một phát hiện tình cờ từ đám cháy đã mang lại công cụ mới bằng kim loại. Sản xuất phát triển, con người làm ra ngày càng nhiều của cải. Kim loại đã làm xã hội nguyên thuỷ chuyển biến sâu sắc.",
+                "sources": [
+                  {
+                    "quote": "Đồng được phát hiện một cách ngẫu nhiên, tìm thấy từ các đám cháy",
+                    "chunk_id": "LS6_B06_C003",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "tạo ra sản phẩm ngày càng nhiều cho xã hội",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "quá trình phát hiện ra kim loại và vai trò của nó đối với sự chuyển biến và phân hoá từ xã hội nguyên thuỷ sang xã hội có giai cấp",
+                    "chunk_id": "LS6_B06_C001",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      25
+                    ],
+                    "content_type": "objectives"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b6_m1.c1",
@@ -2518,6 +4789,438 @@
             "hu_cau": true,
             "text": "Khi của cải dư thừa xuất hiện, cách sống \"làm chung, hưởng chung\" bắt đầu lung lay. Điều gì đã xảy ra?"
           },
+          "video": {
+            "id": "b6_m2.video",
+            "title": "Xã hội nguyên thuỷ tan rã",
+            "style": "tien_su",
+            "scenes": [
+              {
+                "id": "b6_m2.video.s1",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Xã hội nguyên thuỷ tan rã",
+                "label": "Khi có của cải dư thừa",
+                "cast": [
+                  "luyen_kim"
+                ],
+                "caption": "Nhờ công cụ kim loại, con người không chỉ đủ ăn mà còn có của cải dư thừa. Từ đây, cách sống làm chung, hưởng chung của thị tộc bắt đầu thay đổi. Điều gì đã xảy ra?",
+                "sources": [
+                  {
+                    "quote": "Con người không chỉ đủ ăn mà còn có của cải dư thừa",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "làm chung và hưởng chung",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s2",
+                "kind": "bieu_tuong",
+                "duration": 6,
+                "items": [
+                  {
+                    "icon": "gia_dinh",
+                    "label": "Thị tộc cùng dòng máu"
+                  },
+                  {
+                    "icon": "cua_cai",
+                    "label": "Làm chung, hưởng chung"
+                  }
+                ],
+                "caption": "Hãy nhớ lại: công xã thị tộc gồm 2, 3 thế hệ có cùng dòng máu. Mọi người làm chung và hưởng chung.",
+                "sources": [
+                  {
+                    "quote": "Công xã thị tộc gồm 2, 3 thế hệ, có cùng dòng máu, làm chung và hưởng chung",
+                    "chunk_id": "LS6_B05_C003",
+                    "lesson_number": 5,
+                    "pages": [
+                      21,
+                      21
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 10,
+                "items": [
+                  {
+                    "icon": "cay",
+                    "label": "Công cụ kim loại"
+                  },
+                  {
+                    "icon": "cua_cai",
+                    "label": "Sản phẩm nhiều hơn"
+                  }
+                ],
+                "cast": [
+                  "lam_ruong"
+                ],
+                "caption": "Khi công cụ bằng kim loại xuất hiện, con người khai hoang, mở rộng diện tích trồng trọt. Nông nghiệp và các nghề thủ công phát triển, sản phẩm ngày càng nhiều cho xã hội.",
+                "sources": [
+                  {
+                    "quote": "Nhờ có công cụ mới bằng kim loại như lưỡi cày, cuốc, rìu,... con người có thể khai hoang, mở rộng diện tích trồng trọt",
+                    "chunk_id": "LS6_B06_C004",
+                    "lesson_number": 6,
+                    "pages": [
+                      25,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "tạo ra sản phẩm ngày càng nhiều cho xã hội",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s4",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "gia_dinh",
+                    "label": "Gia đình phụ hệ"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Đàn ông làm chủ gia đình"
+                  }
+                ],
+                "caption": "Trong thị tộc, đàn ông có vai trò ngày càng lớn và trở thành chủ gia đình. Con cái lấy theo họ cha. Đó là các gia đình phụ hệ.",
+                "sources": [
+                  {
+                    "quote": "Trong thị tộc, đàn ông có vai trò ngày càng lớn và trở thành chủ gia đình. Con cái lấy theo họ cha. Đó là các gia đình phụ hệ",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s5",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Gia đình phụ hệ",
+                "label": "Con cái lấy theo họ cha",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Sách giáo khoa có tranh minh hoạ gia đình phụ hệ trong công xã thị tộc. Người cha là chủ gia đình, và con cái mang họ của cha.",
+                "sources": [
+                  {
+                    "quote": "Gia đình phụ hệ trong công xã thị tộc (tranh minh hoạ)",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Con cái lấy theo họ cha",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s6",
+                "kind": "bieu_tuong",
+                "duration": 6,
+                "items": [
+                  {
+                    "icon": "cua_cai",
+                    "label": "Của cải dư thừa"
+                  },
+                  {
+                    "icon": "giau_ngheo",
+                    "label": "Kẻ giàu, người nghèo"
+                  }
+                ],
+                "caption": "Cùng với sự xuất hiện ngày càng nhiều của cải dư thừa, xã hội dần có sự phân hoá kẻ giàu, người nghèo.",
+                "sources": [
+                  {
+                    "quote": "Cùng với sự xuất hiện ngày càng nhiều của cải dư thừa, xã hội dần có sự phân hoá kẻ giàu, người nghèo",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s7",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Xã hội nguyên thuỷ dần tan rã",
+                "label": "Không còn hưởng chung",
+                "caption": "Có người giàu, có người nghèo, cách sống làm chung, hưởng chung không còn giữ được như trước. Xã hội nguyên thuỷ dần tan rã.",
+                "sources": [
+                  {
+                    "quote": "xã hội dần có sự phân hoá kẻ giàu, người nghèo. Xã hội nguyên thuỷ dần tan rã",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s8",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Không đều ở mọi nơi",
+                "label": "Mỗi khu vực một khác",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Tuy nhiên, quá trình này diễn ra không đều ở các khu vực trên thế giới. Ở phương Đông, mọi chuyện diễn ra theo một cách riêng.",
+                "sources": [
+                  {
+                    "quote": "Tuy nhiên, quá trình này diễn ra không đều ở các khu vực trên thế giới",
+                    "chunk_id": "LS6_B06_C006",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s9",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Ai Cập"
+                  },
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Lưỡng Hà"
+                  },
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Trung Quốc"
+                  }
+                ],
+                "caption": "Ở phương Đông, như Ai Cập, Lưỡng Hà, Trung Quốc, cư dân sinh sống ven các con sông lớn. Sống bên những dòng sông lớn, họ không thể làm ăn riêng lẻ.",
+                "sources": [
+                  {
+                    "quote": "Ở phương Đông (Ai Cập, Lưỡng Hà, Trung Quốc,...), do sinh sống ven các con sông lớn",
+                    "chunk_id": "LS6_B06_C006",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s10",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Làm thuỷ lợi"
+                  },
+                  {
+                    "icon": "khien",
+                    "label": "Chống ngoại xâm"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Liên kết trong cộng đồng"
+                  }
+                ],
+                "caption": "Họ phải liên kết với nhau trong các cộng đồng, vốn là các công xã thị tộc, để cùng làm thuỷ lợi và chống ngoại xâm.",
+                "sources": [
+                  {
+                    "quote": "cư dân phải liên kết với nhau trong các cộng đồng vốn là các công xã thị tộc để làm thuỷ lợi và chống ngoại xâm",
+                    "chunk_id": "LS6_B06_C006",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s11",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "nguoi",
+                    "label": "Liên kết cộng đồng"
+                  },
+                  {
+                    "icon": "gia_dinh",
+                    "label": "Tập tục nguyên thuỷ"
+                  }
+                ],
+                "caption": "Vì vậy, tính liên kết cộng đồng và nhiều tập tục của xã hội nguyên thuỷ vẫn tiếp tục được bảo lưu ở phương Đông.",
+                "sources": [
+                  {
+                    "quote": "tính liên kết cộng đồng và nhiều tập tục của xã hội nguyên thuỷ vẫn tiếp tục được bảo lưu",
+                    "chunk_id": "LS6_B06_C006",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s12",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Sớm nhưng không triệt để",
+                "label": "Phân hoá ở phương Đông",
+                "caption": "Do vậy, mặc dù xã hội nguyên thuỷ ở phương Đông phân hoá sớm hơn so với các nơi khác, nhưng sự phân hoá ấy không triệt để.",
+                "sources": [
+                  {
+                    "quote": "Do vậy, mặc dù xã hội nguyên thuỷ ở đây phân hoá sớm hơn so với các nơi khác nhưng không triệt để",
+                    "chunk_id": "LS6_B06_C006",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s13",
+                "kind": "moc_thoi_gian",
+                "duration": 8,
+                "events": [
+                  {
+                    "time": "Bước 1",
+                    "label": "Kim loại"
+                  },
+                  {
+                    "time": "Bước 2",
+                    "label": "Dư thừa"
+                  },
+                  {
+                    "time": "Bước 3",
+                    "label": "Giàu, nghèo"
+                  },
+                  {
+                    "time": "Bước 4",
+                    "label": "Tan rã"
+                  }
+                ],
+                "caption": "Tóm lại: công cụ kim loại giúp làm ra của cải dư thừa. Của cải dư thừa dẫn tới phân hoá giàu nghèo. Và xã hội nguyên thuỷ dần tan rã.",
+                "sources": [
+                  {
+                    "quote": "Con người không chỉ đủ ăn mà còn có của cải dư thừa",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Cùng với sự xuất hiện ngày càng nhiều của cải dư thừa, xã hội dần có sự phân hoá kẻ giàu, người nghèo. Xã hội nguyên thuỷ dần tan rã",
+                    "chunk_id": "LS6_B06_C005",
+                    "lesson_number": 6,
+                    "pages": [
+                      26,
+                      26
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m2.video.s14",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Một thời đại mới",
+                "label": "Xã hội có giai cấp, nhà nước",
+                "cast": [
+                  "di_bo"
+                ],
+                "caption": "Từ đây, con người bắt đầu bước vào thời đại xã hội có giai cấp, nhà nước. Ai Cập, Lưỡng Hà, Ấn Độ, Trung Quốc, Hy Lạp và La Mã cổ đại sẽ là câu chuyện của chương tiếp theo.",
+                "sources": [
+                  {
+                    "quote": "con người bắt đầu bước vào thời đại xã hội có giai cấp, nhà nước",
+                    "chunk_id": "LS6_B06_C012",
+                    "lesson_number": 6,
+                    "pages": [
+                      28,
+                      29
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Ai Cập, Lưỡng Hà cổ đại",
+                    "chunk_id": "LS6_B06_C013",
+                    "lesson_number": 6,
+                    "pages": [
+                      29,
+                      29
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b6_m2.c1",
@@ -2740,6 +5443,497 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Từ những mẩu xỉ đồng nhỏ xíu đến cả kho vũ khí bằng đồng: người Việt cổ đã tiến từng bước trên con đường kim loại."
+          },
+          "video": {
+            "id": "b6_m3.video",
+            "title": "Thời đồ đồng trên đất Việt",
+            "style": "dong_son",
+            "scenes": [
+              {
+                "id": "b6_m3.video.s1",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Thời đồ đồng trên đất Việt",
+                "label": "Từ khoảng 4 000 năm trước",
+                "cast": [
+                  "luyen_kim"
+                ],
+                "caption": "Từ khoảng 4 000 năm trước, cư dân ở Bắc Bộ, Trung Bộ và Nam Bộ nước ta đã biết tới đồ đồng. Thời đại đồ đồng ở Việt Nam đã trải qua nhiều nền văn hoá khảo cổ.",
+                "sources": [
+                  {
+                    "quote": "Từ khoảng 4 000 năm trước, cư dân ở Bắc Bộ, Trung Bộ và Nam Bộ đã biết tới đồ đồng",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Thời đại đồ đồng ở Việt Nam đã trải qua những nền văn hoá khảo cổ nào?",
+                    "chunk_id": "LS6_B06_C011",
+                    "lesson_number": 6,
+                    "pages": [
+                      28,
+                      28
+                    ],
+                    "content_type": "question"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s2",
+                "kind": "moc_thoi_gian",
+                "duration": 7,
+                "events": [
+                  {
+                    "time": "Ít đồ đồng",
+                    "label": "Phùng Nguyên"
+                  },
+                  {
+                    "time": "Khá phổ biến",
+                    "label": "Đồng Đậu"
+                  },
+                  {
+                    "time": "Hơn một nửa",
+                    "label": "Gò Mun"
+                  }
+                ],
+                "caption": "Ở Bắc Bộ có ba nền văn hoá nối tiếp nhau: Phùng Nguyên, Đồng Đậu và Gò Mun. Qua mỗi nền văn hoá, đồ đồng lại nhiều thêm.",
+                "sources": [
+                  {
+                    "quote": "Văn hoá Phùng Nguyên (Bắc Bộ)",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Văn hoá Đồng Đậu (Bắc Bộ) Hiện vật bằng đồng khá phổ biến",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Văn hoá Gò Mun (Bắc Bộ) Hiện vật đồng chiếm hơn một nửa hiện vật tìm được",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s3",
+                "kind": "phat_hien",
+                "duration": 7,
+                "finds": [
+                  {
+                    "find": "xi_dong",
+                    "label": "Phùng Nguyên: mẩu xỉ đồng, mẩu đồng thau nhỏ"
+                  }
+                ],
+                "caption": "Ở văn hoá Phùng Nguyên, người ta mới tìm thấy những mẩu xỉ đồng, mẩu đồng thau nhỏ, mảnh vòng hay đoạn dây chì.",
+                "sources": [
+                  {
+                    "quote": "Văn hoá Phùng Nguyên (Bắc Bộ) Đã tìm thấy những mẩu xỉ đồng, mầu đồng thau nhỏ, mảnh vòng hay đoạn dây chì",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s4",
+                "kind": "phat_hien",
+                "duration": 6,
+                "finds": [
+                  {
+                    "find": "mui_ten",
+                    "label": "Mũi tên"
+                  },
+                  {
+                    "find": "luoi_cau",
+                    "label": "Lưỡi câu"
+                  }
+                ],
+                "caption": "Đến văn hoá Đồng Đậu, hiện vật bằng đồng đã khá phổ biến, gồm đục, dùi, cán dao, mũi tên, lưỡi câu.",
+                "sources": [
+                  {
+                    "quote": "Văn hoá Đồng Đậu (Bắc Bộ) Hiện vật bằng đồng khá phổ biến gồm: đục, dùi, cán dao, mũi tên, lưỡi câu",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s5",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "mui_ten",
+                    "label": "Mũi tên"
+                  },
+                  {
+                    "find": "riu_xeo",
+                    "label": "Rìu lưỡi xéo"
+                  },
+                  {
+                    "find": "giao",
+                    "label": "Giáo"
+                  }
+                ],
+                "caption": "Ở văn hoá Gò Mun, hiện vật đồng chiếm hơn một nửa số hiện vật tìm được: vũ khí như mũi tên, dao, giáo; lưỡi câu, dùi, đục, và rìu, đặc biệt là rìu lưỡi xéo.",
+                "sources": [
+                  {
+                    "quote": "Văn hoá Gò Mun (Bắc Bộ) Hiện vật đồng chiếm hơn một nửa hiện vật tìm được, bao gồm: vũ khí (mũi tên, dao, giáo,...), lưỡi câu, dùi, rìu (đặc biệt rìu lưỡi xéo), đục",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Công cụ và vũ khí bằng đồng (văn hoá Gò Mun)",
+                    "chunk_id": "LS6_B06_C009",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s6",
+                "kind": "phat_hien",
+                "duration": 10,
+                "finds": [
+                  {
+                    "find": "mui_ten",
+                    "label": "Tiền Sa Huỳnh (Trung Bộ)"
+                  },
+                  {
+                    "find": "giao",
+                    "label": "Đồng Nai (Nam Bộ)"
+                  }
+                ],
+                "caption": "Không chỉ Bắc Bộ. Văn hoá tiền Sa Huỳnh ở Trung Bộ có đục, lao, mũi tên, lưỡi câu bằng đồng. Văn hoá Đồng Nai ở Nam Bộ có rìu, giáo, lao có ngạnh, mũi tên, lưỡi câu.",
+                "sources": [
+                  {
+                    "quote": "Văn hoá tiền Sa Huỳnh (Trung Bộ) Hiện vật bằng đồng như: đục, lao, mũi tên, lưỡi câu",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Văn hoá Đồng Nai (Nam Bộ) Hiện vật bằng đồng như: rìu, giáo, lao có ngạnh, mũi tên, lưỡi câu",
+                    "chunk_id": "LS6_B06_C009",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s7",
+                "kind": "tieu_de",
+                "duration": 9,
+                "title": "Ba miền đều có đồ đồng",
+                "label": "Bắc Bộ, Trung Bộ, Nam Bộ",
+                "cast": [
+                  "luyen_kim"
+                ],
+                "caption": "Như vậy, từ Bắc Bộ, Trung Bộ đến Nam Bộ, cư dân nhiều vùng trên đất nước ta đều đã biết tới đồ đồng, dùng đồng làm công cụ lao động và vũ khí.",
+                "sources": [
+                  {
+                    "quote": "Từ khoảng 4 000 năm trước, cư dân ở Bắc Bộ, Trung Bộ và Nam Bộ đã biết tới đồ đồng",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Công cụ và vũ khí bằng đồng (văn hoá Gò Mun)",
+                    "chunk_id": "LS6_B06_C009",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s8",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Rời vùng trung du",
+                "label": "Xuống đồng bằng ven sông",
+                "cast": [
+                  "tu_hop"
+                ],
+                "caption": "Việc sử dụng công cụ bằng kim loại đã giúp người nguyên thuỷ mở rộng địa bàn cư trú. Một số đã rời khỏi vùng trung du, chuyển xuống các vùng đồng bằng ven sông.",
+                "sources": [
+                  {
+                    "quote": "Việc sử dụng các công cụ bằng kim loại đã giúp cho người nguyên thuỷ mở rộng địa bàn cư trú. Một số đã rời khỏi vùng trung du, chuyển xuống các vùng đồng bằng ven sông",
+                    "chunk_id": "LS6_B06_C009",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s9",
+                "kind": "bieu_tuong",
+                "duration": 6,
+                "items": [
+                  {
+                    "icon": "cay",
+                    "label": "Cày gỗ lắp lưỡi đồng"
+                  },
+                  {
+                    "icon": "lua",
+                    "label": "Trồng lúa"
+                  },
+                  {
+                    "icon": "luoi_sat",
+                    "label": "Lưỡi hái để gặt"
+                  }
+                ],
+                "cast": [
+                  "lam_ruong"
+                ],
+                "caption": "Họ đã biết dùng cày gỗ có lắp lưỡi bằng đồng để cày ruộng, trồng lúa, và dùng lưỡi hái để gặt.",
+                "sources": [
+                  {
+                    "quote": "Họ đã biết dùng cày gỗ có lắp lưỡi bằng đồng để cày ruộng, trồng lúa, dùng lưỡi hái để gặt",
+                    "chunk_id": "LS6_B06_C009",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s10",
+                "kind": "bieu_tuong",
+                "duration": 7,
+                "items": [
+                  {
+                    "icon": "cua_cai",
+                    "label": "Kinh tế phát triển"
+                  },
+                  {
+                    "icon": "giau_ngheo",
+                    "label": "Phân hoá xã hội"
+                  }
+                ],
+                "caption": "Sự phát triển kinh tế đã dẫn đến phân hoá trong đời sống xã hội. Cuộc sống của người nguyên thuỷ ngày càng ổn định.",
+                "sources": [
+                  {
+                    "quote": "Sự phát triển kinh tế đã dẫn đến phân hoá trong đời sống xã hội. Cuộc sống của người nguyên thuỷ ngày càng ổn định",
+                    "chunk_id": "LS6_B06_C009",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s11",
+                "kind": "song_nuoc",
+                "duration": 6,
+                "labels": [
+                  "Sông Hồng",
+                  "Sông Mã",
+                  "Sông Thu Bồn",
+                  "Sông Đồng Nai"
+                ],
+                "cast": [
+                  "cay_lua"
+                ],
+                "caption": "Họ định cư lâu dài ven các con sông lớn như sông Hồng, sông Mã, sông Thu Bồn, sông Đồng Nai.",
+                "sources": [
+                  {
+                    "quote": "Họ định cư lâu dài ven các con sông lớn như sông Hồng, sông Mã, sông Thu Bồn, sông Đồng Nai",
+                    "chunk_id": "LS6_B06_C010",
+                    "lesson_number": 6,
+                    "pages": [
+                      28,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s12",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "nha_san",
+                    "label": "Định cư lâu dài"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Dân cư đông đúc"
+                  }
+                ],
+                "cast": [
+                  "tu_hop"
+                ],
+                "caption": "Ở đây đã hình thành những khu vực dân cư đông đúc. Đó là cơ sở cho sự xuất hiện các quốc gia cổ đầu tiên trên đất nước Việt Nam.",
+                "sources": [
+                  {
+                    "quote": "Ở đây đã hình thành những khu vực dân cư đông đúc, là cơ sở cho sự xuất hiện các quốc gia cổ đầu tiên trên đất nước Việt Nam",
+                    "chunk_id": "LS6_B06_C010",
+                    "lesson_number": 6,
+                    "pages": [
+                      28,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s13",
+                "kind": "moc_thoi_gian",
+                "duration": 9,
+                "events": [
+                  {
+                    "time": "Trung du",
+                    "label": "Đồ đồng"
+                  },
+                  {
+                    "time": "Đồng bằng",
+                    "label": "Trồng lúa"
+                  },
+                  {
+                    "time": "Ven sông lớn",
+                    "label": "Định cư"
+                  },
+                  {
+                    "time": "Về sau",
+                    "label": "Quốc gia cổ"
+                  }
+                ],
+                "caption": "Nhìn lại cả chặng đường: có đồ đồng, con người xuống đồng bằng, trồng lúa, định cư ven các sông lớn, tạo nên cơ sở cho các quốc gia cổ đầu tiên.",
+                "sources": [
+                  {
+                    "quote": "Một số đã rời khỏi vùng trung du, chuyển xuống các vùng đồng bằng ven sông",
+                    "chunk_id": "LS6_B06_C009",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      28
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "là cơ sở cho sự xuất hiện các quốc gia cổ đầu tiên trên đất nước Việt Nam",
+                    "chunk_id": "LS6_B06_C010",
+                    "lesson_number": 6,
+                    "pages": [
+                      28,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b6_m3.video.s14",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Hướng tới dựng nước",
+                "label": "Những quốc gia cổ đầu tiên",
+                "cast": [
+                  "lam_ruong",
+                  "tu_hop"
+                ],
+                "caption": "Từ những mẩu xỉ đồng nhỏ bé đến rất nhiều công cụ và vũ khí bằng đồng, cư dân trên đất Việt đã từng bước chuẩn bị cho sự ra đời của các quốc gia cổ đầu tiên.",
+                "sources": [
+                  {
+                    "quote": "Đã tìm thấy những mẩu xỉ đồng",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Hiện vật đồng chiếm hơn một nửa hiện vật tìm được",
+                    "chunk_id": "LS6_B06_C008",
+                    "lesson_number": 6,
+                    "pages": [
+                      27,
+                      27
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "là cơ sở cho sự xuất hiện các quốc gia cổ đầu tiên trên đất nước Việt Nam",
+                    "chunk_id": "LS6_B06_C010",
+                    "lesson_number": 6,
+                    "pages": [
+                      28,
+                      28
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
           },
           "cards": [
             {

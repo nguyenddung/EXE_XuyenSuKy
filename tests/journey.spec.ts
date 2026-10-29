@@ -278,3 +278,35 @@ test('the Bài 4 video tells human origins in thirteen narrated scenes of about 
   await expect(modal(page).locator('svg[role="img"]')).toContainText('Minh hoạ lớp đất, không phải bản đồ')
   expect(await modal(page).evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
 })
+
+test('every scene of the Chương 2 videos draws without errors', async ({ page }) => {
+  test.setTimeout(120000)
+  const errors: string[] = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  const chapter2 = await (await page.request.get('/api/journeys/lop6_chuong2')).json() as { stages: { missions: { id: string; video: { title: string; scenes: { caption: string }[] } }[] }[] }
+  const videos = chapter2.stages.flatMap((stage) => stage.missions).map((mission) => mission.video)
+  // Later missions are locked, so each video in turn is shown in the first mission of the chapter.
+  let shown = videos[0]
+  await page.route('**/api/journeys/lop6_chuong2', async (route) => {
+    const response = await route.fetch()
+    const data = await response.json()
+    data.stages[0].missions[0].video = shown
+    await route.fulfill({ response, json: data })
+  })
+  await page.addInitScript(() => localStorage.setItem('xuyen-su-ky-journey-selected-v1', JSON.stringify({ 7: 'lop6_chuong2' })))
+  for (const [number, video] of videos.entries()) {
+    shown = video
+    // Reloading fetches the journey again, now carrying the next video.
+    if (number === 0) await page.goto('/home#journey')
+    else await page.reload()
+    await page.locator('#journey .journey-mission').first().click()
+    await modal(page).getByRole('button', { name: 'Nhận nhiệm vụ' }).click()
+    await expect(modal(page).locator('.journey-eyebrow').first()).toHaveText(/^Video · (1:5\d|2:0\d)$/)
+    for (const [index, scene] of video.scenes.entries()) {
+      await modal(page).getByRole('button', { name: `Cảnh ${index + 1}`, exact: true }).click()
+      await expect(modal(page).locator('svg[role="img"]')).toHaveAttribute('aria-label', `${video.title}, cảnh ${index + 1}/${video.scenes.length}`)
+      await expect(modal(page).locator('.journey-video-caption p')).toHaveText(scene.caption)
+    }
+  }
+  expect(errors).toEqual([])
+})

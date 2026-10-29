@@ -15,6 +15,8 @@ const cream = '#fbf3df'
 const bronze = '#e2a845'
 const bronzeDark = '#9a6418'
 const clamp = (value: number) => Math.min(1, Math.max(0, value))
+/** A dark halo behind light words, so they stay readable where they cross the sun or a bright sky. */
+const halo = { stroke: '#120c18', strokeOpacity: 0.55, strokeLinejoin: 'round' as const, paintOrder: 'stroke' }
 const ease = (value: number) => 1 - Math.pow(1 - clamp(value), 3)
 const pop = (value: number) => { const x = clamp(value); return 1 + 2.2 * Math.pow(x - 1, 3) + 1.2 * Math.pow(x - 1, 2) }
 /** 0 → 1 over `length` seconds, starting at `at`. */
@@ -79,7 +81,7 @@ function TitleScene({ scene, local, band, prehistoric }: { scene: Extract<VideoS
   const [drumY, drumR, titleY, labelY] = band ? [205, 115, 420, 500] : [320, 170, 610, 690]
   return <g>
     <g transform={`translate(800 ${drumY}) scale(${0.55 + 0.45 * drum}) rotate(${local * 5})`} opacity={drum}>{prehistoric ? <SunEmblem radius={drumR * 0.8} t={local} /> : <DrumFace radius={drumR} />}</g>
-    <text x={800} y={titleY + (1 - title) * 30} textAnchor="middle" fontSize={band ? 80 : 88} fontWeight={800} fill={cream} opacity={title}>{scene.title}</text>
+    <text x={800} y={titleY + (1 - title) * 30} textAnchor="middle" fontSize={band ? 80 : 88} fontWeight={800} fill={cream} opacity={title} strokeWidth={10} {...halo}>{scene.title}</text>
     {scene.label && <g opacity={label} transform={`translate(800 ${labelY + (1 - label) * 20})`}><rect x={-width / 2} y={-38} width={width} height={68} rx={34} fill={bronze} /><text y={10} textAnchor="middle" fontSize={38} fontWeight={700} fill={ink}>{scene.label}</text></g>}
   </g>
 }
@@ -100,7 +102,7 @@ function IconScene({ scene, local, band }: { scene: Extract<VideoScene, { kind: 
       const scale = shown ? pop(shown) : 0
       return <g key={item.label} opacity={clamp(shown * 2)}>
         <g transform={`translate(${x(index)} ${cy}) scale(${scale * size})`}><circle r={132} fill="#173c69" stroke={bronze} strokeWidth={7} />{icons[item.icon]}</g>
-        {wrap(item.label, 16).map((line, row) => <text key={line} x={x(index)} y={labelY + row * (font + 8)} textAnchor="middle" fontSize={font} fontWeight={700} fill={cream}>{line}</text>)}
+        {wrap(item.label, 16).map((line, row) => <text key={line} x={x(index)} y={labelY + row * (font + 8)} textAnchor="middle" fontSize={font} fontWeight={700} fill={cream} strokeWidth={8} {...halo}>{line}</text>)}
       </g>
     })}
   </g>
@@ -111,7 +113,7 @@ const rivers = [
   'M 470 250 C 600 300 700 330 820 400 S 1050 470 1200 520 S 1320 560 1390 560',
   'M 300 470 C 420 560 520 640 700 700 S 960 780 1100 810 S 1300 840 1380 850',
 ]
-const labelSpots = [[880, 360], [760, 800], [1080, 470]]
+const labelSpots = [[880, 360], [760, 800], [1080, 470], [1150, 770]]
 const fields = [[640, 540], [760, 470], [900, 600], [1010, 520], [560, 690], [860, 740], [1080, 700]]
 
 function RiverScene({ scene, local }: { scene: Extract<VideoScene, { kind: 'song_nuoc' }>; local: number }) {
