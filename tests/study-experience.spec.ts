@@ -1,5 +1,7 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
+
+const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 
 test('resume saves the section and reader preferences without awarding learning progress', async ({ page }) => {
   await page.goto('/home')
@@ -12,6 +14,7 @@ test('resume saves the section and reader preferences without awarding learning 
   await page.locator('.dataset-toc a').nth(1).click()
   await expect.poll(() => page.evaluate(() => Object.values(JSON.parse(localStorage.getItem('xuyen-su-ky-journal-v1')!).reading).map((item: any) => item.section))).toContain(1)
   await page.keyboard.press('Escape')
+  await openMenu(page, 'Trang chủ')
   await expect(page.locator('.study-action-read')).toContainText('Đọc tiếp bài dang dở')
   await page.reload()
   await page.locator('.study-action-read').click()
@@ -36,15 +39,19 @@ test('read lessons leave recommendations; review, saved collections and notebook
   await page.getByRole('dialog').getByRole('button', { name: 'Cần đọc lại', exact: true }).click()
   await page.getByLabel('Sổ tay của bạn').fill('Ghi nhớ bằng lời của mình.')
   await page.keyboard.press('Escape')
+  await expect(page).toHaveURL(/#library$/)
+  await openMenu(page, 'Trang chủ')
   await expect(page.locator('.dashboard-lesson-copy strong').first()).not.toHaveText(firstTitle)
   await expect(page.locator('.study-action-review')).toContainText('1 bài lớp 7')
   await expect(page.getByRole('progressbar', { name: 'Mục tiêu học trên trang chủ' })).toHaveAttribute('aria-valuenow', '2')
   await page.locator('.study-action-review').click()
   await expect(page.locator('.dataset-card')).toHaveCount(1)
   await expect(page.locator('.dataset-card')).toContainText(firstTitle)
+  await openMenu(page, 'Trang chủ')
   await page.locator('.study-action-saved').click()
   await expect(page.getByRole('combobox', { name: 'Lọc lớp sách giáo khoa' })).toHaveValue('all')
   await expect(page.locator('.dataset-card')).toHaveCount(1)
+  await openMenu(page, 'Trang chủ')
   const downloadEvent = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Tải sổ tay', exact: true }).click()
   const download = await downloadEvent
@@ -53,6 +60,7 @@ test('read lessons leave recommendations; review, saved collections and notebook
   expect(contents).toContain(firstTitle)
   expect(contents).toContain('Ghi nhớ bằng lời của mình.')
   await page.reload()
+  await openMenu(page, 'Trang chủ')
   await page.locator('.study-action-review').click()
   await expect(page.locator('.dataset-card')).toHaveCount(1)
 })

@@ -38,6 +38,6 @@ test('an era chosen while signed out opens its lesson after signing in', async (
   await expect(page).toHaveURL(/\/dang-nhap$/)
   await page.getByRole('button', { name: /Học thử không cần tài khoản/ }).click()
   await page.locator('.grade-onboarding .button-primary').click()
-  await expect(page).toHaveURL(/\/home$/)
+  await expect(page).toHaveURL(/\/home#library$/)
   await expect(page.locator('#dataset-reader-title')).toContainText('thời Lý')
 })
