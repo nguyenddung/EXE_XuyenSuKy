@@ -310,3 +310,23 @@ test('every scene of the Chương 2 videos draws without errors', async ({ page 
   }
   expect(errors).toEqual([])
 })
+
+test('the chapter picker shows where the videos are and Video bài học plays any of them without unlocking missions', async ({ page }) => {
+  await page.goto('/home#journey')
+  const picker = page.getByRole('navigation', { name: 'Chọn chương' })
+  const chapter2 = picker.getByRole('button', { name: /Chương 2/ })
+  await expect(chapter2).toContainText('8 video')
+  await expect(picker.getByRole('button', { name: /Chương 1/ })).not.toContainText('video')
+  await chapter2.click()
+  await expect(page.getByRole('heading', { name: 'Buổi bình minh của loài người' })).toBeVisible()
+  await page.locator('#journey').getByRole('button', { name: 'Video bài học · 8' }).click()
+  await expect(modal(page).getByRole('heading', { name: 'Video bài học' })).toBeVisible()
+  await expect(modal(page).locator('.journey-video-list button')).toHaveCount(8)
+  // The last video belongs to Bài 6, whose missions are still locked for a new learner.
+  await modal(page).getByRole('button', { name: /Thời đồ đồng trên đất Việt/ }).click()
+  await expect(modal(page).getByRole('heading', { name: 'Thời đồ đồng trên đất Việt' })).toBeVisible()
+  await expect(modal(page).locator('svg[role="img"]')).toHaveAttribute('aria-label', /^Thời đồ đồng trên đất Việt, cảnh 1\/14$/)
+  await expect(modal(page).getByRole('button', { name: /Xem video · / })).toBeVisible()
+  await modal(page).getByRole('button', { name: 'Danh sách video' }).click()
+  await expect(modal(page).locator('.journey-video-list button')).toHaveCount(8)
+})

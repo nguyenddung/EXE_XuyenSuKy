@@ -9,6 +9,7 @@
 .journey-chip { display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 16px; border: 1px solid #d5e0ee; border-radius: 999px; background: #fff; color: #1d3d66; font-size: 12px; font-weight: 700; }
 .journey-chip:hover { border-color: #5a9de1; color: var(--sky-blue-strong); }
 .journey-chip.is-due { border-color: #f0b23b; background: #fff4d6; color: #6a4708; }
+.journey-chip.is-video { border-color: #e6c27a; color: #7a5208; }
 .journey-say { display: flex; align-items: flex-start; gap: 14px; margin: 0 0 18px; }
 .journey-guide { display: grid; flex: none; place-items: center; width: 46px; height: 46px; border: 2px solid #cf4c34; border-radius: 50%; background: #fff; color: #a53c2d; font-size: 22px; box-shadow: 0 0 0 3px #fff4df inset; }
 .journey-say p { margin: 0; padding: 14px 18px; border-radius: 4px 16px 16px 16px; background: var(--sky-blue-soft); color: var(--sky-ink); font-size: 14px; line-height: 1.75; }
@@ -146,3 +147,12 @@
 .journey-chapters small { color: #2677bc; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .journey-chapters strong { font-size: 14px; line-height: 1.35; }
 .journey-chapters span { color: var(--sky-muted); font-size: 12px; }
+.journey-chapters em { display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; color: #b07a10; font-style: normal; font-weight: 700; }
+
+/* Video bài học: every video of the chapter, watchable without unlocking its mission */
+.journey-video-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.journey-video-list button { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px; padding: 10px 14px; border: 1px solid var(--sky-line); border-radius: 12px; background: #fff; color: var(--sky-ink); font-size: 14px; font-weight: 700; text-align: left; }
+.journey-video-list button:hover { border-color: #5a9de1; color: var(--sky-blue-strong); }
+.journey-video-list svg { flex: none; color: #b07a10; }
+.journey-video-list span { flex: 1; }
+.journey-video-list small { color: var(--sky-muted); font-size: 12px; font-variant-numeric: tabular-nums; }

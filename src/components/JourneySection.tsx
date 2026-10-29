@@ -15,7 +15,7 @@ function ChapterPicker({ state }: { state: JourneyState }) {
   if (state.choices.length < 2) return null
   return <nav className="journey-chapters" aria-label="Chọn chương">{state.choices.map((item) => {
     const number = item.chapter.match(/Chương\s+(\d+)/i)?.[1]
-    return <button key={item.id} type="button" aria-pressed={item.id === state.chosenId} onClick={() => state.select(item.id)}><small>{number ? `Chương ${number}` : 'Chương'}</small><strong>{item.title}</strong><span>{item.pieces}/{item.missionCount} mảnh Sử Ký</span></button>
+    return <button key={item.id} type="button" aria-pressed={item.id === state.chosenId} onClick={() => state.select(item.id)}><small>{number ? `Chương ${number}` : 'Chương'}</small><strong>{item.title}</strong><span>{item.pieces}/{item.missionCount} mảnh Sử Ký{item.videoCount ? <em><Clapperboard size={12} aria-hidden="true" /> {item.videoCount} video</em> : null}</span></button>
   })}</nav>
 }
 
@@ -34,6 +34,7 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord }: Pro
   const ready = { ...state, journey }
   const rules = journey.rules
   const missions = allMissions(journey)
+  const videos = missions.filter((mission) => mission.video).length
   const pieces = missions.filter((mission) => progress.pieces[mission.reward.manh_su_ky.id] !== undefined).length
   const due = dueMissions(progress, journey, today)
   const startDay = Math.min(today, ...Object.values(progress.objectives).flatMap((item) => item.firstTry.map((entry) => entry.d)))
@@ -42,6 +43,7 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord }: Pro
     const token = Date.now()
     if (request.name === 'mission') setView({ ...request, token })
     else if (request.name === 'collection') setView({ name: 'collection', token })
+    else if (request.name === 'videos') setView({ name: 'videos', token })
     else if (request.name === 'check') {
       const stage = writtenStages(journey!).find((item) => item.id === request.stageId)
       if (!stage) return
@@ -61,6 +63,7 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord }: Pro
       <span className="journey-stat"><strong>{pieces}/{missions.length}</strong> mảnh Sử Ký</span>
       <button type="button" className={`journey-chip ${due.length ? 'is-due' : ''}`} onClick={() => open({ name: 'review' })}><CalendarClock size={16} /> Ôn tập{due.length ? ` · ${due.length}` : ''}</button>
       <button type="button" className="journey-chip" onClick={() => open({ name: 'collection' })}><Award size={16} /> Bộ sưu tập</button>
+      {videos > 0 && <button type="button" className="journey-chip is-video" onClick={() => open({ name: 'videos' })}><Clapperboard size={16} /> Video bài học · {videos}</button>}
     </div>
     {journey.intro && <GuideSays journey={journey} narration={journey.intro} />}
     <ul className="journey-legend" aria-label="Chú giải"><li><i data-status="new" /> Chưa làm</li><li><i data-status="done" /> Hoàn thành</li><li><i data-status="mastered" /> Nắm vững (được mảnh Sử Ký)</li></ul>

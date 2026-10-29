@@ -70,7 +70,7 @@ export interface JourneyRules {
   stage_check: { pass_ratio: number }
 }
 export interface Journey { id: string; title: string; grade: number; book: string; chapter: string; mascot: { id: string; name: string }; intro?: Narration; rules: JourneyRules; stages: Stage[] }
-export interface JourneySummary { id: string; title: string; grade: number; book: string; chapter: string; stageCount: number; writtenStageCount: number; missionCount: number }
+export interface JourneySummary { id: string; title: string; grade: number; book: string; chapter: string; stageCount: number; writtenStageCount: number; missionCount: number; videoCount: number }
 
 /** Correct answers a learner gives before a mission is complete (the prototype's QUESTIONS_PER_MISSION). */
 export const QUESTIONS_PER_MISSION = 2

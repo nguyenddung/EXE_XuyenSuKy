@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowDown, ArrowRight, ArrowUp, Award, BookOpen, Check, Lightbulb, MessageCircle, Play, RotateCcw, Search, X } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Award, BookOpen, Check, Clapperboard, Lightbulb, MessageCircle, Play, RotateCcw, Search, X } from 'lucide-react'
 import type { JourneyState } from '../hooks/useJourney'
 import type { JournalKind } from '../hooks/useLearningJournal'
 import { JourneyVideo } from './JourneyVideo'
@@ -8,12 +8,13 @@ import {
   type Answer, type Grade, type Journey, type Mission, type Narration, type Question, type Reflection, type Stage,
 } from '../lib/journey'
 
-export type JourneyRequest = { name: 'mission'; missionId: string } | { name: 'check'; stageId: string } | { name: 'review' } | { name: 'collection' }
+export type JourneyRequest = { name: 'mission'; missionId: string } | { name: 'check'; stageId: string } | { name: 'review' } | { name: 'collection' } | { name: 'videos' }
 export type JourneyView =
   | { name: 'mission'; missionId: string; token: number }
   | { name: 'check'; stageId: string; questions: { question: Question; missionId: string | null }[]; token: number }
   | { name: 'review'; queue: { missionId: string; question: Question }[]; token: number }
   | { name: 'collection'; token: number }
+  | { name: 'videos'; token: number }
 
 interface Shared {
   state: JourneyState & { journey: Journey }
@@ -254,6 +255,15 @@ function CollectionView({ state }: Shared) {
   })}</>
 }
 
+/** Every video of the chapter in one place, watchable whatever the mission locks; XP and Sử Ký pieces still come from the missions. */
+function VideosView({ state }: Shared) {
+  const { journey } = state
+  const [playing, setPlaying] = useState<Mission | null>(null)
+  useEffect(() => { document.querySelector<HTMLElement>('#journey-modal-title')?.focus() }, [playing])
+  if (playing?.video) return <><p className="journey-modal-kicker">Video bài học</p><h2 id="journey-modal-title" tabIndex={-1}>{playing.video.title}</h2><section className="journey-panel"><span className="journey-eyebrow">Video · {clockLabel(videoLength(playing.video))}</span><JourneyVideo key={playing.id} video={playing.video} /><div className="journey-actions"><button className="button-outline" type="button" onClick={() => setPlaying(null)}><ArrowLeft size={16} /> Danh sách video</button></div></section></>
+  return <><p className="journey-modal-kicker">{journey.title}</p><h2 id="journey-modal-title" tabIndex={-1}>Video bài học</h2><p className="journey-hint-line">Xem lại video của bất kỳ bài nào. Làm nhiệm vụ để nhận XP và mảnh Sử Ký.</p>{writtenStages(journey).filter((stage) => stage.missions.some((mission) => mission.video)).map((stage) => <section className="journey-panel" key={stage.id}><span className="journey-eyebrow">Bài {stage.lesson_number}: {stage.sgk_title}</span><ul className="journey-video-list">{stage.missions.map((mission) => mission.video && <li key={mission.id}><button type="button" onClick={() => setPlaying(mission)}><Clapperboard size={18} aria-hidden="true" /><span>{mission.video.title}</span><small>{clockLabel(videoLength(mission.video))}</small></button></li>)}</ul></section>)}</>
+}
+
 export function JourneyModal(props: Shared & { view: JourneyView }) {
   const { view, onClose, state } = props
   const dialog = useRef<HTMLDialogElement>(null)
@@ -277,6 +287,7 @@ export function JourneyModal(props: Shared & { view: JourneyView }) {
     const stage = writtenStages(state.journey).find((item) => item.id === view.stageId)
     if (stage && view.questions.length) content = <CheckView key={view.token} {...props} stage={stage} questions={view.questions} />
   } else if (view.name === 'review') content = <ReviewView key={view.token} {...props} queue={view.queue} />
+  else if (view.name === 'videos') content = <VideosView key={view.token} {...props} />
   else content = <CollectionView key={view.token} {...props} />
 
   return <dialog ref={dialog} className="journey-modal" aria-labelledby="journey-modal-title" onCancel={(event) => { event.preventDefault(); onClose() }}>
