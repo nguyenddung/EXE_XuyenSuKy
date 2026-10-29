@@ -69,6 +69,17 @@ Khi đọc bằng giọng trình duyệt, nhân vật giữ hoạt hình nói qu
 
 Mỗi thẻ nhân vật có hai lối vào riêng: **Nhắn tin** mở lịch sử hội thoại, nguồn SGK và ô nhập văn bản; **Nói chuyện** mở sân khấu nhân vật, lời đang nói và nút mic lớn. Trong chế độ nói, nhấn **Nói câu hỏi**, kiểm tra bản nhận dạng rồi nhấn **Gửi câu hỏi**; câu trả lời tự phát khi bật **Tự đọc câu trả lời**. Nút **Chỉnh nội dung** chuyển sang ô nhập văn bản và giữ nguyên bản nhận dạng. Có thể chuyển chế độ trong cùng cửa sổ mà không mất lịch sử hoặc câu hỏi đang soạn; chuyển chế độ dừng mic và giọng đọc. Chế độ nhắn tin không tự phát âm thanh. Nút nghe một câu trả lời chuyển sang chế độ nói; **Xem văn bản và nguồn** quay về lịch sử. Cài đặt giảm chuyển động của hệ điều hành tắt các vòng lặp hoạt hình nhưng vẫn hiển thị trạng thái bằng chữ.
 
+### Lịch sử trò chuyện
+
+Hội thoại với từng nhân vật được lưu và khôi phục khi đóng/mở chat, đổi nhân vật, mở bài học nguồn hoặc tải lại trang. Chế độ **Nhắn tin** và **Nói chuyện** của cùng một nhân vật dùng chung lịch sử.
+
+- **Nơi lưu:** đăng nhập hiện chỉ là demo (không có tài khoản hay database thật) nên lịch sử nằm trong `localStorage` của trình duyệt, khóa `xuyen-su-ky-chat-v1:<chủ sở hữu>:<id nhân vật>`. Chủ sở hữu là định danh ổn định `userId` của phiên (email chuẩn hóa của tài khoản demo) hoặc `guest`; **tên hiển thị không bao giờ được dùng làm định danh**. Phiên đăng nhập cũ chưa có `userId` vẫn chat được nhưng không lưu cho đến khi đăng nhập lại.
+- **Giới hạn:** chỉ lưu trên trình duyệt/thiết bị này, không đồng bộ giữa thiết bị, không được bảo vệ khỏi người khác dùng chung hồ sơ trình duyệt, và đăng xuất không xóa dữ liệu (đăng nhập lại sẽ thấy lại). Hai tab cùng mở một nhân vật ghi đè lẫn nhau theo bản ghi sau cùng. Khi có backend tài khoản thật, thay `src/lib/chatHistory.ts` bằng API có kiểm tra quyền truy cập.
+- **Nội dung lưu:** câu hỏi, câu trả lời, nguồn trích dẫn (không kèm đoạn văn gốc dài) và thời gian hỏi/đáp, tối đa 40 lượt gần nhất mỗi nhân vật. Không lưu audio, API key, câu hỏi chưa được trả lời, lỗi hay trạng thái đang tải. Ngữ cảnh gửi API vẫn là 3 lượt đã trả lời gần nhất.
+- **Độ bền:** dữ liệu hỏng, sai phiên bản (`version` hiện là 1, có bảng `migrations` cho phiên bản sau) hoặc khai báo sai chủ sở hữu/nhân vật bị bỏ qua kèm thông báo. Khi hết dung lượng, các lượt cũ nhất bị bỏ dần; nếu vẫn không lưu được, chat tiếp tục trong bộ nhớ và hiện cảnh báo.
+- **Phản hồi muộn:** mỗi cập nhật gắn với token (chủ sở hữu + nhân vật + lần bắt đầu hội thoại); phản hồi đến sau khi đổi người dùng, nhân vật, đóng chat hoặc bắt đầu cuộc trò chuyện mới bị bỏ qua.
+- **Bắt đầu cuộc trò chuyện mới** chỉ xóa bản ghi của người dùng hiện tại với nhân vật đang mở.
+
 Chat có nút **Nói câu hỏi** để nhập tiếng Việt bằng Web Speech API, **Nghe câu trả lời / Dừng đọc** và tùy chọn **Tự đọc câu trả lời** (bật mặc định). Câu hỏi từ mic được đưa vào ô nhập để kiểm tra trước khi gửi. Trình duyệt cần hỗ trợ SpeechRecognition và được cấp quyền microphone; dùng HTTPS hoặc localhost. Khi chưa hỗ trợ mic, nhập văn bản vẫn hoạt động.
 
 Để dùng ElevenLabs, phần cấu hình sau đã được thêm vào `.env.local`. Điền **secret API key** vào `ELEVENLABS_API_KEY` (không dùng Key ID), rồi khởi động lại Vite/backend:
@@ -198,7 +209,7 @@ Danh mục có Trần Hưng Đạo, Lý Thường Kiệt, Quang Trung, Hai Bà T
 
 Đây là **trò chuyện mô phỏng kết hợp tra cứu văn bản và RAG tùy cấu hình**; chưa dùng giọng nói. Backend chọn đoạn SGK theo nhân vật/chủ đề/câu hỏi, dùng ngữ cảnh câu hỏi trước cho câu tiếp nối ngắn. Các chủ đề dễ nhầm niên đại có đoạn nguồn đã đối chiếu; nếu snapshot thay đổi, đoạn này phải còn khớp nguyên văn mới được dùng. Khi có OpenAI key, model viết lời giải thích ngắn từ đoạn đã chọn và dẫn [1]. Nếu thiếu key hoặc API lỗi, backend trả trích đoạn nguyên văn. Câu trả lời có nút mở bài và nguồn sách/bộ sách/NXB/trang PDF. Dataset OCR có thể giữ lỗi chính tả từ bản gốc. Ngoài phạm vi hoặc chưa đủ nguồn thì trả thông báo và câu hỏi gợi ý.
 
-API giới hạn câu hỏi 1.000 ký tự, tối đa 8 lượt ngữ cảnh (2.000 ký tự/lượt), payload 16 KB; phản hồi chat không được cache. Lệnh OpenAI chỉ gửi câu hỏi hiện tại, tối đa 500 ký tự của câu hỏi trước và một đoạn nguồn; đặt `store: false` và giới hạn 500 output tokens. Backend không ghi lịch sử hay sửa dataset. Lịch sử chỉ giữ trong hộp thoại đang mở và được xóa khi đóng; có nút bắt đầu cuộc trò chuyện mới, trạng thái đang tìm, gửi lại khi lỗi và hủy yêu cầu khi đóng.
+API giới hạn câu hỏi 1.000 ký tự, tối đa 8 lượt ngữ cảnh (2.000 ký tự/lượt), payload 16 KB; phản hồi chat không được cache. Lệnh OpenAI chỉ gửi câu hỏi hiện tại, tối đa 500 ký tự của câu hỏi trước và một đoạn nguồn; đặt `store: false` và giới hạn 500 output tokens. Backend không ghi lịch sử hay sửa dataset. Phía backend không lưu lịch sử; lịch sử do trình duyệt giữ (xem mục *Lịch sử trò chuyện* bên dưới). Có nút bắt đầu cuộc trò chuyện mới, trạng thái đang tìm, gửi lại khi lỗi và hủy yêu cầu khi đóng.
 
 Hồ sơ: `shared/characters.json`; chọn nguồn: `server/characters.mjs` và `server/character-evidence.mjs`; tạo câu trả lời AI: `server/openai-rag.mjs`; UI: `CharacterSection`, `CharacterChatModal`. Tám ảnh bổ sung được tạo bằng imagegen tích hợp, tối ưu WebP; [prompt và đường dẫn ảnh](docs/character-image-prompts.md). Kiểm thử cục bộ kiểm tra niên đại, nguồn nguyên văn, câu nối tiếp, ngoài phạm vi, fallback khi OpenAI lỗi và giao diện; chưa chạy đánh giá bằng LLM hoặc Langfuse cloud.
 
@@ -257,3 +268,29 @@ Màn đọc SGK lưu mục đang xem, khôi phục khi mở lại và ghi nhớ 
 Điện thoại có thanh điều hướng dưới cùng; desktop hỗ trợ Ctrl/Cmd + K để tìm kiếm. Tìm kiếm hủy yêu cầu cũ để tránh hiển thị kết quả của từ khóa trước. Thử thách ưu tiên trò chưa hoàn thành, sau đó ưu tiên kỷ lục sao thấp hơn.
 
 Kiểm thử: npx playwright test tests/study-experience.spec.ts và npm run test:games.
+
+## Hành trình game hóa
+
+Mục **Hành trình** ở `/home` chạy các hành trình do `course_builder` (repo pipeline OCR) biên soạn: hành trình = 1 chương, chặng = 1 bài, nhiệm vụ = 1 mục tiêu học. Lớp 6 có 5 hành trình (`data/journeys/lop6_chuong1.json` … `lop6_chuong5.json`), học sinh chọn chương ở thanh "Chọn chương" (app nhớ chương đã chọn theo lớp):
+
+| Hành trình | Chặng (bài) | Nhiệm vụ |
+|---|---|---|
+| Chương 1 · Thám tử thời gian | Bài 1–3 | 7 |
+| Chương 2 · Buổi bình minh của loài người | Bài 4–6 | 8 |
+| Chương 3 · Những nền văn minh cổ đại | Bài 7–10 | 14 |
+| Chương 4 · Đông Nam Á: ngã tư đường của thế giới | Bài 11–13 | 7 |
+| Chương 5 · Hành trình giữ nước | Bài 14, 16, 18 (Bài 15, 17, 19, 20 đang biên soạn) | 13 |
+
+Các bài chưa biên soạn hiện trên bản đồ với nhãn "đang được biên soạn". Học sinh lớp khác thấy ghi chú và vẫn đi thử được. Tên Chương 3 trong dataset còn lỗi OCR ("XÃ HỘI CỔ ĐẠI KẾT"); hành trình dùng `chapter_title` để hiển thị đúng, nên sửa thêm ở `corrections/` của pipeline.
+
+- Nhiệm vụ 5 bước: nhận nhiệm vụ → kiến thức (video nếu có, rồi thẻ kiến thức kèm trang SGK) → khám phá (tư liệu, dòng thời gian, phỏng vấn nhân vật mở thẳng phòng trò chuyện nếu nhân vật đã có) → thử thách → kết quả.
+- Sai không mất lượt: gợi ý 3 bậc mở dần, sai lần 2 đổi sang câu tương đương cùng mục tiêu. XP, mốc ôn tập (1, 3, 7, 14 ngày), điều kiện nắm vững và tỉ lệ qua chặng (80%) lấy từ trường `rules` của file hành trình.
+- Mảnh Sử Ký và huy hiệu chỉ trao khi **nắm vững** (đúng ngay lần đầu ở 2 câu khác nhau vào 2 ngày khác nhau); XP thưởng công sức và được cộng vào tổng XP ở dashboard.
+- Video nhiệm vụ: "Nhà nước Văn Lang ra đời" (Chương 5, khoảng 33 giây) và "Từ Vượn người đến Người tinh khôn" (Chương 2, Bài 4, khoảng 1 phút 54 giây, nền tiền sử `style: tien_su`, mẫu cảnh `tien_hoa`, `moc_thoi_gian`, `phat_hien` vẽ trong `videoPrehistory.tsx`). Video là animation vẽ bằng SVG trong `JourneyVideo.tsx`: mỗi cảnh dùng một mẫu có sẵn (`tieu_de`, `bieu_tuong`, `song_nuoc` và ba mẫu tiền sử), phụ đề = lời thuyết minh kèm trang SGK, tua và chọn cảnh được, thuyết minh bằng giọng tiếng Việt của trình duyệt nếu máy có. Khung hình là hàm thuần theo thời gian nên có thể xuất MP4 sau này (Remotion). Chữ trên hình và lời thuyết minh của từng cảnh được `course_builder` kiểm theo câu trích của chính cảnh đó.
+- Thuyết minh video được thu sẵn bằng ElevenLabs: `npm run build:narration` (cần `ELEVENLABS_API_KEY`, giọng ở `ELEVENLABS_NARRATOR_VOICE_ID` trong `.env.local`) ghi MP3 vào `public/audio/journeys/<hành trình>/` và dấu băm từng câu vào `data/journeys/narration/`. Chỉ cảnh mới hoặc đổi lời mới bị thu lại; server chỉ gắn âm thanh khi câu vẫn khớp, cảnh lệch tự quay về giọng trình duyệt. Học sinh nghe file tĩnh nên không tốn lượt gọi dịch vụ. Gói Free chỉ gọi được giọng premade (hiện dùng George). Khi có giọng thu sẵn, mỗi cảnh dài bằng câu đọc + 0,6 giây (độ dài đo từ file MP3, `scripts/mp3-duration.mjs`), nên giữa các câu chỉ có quãng ngắt ngắn. Cảnh có thể có người Việt cổ minh hoạ (`cast`, vẽ trong `videoPeople.tsx`): tụ họp, làm ruộng, đào mương, cầm vũ khí, chèo thuyền, cấy lúa, đánh trống.
+- Chặng mở khi qua chặng trước; chặng đã có tiến độ thì không bị khoá lại khi biên soạn thêm bài phía trước.
+- Tiến độ lưu `localStorage` khóa `xuyen-su-ky-journey-v1`. "Công cụ học thử" có nút sang ngày hôm sau, mở khóa mọi chặng (quyền giáo viên) và xóa tiến độ hành trình.
+
+API: `GET /api/journeys?grade=6` (danh sách), `GET /api/journeys/<id>` (nội dung, chỉ kèm `chunk_id` và trang, không gửi câu trích SGK). Khi server đọc file, mọi câu trích phải có nguyên văn trong chunk được dẫn của đúng lớp và đúng trang; sai một chỗ thì cả hành trình không được phục vụ. `npm run check:dataset` kiểm tra cả hành trình.
+
+Cập nhật sau khi biên soạn thêm: chạy `python -m course_builder.build` ở repo pipeline, rồi `npm run import:journey -- <đường dẫn>/course/<id>.json`. Kiểm thử: `node --test tests/journey.test.mjs` và `npx playwright test tests/journey.spec.ts`.

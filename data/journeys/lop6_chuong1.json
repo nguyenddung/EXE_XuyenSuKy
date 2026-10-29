@@ -1,0 +1,2377 @@
+{
+  "id": "lop6_chuong1",
+  "title": "Thám tử thời gian: vì sao phải học lịch sử",
+  "grade": 6,
+  "book": "Lịch sử và Địa lí 6 (Phần Lịch sử)",
+  "chapter": "Chương 1: VÌ SAO PHẢI HỌC LỊCH SỬ",
+  "mascot": {
+    "id": "linh_vat",
+    "name": "Linh vật (chưa đặt tên)"
+  },
+  "intro": {
+    "speaker": "linh_vat",
+    "hu_cau": true,
+    "text": "Chào em, thám tử nhỏ! Trước khi ngược dòng thời gian, em cần ba món đồ nghề: hiểu lịch sử là gì, biết tìm bằng chứng ở đâu và biết đọc các mốc thời gian. Cùng nhận đồ nghề nhé!"
+  },
+  "rules": {
+    "xp": {
+      "first_try": 10,
+      "after_retry": [
+        5,
+        2
+      ],
+      "max_with_hint": 5,
+      "mission_complete": 20,
+      "stage_check_pass": 50
+    },
+    "hints": {
+      "levels": [
+        "nudge",
+        "card",
+        "narrow"
+      ]
+    },
+    "mastery": {
+      "first_try_correct_variants": 2,
+      "distinct_days": 2,
+      "reward_on_mastery": [
+        "manh_su_ky",
+        "badge"
+      ]
+    },
+    "review": {
+      "intervals_days": [
+        1,
+        3,
+        7,
+        14
+      ],
+      "reset_on_wrong": true,
+      "max_items_per_session": 5
+    },
+    "challenge": {
+      "min_variants_per_objective": 3,
+      "shuffle_choices": true
+    },
+    "stage_check": {
+      "pass_ratio": 0.8,
+      "retry": "unlimited"
+    },
+    "unlock": {
+      "next_stage_on": "stage_check_pass",
+      "teacher_can_unlock": true
+    }
+  },
+  "stages": [
+    {
+      "id": "b1",
+      "lesson_number": 1,
+      "title": "Lịch sử ở quanh ta",
+      "sgk_title": "Lịch sử và cuộc sống",
+      "pages": [
+        10,
+        11
+      ],
+      "status": "da_bien_soan",
+      "intro": {
+        "speaker": "linh_vat",
+        "hu_cau": true,
+        "text": "Chiếc máy tính đầu tiên trên thế giới to bằng cả một căn phòng; máy tính xách tay hôm nay nằm gọn trong chiếc cặp. Sự thay đổi ấy gọi là gì? Hãy cùng tìm hiểu.",
+        "source_quote": [
+          "Máy tính đầu tiên trên thế giới - ENIAC",
+          "Máy tính xách tay hiện nay"
+        ],
+        "sources": [
+          {
+            "quote": "Máy tính đầu tiên trên thế giới - ENIAC",
+            "chunk_id": "LS6_B01_C003",
+            "lesson_number": 1,
+            "pages": [
+              10,
+              10
+            ],
+            "content_type": "body"
+          },
+          {
+            "quote": "Máy tính xách tay hiện nay",
+            "chunk_id": "LS6_B01_C003",
+            "lesson_number": 1,
+            "pages": [
+              10,
+              10
+            ],
+            "content_type": "body"
+          }
+        ]
+      },
+      "missions": [
+        {
+          "id": "b1_m1",
+          "title": "Lịch sử là gì?",
+          "objective": {
+            "id": "b1_m1.o",
+            "text": "Nêu được khái niệm lịch sử và môn Lịch sử.",
+            "bloom": "nho"
+          },
+          "intro": {
+            "speaker": "linh_vat",
+            "hu_cau": true,
+            "text": "Mọi thứ quanh em đều đang thay đổi, từ chiếc máy tính đến chính em. Nhiệm vụ: tìm ra lịch sử là gì và môn Lịch sử học về điều gì."
+          },
+          "cards": [
+            {
+              "id": "b1_m1.c1",
+              "text": "Máy tính điện tử cũng như mọi sự vật xung quanh, cả con người và xã hội loài người đều biến đổi theo thời gian. Sự thay đổi đó chính là lịch sử.",
+              "sources": [
+                {
+                  "quote": "Máy tính điện tử cũng như mọi sự vật xung quanh chúng ta, cả con người và xã hội loài người đều biến đổi theo thời gian.",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Sự thay đổi đó chính là lịch sử.",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m1.c2",
+              "text": "Lịch sử là tất cả những gì đã xảy ra; lịch sử còn được hiểu là một khoa học nghiên cứu và phục dựng lại quá khứ.",
+              "sources": [
+                {
+                  "quote": "Lịch sử là tất cả những gì đã xảy ra và lịch sử còn được hiểu là một khoa học nghiên cứu và phục dựng lại quá khứ.",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m1.c3",
+              "text": "Môn Lịch sử tìm hiểu quá trình hình thành và phát triển của xã hội loài người từ khi con người xuất hiện trên Trái Đất cho đến ngày nay.",
+              "sources": [
+                {
+                  "quote": "Môn Lịch sử là môn học tìm hiểu quá trình hình thành và phát triển của xã hội loài người từ khi con người xuất hiện trên Trái Đất cho đến ngày nay.",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "explore": [
+            {
+              "type": "dong_thoi_gian",
+              "prompt": "Chiếc máy tính đã thay đổi thế nào qua thời gian? Sự thay đổi ấy có phải là lịch sử không?",
+              "clue": "Máy tính thay đổi từ ENIAC đến máy tính xách tay ngày nay. Mọi sự thay đổi theo thời gian chính là lịch sử.",
+              "events": [
+                {
+                  "time": "Năm 1946",
+                  "label": "Máy tính đầu tiên trên thế giới: ENIAC",
+                  "sources": [
+                    {
+                      "quote": "Máy tính đầu tiên trên thế giới - ENIAC (1946)",
+                      "chunk_id": "LS6_B01_C003",
+                      "lesson_number": 1,
+                      "pages": [
+                        10,
+                        10
+                      ],
+                      "content_type": "body"
+                    }
+                  ]
+                },
+                {
+                  "time": "1971 - 1980",
+                  "label": "Máy tính thế hệ thứ 4",
+                  "sources": [
+                    {
+                      "quote": "Máy tính thế hệ thứ 4 (1971 - 1980)",
+                      "chunk_id": "LS6_B01_C003",
+                      "lesson_number": 1,
+                      "pages": [
+                        10,
+                        10
+                      ],
+                      "content_type": "body"
+                    }
+                  ]
+                },
+                {
+                  "time": "Hiện nay",
+                  "label": "Máy tính xách tay",
+                  "sources": [
+                    {
+                      "quote": "Máy tính xách tay hiện nay",
+                      "chunk_id": "LS6_B01_C003",
+                      "lesson_number": 1,
+                      "pages": [
+                        10,
+                        10
+                      ],
+                      "content_type": "body"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "challenge_pool": [
+            {
+              "id": "b1_m1.q1",
+              "type": "trac_nghiem",
+              "prompt": "Theo SGK, lịch sử là gì?",
+              "choices": [
+                "Tất cả những gì đã xảy ra, và cũng là khoa học nghiên cứu, phục dựng lại quá khứ",
+                "Những câu chuyện do người xưa tưởng tượng ra",
+                "Những gì sẽ xảy ra trong tương lai",
+                "Chỉ là các trận đánh của các vị vua"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Lịch sử gắn với quá khứ, với những gì đã xảy ra.",
+                "card": "b1_m1.c2",
+                "narrow": "Đáp án có hai ý: những gì đã xảy ra, và một khoa học."
+              },
+              "explanation": "Lịch sử là tất cả những gì đã xảy ra, và còn là một khoa học nghiên cứu, phục dựng lại quá khứ.",
+              "sources": [
+                {
+                  "quote": "Lịch sử là tất cả những gì đã xảy ra và lịch sử còn được hiểu là một khoa học nghiên cứu và phục dựng lại quá khứ.",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m1.q2",
+              "type": "trac_nghiem",
+              "prompt": "Môn Lịch sử tìm hiểu điều gì?",
+              "choices": [
+                "Quá trình hình thành và phát triển của xã hội loài người từ khi con người xuất hiện đến ngày nay",
+                "Cách chế tạo máy tính điện tử",
+                "Sự chuyển động của Trái Đất quanh Mặt Trời",
+                "Các loài động vật trong tự nhiên"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Môn Lịch sử học về con người và xã hội loài người.",
+                "card": "b1_m1.c3",
+                "narrow": "Chỉ một phương án nói về xã hội loài người."
+              },
+              "explanation": "Môn Lịch sử tìm hiểu quá trình hình thành và phát triển của xã hội loài người từ khi con người xuất hiện trên Trái Đất cho đến ngày nay.",
+              "sources": [
+                {
+                  "quote": "Môn Lịch sử là môn học tìm hiểu quá trình hình thành và phát triển của xã hội loài người từ khi con người xuất hiện trên Trái Đất cho đến ngày nay.",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m1.q3",
+              "type": "trac_nghiem",
+              "prompt": "Vì sao sự thay đổi của chiếc máy tính điện tử qua thời gian cũng được gọi là lịch sử?",
+              "choices": [
+                "Vì mọi sự vật, con người và xã hội đều biến đổi theo thời gian; sự thay đổi đó chính là lịch sử",
+                "Vì máy tính là đồ vật rất đắt tiền",
+                "Vì chỉ có máy móc mới có lịch sử",
+                "Vì máy tính giúp em học môn Lịch sử"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Hãy nghĩ tới hai chữ \"thay đổi\" và \"thời gian\".",
+                "card": "b1_m1.c1",
+                "narrow": "Không chỉ máy móc, cả con người và xã hội cũng thay đổi."
+              },
+              "explanation": "Mọi sự vật, con người và xã hội loài người đều biến đổi theo thời gian; sự thay đổi đó chính là lịch sử.",
+              "sources": [
+                {
+                  "quote": "cả con người và xã hội loài người đều biến đổi theo thời gian",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Sự thay đổi đó chính là lịch sử.",
+                  "chunk_id": "LS6_B01_C004",
+                  "lesson_number": 1,
+                  "pages": [
+                    10,
+                    10
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "reward": {
+            "manh_su_ky": {
+              "id": "lich_su_la_gi",
+              "title": "Mảnh Sử Ký: Lịch sử là gì"
+            }
+          }
+        },
+        {
+          "id": "b1_m2",
+          "title": "Vì sao phải học lịch sử?",
+          "objective": {
+            "id": "b1_m2.o",
+            "text": "Giải thích được vì sao cần học lịch sử.",
+            "bloom": "hieu"
+          },
+          "intro": {
+            "speaker": "linh_vat",
+            "hu_cau": true,
+            "text": "Học lịch sử để làm gì nhỉ? Bác Hồ từng có một câu trả lời rất ngắn gọn bằng thơ. Hãy tìm câu thơ ấy."
+          },
+          "cards": [
+            {
+              "id": "b1_m2.c1",
+              "text": "Học lịch sử giúp chúng ta tìm hiểu quá khứ, tìm về cội nguồn của bản thân, gia đình, dòng họ, rộng hơn là của cả dân tộc, nhân loại.",
+              "sources": [
+                {
+                  "quote": "Học lịch sử giúp chúng ta tìm hiểu quá khứ, tìm về cội nguồn của chính bản thân, gia đình, dòng họ, và rộng hơn là của cả dân tộc, nhân loại.",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m2.c2",
+              "text": "Chủ tịch Hồ Chí Minh viết: \"Dân ta phải biết sử ta / Cho tường gốc tích nước nhà Việt Nam\".",
+              "sources": [
+                {
+                  "quote": "Dân ta phải biết sử ta Cho tường gốc tích nước nhà Việt Nam.",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "(Hồ Chí Minh)",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m2.c3",
+              "text": "Học lịch sử còn để đúc kết bài học kinh nghiệm về thành công và thất bại của quá khứ, phục vụ hiện tại và xây dựng cuộc sống mới trong tương lai.",
+              "sources": [
+                {
+                  "quote": "Học lịch sử còn để đúc kết những bài học kinh nghiệm về sự thành công và thất bại của quá khứ để phục vụ hiện tại và xây dựng cuộc sống mới trong tương lai.",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "explore": [
+            {
+              "type": "tu_lieu",
+              "text": "Hôm nay gặp các chú ở Đền Hùng có ý nghĩa to lớn vì Vua Hùng là vị vua khai quốc,... Các Vua Hùng đã có công dựng nước, Bác cháu ta phải cùng nhau giữ lấy nước.",
+              "citation": "Lời Bác Hồ căn dặn các chiến sĩ tại Đền Hùng, ngày 19 - 9 - 1954 (SGK)",
+              "prompt": "Vì sao Bác Hồ nhắc tới công dựng nước của các Vua Hùng khi dặn các chiến sĩ giữ nước?",
+              "clue": "Biết công dựng nước của cha ông (quá khứ) giúp chúng ta hiểu trách nhiệm giữ lấy nước hôm nay.",
+              "sources": [
+                {
+                  "quote": "Các Vua Hùng đã có công dựng nước, Bác cháu ta phải cùng nhau giữ lấy nước",
+                  "chunk_id": "LS6_B01_C005",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "did_you_know"
+                },
+                {
+                  "quote": "Ngày 19 - 9 - 1954",
+                  "chunk_id": "LS6_B01_C005",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "did_you_know"
+                }
+              ]
+            },
+            {
+              "type": "phong_van",
+              "character": "ho_chi_minh",
+              "prompt": "Hỏi Bác Hồ về việc học lịch sử.",
+              "suggested_questions": [
+                "Vì sao \"Dân ta phải biết sử ta\"?",
+                "Bác dặn các chiến sĩ điều gì ở Đền Hùng?"
+              ]
+            }
+          ],
+          "challenge_pool": [
+            {
+              "id": "b1_m2.q1",
+              "type": "trac_nghiem",
+              "prompt": "Học lịch sử giúp chúng ta điều gì?",
+              "choices": [
+                "Tìm hiểu quá khứ, tìm về cội nguồn của bản thân, gia đình, dân tộc và nhân loại",
+                "Đoán trước chính xác mọi việc sẽ xảy ra",
+                "Chỉ để thuộc lòng thật nhiều năm tháng",
+                "Chỉ để biết tên các vị vua"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Lịch sử đưa ta về với \"gốc gác\" của mình.",
+                "card": "b1_m2.c1",
+                "narrow": "Đáp án có chữ \"cội nguồn\"."
+              },
+              "explanation": "Học lịch sử giúp chúng ta tìm hiểu quá khứ, tìm về cội nguồn của bản thân, gia đình, dòng họ, dân tộc và nhân loại.",
+              "sources": [
+                {
+                  "quote": "Học lịch sử giúp chúng ta tìm hiểu quá khứ, tìm về cội nguồn của chính bản thân, gia đình, dòng họ, và rộng hơn là của cả dân tộc, nhân loại.",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m2.q2",
+              "type": "trac_nghiem",
+              "prompt": "Câu thơ \"Dân ta phải biết sử ta / Cho tường gốc tích nước nhà Việt Nam\" là của ai?",
+              "choices": [
+                "Hồ Chí Minh",
+                "Ngô Quyền",
+                "Hùng Vương",
+                "Trưng Trắc"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Đây là vị lãnh tụ đã dặn các chiến sĩ ở Đền Hùng.",
+                "card": "b1_m2.c2",
+                "narrow": "Tác giả là Chủ tịch nước Việt Nam Dân chủ Cộng hoà."
+              },
+              "explanation": "Câu thơ của Chủ tịch Hồ Chí Minh nhắc người Việt phải hiểu lịch sử dân tộc mình.",
+              "sources": [
+                {
+                  "quote": "Dân ta phải biết sử ta Cho tường gốc tích nước nhà Việt Nam.",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "(Hồ Chí Minh)",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b1_m2.q3",
+              "type": "trac_nghiem",
+              "prompt": "Ý nào KHÔNG phải là lí do để học lịch sử?",
+              "choices": [
+                "Thuộc lòng thật nhiều con số mà không cần hiểu",
+                "Tìm về cội nguồn của bản thân và dân tộc",
+                "Đúc kết bài học kinh nghiệm từ thành công và thất bại của quá khứ",
+                "Phục vụ hiện tại và xây dựng cuộc sống mới trong tương lai"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Ba lí do đúng đều có trong SGK.",
+                "card": "b1_m2.c3",
+                "narrow": "Học lịch sử là để hiểu, không phải chỉ để nhớ con số."
+              },
+              "explanation": "Học lịch sử để tìm về cội nguồn, đúc kết bài học kinh nghiệm, phục vụ hiện tại và xây dựng tương lai; không phải để học thuộc máy móc.",
+              "sources": [
+                {
+                  "quote": "tìm về cội nguồn của chính bản thân",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "đúc kết những bài học kinh nghiệm về sự thành công và thất bại của quá khứ để phục vụ hiện tại và xây dựng cuộc sống mới trong tương lai",
+                  "chunk_id": "LS6_B01_C006",
+                  "lesson_number": 1,
+                  "pages": [
+                    11,
+                    11
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "reward": {
+            "manh_su_ky": {
+              "id": "biet_su_ta",
+              "title": "Mảnh Sử Ký: Dân ta phải biết sử ta"
+            }
+          }
+        }
+      ],
+      "stage_check": {
+        "draw_per_objective": 1,
+        "extra": [
+          {
+            "id": "b1.check.x1",
+            "type": "ghep_noi",
+            "prompt": "Ghép mỗi khái niệm với nội dung đúng.",
+            "pairs": [
+              [
+                "Lịch sử",
+                "Tất cả những gì đã xảy ra"
+              ],
+              [
+                "Môn Lịch sử",
+                "Tìm hiểu quá trình hình thành, phát triển của xã hội loài người"
+              ],
+              [
+                "Học lịch sử",
+                "Tìm về cội nguồn, đúc kết bài học kinh nghiệm"
+              ]
+            ],
+            "hints": {
+              "nudge": "Lịch sử là đối tượng; môn Lịch sử là môn học; học lịch sử là việc làm của em.",
+              "card": "b1_m1.c2",
+              "narrow": "Lịch sử là tất cả những gì đã xảy ra."
+            },
+            "explanation": "Lịch sử là những gì đã xảy ra; môn Lịch sử tìm hiểu quá trình phát triển của xã hội loài người; học lịch sử để tìm về cội nguồn, đúc kết bài học kinh nghiệm.",
+            "sources": [
+              {
+                "quote": "Lịch sử là tất cả những gì đã xảy ra",
+                "chunk_id": "LS6_B01_C004",
+                "lesson_number": 1,
+                "pages": [
+                  10,
+                  10
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "Môn Lịch sử là môn học tìm hiểu quá trình hình thành và phát triển của xã hội loài người",
+                "chunk_id": "LS6_B01_C004",
+                "lesson_number": 1,
+                "pages": [
+                  10,
+                  10
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "tìm về cội nguồn",
+                "chunk_id": "LS6_B01_C006",
+                "lesson_number": 1,
+                "pages": [
+                  11,
+                  11
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "đúc kết những bài học kinh nghiệm",
+                "chunk_id": "LS6_B01_C006",
+                "lesson_number": 1,
+                "pages": [
+                  11,
+                  11
+                ],
+                "content_type": "body"
+              }
+            ]
+          }
+        ],
+        "reflection": [
+          {
+            "id": "b1.check.r1",
+            "type": "giai_thich",
+            "prompt": "Theo em, vì sao Bác Hồ nói \"Dân ta phải biết sử ta\"?",
+            "rubric": [
+              "Học lịch sử giúp tìm về cội nguồn của bản thân, gia đình, dân tộc",
+              "Học lịch sử giúp đúc kết bài học kinh nghiệm từ thành công và thất bại",
+              "Hiểu quá khứ để phục vụ hiện tại và xây dựng tương lai"
+            ],
+            "sample_answer": "Biết sử ta giúp mỗi người hiểu cội nguồn của bản thân, gia đình và dân tộc; rút ra bài học từ thành công và thất bại của cha ông để sống tốt hôm nay và xây dựng tương lai.",
+            "sources": [
+              {
+                "quote": "tìm về cội nguồn của chính bản thân, gia đình, dòng họ",
+                "chunk_id": "LS6_B01_C006",
+                "lesson_number": 1,
+                "pages": [
+                  11,
+                  11
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "đúc kết những bài học kinh nghiệm về sự thành công và thất bại của quá khứ",
+                "chunk_id": "LS6_B01_C006",
+                "lesson_number": 1,
+                "pages": [
+                  11,
+                  11
+                ],
+                "content_type": "body"
+              }
+            ]
+          }
+        ]
+      },
+      "collection": {
+        "title": "Hồ sơ nhập môn lịch sử",
+        "badge": {
+          "id": "nha_su_hoc_nhi",
+          "title": "Huy hiệu Nhà sử học nhí",
+          "condition": "master_all_missions"
+        }
+      },
+      "order": 1
+    },
+    {
+      "id": "b2",
+      "lesson_number": 2,
+      "title": "Đi tìm bằng chứng của quá khứ",
+      "sgk_title": "Dựa vào đâu để biết và phục dựng lại lịch sử?",
+      "pages": [
+        12,
+        14
+      ],
+      "status": "da_bien_soan",
+      "intro": {
+        "speaker": "linh_vat",
+        "hu_cau": true,
+        "text": "Nhà sử học làm việc giống như thám tử: muốn dựng lại lịch sử, phải đi tìm bằng chứng. Bằng chứng ấy có thể nằm trong lòng đất, trên trang sách hay trong câu chuyện của ông bà.",
+        "source_quote": [
+          "Các nhà sử học làm công việc tương tự như những thám tử.",
+          "Muốn dựng lại lịch sử, họ phải đi tìm các bằng chứng, tức là các tư liệu lịch sử"
+        ],
+        "sources": [
+          {
+            "quote": "Các nhà sử học làm công việc tương tự như những thám tử.",
+            "chunk_id": "LS6_B02_C002",
+            "lesson_number": 2,
+            "pages": [
+              12,
+              12
+            ],
+            "content_type": "intro"
+          },
+          {
+            "quote": "Muốn dựng lại lịch sử, họ phải đi tìm các bằng chứng, tức là các tư liệu lịch sử",
+            "chunk_id": "LS6_B02_C002",
+            "lesson_number": 2,
+            "pages": [
+              12,
+              12
+            ],
+            "content_type": "intro"
+          }
+        ]
+      },
+      "missions": [
+        {
+          "id": "b2_m1",
+          "title": "Hiện vật và chữ viết",
+          "objective": {
+            "id": "b2_m1.o",
+            "text": "Phân biệt được tư liệu hiện vật, tư liệu chữ viết và nêu được giá trị của chúng.",
+            "bloom": "hieu"
+          },
+          "intro": {
+            "speaker": "linh_vat",
+            "hu_cau": true,
+            "text": "Một mảnh ngói trong lòng đất và một tấm bia đá ở Văn Miếu: cả hai đều là bằng chứng. Chúng khác nhau ở đâu?"
+          },
+          "cards": [
+            {
+              "id": "b2_m1.c1",
+              "text": "Tư liệu hiện vật là những di tích, đồ vật của người xưa còn lưu giữ trong lòng đất hay trên mặt đất, ví dụ di tích Hoàng thành Thăng Long, ngói úp trang trí đôi chim phượng.",
+              "sources": [
+                {
+                  "quote": "Tư liệu hiện vật là những di tích, đồ vật của người xưa còn lưu giữ lại trong lòng đất hay trên mặt đất",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Một góc di tích Hoàng thành Thăng Long",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Ngói úp trang trí đôi chim phượng bằng đất nung tìm thấy ở Hoàng thành Thăng Long",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m1.c2",
+              "text": "Nếu biết khai thác, hiện vật cho ta biết khá cụ thể và trung thực về đời sống vật chất và phần nào đời sống tinh thần của người xưa.",
+              "sources": [
+                {
+                  "quote": "nếu biết khai thác, chúng có thể cho ta biết khá cụ thể và trung thực về đời sống vật chất và phần nào đời sống tinh thần của người xưa",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m1.c3",
+              "text": "Bản ghi, tài liệu chép tay, sách in, chữ khắc gọi chung là tư liệu chữ viết, như bia ghi tên người đỗ Tiến sĩ ở Văn Miếu. Tư liệu này ghi chép tương đối đầy đủ, nhưng thường mang ý thức chủ quan của tác giả.",
+              "sources": [
+                {
+                  "quote": "Những bản ghi, tài liệu chép tay hay sách được in, khắc chữ được gọi chung là tư liệu chữ viết.",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Nguồn tư liệu này ghi chép tương đối đầy đủ về đời sống con người.",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Tuy nhiên, tư liệu chữ viết thường mang ý thức chủ quan của tác giả tư liệu.",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Những tấm bia ghi tên người đỗ Tiến sĩ thời xưa ở Văn Miếu (Hà Nội)",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "explore": [
+            {
+              "type": "tu_lieu",
+              "text": "Cuộc chống Mỹ, cứu nước của nhân dân ta dù phải kinh qua gian khổ hi sinh nhiều hơn nữa, song nhất định thắng lợi hoàn toàn. Đó là một điều chắc chắn.",
+              "citation": "Trích Di chúc của Chủ tịch Hồ Chí Minh (SGK)",
+              "prompt": "Đây là loại tư liệu gì? Đoạn trích cho em biết điều gì?",
+              "clue": "Đây là tư liệu chữ viết. Bác Hồ tin chắc cuộc chống Mỹ, cứu nước nhất định thắng lợi hoàn toàn.",
+              "sources": [
+                {
+                  "quote": "Cuộc chống Mỹ, cứu nước của nhân dân ta dù phải kinh qua gian khổ hi sinh nhiều hơn nữa, song nhất định thắng lợi hoàn toàn. Đó là một điều chắc chắn.",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "challenge_pool": [
+            {
+              "id": "b2_m1.q1",
+              "type": "trac_nghiem",
+              "prompt": "Tư liệu hiện vật là gì?",
+              "choices": [
+                "Những di tích, đồ vật của người xưa còn lưu giữ trong lòng đất hay trên mặt đất",
+                "Những câu chuyện dân gian kể từ đời này qua đời khác",
+                "Những bản ghi, sách được in, khắc chữ",
+                "Những bức ảnh chụp ngày nay"
+              ],
+              "answer": 0,
+              "why_wrong": {
+                "1": "Đó là tư liệu truyền miệng.",
+                "2": "Đó là tư liệu chữ viết."
+              },
+              "hints": {
+                "nudge": "\"Hiện vật\" là thứ có thể nhìn, chạm vào được.",
+                "card": "b2_m1.c1",
+                "narrow": "Đáp án nói về di tích, đồ vật."
+              },
+              "explanation": "Tư liệu hiện vật là những di tích, đồ vật của người xưa còn lưu giữ trong lòng đất hay trên mặt đất.",
+              "sources": [
+                {
+                  "quote": "Tư liệu hiện vật là những di tích, đồ vật của người xưa còn lưu giữ lại trong lòng đất hay trên mặt đất",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "được kể truyền miệng từ đời này qua đời khác",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Những bản ghi, tài liệu chép tay hay sách được in, khắc chữ",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m1.q2",
+              "type": "phan_loai",
+              "prompt": "Xếp mỗi bằng chứng vào đúng loại tư liệu.",
+              "groups": {
+                "Tư liệu hiện vật": [
+                  "Di tích Hoàng thành Thăng Long",
+                  "Ngói úp trang trí đôi chim phượng",
+                  "Mặt trống đồng Ngọc Lũ"
+                ],
+                "Tư liệu chữ viết": [
+                  "Bia ghi tên người đỗ Tiến sĩ ở Văn Miếu",
+                  "Di chúc của Chủ tịch Hồ Chí Minh"
+                ]
+              },
+              "hints": {
+                "nudge": "Có chữ viết, chữ khắc thì là tư liệu chữ viết.",
+                "card": "b2_m1.c3",
+                "narrow": "Tấm bia có khắc tên người đỗ Tiến sĩ."
+              },
+              "explanation": "Di tích, ngói, trống đồng là hiện vật; bia khắc tên và Di chúc là tư liệu chữ viết.",
+              "sources": [
+                {
+                  "quote": "Một góc di tích Hoàng thành Thăng Long",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Ngói úp trang trí đôi chim phượng",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Mặt trống đồng Ngọc Lũ",
+                  "chunk_id": "LS6_B02_C002",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    12
+                  ],
+                  "content_type": "intro"
+                },
+                {
+                  "quote": "Những tấm bia ghi tên người đỗ Tiến sĩ thời xưa ở Văn Miếu",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Trích Di chúc, Hồ Chí Minh",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m1.q3",
+              "type": "trac_nghiem",
+              "prompt": "Điểm hạn chế của tư liệu chữ viết là gì?",
+              "choices": [
+                "Thường mang ý thức chủ quan của tác giả tư liệu",
+                "Không ghi chép được gì về đời sống con người",
+                "Chỉ có thể tìm thấy trong lòng đất",
+                "Luôn không cho biết thời gian và địa điểm"
+              ],
+              "answer": 0,
+              "why_wrong": {
+                "1": "Ngược lại, tư liệu chữ viết ghi chép tương đối đầy đủ về đời sống con người."
+              },
+              "hints": {
+                "nudge": "Người viết có thể đưa suy nghĩ riêng của mình vào.",
+                "card": "b2_m1.c3",
+                "narrow": "Đáp án có chữ \"chủ quan\"."
+              },
+              "explanation": "Tư liệu chữ viết ghi chép tương đối đầy đủ nhưng thường mang ý thức chủ quan của tác giả.",
+              "sources": [
+                {
+                  "quote": "Nguồn tư liệu này ghi chép tương đối đầy đủ về đời sống con người.",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "tư liệu chữ viết thường mang ý thức chủ quan của tác giả tư liệu",
+                  "chunk_id": "LS6_B02_C004",
+                  "lesson_number": 2,
+                  "pages": [
+                    13,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m1.q4",
+              "type": "trac_nghiem",
+              "prompt": "Nếu biết khai thác, tư liệu hiện vật cho ta biết điều gì?",
+              "choices": [
+                "Khá cụ thể và trung thực về đời sống vật chất, phần nào đời sống tinh thần của người xưa",
+                "Chính xác tên tuổi của mọi người xưa",
+                "Suy nghĩ chủ quan của người viết sách",
+                "Những sự kiện sẽ xảy ra trong tương lai"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Đồ vật cho biết người xưa ăn, ở, làm việc ra sao.",
+                "card": "b2_m1.c2",
+                "narrow": "Đáp án có chữ \"trung thực\"."
+              },
+              "explanation": "Hiện vật cho biết khá cụ thể và trung thực về đời sống vật chất và phần nào đời sống tinh thần của người xưa.",
+              "sources": [
+                {
+                  "quote": "chúng có thể cho ta biết khá cụ thể và trung thực về đời sống vật chất và phần nào đời sống tinh thần của người xưa",
+                  "chunk_id": "LS6_B02_C003",
+                  "lesson_number": 2,
+                  "pages": [
+                    12,
+                    13
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "reward": {
+            "manh_su_ky": {
+              "id": "hien_vat_chu_viet",
+              "title": "Mảnh Sử Ký: Hiện vật và chữ viết"
+            }
+          }
+        },
+        {
+          "id": "b2_m2",
+          "title": "Truyền miệng và tư liệu gốc",
+          "objective": {
+            "id": "b2_m2.o",
+            "text": "Nêu được thế nào là tư liệu truyền miệng, tư liệu gốc và giá trị của chúng.",
+            "bloom": "hieu"
+          },
+          "intro": {
+            "speaker": "linh_vat",
+            "hu_cau": true,
+            "text": "Chuyện Thánh Gióng ông bà kể cho em nghe có phải là bằng chứng lịch sử không? Và loại bằng chứng nào đáng tin cậy nhất?"
+          },
+          "cards": [
+            {
+              "id": "b2_m2.c1",
+              "text": "Những câu chuyện dân gian (thần thoại, truyền thuyết, cổ tích...) kể truyền miệng từ đời này qua đời khác gọi là tư liệu truyền miệng, ví dụ chuyện Thánh Gióng đánh giặc Ân.",
+              "sources": [
+                {
+                  "quote": "Những câu chuyện dân gian (thần thoại, truyền thuyết, cổ tích,...) được kể truyền miệng từ đời này qua đời khác gọi là tư liệu truyền miệng",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Thánh Gióng đánh giặc Ân",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m2.c2",
+              "text": "Tư liệu truyền miệng thường không cho biết chính xác thời gian và địa điểm, nhưng phần nào phản ánh hiện thực lịch sử.",
+              "sources": [
+                {
+                  "quote": "Loại tư liệu này thường không cho biết chính xác về thời gian và địa điểm, nhưng phần nào phản ánh hiện thực lịch sử.",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m2.c3",
+              "text": "Tư liệu gốc cung cấp những thông tin đầu tiên và trực tiếp về sự kiện hoặc thời kì lịch sử. Đây là nguồn tư liệu đáng tin cậy nhất.",
+              "sources": [
+                {
+                  "quote": "Tư liệu gốc là tư liệu cung cấp những thông tin đầu tiên và trực tiếp về sự kiện hoặc thời kì lịch sử nào đó.",
+                  "chunk_id": "LS6_B02_C009",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "source"
+                },
+                {
+                  "quote": "Đây là nguồn tư liệu đáng tin cậy nhất khi tìm hiểu lịch sử.",
+                  "chunk_id": "LS6_B02_C009",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "source"
+                }
+              ]
+            }
+          ],
+          "explore": [
+            {
+              "type": "tu_lieu",
+              "text": "Thánh Gióng đánh giặc Ân (tranh dân gian Đông Hồ).",
+              "citation": "SGK, hình 5",
+              "prompt": "Câu chuyện Thánh Gióng cho em biết điều gì về người Việt xưa, dù không nói rõ năm nào?",
+              "clue": "Tư liệu truyền miệng không cho biết chính xác thời gian, địa điểm, nhưng phần nào phản ánh hiện thực: người Việt xưa đã phải chống giặc ngoại xâm.",
+              "sources": [
+                {
+                  "quote": "Thánh Gióng đánh giặc Ân (tranh dân gian Đông Hồ)",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "thường không cho biết chính xác về thời gian và địa điểm, nhưng phần nào phản ánh hiện thực lịch sử",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "challenge_pool": [
+            {
+              "id": "b2_m2.q1",
+              "type": "trac_nghiem",
+              "prompt": "Tư liệu truyền miệng là gì?",
+              "choices": [
+                "Những câu chuyện dân gian được kể truyền miệng từ đời này qua đời khác",
+                "Những đồ vật của người xưa trong lòng đất",
+                "Những tấm bia khắc chữ",
+                "Những tài liệu chép tay"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "\"Truyền miệng\" là được kể lại bằng lời.",
+                "card": "b2_m2.c1",
+                "narrow": "Thần thoại, truyền thuyết, cổ tích thuộc loại này."
+              },
+              "explanation": "Tư liệu truyền miệng là những câu chuyện dân gian được kể truyền miệng từ đời này qua đời khác.",
+              "sources": [
+                {
+                  "quote": "Những câu chuyện dân gian (thần thoại, truyền thuyết, cổ tích,...) được kể truyền miệng từ đời này qua đời khác gọi là tư liệu truyền miệng",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b2_m2.q2",
+              "type": "trac_nghiem",
+              "prompt": "Nguồn tư liệu nào đáng tin cậy nhất khi tìm hiểu lịch sử?",
+              "choices": [
+                "Tư liệu gốc",
+                "Tư liệu truyền miệng",
+                "Lời đồn của người không chứng kiến",
+                "Truyện cổ tích"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Đó là nguồn cung cấp thông tin đầu tiên và trực tiếp.",
+                "card": "b2_m2.c3",
+                "narrow": "Đáp án có chữ \"gốc\"."
+              },
+              "explanation": "Tư liệu gốc cung cấp thông tin đầu tiên và trực tiếp nên là nguồn đáng tin cậy nhất.",
+              "sources": [
+                {
+                  "quote": "Tư liệu gốc là tư liệu cung cấp những thông tin đầu tiên và trực tiếp",
+                  "chunk_id": "LS6_B02_C009",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "source"
+                },
+                {
+                  "quote": "Đây là nguồn tư liệu đáng tin cậy nhất khi tìm hiểu lịch sử.",
+                  "chunk_id": "LS6_B02_C009",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "source"
+                }
+              ]
+            },
+            {
+              "id": "b2_m2.q3",
+              "type": "trac_nghiem",
+              "prompt": "Nhận xét nào đúng về tư liệu truyền miệng?",
+              "choices": [
+                "Không cho biết chính xác thời gian, địa điểm nhưng phần nào phản ánh hiện thực lịch sử",
+                "Luôn cho biết chính xác ngày tháng xảy ra sự việc",
+                "Là nguồn đáng tin cậy nhất",
+                "Không có giá trị gì với lịch sử"
+              ],
+              "answer": 0,
+              "why_wrong": {
+                "2": "Nguồn đáng tin cậy nhất là tư liệu gốc."
+              },
+              "hints": {
+                "nudge": "Chuyện Thánh Gióng không nói năm nào, nhưng vẫn cho ta biết điều gì đó.",
+                "card": "b2_m2.c2",
+                "narrow": "Đáp án có cả mặt hạn chế và mặt giá trị."
+              },
+              "explanation": "Tư liệu truyền miệng thường không cho biết chính xác thời gian và địa điểm, nhưng phần nào phản ánh hiện thực lịch sử.",
+              "sources": [
+                {
+                  "quote": "Loại tư liệu này thường không cho biết chính xác về thời gian và địa điểm, nhưng phần nào phản ánh hiện thực lịch sử.",
+                  "chunk_id": "LS6_B02_C007",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Đây là nguồn tư liệu đáng tin cậy nhất khi tìm hiểu lịch sử.",
+                  "chunk_id": "LS6_B02_C009",
+                  "lesson_number": 2,
+                  "pages": [
+                    14,
+                    14
+                  ],
+                  "content_type": "source"
+                }
+              ]
+            }
+          ],
+          "reward": {
+            "manh_su_ky": {
+              "id": "truyen_mieng_tu_lieu_goc",
+              "title": "Mảnh Sử Ký: Truyền miệng và tư liệu gốc"
+            }
+          }
+        }
+      ],
+      "stage_check": {
+        "draw_per_objective": 1,
+        "extra": [
+          {
+            "id": "b2.check.x1",
+            "type": "ghep_noi",
+            "prompt": "Ghép mỗi loại tư liệu với ví dụ phù hợp.",
+            "pairs": [
+              [
+                "Tư liệu hiện vật",
+                "Ngói úp trang trí đôi chim phượng"
+              ],
+              [
+                "Tư liệu chữ viết",
+                "Bia ghi tên người đỗ Tiến sĩ"
+              ],
+              [
+                "Tư liệu truyền miệng",
+                "Chuyện Thánh Gióng đánh giặc Ân"
+              ]
+            ],
+            "hints": {
+              "nudge": "Đồ vật, chữ khắc, câu chuyện: ba loại khác nhau.",
+              "card": "b2_m2.c1",
+              "narrow": "Chuyện Thánh Gióng là tư liệu truyền miệng."
+            },
+            "explanation": "Ngói là hiện vật, bia khắc chữ là tư liệu chữ viết, chuyện Thánh Gióng là tư liệu truyền miệng.",
+            "sources": [
+              {
+                "quote": "Ngói úp trang trí đôi chim phượng",
+                "chunk_id": "LS6_B02_C003",
+                "lesson_number": 2,
+                "pages": [
+                  12,
+                  13
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "Những tấm bia ghi tên người đỗ Tiến sĩ",
+                "chunk_id": "LS6_B02_C004",
+                "lesson_number": 2,
+                "pages": [
+                  13,
+                  13
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "Thánh Gióng đánh giặc Ân",
+                "chunk_id": "LS6_B02_C007",
+                "lesson_number": 2,
+                "pages": [
+                  14,
+                  14
+                ],
+                "content_type": "body"
+              }
+            ]
+          }
+        ],
+        "reflection": [
+          {
+            "id": "b2.check.r1",
+            "type": "giai_thich",
+            "prompt": "Nếu được giao tìm hiểu về Hoàng thành Thăng Long, em sẽ dùng những loại tư liệu nào? Vì sao?",
+            "rubric": [
+              "Dùng tư liệu hiện vật (di tích, ngói, đồ vật) vì cho biết khá cụ thể, trung thực về đời sống",
+              "Dùng tư liệu chữ viết vì ghi chép tương đối đầy đủ, nhưng cần lưu ý ý thức chủ quan của tác giả",
+              "Ưu tiên tư liệu gốc vì đáng tin cậy nhất"
+            ],
+            "sample_answer": "Em sẽ dùng hiện vật như di tích, ngói trang trí tìm thấy ở Hoàng thành vì chúng cho biết khá cụ thể, trung thực về đời sống người xưa; dùng thêm tư liệu chữ viết nhưng cẩn thận vì có thể mang ý chủ quan của người viết; và ưu tiên tư liệu gốc vì đáng tin cậy nhất.",
+            "sources": [
+              {
+                "quote": "Một góc di tích Hoàng thành Thăng Long",
+                "chunk_id": "LS6_B02_C003",
+                "lesson_number": 2,
+                "pages": [
+                  12,
+                  13
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "khá cụ thể và trung thực về đời sống vật chất",
+                "chunk_id": "LS6_B02_C003",
+                "lesson_number": 2,
+                "pages": [
+                  12,
+                  13
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "thường mang ý thức chủ quan của tác giả tư liệu",
+                "chunk_id": "LS6_B02_C004",
+                "lesson_number": 2,
+                "pages": [
+                  13,
+                  13
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "Đây là nguồn tư liệu đáng tin cậy nhất khi tìm hiểu lịch sử.",
+                "chunk_id": "LS6_B02_C009",
+                "lesson_number": 2,
+                "pages": [
+                  14,
+                  14
+                ],
+                "content_type": "source"
+              }
+            ]
+          }
+        ]
+      },
+      "collection": {
+        "title": "Hồ sơ bằng chứng",
+        "badge": {
+          "id": "tham_tu_su_lieu",
+          "title": "Huy hiệu Thám tử sử liệu",
+          "condition": "master_all_missions"
+        }
+      },
+      "order": 2
+    },
+    {
+      "id": "b3",
+      "lesson_number": 3,
+      "title": "Đọc các mốc thời gian",
+      "sgk_title": "Thời gian trong lịch sử",
+      "pages": [
+        15,
+        17
+      ],
+      "status": "da_bien_soan",
+      "intro": {
+        "speaker": "linh_vat",
+        "hu_cau": true,
+        "text": "Vì sao trên cùng một tờ lịch lại in hai ngày khác nhau? Muốn trả lời, thám tử thời gian phải biết người xưa tính thời gian thế nào.",
+        "source_quote": "vì sao trên cùng một tờ lịch lại ghi hai ngày khác nhau",
+        "sources": [
+          {
+            "quote": "vì sao trên cùng một tờ lịch lại ghi hai ngày khác nhau",
+            "chunk_id": "LS6_B03_C002",
+            "lesson_number": 3,
+            "pages": [
+              15,
+              15
+            ],
+            "content_type": "intro"
+          }
+        ]
+      },
+      "missions": [
+        {
+          "id": "b3_m1",
+          "title": "Vì sao phải xác định thời gian?",
+          "objective": {
+            "id": "b3_m1.o",
+            "text": "Giải thích được vì sao cần xác định thời gian trong lịch sử.",
+            "bloom": "hieu"
+          },
+          "intro": {
+            "speaker": "linh_vat",
+            "hu_cau": true,
+            "text": "Một câu chuyện bị xáo trộn thứ tự sẽ rất khó hiểu. Lịch sử cũng vậy!"
+          },
+          "cards": [
+            {
+              "id": "b3_m1.c1",
+              "text": "Lịch sử là những gì đã xảy ra trong quá khứ theo trình tự thời gian. Muốn hiểu và dựng lại lịch sử, cần sắp xếp các sự kiện theo đúng trình tự.",
+              "sources": [
+                {
+                  "quote": "Lịch sử là những gì đã xảy ra trong quá khứ theo trình tự thời gian.",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Muốn hiểu và dựng lại lịch sử, cần sắp xếp tất cả sự kiện theo đúng trình tự của nó.",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m1.c2",
+              "text": "Để xác định thời gian, ta cần biết cách tính. Từ xa xưa, các dân tộc đã sáng tạo nhiều cách đo thời gian, như đồng hồ cát, đồng hồ nước, đồng hồ mặt trời.",
+              "sources": [
+                {
+                  "quote": "Để xác định được thời gian, ta cần biết cách tính.",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Từ xa xưa, các dân tộc trên thế giới đã sáng tạo ra nhiều cách đo thời gian khác nhau.",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "a. Đồng hồ cát b. Đồng hồ nước c. Đồng hồ mặt trời",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "explore": [
+            {
+              "type": "tu_lieu",
+              "text": "Đồng hồ cát, đồng hồ nước, đồng hồ mặt trời.",
+              "citation": "Một số dụng cụ đo thời gian của người xưa (SGK, hình 2)",
+              "prompt": "Người xưa đã dựa vào những gì để đo thời gian?",
+              "clue": "Người xưa dựa vào cát chảy, nước chảy và bóng nắng mặt trời: mỗi dân tộc sáng tạo cách đo thời gian riêng.",
+              "sources": [
+                {
+                  "quote": "a. Đồng hồ cát b. Đồng hồ nước c. Đồng hồ mặt trời",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Một số dụng cụ đo thời gian của người xưa",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "challenge_pool": [
+            {
+              "id": "b3_m1.q1",
+              "type": "trac_nghiem",
+              "prompt": "Vì sao cần xác định thời gian trong lịch sử?",
+              "choices": [
+                "Vì muốn hiểu và dựng lại lịch sử phải sắp xếp các sự kiện theo đúng trình tự",
+                "Vì để biết hôm nay là thứ mấy",
+                "Vì để đo xem ai chạy nhanh hơn",
+                "Vì người xưa không có đồng hồ"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Lịch sử là những gì đã xảy ra theo trình tự thời gian.",
+                "card": "b3_m1.c1",
+                "narrow": "Đáp án có chữ \"trình tự\"."
+              },
+              "explanation": "Lịch sử diễn ra theo trình tự thời gian; muốn hiểu và dựng lại lịch sử phải sắp xếp sự kiện theo đúng trình tự.",
+              "sources": [
+                {
+                  "quote": "Muốn hiểu và dựng lại lịch sử, cần sắp xếp tất cả sự kiện theo đúng trình tự của nó.",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m1.q2",
+              "type": "trac_nghiem",
+              "prompt": "Dụng cụ nào KHÔNG được nhắc tới trong SGK như một dụng cụ đo thời gian của người xưa?",
+              "choices": [
+                "Đồng hồ điện tử",
+                "Đồng hồ cát",
+                "Đồng hồ nước",
+                "Đồng hồ mặt trời"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Người xưa chưa có điện.",
+                "card": "b3_m1.c2",
+                "narrow": "Ba dụng cụ đúng dùng cát, nước và ánh nắng."
+              },
+              "explanation": "SGK giới thiệu đồng hồ cát, đồng hồ nước và đồng hồ mặt trời; đồng hồ điện tử là của thời nay.",
+              "sources": [
+                {
+                  "quote": "a. Đồng hồ cát b. Đồng hồ nước c. Đồng hồ mặt trời",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m1.q3",
+              "type": "sap_xep",
+              "prompt": "Sắp xếp các việc của một nhà sử học khi dựng lại một câu chuyện lịch sử.",
+              "items": [
+                "Tìm các sự kiện đã xảy ra",
+                "Xác định thời gian của từng sự kiện",
+                "Sắp xếp sự kiện theo đúng trình tự",
+                "Hiểu và dựng lại câu chuyện lịch sử"
+              ],
+              "hints": {
+                "nudge": "Phải biết sự kiện và thời gian trước rồi mới sắp xếp được.",
+                "card": "b3_m1.c1",
+                "narrow": "Bước cuối là dựng lại câu chuyện."
+              },
+              "explanation": "Biết sự kiện, xác định thời gian, sắp xếp theo trình tự rồi mới hiểu và dựng lại được lịch sử.",
+              "sources": [
+                {
+                  "quote": "Muốn hiểu và dựng lại lịch sử, cần sắp xếp tất cả sự kiện theo đúng trình tự của nó.",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Để xác định được thời gian, ta cần biết cách tính.",
+                  "chunk_id": "LS6_B03_C004",
+                  "lesson_number": 3,
+                  "pages": [
+                    15,
+                    15
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "reward": {
+            "manh_su_ky": {
+              "id": "trinh_tu_thoi_gian",
+              "title": "Mảnh Sử Ký: Trình tự thời gian"
+            }
+          }
+        },
+        {
+          "id": "b3_m2",
+          "title": "Âm lịch và dương lịch",
+          "objective": {
+            "id": "b3_m2.o",
+            "text": "Phân biệt được âm lịch và dương lịch.",
+            "bloom": "hieu"
+          },
+          "intro": {
+            "speaker": "linh_vat",
+            "hu_cau": true,
+            "text": "Có người nhìn Mặt Trăng, có người nhìn Mặt Trời để làm lịch. Em đứng về phía nào?"
+          },
+          "cards": [
+            {
+              "id": "b3_m2.c1",
+              "text": "Âm lịch được tính theo chu kì chuyển động của Mặt Trăng quanh Trái Đất. Người Ai Cập, Lưỡng Hà, Trung Quốc cổ đại và một số dân tộc phương Đông tính theo âm lịch.",
+              "sources": [
+                {
+                  "quote": "Âm lịch là hệ lịch được tính theo chu kì chuyển động của Mặt Trăng quanh Trái Đất.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Người Ai Cập, Lưỡng Hà hay Trung Quốc cổ đại và một số dân tộc phương Đông khác thì tính theo âm lịch",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m2.c2",
+              "text": "Dương lịch được tính theo chu kì chuyển động của Trái Đất quanh Mặt Trời. Người La Mã và nhiều tộc người ở châu Âu tính theo dương lịch.",
+              "sources": [
+                {
+                  "quote": "Dương lịch là hệ lịch được tính theo chu kì chuyển động của Trái Đất quanh Mặt Trời.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "còn người La Mã và nhiều tộc người ở châu Âu, - thì tính theo dương lịch",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m2.c3",
+              "text": "Ở Việt Nam, Công lịch được dùng chính thức trong cơ quan, văn bản nhà nước; âm lịch vẫn phổ biến rộng rãi trong nhân dân. Vì vậy trên tờ lịch in ngày, tháng, năm của cả hai loại lịch.",
+              "sources": [
+                {
+                  "quote": "Hiện nay, ở Việt Nam, Công lịch được dùng chính thức trong các cơ quan và văn bản nhà nước, tuy nhiên, âm lịch vẫn được phổ biến rộng rãi trong nhân dân.",
+                  "chunk_id": "LS6_B03_C007",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Vì vậy, trên tờ lịch đều in ngày, tháng, năm của cả hai loại lịch này.",
+                  "chunk_id": "LS6_B03_C007",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "explore": [
+            {
+              "type": "tu_lieu",
+              "text": "Khoảng thiên niên kỉ III TCN, người Ai Cập đã biết làm lịch.",
+              "citation": "SGK, Bài 3",
+              "prompt": "Người Ai Cập biết làm lịch từ rất sớm. Theo SGK, họ tính lịch theo Mặt Trăng hay Mặt Trời?",
+              "clue": "Người Ai Cập cổ đại tính theo âm lịch, dựa vào chu kì chuyển động của Mặt Trăng quanh Trái Đất.",
+              "sources": [
+                {
+                  "quote": "Khoảng thiên niên kỉ III TCN, người Ai Cập đã biết làm lịch.",
+                  "chunk_id": "LS6_B03_C011",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Người Ai Cập, Lưỡng Hà hay Trung Quốc cổ đại và một số dân tộc phương Đông khác thì tính theo âm lịch",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "challenge_pool": [
+            {
+              "id": "b3_m2.q1",
+              "type": "trac_nghiem",
+              "prompt": "Âm lịch được tính dựa vào điều gì?",
+              "choices": [
+                "Chu kì chuyển động của Mặt Trăng quanh Trái Đất",
+                "Chu kì chuyển động của Trái Đất quanh Mặt Trời",
+                "Số lần nước sông lên xuống",
+                "Năm ra đời của Chúa Giê-su"
+              ],
+              "answer": 0,
+              "why_wrong": {
+                "1": "Đó là cách tính dương lịch."
+              },
+              "hints": {
+                "nudge": "\"Âm\" gắn với Mặt Trăng.",
+                "card": "b3_m2.c1",
+                "narrow": "Đáp án nói về Mặt Trăng."
+              },
+              "explanation": "Âm lịch tính theo chu kì chuyển động của Mặt Trăng quanh Trái Đất.",
+              "sources": [
+                {
+                  "quote": "Âm lịch là hệ lịch được tính theo chu kì chuyển động của Mặt Trăng quanh Trái Đất.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Dương lịch là hệ lịch được tính theo chu kì chuyển động của Trái Đất quanh Mặt Trời.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m2.q2",
+              "type": "phan_loai",
+              "prompt": "Xếp mỗi ý vào âm lịch hoặc dương lịch.",
+              "groups": {
+                "Âm lịch": [
+                  "Tính theo Mặt Trăng quanh Trái Đất",
+                  "Người Ai Cập, Lưỡng Hà, Trung Quốc cổ đại dùng"
+                ],
+                "Dương lịch": [
+                  "Tính theo Trái Đất quanh Mặt Trời",
+                  "Người La Mã và nhiều tộc người ở châu Âu dùng"
+                ]
+              },
+              "hints": {
+                "nudge": "Phương Đông cổ đại dùng một loại, châu Âu dùng loại kia.",
+                "card": "b3_m2.c2",
+                "narrow": "Người La Mã dùng dương lịch."
+              },
+              "explanation": "Âm lịch: theo Mặt Trăng, phổ biến ở phương Đông cổ đại. Dương lịch: theo Mặt Trời, người La Mã và châu Âu dùng.",
+              "sources": [
+                {
+                  "quote": "Âm lịch là hệ lịch được tính theo chu kì chuyển động của Mặt Trăng quanh Trái Đất.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Dương lịch là hệ lịch được tính theo chu kì chuyển động của Trái Đất quanh Mặt Trời.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Người Ai Cập, Lưỡng Hà hay Trung Quốc cổ đại",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "còn người La Mã và nhiều tộc người ở châu Âu",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m2.q3",
+              "type": "trac_nghiem",
+              "prompt": "Vì sao trên tờ lịch ở Việt Nam in cả ngày âm lịch và dương lịch?",
+              "choices": [
+                "Vì Công lịch dùng chính thức trong cơ quan nhà nước, còn âm lịch vẫn phổ biến rộng rãi trong nhân dân",
+                "Vì in hai ngày cho tờ lịch đẹp hơn",
+                "Vì người Việt chưa biết dùng Công lịch",
+                "Vì âm lịch và dương lịch luôn trùng nhau"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Mỗi loại lịch được dùng ở những nơi khác nhau.",
+                "card": "b3_m2.c3",
+                "narrow": "Đáp án nói tới cơ quan nhà nước và nhân dân."
+              },
+              "explanation": "Công lịch dùng chính thức trong cơ quan, văn bản nhà nước; âm lịch phổ biến trong nhân dân nên tờ lịch in cả hai.",
+              "sources": [
+                {
+                  "quote": "Công lịch được dùng chính thức trong các cơ quan và văn bản nhà nước, tuy nhiên, âm lịch vẫn được phổ biến rộng rãi trong nhân dân.",
+                  "chunk_id": "LS6_B03_C007",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Vì vậy, trên tờ lịch đều in ngày, tháng, năm của cả hai loại lịch này.",
+                  "chunk_id": "LS6_B03_C007",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "reward": {
+            "manh_su_ky": {
+              "id": "am_duong_lich",
+              "title": "Mảnh Sử Ký: Âm lịch và dương lịch"
+            }
+          }
+        },
+        {
+          "id": "b3_m3",
+          "title": "Công lịch, thế kỉ và thiên niên kỉ",
+          "objective": {
+            "id": "b3_m3.o",
+            "text": "Nêu được các khái niệm Công nguyên, trước Công nguyên, thập kỉ, thế kỉ, thiên niên kỉ và đọc được mốc thời gian.",
+            "bloom": "van_dung"
+          },
+          "intro": {
+            "speaker": "linh_vat",
+            "hu_cau": true,
+            "text": "Năm 1 trước Công nguyên đứng ngay trước năm đầu tiên của Công nguyên. Vậy năm nào xảy ra trước? Cùng tập đọc mốc thời gian nhé."
+          },
+          "cards": [
+            {
+              "id": "b3_m3.c1",
+              "text": "Dương lịch về sau được hoàn chỉnh, thống nhất để các dân tộc đều dùng được, đó là Công lịch.",
+              "sources": [
+                {
+                  "quote": "Về sau, dương lịch đã được hoàn chỉnh và thống nhất để các dân tộc đều có thể sử dụng. đó là Công lịch.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m3.c2",
+              "text": "Công lịch lấy năm ra đời của Chúa Giê-su là năm đầu tiên của Công nguyên. Ngay trước năm đó là năm 1 trước Công nguyên (TCN).",
+              "sources": [
+                {
+                  "quote": "Công lịch lấy năm ra đời của Chúa Giê-su - tương truyền là người sáng lập ra đạo Thiên Chúa, là năm đầu tiên của công nguyên.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Ngay trước năm đó là năm 1 trước công nguyên (TCN).",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m3.c3",
+              "text": "Thời gian còn được chia thành thập kỉ (10 năm), thế kỉ (100 năm) và thiên niên kỉ (1 000 năm).",
+              "sources": [
+                {
+                  "quote": "Đồng thời còn có cách phân chia thời gian thành thập kỉ (10 năm), thế kỉ (100 năm) và thiên niên kỉ (1 000 năm), tính từ năm đầu tiên của các khoảng thời gian đó.",
+                  "chunk_id": "LS6_B03_C007",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "explore": [
+            {
+              "type": "dong_thoi_gian",
+              "prompt": "Trong hai sự kiện dưới đây, sự kiện nào xảy ra trước? Vì sao năm trước Công nguyên càng lớn thì càng xa xưa?",
+              "clue": "Người Ai Cập biết làm lịch (khoảng thiên niên kỉ III TCN) từ trước khi Thục Phán lập nước Âu Lạc (khoảng năm 208 TCN). Trước Công nguyên, năm càng lớn càng cách xa năm 1.",
+              "events": [
+                {
+                  "time": "Khoảng thiên niên kỉ III TCN",
+                  "label": "Người Ai Cập biết làm lịch",
+                  "sources": [
+                    {
+                      "quote": "Khoảng thiên niên kỉ III TCN, người Ai Cập đã biết làm lịch.",
+                      "chunk_id": "LS6_B03_C011",
+                      "lesson_number": 3,
+                      "pages": [
+                        16,
+                        16
+                      ],
+                      "content_type": "body"
+                    }
+                  ]
+                },
+                {
+                  "time": "Khoảng năm 208 TCN",
+                  "label": "Thục Phán lập ra nước Âu Lạc",
+                  "sources": [
+                    {
+                      "quote": "Thục Phán lập ra nước Âu Lạc vào khoảng năm 208 TCN",
+                      "chunk_id": "LS6_B03_C011",
+                      "lesson_number": 3,
+                      "pages": [
+                        16,
+                        16
+                      ],
+                      "content_type": "body"
+                    }
+                  ]
+                },
+                {
+                  "time": "Năm 1 TCN",
+                  "label": "Năm ngay trước năm đầu tiên của Công nguyên",
+                  "sources": [
+                    {
+                      "quote": "Ngay trước năm đó là năm 1 trước công nguyên (TCN).",
+                      "chunk_id": "LS6_B03_C006",
+                      "lesson_number": 3,
+                      "pages": [
+                        16,
+                        16
+                      ],
+                      "content_type": "body"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "challenge_pool": [
+            {
+              "id": "b3_m3.q1",
+              "type": "trac_nghiem",
+              "prompt": "Một thế kỉ là bao nhiêu năm?",
+              "choices": [
+                "100 năm",
+                "10 năm",
+                "1 000 năm",
+                "Một năm"
+              ],
+              "answer": 0,
+              "why_wrong": {
+                "1": "10 năm là một thập kỉ.",
+                "2": "1 000 năm là một thiên niên kỉ."
+              },
+              "hints": {
+                "nudge": "Thập kỉ < thế kỉ < thiên niên kỉ.",
+                "card": "b3_m3.c3",
+                "narrow": "Gấp mười lần một thập kỉ."
+              },
+              "explanation": "Thập kỉ là 10 năm, thế kỉ là 100 năm, thiên niên kỉ là 1 000 năm.",
+              "sources": [
+                {
+                  "quote": "thập kỉ (10 năm), thế kỉ (100 năm) và thiên niên kỉ (1 000 năm)",
+                  "chunk_id": "LS6_B03_C007",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m3.q2",
+              "type": "ghep_noi",
+              "prompt": "Ghép mỗi khoảng thời gian với số năm của nó.",
+              "pairs": [
+                [
+                  "Thập kỉ",
+                  "10 năm"
+                ],
+                [
+                  "Thế kỉ",
+                  "100 năm"
+                ],
+                [
+                  "Thiên niên kỉ",
+                  "1 000 năm"
+                ]
+              ],
+              "hints": {
+                "nudge": "\"Thiên\" nghĩa là nghìn.",
+                "card": "b3_m3.c3",
+                "narrow": "Thập kỉ là khoảng ngắn nhất."
+              },
+              "explanation": "Thập kỉ 10 năm, thế kỉ 100 năm, thiên niên kỉ 1 000 năm.",
+              "sources": [
+                {
+                  "quote": "thập kỉ (10 năm), thế kỉ (100 năm) và thiên niên kỉ (1 000 năm)",
+                  "chunk_id": "LS6_B03_C007",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m3.q3",
+              "type": "trac_nghiem",
+              "prompt": "Công lịch lấy mốc nào làm năm đầu tiên của Công nguyên?",
+              "choices": [
+                "Năm ra đời của Chúa Giê-su (theo tương truyền)",
+                "Năm người Ai Cập biết làm lịch",
+                "Năm Thục Phán lập nước Âu Lạc",
+                "Năm con người xuất hiện trên Trái Đất"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Người này tương truyền là người sáng lập ra đạo Thiên Chúa.",
+                "card": "b3_m3.c2",
+                "narrow": "Đáp án nhắc tới Chúa Giê-su."
+              },
+              "explanation": "Công lịch lấy năm ra đời của Chúa Giê-su là năm đầu tiên của Công nguyên; ngay trước đó là năm 1 TCN.",
+              "sources": [
+                {
+                  "quote": "Công lịch lấy năm ra đời của Chúa Giê-su - tương truyền là người sáng lập ra đạo Thiên Chúa, là năm đầu tiên của công nguyên.",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Khoảng thiên niên kỉ III TCN, người Ai Cập đã biết làm lịch.",
+                  "chunk_id": "LS6_B03_C011",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Thục Phán lập ra nước Âu Lạc",
+                  "chunk_id": "LS6_B03_C011",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b3_m3.q4",
+              "type": "sap_xep",
+              "prompt": "Sắp xếp theo thứ tự thời gian, từ xưa nhất đến gần nhất.",
+              "items": [
+                "Người Ai Cập biết làm lịch (khoảng thiên niên kỉ III TCN)",
+                "Thục Phán lập ra nước Âu Lạc (khoảng năm 208 TCN)",
+                "Năm 1 TCN",
+                "Năm đầu tiên của Công nguyên"
+              ],
+              "hints": {
+                "nudge": "Trước Công nguyên, số năm càng lớn thì càng xa xưa.",
+                "card": "b3_m3.c2",
+                "narrow": "Năm 1 TCN đứng ngay trước năm đầu tiên của Công nguyên."
+              },
+              "explanation": "Thiên niên kỉ III TCN xa xưa hơn năm 208 TCN; năm 208 TCN trước năm 1 TCN; rồi mới tới năm đầu tiên của Công nguyên.",
+              "sources": [
+                {
+                  "quote": "Khoảng thiên niên kỉ III TCN, người Ai Cập đã biết làm lịch.",
+                  "chunk_id": "LS6_B03_C011",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Thục Phán lập ra nước Âu Lạc vào khoảng năm 208 TCN",
+                  "chunk_id": "LS6_B03_C011",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Ngay trước năm đó là năm 1 trước công nguyên (TCN).",
+                  "chunk_id": "LS6_B03_C006",
+                  "lesson_number": 3,
+                  "pages": [
+                    16,
+                    16
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            }
+          ],
+          "reward": {
+            "manh_su_ky": {
+              "id": "cong_lich",
+              "title": "Mảnh Sử Ký: Công lịch"
+            }
+          }
+        }
+      ],
+      "stage_check": {
+        "draw_per_objective": 1,
+        "extra": [
+          {
+            "id": "b3.check.x1",
+            "type": "trac_nghiem",
+            "prompt": "Hệ lịch nào được dùng chính thức trong các cơ quan và văn bản nhà nước ở Việt Nam hiện nay?",
+            "choices": [
+              "Công lịch",
+              "Âm lịch",
+              "Lịch của người Ai Cập",
+              "Lịch của người Lưỡng Hà"
+            ],
+            "answer": 0,
+            "hints": {
+              "nudge": "Đó là dương lịch đã được hoàn chỉnh và thống nhất.",
+              "card": "b3_m2.c3",
+              "narrow": "Âm lịch phổ biến trong nhân dân, không phải trong văn bản nhà nước."
+            },
+            "explanation": "Công lịch được dùng chính thức trong cơ quan, văn bản nhà nước; âm lịch phổ biến trong nhân dân.",
+            "sources": [
+              {
+                "quote": "Công lịch được dùng chính thức trong các cơ quan và văn bản nhà nước, tuy nhiên, âm lịch vẫn được phổ biến rộng rãi trong nhân dân.",
+                "chunk_id": "LS6_B03_C007",
+                "lesson_number": 3,
+                "pages": [
+                  16,
+                  16
+                ],
+                "content_type": "body"
+              }
+            ]
+          }
+        ],
+        "reflection": [
+          {
+            "id": "b3.check.r1",
+            "type": "giai_thich",
+            "prompt": "Em hãy giải thích cho một bạn nhỏ hơn: vì sao trên tờ lịch nhà em in hai ngày khác nhau?",
+            "rubric": [
+              "Một ngày theo dương lịch (Công lịch), tính theo Trái Đất quanh Mặt Trời",
+              "Một ngày theo âm lịch, tính theo Mặt Trăng quanh Trái Đất",
+              "Công lịch dùng chính thức trong nhà nước, âm lịch phổ biến trong nhân dân nên in cả hai"
+            ],
+            "sample_answer": "Tờ lịch in một ngày dương lịch (Công lịch), tính theo chuyển động của Trái Đất quanh Mặt Trời, và một ngày âm lịch, tính theo chuyển động của Mặt Trăng quanh Trái Đất. Công lịch dùng chính thức trong cơ quan nhà nước còn âm lịch vẫn phổ biến trong nhân dân, nên tờ lịch in cả hai.",
+            "sources": [
+              {
+                "quote": "Âm lịch là hệ lịch được tính theo chu kì chuyển động của Mặt Trăng quanh Trái Đất.",
+                "chunk_id": "LS6_B03_C006",
+                "lesson_number": 3,
+                "pages": [
+                  16,
+                  16
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "Dương lịch là hệ lịch được tính theo chu kì chuyển động của Trái Đất quanh Mặt Trời.",
+                "chunk_id": "LS6_B03_C006",
+                "lesson_number": 3,
+                "pages": [
+                  16,
+                  16
+                ],
+                "content_type": "body"
+              },
+              {
+                "quote": "Vì vậy, trên tờ lịch đều in ngày, tháng, năm của cả hai loại lịch này.",
+                "chunk_id": "LS6_B03_C007",
+                "lesson_number": 3,
+                "pages": [
+                  16,
+                  16
+                ],
+                "content_type": "body"
+              }
+            ]
+          }
+        ]
+      },
+      "collection": {
+        "title": "Hồ sơ thời gian",
+        "badge": {
+          "id": "nguoi_giu_thoi_gian",
+          "title": "Huy hiệu Người giữ thời gian",
+          "condition": "master_all_missions"
+        }
+      },
+      "order": 3
+    }
+  ],
+  "build": {
+    "date": "2026-10-28",
+    "dataset_version": "1.0.0",
+    "warnings": []
+  }
+}

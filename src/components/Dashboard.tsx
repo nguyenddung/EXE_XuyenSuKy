@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
-import { ArrowRight, Bell, BookOpen, Check, ChevronDown, Compass, Flame, Home, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Trophy, UserRound, X } from 'lucide-react'
+import { ArrowRight, Bell, BookOpen, Check, ChevronDown, Compass, Flame, Home, Map as MapIcon, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Trophy, UserRound, X } from 'lucide-react'
 import { challengeActivities, demoAccount } from '../data/demo'
 import { rankingsFor } from '../data/leaderboard'
 import type { DemoActivity } from '../data/demo'
@@ -14,6 +14,7 @@ import { eras } from '../data/eras'
 
 const navigation = [
   { label: 'Trang chủ', href: '#dashboard', icon: Home },
+  { label: 'Hành trình', href: '#journey', icon: MapIcon },
   { label: 'Học tập', href: '#library', icon: BookOpen },
   { label: 'Khám phá', href: '#timeline', icon: Compass },
   { label: 'Nhân vật AI', href: '#characters', icon: UserRound },

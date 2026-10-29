@@ -192,3 +192,5 @@
   .character-stage[data-activity='listening'] .actor-head { transform: rotate(.3deg); }
   .character-stage[data-activity='speaking'] .stage-sound i { height: 11px; }
 }
+.chat-time { display: block; margin: -8px 2px 12px; text-align: right; color: #7b8c85; font-size: 10px; }
+.chat-history-note { margin: -8px 0 16px; text-align: center; color: #6a7766; font-size: 11px; line-height: 1.6; }

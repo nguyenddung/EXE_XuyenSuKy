@@ -3,6 +3,7 @@ import { characterIndex, listCharacters } from './characters.mjs'
 import { answerCharacterQuestion } from './rag/pipeline.mjs'
 import { clientKey, createLimiter } from './rag/limits.mjs'
 import { SpeechError, synthesizeSpeech } from './speech.mjs'
+import { getJourneys } from './journeys.mjs'
 
 const defaultLimiter = createLimiter()
 
@@ -80,7 +81,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       res.setHeader('Allow', chat || speech ? 'POST' : 'GET, HEAD')
       throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : 'This dataset endpoint is read-only.')
     }
-    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     if (speech) {
       const body = await readJsonBody(req, 32000)
       const audio = await (options.speech || synthesizeSpeech)({ characterId: parts[1], text: body.text, visitor: clientKey(req) })
@@ -109,6 +110,12 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       const entry = characterIndex(data).find((item) => item.profile.id === parts[1])
       if (!entry) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
       result = { ...entry.public, lessons: entry.lessons }
+    }
+    else if (parts[0] === 'journeys' && parts.length <= 2) {
+      const journeys = await (options.journeys || getJourneys)(data)
+      if (parts.length === 1) { const items = [...journeys.values()].map((entry) => entry.summary).filter((summary) => !grade || summary.grade === grade); result = { items, total: items.length } }
+      else if (!journeys.has(parts[1])) throw new HttpError(404, 'JOURNEY_NOT_FOUND', 'Journey not found.')
+      else result = journeys.get(parts[1]).public
     }
     else if (route === 'health') result = { status: 'ok', datasetVersion: data.metadata.version, totals: data.metadata.totals }
     else if (route === 'metadata') result = data.metadata

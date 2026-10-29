@@ -11,7 +11,7 @@ import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character, CharacterInteractionMode } from '../types'
 import type { DemoActivity } from '../data/demo'
-import { hasAppAccess, useDemoSession } from '../hooks/useDemoSession'
+import { hasAppAccess, storageOwner, useDemoSession } from '../hooks/useDemoSession'
 import { Navbar } from '../components/Navbar'
 import { Hero, LandingCta } from '../components/Hero'
 import { ClassSelection } from '../components/ClassSelection'
@@ -24,6 +24,8 @@ import { StatsSection } from '../components/StatsSection'
 import { Footer } from '../components/Footer'
 import { LoginModal } from '../components/LoginModal'
 import { ActivityModal } from '../components/ActivityModal'
+import { JourneySection } from '../components/JourneySection'
+import { useJourney } from '../hooks/useJourney'
 
 export function HomePage({ landing = false }: { landing?: boolean }) {
   const navigate = useNavigate()
@@ -34,6 +36,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }, [landing])
   const { session, login, startGuest, logout, selectGrade, reset, completeActivity, recordGame } = useDemoSession()
   const authenticated = hasAppAccess(session)
+  const chatOwner = storageOwner(session)
   const learning = useLearningJournal()
   const dataset = useHistoryDataset()
   const [librarySource, setLibrarySource] = useState<'dataset' | 'demo'>(() => {
@@ -56,6 +59,9 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   const recommendation = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.recommendation
   const gradeRead = learning.journal.read.filter((id) => id.startsWith(`LS${session.grade}_B`)).length
   const gradeCount = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.lessonCount || 0
+  const journey = useJourney(session.grade)
+  // Journey XP is earned per answer and stored with the journey progress; progress panels show it with activity XP.
+  const progressSession = { ...session, earnedXp: session.earnedXp + journey.totalXp }
   function completeLearning(id: string, reward: number) {
     completeActivity(id, reward)
     learning.record(id, id.startsWith('minigame-') ? 'game' : 'quiz')
@@ -119,18 +125,20 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
 
   const sections = <>
         {!landing && <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />}
+        {!landing && <JourneySection state={journey} grade={session.grade} onChat={openCharacter} onNotice={setNotice} onRecord={learning.record} />}
         {!landing && <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />}
         <HistoryTimeline />
         <CharacterSection onChat={openCharacter} />
         <ChallengeSection records={session.gameRecords} completedActivities={session.completedActivities} onTry={setActiveGame} />
         {!landing && <UserProgress
-          session={session}
+          session={progressSession}
           learningStreak={streak(learning.journal.events)}
           onLogin={() => setLoginOpen(true)}
           onReset={() => {
             if (!window.confirm('Đặt lại toàn bộ tiến độ, bài đã lưu và ghi chú trên trình duyệt này?')) return
             reset()
             learning.resetJournal()
+            journey.reset()
             setNotice('Đã đặt lại hành trình demo của Minh.')
           }}
         />}
@@ -147,7 +155,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       </> : <Dashboard
         learning={learning}
         onCollection={filter => { setLibrarySource('dataset'); setRequestedCollection({ filter, token: Date.now() }); window.setTimeout(() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' }), 60) }}
-        session={session}
+        session={progressSession}
         readCount={gradeRead}
         gradeCount={gradeCount}
         recommendedLessonId={recommendation?.id}
@@ -162,7 +170,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       >{sections}<ImageCredits /><Footer /></Dashboard>}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && <CharacterChatModal key={activeCharacter.id} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
+      {activeCharacter && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id) }} />}
       {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}
