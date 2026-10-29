@@ -1,8 +1,8 @@
 ﻿export const games = [
-  { id: 'timeline', title: 'Xếp dòng sử', tag: 'TƯ DUY TRÌNH TỰ', description: 'Cỗ máy thời gian bị xáo trộn. Đưa 5 dấu mốc trở về đúng vị trí!', icon: '⌛', time: '2–3 phút', reward: 60, color: 'sand' },
-  { id: 'memory', title: 'Lật thẻ ký ức', tag: 'GHI NHỚ LIÊN KẾT', description: 'Lật thẻ, tìm cặp nhân vật và dấu ấn. Bạn nhớ được bao nhiêu?', icon: '✦', time: '2–4 phút', reward: 60, color: 'green' },
-  { id: 'detective', title: 'Thám tử nhân vật', tag: 'SUY LUẬN TỪ MANH MỐI', description: 'Mở hồ sơ bí mật, nối các manh mối và tìm ra nhân vật ẩn danh.', icon: '⌕', time: '3–4 phút', reward: 80, color: 'rose' },
-  { id: 'strategy', title: 'Mật lệnh Bạch Đằng', tag: 'RA QUYẾT ĐỊNH', description: 'Đọc địa hình, quan sát con nước và lựa chọn kế sách qua 3 chặng.', icon: '⚑', time: '2–3 phút', reward: 80, color: 'blue' },
+  { id: 'timeline', title: 'Xếp dòng sử', tag: 'TƯ DUY TRÌNH TỰ', description: 'Cỗ máy thời gian bị xáo trộn. Đưa 5 dấu mốc trở về đúng vị trí!', time: '2–3 phút', reward: 60, color: 'sand' },
+  { id: 'memory', title: 'Lật thẻ ký ức', tag: 'GHI NHỚ LIÊN KẾT', description: 'Lật thẻ, tìm cặp nhân vật và dấu ấn. Bạn nhớ được bao nhiêu?', time: '2–4 phút', reward: 60, color: 'green' },
+  { id: 'detective', title: 'Thám tử nhân vật', tag: 'SUY LUẬN TỪ MANH MỐI', description: 'Mở hồ sơ bí mật, nối các manh mối và tìm ra nhân vật ẩn danh.', time: '3–4 phút', reward: 80, color: 'rose' },
+  { id: 'strategy', title: 'Mật lệnh Bạch Đằng', tag: 'RA QUYẾT ĐỊNH', description: 'Đọc địa hình, quan sát con nước và lựa chọn kế sách qua 3 chặng.', time: '2–3 phút', reward: 80, color: 'blue' },
 ] as const
 export type GameId = typeof games[number]['id']
 export const milestones = [
