@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, Bookmark, BookOpen, Check, Search, X } from 'lucide-react'
+import { ArrowRight, Bookmark, BookOpen, Check, Clapperboard, Search, X } from 'lucide-react'
 import { historyApi, sourceLabel, type DatasetMetadata, type HistoryChunk, type HistoryLesson, type LessonDetail, type PageResult } from '../lib/historyApi'
 import { useReaderPreferences } from '../hooks/useReaderPreferences'
 import type { LessonCollection } from './StudyPlan'
 import { dayKey, streak, type useLearningJournal } from '../hooks/useLearningJournal'
+import type { JourneyState } from '../hooks/useJourney'
+import { journeyLessonOf, LessonJourney, type JourneyLaunch } from './LessonJourney'
 
 type Learning = ReturnType<typeof useLearningJournal>
 interface Props {
@@ -14,6 +16,8 @@ interface Props {
   grade: number
   requestedLessonId: string | null
   onRequestHandled: () => void
+  journeys: JourneyState
+  onJourney: (launch: JourneyLaunch) => void
 }
 
 function DatasetDailyGoal({ learning }: { learning: Learning }) {
@@ -24,7 +28,14 @@ function DatasetDailyGoal({ learning }: { learning: Learning }) {
   return <div className="dataset-daily-goal"><div className="daily-goal"><span>Mục tiêu hôm nay</span><label><span className="sr-only">Mục tiêu hoạt động mỗi ngày</span><select value={goal} onChange={(event) => learning.setGoal(Number(event.target.value))}>{[1, 3, 5].map((value) => <option key={value} value={value}>{value} hoạt động</option>)}</select></label></div><div className="daily-meter" role="progressbar" aria-label="Tiến độ mục tiêu hôm nay" aria-valuemin={0} aria-valuemax={goal} aria-valuenow={Math.min(count, goal)}><span style={{ width: `${Math.min(100, count / goal * 100)}%` }} /></div><div className="daily-count" role="status"><strong>{count >= goal ? 'Đã hoàn thành mục tiêu hôm nay!' : `${count}/${goal} hoạt động hôm nay`}</strong><span>{streak(learning.journal.events, today)} ngày liên tiếp</span></div><p className="journal-note">Đọc, ôn hoặc chơi game đều được ghi nhận. Ghi chú và tiến độ lưu trên trình duyệt này.</p></div>
 }
 
-function DatasetReader({ lesson, learning, onClose }: { lesson: LessonDetail; learning: Learning; onClose: () => void }) {
+/** Tells, on the lesson card, that the reader also has videos and missions for this lesson. */
+function JourneyBadge({ journeys, lessonId }: { journeys: JourneyState; lessonId: string }) {
+  const lesson = journeyLessonOf(journeys, lessonId)?.lesson
+  if (!lesson) return null
+  return <span className="lesson-journey-badge">{lesson.videos > 0 && <><Clapperboard size={13} aria-hidden="true" /> {lesson.videos} video · </>}{lesson.missions} nhiệm vụ</span>
+}
+
+function DatasetReader({ lesson, learning, onClose, journeys, onJourney }: { lesson: LessonDetail; learning: Learning; onClose: () => void; journeys: JourneyState; onJourney: (launch: JourneyLaunch) => void }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const title = useRef<HTMLHeadingElement>(null)
   const { large, focused, toggleLarge, toggleFocus } = useReaderPreferences()
@@ -74,6 +85,7 @@ function DatasetReader({ lesson, learning, onClose }: { lesson: LessonDetail; le
     </header>
     <div className="reader-position-bar"><span>Mục {activeSection + 1}/{lesson.sections.length}<small>Vị trí đọc tự động lưu</small></span><div><button aria-label="Mục trước" disabled={activeSection === 0} onClick={() => goToSection(activeSection - 1)}>←</button><button aria-label="Mục sau" disabled={activeSection >= lesson.sections.length - 1} onClick={() => goToSection(activeSection + 1)}>→</button><button aria-label="Đóng bài đọc" onClick={onClose}><X size={20} /></button></div></div>
     <div className="reader-content">
+      <LessonJourney lessonId={lesson.id} journeys={journeys} onLaunch={(launch) => { onClose(); onJourney(launch) }} />
       <details className="reader-toc-container" open={!focused && !window.matchMedia('(max-width: 680px)').matches}><summary>Mục lục bài học</summary><nav className="dataset-toc" aria-label="Mục lục bài học">{lesson.sections.map((section, index) => <a href={`#dataset-section-${index}`} key={index} aria-current={activeSection === index ? 'location' : undefined} onClick={event => { event.preventDefault(); goToSection(index) }}>{section.title}</a>)}</nav></details>
       <div className={`reader-prose ${large ? 'large' : ''}`}>{lesson.sections.map((section, index) => <section className="dataset-section" key={index} id={`dataset-section-${index}`}><h3>{section.title}</h3><small>Trang PDF {section.pageStart}{section.pageEnd !== section.pageStart ? `–${section.pageEnd}` : ''}</small>{section.content.split('\n').filter(Boolean).map((paragraph, line) => <p key={line}>{paragraph}</p>)}</section>)}</div>
       <button className="button-outline mark-read" onClick={() => { markRead(lesson.id); setReadNow(true) }}><Check size={16} /> {readNow ? 'Đã ghi nhận hôm nay' : journal.read.includes(lesson.id) ? 'Ghi nhận đọc lại hôm nay' : 'Đánh dấu đã đọc'}</button>
@@ -85,7 +97,7 @@ function DatasetReader({ lesson, learning, onClose }: { lesson: LessonDetail; le
   </dialog>
 }
 
-export function DatasetLibrary({ onCollectionHandled, requestedCollection, metadata, learning, grade, requestedLessonId, onRequestHandled }: Props) {
+export function DatasetLibrary({ onCollectionHandled, requestedCollection, metadata, learning, grade, requestedLessonId, onRequestHandled, journeys, onJourney }: Props) {
   const [query, setQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const [filterGrade, setFilterGrade] = useState(String(grade))
@@ -148,11 +160,11 @@ export function DatasetLibrary({ onCollectionHandled, requestedCollection, metad
     <div className="library-filters" role="group" aria-label="Cách tra cứu dataset"><button aria-pressed={mode === 'lessons'} onClick={() => { setMode('lessons'); setPage(1) }}>Bài học</button><button aria-pressed={mode === 'search'} onClick={() => { setMode('search'); setPage(1) }}>Tra cứu đoạn có nguồn</button></div>
     {mode === 'lessons' && <div className="library-filters" role="group" aria-label="Lọc bài học sách giáo khoa">{[['all', 'Tất cả'], ['saved', 'Đã lưu'], ['unread', 'Chưa đọc'], ['review', 'Cần đọc lại'], ['notes', 'Có ghi chú']].map(([id, label]) => <button key={id} aria-pressed={filter === id} onClick={() => changeFilter(id)}>{label}</button>)}</div>}
     <div className="library-result-count" role="status">{loading ? 'Đang tải dữ liệu…' : error || (mode === 'search' && debouncedQuery.trim().length < 2 ? 'Nhập ít nhất 2 ký tự để tìm đoạn tư liệu có nguồn.' : `${count || 0} ${mode === 'lessons' ? 'bài học' : 'đoạn tư liệu'} phù hợp`)}{error && <button className="button-outline" onClick={() => setRetry((value) => value + 1)}>Thử lại</button>}</div>
-    {!loading && !error && mode === 'lessons' && <div className="library-grid">{result?.items.map((lesson) => <article className={`library-card dataset-card library-grade-${lesson.grade}`} key={lesson.id}><div className="library-card-top"><span>LỚP {lesson.grade} · {lesson.minutes} PHÚT</span><button aria-label={`${journal.bookmarks.includes(lesson.id) ? 'Bỏ lưu' : 'Lưu'}: ${lesson.title}`} aria-pressed={journal.bookmarks.includes(lesson.id)} onClick={() => bookmark(lesson.id)}><Bookmark size={19} fill={journal.bookmarks.includes(lesson.id) ? 'currentColor' : 'none'} /></button></div><span className="library-era">{lesson.chapter}</span><h3>{lesson.title}</h3><p>{lesson.excerpt}</p><small className="dataset-card-source">{lesson.source.bookSeries} · trang PDF {lesson.source.pageStart}–{lesson.source.pageEnd}</small><div className="library-state">{journal.read.includes(lesson.id) ? '✓ Đã đọc' : `${lesson.sectionCount} mục kiến thức`}{journal.notes[lesson.id]?.trim() && <span> · Có ghi chú</span>}</div><button className="library-open" onClick={() => setSelectedId(lesson.id)}><BookOpen size={16} /> Mở bài học <ArrowRight size={17} /><span className="sr-only">: {lesson.title}</span></button></article>)}</div>}
+    {!loading && !error && mode === 'lessons' && <div className="library-grid">{result?.items.map((lesson) => <article className={`library-card dataset-card library-grade-${lesson.grade}`} key={lesson.id}><div className="library-card-top"><span>LỚP {lesson.grade} · {lesson.minutes} PHÚT</span><button aria-label={`${journal.bookmarks.includes(lesson.id) ? 'Bỏ lưu' : 'Lưu'}: ${lesson.title}`} aria-pressed={journal.bookmarks.includes(lesson.id)} onClick={() => bookmark(lesson.id)}><Bookmark size={19} fill={journal.bookmarks.includes(lesson.id) ? 'currentColor' : 'none'} /></button></div><span className="library-era">{lesson.chapter}</span><h3>{lesson.title}</h3><JourneyBadge journeys={journeys} lessonId={lesson.id} /><p>{lesson.excerpt}</p><small className="dataset-card-source">{lesson.source.bookSeries} · trang PDF {lesson.source.pageStart}–{lesson.source.pageEnd}</small><div className="library-state">{journal.read.includes(lesson.id) ? '✓ Đã đọc' : `${lesson.sectionCount} mục kiến thức`}{journal.notes[lesson.id]?.trim() && <span> · Có ghi chú</span>}</div><button className="library-open" onClick={() => setSelectedId(lesson.id)}><BookOpen size={16} /> Mở bài học <ArrowRight size={17} /><span className="sr-only">: {lesson.title}</span></button></article>)}</div>}
     {!loading && !error && mode === 'search' && <div className="dataset-source-results">{sources?.items.map((chunk) => <article className="dataset-source-card" key={chunk.id}><span className="section-kicker">LỚP {chunk.grade} · {chunk.sectionTitle}</span><h3>{chunk.lessonTitle}</h3><p>{chunk.text}</p><small>{sourceLabel(chunk.source)}</small><button className="button-outline" onClick={() => setSelectedId(chunk.lessonId)}>Đọc bài chứa đoạn này <ArrowRight size={16} /></button></article>)}</div>}
     {!loading && !error && count === 0 && <div className="library-empty"><BookOpen size={30} /><h3>Chưa tìm thấy nội dung phù hợp</h3><p>Thử từ khóa khác hoặc bỏ bớt bộ lọc.</p><button className="button-outline" onClick={() => { setQuery(''); setFilterGrade('all'); setChapter(''); changeFilter('all') }}>Xem tất cả bài học</button></div>}
     {!loading && !error && pages > 1 && <nav className="dataset-pagination" aria-label="Phân trang dataset"><button className="button-outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>Trang trước</button><span>Trang {page}/{pages}</span><button className="button-outline" disabled={page >= pages} onClick={() => setPage(page + 1)}>Trang sau <ArrowRight size={16} /></button></nav>}
     {selectedId && !active && <div className="dataset-reader-status" role="status">{readerError || 'Đang mở bài học…'}<button onClick={() => { setSelectedId(null); setReaderError('') }}>Đóng</button></div>}
-    {active && <DatasetReader key={active.id} lesson={active} learning={learning} onClose={() => { setActive(null); setSelectedId(null) }} />}
+    {active && <DatasetReader key={active.id} lesson={active} learning={learning} journeys={journeys} onJourney={onJourney} onClose={() => { setActive(null); setSelectedId(null) }} />}
   </div>
 }

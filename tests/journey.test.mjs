@@ -27,7 +27,7 @@ test('the journey API lists journeys by grade and serves page references without
   const list = await get('journeys')
   assert.equal(list.response.status, 200)
   assert.deepEqual(list.body.items.map((item) => item.id), ['lop6_chuong1', 'lop6_chuong2', 'lop6_chuong3', 'lop6_chuong4', 'lop6_chuong5'])
-  assert.deepEqual({ ...list.body.items[4], title: undefined, book: undefined, chapter: undefined }, { id: 'lop6_chuong5', grade: 6, stageCount: 7, writtenStageCount: 3, missionCount: 13, videoCount: 1, title: undefined, book: undefined, chapter: undefined })
+  assert.deepEqual({ ...list.body.items[4], title: undefined, book: undefined, chapter: undefined }, { id: 'lop6_chuong5', grade: 6, stageCount: 7, writtenStageCount: 3, missionCount: 13, videoCount: 1, lessons: [{ number: 14, missions: 4, videos: 1 }, { number: 16, missions: 5, videos: 0 }, { number: 18, missions: 4, videos: 0 }], title: undefined, book: undefined, chapter: undefined })
   assert.equal((await get('journeys?grade=7')).body.total, 0)
   const detail = await get('journeys/lop6_chuong5')
   assert.equal(detail.response.status, 200)

@@ -1,0 +1,32 @@
+/* The journey's videos and missions shown inside the SGK reader (LessonJourney), plus the links between the two. */
+.lesson-journey { margin: 0 0 22px; padding: 18px 20px; border: 1px solid var(--sky-line); border-radius: 16px; background: var(--sky-canvas); color: var(--sky-ink); }
+.lesson-journey-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 16px; margin-bottom: 12px; }
+.lesson-journey-head h3 { margin: 4px 0 0; font-size: 18px; font-weight: 800; }
+.lesson-journey-count, .lesson-journey-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border: 1px solid #e6c27a; border-radius: 999px; background: #fff8e6; color: #7a5208; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.lesson-journey-badge { align-self: flex-start; margin: 2px 0 8px; }
+.lesson-journey-state { margin: 0; color: var(--sky-text); font-size: 14px; }
+.lesson-journey-videos ul, .lesson-journey-missions { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.lesson-journey-videos ul { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); margin-bottom: 14px; }
+.lesson-journey-videos li button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 52px; padding: 10px 14px; border: 1px solid #e6c27a; border-radius: 12px; background: #fff; color: var(--sky-ink); font-size: 14px; font-weight: 700; text-align: left; }
+.lesson-journey-videos li button > svg { flex: none; color: #b07d12; }
+.lesson-journey-videos li button[aria-pressed="true"] { background: #fff8e6; box-shadow: 0 0 0 2px #e6c27a inset; }
+.lesson-journey-videos small, .lesson-journey-missions small { display: block; margin-top: 2px; color: var(--sky-muted); font-size: 12px; font-weight: 500; line-height: 1.5; }
+.lesson-journey-player { margin-bottom: 12px; }
+.lesson-journey-player-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.lesson-journey-player-head .button-outline, .lesson-journey-missions .button-outline, .lesson-journey-foot button { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px; font-size: 13px; }
+.lesson-journey-missions li { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--sky-line); border-radius: 12px; background: #fff; font-size: 14px; font-weight: 700; }
+.lesson-journey-missions li > span { flex: 1; min-width: 0; }
+.lesson-journey-missions button:disabled { cursor: not-allowed; opacity: .6; }
+.lesson-journey [data-status] { display: inline-block; flex: none; width: 11px; height: 11px; border: 2px solid #9fb2cc; border-radius: 50%; background: #fff; }
+.lesson-journey [data-status="done"] { border-color: var(--sky-blue); background: #cfe5ff; }
+.lesson-journey [data-status="mastered"] { border-color: #d29a17; background: #ffc044; }
+.lesson-journey-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-top: 14px; }
+.lesson-journey-foot p { flex: 1 1 260px; margin: 0; color: var(--sky-text); font-size: 13px; line-height: 1.6; }
+.lesson-journey-foot > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.journey-read-lesson { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 4px 0; color: var(--sky-blue-strong); font-size: 13px; font-weight: 700; text-decoration: underline; }
+.lesson-journey button:focus-visible, .journey-read-lesson:focus-visible { outline: 2px solid var(--sky-blue); outline-offset: 2px; }
+@media (max-width: 560px) {
+  .lesson-journey { padding: 14px; }
+  .lesson-journey-missions li { flex-wrap: wrap; }
+  .lesson-journey-missions li > button { width: 100%; justify-content: center; }
+}
