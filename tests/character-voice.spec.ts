@@ -1,4 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
+import { signInAsMember } from './member'
+
+// Character conversations are for signed-in members.
+test.beforeEach(({ page }) => signInAsMember(page))
 
 type VoiceAction = 'beginStudentSpeech' | 'endStudentSpeech' | 'interimTranscript' | 'endMic' | 'lateMicSpeech' | 'finishUtterance' | 'pauseUtterance' | 'resumeUtterance' | 'failUtterance' | 'repeatFirstEnd' | 'lateUtteranceEvents' | 'pauseAudio'
 const voiceAction = (page: Page, action: VoiceAction, text = '') => page.evaluate(({ action, text }) => (window as unknown as { __voiceTest: Record<VoiceAction, (text: string) => void> }).__voiceTest[action](text), { action, text })

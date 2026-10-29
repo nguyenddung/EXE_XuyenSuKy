@@ -1,4 +1,8 @@
 import { expect, test, type Page } from '@playwright/test'
+import { signInAsMember } from './member'
+
+// Character conversations are for signed-in members.
+test.beforeEach(({ page }) => signInAsMember(page))
 
 // The dev server runs without ElevenLabs, so these tests mark the characters as live-capable and stub the session endpoint.
 async function enableLiveVoice(page: Page, session: { status: number; body: unknown }) {

@@ -185,7 +185,7 @@ test('review on another day grants mastery and the Sử Ký piece; the stage che
   await expect(page.locator('#journey .journey-stage').nth(4)).toHaveClass(/is-open/)
 })
 
-test('interview opens the character chat, other grades see a note, and the dialog fits a phone screen', async ({ page }) => {
+test('a guest who asks for an interview signs in over the mission, then the chat opens; other grades see a note; the dialog fits a phone screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
@@ -199,6 +199,12 @@ test('interview opens the character chat, other grades see a note, and the dialo
   while (await modal(page).getByRole('button', { name: 'Thẻ tiếp' }).count()) await modal(page).getByRole('button', { name: 'Thẻ tiếp' }).click()
   await modal(page).getByRole('button', { name: 'Đi khám phá' }).click()
   await modal(page).getByRole('button', { name: 'Trò chuyện với Ngô Quyền' }).click()
+  // The sign-in dialog opens in the top layer, above the mission dialog, and the interview continues after signing in.
+  const signIn = page.getByRole('dialog', { name: 'Đăng nhập để tiếp tục' })
+  await expect(signIn).toContainText('Đăng nhập để nhắn tin với Ngô Quyền')
+  await signIn.getByRole('button', { name: 'Điền tài khoản mẫu' }).click()
+  await signIn.locator('.login-form button[type=submit]').click()
+  await expect(signIn).toHaveCount(0)
   await expect(page.locator('dialog.chat-modal')).toBeVisible()
   await expect(page.locator('#chat-title')).toContainText('Ngô Quyền')
   await page.keyboard.press('Escape')

@@ -1,4 +1,8 @@
 import { expect, test } from '@playwright/test'
+import { signInAsMember } from './member'
+
+// Character conversations are for signed-in members.
+test.beforeEach(({ page }) => signInAsMember(page))
 
 async function openCharacter(page: import('@playwright/test').Page, name: string) {
   await page.goto('/home#characters')

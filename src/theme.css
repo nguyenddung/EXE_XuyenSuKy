@@ -289,3 +289,7 @@
 .featured-conversation-actions .featured-voice-action:hover:not(:disabled) { border-color: #32705f; background: #32705f; color: #fff; }
 .featured-conversation-actions button:disabled { opacity: .5; }
 .featured-conversation p { margin: 8px 0 0; color: var(--sky-muted); font-size: 12px; line-height: 1.5; text-align: center; }
+
+/* Sign-in dialog: a transparent full-screen <dialog> whose inner backdrop does the dimming and centering */
+.login-dialog { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: visible; }
+.login-dialog::backdrop { background: transparent; }
