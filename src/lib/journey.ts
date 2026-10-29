@@ -36,7 +36,7 @@ export type VideoScene = { id: string; duration: number; caption: string; source
   | { kind: 'phat_hien'; finds: { find: VideoFind; label: string }[] }
 )
 /** style: dong_son (bronze-drum backdrop, default) or tien_su (dusk sky and sun, for prehistoric lessons). */
-export interface MissionVideo { id: string; title: string; style?: 'dong_son' | 'tien_su'; scenes: VideoScene[] }
+export interface MissionVideo { id: string; title: string; style?: 'dong_son' | 'tien_su'; scenes: VideoScene[]; /** Index of the SGK lesson section the video illustrates (added by the server). */ section?: number }
 export interface Mission {
   id: string
   title: string

@@ -74,7 +74,10 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   const [activeGame, setActiveGame] = useState<GameId | null>(null)
   const [activeCharacter, setActiveCharacter] = useState<Character | null>(null)
   const [characterMode, setCharacterMode] = useState<CharacterInteractionMode>('chat')
+  // Text and voice conversations with the AI characters are for signed-in members; a guest signs in first and the chosen conversation then opens.
+  const [pendingCharacter, setPendingCharacter] = useState<{ character: Character; mode: CharacterInteractionMode } | null>(null)
   function openCharacter(character: Character, mode: CharacterInteractionMode = 'chat') {
+    if (!session.loggedIn) { setPendingActivity(null); setPendingCharacter({ character, mode }); setLoginOpen(true); return }
     setCharacterMode(mode); setActiveCharacter(character)
   }
   const [activeActivity, setActiveActivity] = useState<DemoActivity | null>(null)
@@ -90,7 +93,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
 
   function openActivity(activity: DemoActivity) {
     if (session.loggedIn) setActiveActivity(activity)
-    else { setPendingActivity(activity); setLoginOpen(true) }
+    else { setPendingCharacter(null); setPendingActivity(activity); setLoginOpen(true) }
   }
 
   async function handleLogin(email: string, password: string, remember: boolean) {
@@ -106,6 +109,12 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       setActiveActivity(pendingActivity); setPendingActivity(null)
     }
   }, [session.loggedIn, session.gradeSelected, pendingActivity, loginOpen])
+  // The learning app asks a new account for its grade first; the landing page never does, so the conversation opens right away there.
+  useEffect(() => {
+    if (session.loggedIn && (landing || session.gradeSelected) && pendingCharacter && !loginOpen) {
+      setCharacterMode(pendingCharacter.mode); setActiveCharacter(pendingCharacter.character); setPendingCharacter(null)
+    }
+  }, [session.loggedIn, session.gradeSelected, landing, pendingCharacter, loginOpen])
 
   function handleLogout() {
     logout()
@@ -185,8 +194,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       />}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}
-      {loginOpen && <LoginModal onClose={() => { setLoginOpen(false); setPendingActivity(null) }} onLogin={handleLogin} />}
+      {activeCharacter && session.loggedIn && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}
+      {loginOpen && <LoginModal reason={pendingCharacter ? `Đăng nhập để ${pendingCharacter.mode === 'voice' ? 'nói chuyện' : 'nhắn tin'} với ${pendingCharacter.character.name}. Trò chuyện với nhân vật AI chỉ dành cho tài khoản đã đăng nhập.` : undefined} onClose={() => { setLoginOpen(false); setPendingActivity(null); setPendingCharacter(null) }} onLogin={handleLogin} onRegistered={selectGrade} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}
         activity={activeActivity}

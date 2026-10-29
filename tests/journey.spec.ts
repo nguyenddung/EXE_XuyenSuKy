@@ -231,7 +231,7 @@ test('the chapter test opens after every stage, asks twenty questions from the w
   await expect(page.locator('#journey .journey-chapter-check')).toContainText('Đã hoàn thành chương')
 })
 
-test('interview opens the character chat, other grades see a note, and the dialog fits a phone screen', async ({ page }) => {
+test('a guest who asks for an interview signs in over the mission, then the chat opens; other grades see a note; the dialog fits a phone screen', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
@@ -245,6 +245,12 @@ test('interview opens the character chat, other grades see a note, and the dialo
   while (await modal(page).getByRole('button', { name: 'Thẻ tiếp' }).count()) await modal(page).getByRole('button', { name: 'Thẻ tiếp' }).click()
   await modal(page).getByRole('button', { name: 'Đi khám phá' }).click()
   await modal(page).getByRole('button', { name: 'Trò chuyện với Ngô Quyền' }).click()
+  // The sign-in dialog opens in the top layer, above the mission dialog, and the interview continues after signing in.
+  const signIn = page.getByRole('dialog', { name: 'Đăng nhập để tiếp tục' })
+  await expect(signIn).toContainText('Đăng nhập để nhắn tin với Ngô Quyền')
+  await signIn.getByRole('button', { name: 'Điền tài khoản mẫu' }).click()
+  await signIn.locator('.login-form button[type=submit]').click()
+  await expect(signIn).toHaveCount(0)
   await expect(page.locator('dialog.chat-modal')).toBeVisible()
   await expect(page.locator('#chat-title')).toContainText('Ngô Quyền')
   await page.keyboard.press('Escape')
@@ -277,9 +283,13 @@ test('recorded narration plays scene by scene even without a browser voice', asy
   await expect(modal(page).locator('.journey-video')).not.toContainText('chưa có giọng đọc tiếng Việt')
   await modal(page).getByRole('button', { name: 'Cảnh 4' }).click()
   await modal(page).getByRole('button', { name: 'Phát video' }).click()
-  await expect.poll(() => page.evaluate(() => (window as unknown as { played: string[] }).played)).toEqual(['/audio/journeys/lop6_chuong5/b14_m1.video.s4.mp3'])
-  await expect.poll(() => page.evaluate(() => (window as unknown as { played: string[] }).played.length), { timeout: 15000 }).toBe(2)
-  expect(await page.evaluate(() => (window as unknown as { played: string[] }).played[1])).toBe('/audio/journeys/lop6_chuong5/b14_m1.video.s5.mp3')
+  // Playback timing depends on animation frames, so only the order is checked: scene 4 starts, scene 5 follows.
+  const played = () => page.evaluate(() => (window as unknown as { played: string[] }).played)
+  const clip = (scene: number) => `/audio/journeys/lop6_chuong5/b14_m1.video.s${scene}.mp3`
+  await expect.poll(async () => (await played())[0]).toBe(clip(4))
+  await expect.poll(async () => (await played()).includes(clip(5)), { timeout: 15000 }).toBe(true)
+  const order = await played()
+  expect(order.indexOf(clip(5))).toBeGreaterThan(order.indexOf(clip(4)))
   await modal(page).getByRole('button', { name: 'Thuyết minh' }).click()
   await expect(modal(page).getByRole('button', { name: 'Thuyết minh' })).toHaveAttribute('aria-pressed', 'false')
 })

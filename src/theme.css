@@ -289,3 +289,17 @@
 .featured-conversation-actions .featured-voice-action:hover:not(:disabled) { border-color: #32705f; background: #32705f; color: #fff; }
 .featured-conversation-actions button:disabled { opacity: .5; }
 .featured-conversation p { margin: 8px 0 0; color: var(--sky-muted); font-size: 12px; line-height: 1.5; text-align: center; }
+
+/* Sign-in dialog: a transparent full-screen <dialog> whose inner backdrop does the dimming and centering */
+.login-dialog { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: visible; }
+.login-dialog::backdrop { background: transparent; }
+/* Grade chosen while registering (LoginForm) */
+.login-form .login-grade { display: grid; gap: 8px; min-width: 0; margin: 8px 0 0; padding: 0; border: 0; }
+.login-form .login-grade legend { margin-bottom: 8px; padding: 0; color: #315855; font-size: 12px; font-weight: 800; }
+.login-grade-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.login-grade-options label { position: relative; margin: 0; cursor: pointer; }
+.login-grade-options input { position: absolute; inset: 0; width: 100%; min-height: 0; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.login-grade-options span { display: grid; place-items: center; min-height: 44px; border: 1px solid #d8dce5; border-radius: 12px; background: #fff; color: #29344b; font-size: 13px; font-weight: 700; }
+.login-grade-options input:checked + span { border-color: #273d65; background: #273d65; color: #fff; }
+.login-grade-options input:focus-visible + span { outline: 2px solid var(--sky-blue); outline-offset: 2px; }
+.login-form .login-grade small { color: var(--sky-text); font-size: 12px; line-height: 1.5; }

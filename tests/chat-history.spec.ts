@@ -1,8 +1,11 @@
 import { expect, test, type Page } from '@playwright/test'
+import { memberSession as minhSession, signInAsMember } from './member'
 
 const prefix = 'xuyen-su-ky-chat-v1'
 const sessionKey = 'xuyen-su-ky-demo-v1'
-const minhSession = { loggedIn: true, guest: false, expiresAt: 4102444800000, userId: 'minh@xuyensuki.vn', name: 'Minh', gradeSelected: true, grade: 7, completedActivities: [], earnedXp: 0 }
+const minh = 'minh%40xuyensuki.vn'
+// Conversations need a signed-in member; the account tests sign in and out themselves.
+test.beforeEach(({ page }, testInfo) => { if (!testInfo.titlePath.includes('accounts')) return signInAsMember(page) })
 
 const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 const card = (page: Page, name: string) => page.locator('.character-card').filter({ has: page.getByRole('heading', { name, exact: true }) })
@@ -61,7 +64,7 @@ test('conversation survives reload, close and source lessons, and text and voice
   await expect(page.locator('.chat-exchange')).toHaveCount(2)
 
   // Only text is on disk: no audio, key, error or loading state.
-  const raw = (await stored(page, 'guest', 'ngo-quyen')) || ''
+  const raw = (await stored(page, minhSession.userId, 'ngo-quyen')) || ''
   const record = JSON.parse(raw)
   expect(record.version).toBe(1)
   expect(record.exchanges).toHaveLength(2)
@@ -83,11 +86,11 @@ test('each character keeps its own conversation and starting over clears only th
   await expect(page.locator('.chat-history-note')).toHaveCount(0)
   await page.getByRole('button', { name: 'Lý Công Uẩn dời đô năm nào?', exact: true }).click()
   await expect(page.locator('.chat-answer')).toContainText('1010')
-  expect(await storedKeys(page)).toEqual([`${prefix}:guest:ly-cong-uan`, `${prefix}:guest:ngo-quyen`])
+  expect(await storedKeys(page)).toEqual([`${prefix}:${minh}:ly-cong-uan`, `${prefix}:${minh}:ngo-quyen`])
 
   await page.getByRole('button', { name: 'Bắt đầu cuộc trò chuyện mới' }).click()
   await expect(page.locator('.chat-exchange')).toHaveCount(0)
-  expect(await storedKeys(page)).toEqual([`${prefix}:guest:ngo-quyen`])
+  expect(await storedKeys(page)).toEqual([`${prefix}:${minh}:ngo-quyen`])
   await page.reload()
   await card(page, 'Lý Công Uẩn').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
   await expect(page.locator('.chat-exchange')).toHaveCount(0)
@@ -99,7 +102,7 @@ test('each character keeps its own conversation and starting over clears only th
 test.describe('accounts', () => {
   test.use({ storageState: { cookies: [], origins: [] } })
 
-  test('signing out and switching between guest and account never mixes conversations', async ({ page }) => {
+  test('a guest cannot open a conversation and never sees the account history; signing back in restores it', async ({ page }) => {
     await page.goto('/dang-nhap')
     await page.getByRole('button', { name: 'Điền tài khoản mẫu' }).click()
     await page.locator('.login-form button[type=submit]').click()
@@ -120,14 +123,10 @@ test.describe('accounts', () => {
     await expect(page).toHaveURL(/\/home$/)
     await openMenu(page, 'Nhân vật AI')
     await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
-    await expect(page.locator('.chat-exchange')).toHaveCount(0)
-    await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
-    await expect(page.locator('.chat-answer')).toContainText('938')
-    await page.locator('#chat-input').fill('Chiến thắng có ý nghĩa gì?')
-    await page.keyboard.press('Enter')
-    await expect(page.locator('.chat-exchange')).toHaveCount(2)
-    expect(await storedKeys(page)).toEqual([`${prefix}:guest:ngo-quyen`, `${prefix}:minh%40xuyensuki.vn:ngo-quyen`])
-    await page.keyboard.press('Escape')
+    await expect(page.getByRole('dialog', { name: 'Đăng nhập để tiếp tục' })).toContainText('Đăng nhập để nhắn tin với Ngô Quyền')
+    await expect(page.locator('.chat-modal')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Đóng đăng nhập' }).click()
+    expect(await storedKeys(page)).toEqual([`${prefix}:${minh}:ngo-quyen`])
 
     await page.goto('/')
     await page.getByRole('button', { name: 'Tài khoản: Khách' }).click()
@@ -169,21 +168,21 @@ test.describe('accounts', () => {
 
 test('corrupt, outdated or mismatched stored data is ignored and chatting still works', async ({ page }) => {
   await page.goto('/home#characters')
-  const key = `${prefix}:guest:ngo-quyen`
-  for (const raw of ['{khong-phai-json', JSON.stringify({ version: 0, owner: 'guest', characterId: 'ngo-quyen', exchanges: [] }), JSON.stringify({ version: 1, owner: 'minh@xuyensuki.vn', characterId: 'ngo-quyen', exchanges: [{ id: 'x', question: 'Của người khác', askedAt: 1, answeredAt: 2, reply: { mode: 'textbook', answer: 'RIENG-TU-CUA-MINH', sources: [] } }] })]) {
+  const key = `${prefix}:${minh}:ngo-quyen`
+  for (const raw of ['{khong-phai-json', JSON.stringify({ version: 0, owner: minhSession.userId, characterId: 'ngo-quyen', exchanges: [] }), JSON.stringify({ version: 1, owner: 'khac@xuyensuki.vn', characterId: 'ngo-quyen', exchanges: [{ id: 'x', question: 'Của người khác', askedAt: 1, answeredAt: 2, reply: { mode: 'textbook', answer: 'RIENG-TU-CUA-NGUOI-KHAC', sources: [] } }] })]) {
     await page.evaluate(([name, value]) => localStorage.setItem(name, value), [key, raw])
     await page.reload()
     await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
     await expect(page.locator('.chat-history-note')).toContainText('bị lỗi hoặc không còn tương thích')
     await expect(page.locator('.chat-exchange')).toHaveCount(0)
-    await expect(page.getByText('RIENG-TU-CUA-MINH')).toHaveCount(0)
-    await expect.poll(() => stored(page, 'guest', 'ngo-quyen')).toBeNull()
+    await expect(page.getByText('RIENG-TU-CUA-NGUOI-KHAC')).toHaveCount(0)
+    await expect.poll(() => stored(page, minhSession.userId, 'ngo-quyen')).toBeNull()
     await page.keyboard.press('Escape')
   }
   await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
   await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
   await expect(page.locator('.chat-answer')).toContainText('938')
-  expect(JSON.parse((await stored(page, 'guest', 'ngo-quyen'))!).exchanges).toHaveLength(1)
+  expect(JSON.parse((await stored(page, minhSession.userId, 'ngo-quyen'))!).exchanges).toHaveLength(1)
 })
 
 test('a full or blocked storage warns but never stops the conversation', async ({ page }) => {
@@ -219,7 +218,7 @@ test('a reply that arrives after the modal was closed or another character opene
   await expect(page.locator('.chat-exchange')).toHaveCount(0)
   await page.getByRole('button', { name: 'Lý Công Uẩn dời đô năm nào?', exact: true }).click()
   await expect(page.locator('.chat-answer')).toContainText('1010')
-  expect(await storedKeys(page)).toEqual([`${prefix}:guest:ly-cong-uan`])
+  expect(await storedKeys(page)).toEqual([`${prefix}:${minh}:ly-cong-uan`])
   await page.keyboard.press('Escape')
   await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
   await expect(page.locator('.chat-exchange')).toHaveCount(0)
