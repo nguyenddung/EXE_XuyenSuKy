@@ -27,7 +27,7 @@ test('strategy gives feedback, prevents advance on incorrect choices and awards 
 })
 test('mobile: both routes, image loading, modal focus and Escape restore', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 }); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message))
-  for (const route of ['/', '/home']) { await page.goto(route); for (let index = 0; index < 4; index++) { const trigger = page.locator('.game-card-bottom button').nth(index); await trigger.click(); await expect(page.locator('#game-title')).toBeFocused(); await page.keyboard.press('Shift+Tab'); await expect(page.locator('.minigame-modal button:not(:disabled), .minigame-modal a[href]').last()).toBeFocused(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await page.keyboard.press('Escape'); await expect(trigger).toBeFocused(); await expect(page.getByRole('dialog')).toHaveCount(0) } }
+  for (const route of ['/', '/home#challenges']) { await page.goto(route); for (let index = 0; index < 4; index++) { const trigger = page.locator('.game-card-bottom button').nth(index); await trigger.click(); await expect(page.locator('#game-title')).toBeFocused(); await page.keyboard.press('Shift+Tab'); await expect(page.locator('.minigame-modal button:not(:disabled), .minigame-modal a[href]').last()).toBeFocused(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await page.keyboard.press('Escape'); await expect(trigger).toBeFocused(); await expect(page.getByRole('dialog')).toHaveCount(0) } }
   expect(errors).toEqual([])
 })
 

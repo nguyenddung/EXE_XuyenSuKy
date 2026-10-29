@@ -1,4 +1,6 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 
 test('dashboard cards open real lessons, search and quiz', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1536, height: 1024 })
@@ -12,6 +14,7 @@ test('dashboard cards open real lessons, search and quiz', async ({ page }, test
   await page.getByRole('searchbox', { name: 'Tìm sự kiện, nhân vật, thời kỳ' }).fill('Bạch Đằng')
   await page.getByRole('searchbox', { name: 'Tìm sự kiện, nhân vật, thời kỳ' }).press('Enter')
   await expect(page.getByRole('region', { name: 'Kết quả tìm kiếm' }).getByRole('button').first()).toBeVisible()
+  await openMenu(page, 'Trang chủ')
   await page.locator('.dashboard-mission.mission-orange').click()
   await expect(page.getByRole('dialog')).toBeVisible()
 })
@@ -23,7 +26,7 @@ test('landing shares the dashboard look and its era cards open the lesson on /ho
   await expect(page.locator('.site-header .brand-text')).toHaveText('Xuyên Sử Ký')
   await expect(page.locator('.landing-hero .dashboard-era')).toHaveCount(6)
   await page.locator('.landing-hero .dashboard-era').filter({ hasText: 'Thời Lý' }).click()
-  await expect(page).toHaveURL(/\/home$/)
+  await expect(page).toHaveURL(/\/home#library$/)
   await expect(page.locator('#dataset-reader-title')).toContainText('thời Lý')
 })
 
@@ -44,4 +47,19 @@ test('dashboard navigation works on mobile without horizontal overflow', async (
   await expect(page.getByRole('navigation', { name: 'Các khu vực' })).toBeVisible()
   await page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name: 'Học tập' }).click()
   await expect(page.getByRole('button', { name: 'Mở menu' })).toBeVisible()
+})
+
+test('each menu item shows only its own section', async ({ page }) => {
+  await page.goto('/home')
+  const sections = { 'Trang chủ': '#dashboard', 'Hành trình': '#journey', 'Học tập': '#library', 'Khám phá': '#timeline', 'Nhân vật AI': '#characters', 'Thử thách': '#challenges', 'Bảng xếp hạng': '#progress' }
+  for (const [name, selector] of Object.entries(sections)) {
+    await openMenu(page, name)
+    await expect(page).toHaveURL(new RegExp(`${selector}$`))
+    await expect(page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true })).toHaveAttribute('aria-current', 'page')
+    await expect(page.locator(selector)).toBeVisible()
+    for (const other of Object.values(sections).filter(item => item !== selector)) await expect(page.locator(other)).toHaveCount(0)
+  }
+  await page.goBack()
+  await expect(page.locator('#challenges')).toBeVisible()
+  await expect(page.locator('#progress')).toHaveCount(0)
 })

@@ -4,6 +4,7 @@ const prefix = 'xuyen-su-ky-chat-v1'
 const sessionKey = 'xuyen-su-ky-demo-v1'
 const minhSession = { loggedIn: true, guest: false, userId: 'minh@xuyensuki.vn', name: 'Minh', gradeSelected: true, grade: 7, completedActivities: [], earnedXp: 0 }
 
+const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 const card = (page: Page, name: string) => page.locator('.character-card').filter({ has: page.getByRole('heading', { name, exact: true }) })
 async function openCharacter(page: Page, name: string, mode: 'Nhắn tin' | 'Nói chuyện' = 'Nhắn tin') {
   await page.goto('/home#characters')
@@ -17,7 +18,7 @@ const ask = async (page: Page, question: string) => {
 const stored = (page: Page, owner: string, character: string) => page.evaluate(([key]) => localStorage.getItem(key), [`${prefix}:${encodeURIComponent(owner)}:${character}`])
 const storedKeys = (page: Page) => page.evaluate((chatPrefix) => Object.keys(localStorage).filter((key) => key.startsWith(chatPrefix)).sort(), prefix)
 async function useSession(page: Page, session: object) {
-  await page.goto('/home')
+  await page.goto('/home#characters')
   await page.evaluate(([key, value]) => localStorage.setItem(key, value), [sessionKey, JSON.stringify(session)])
 }
 
@@ -41,6 +42,7 @@ test('conversation survives reload, close and source lessons, and text and voice
   await expect(page.locator('.lesson-reader')).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(page.locator('.lesson-reader')).toHaveCount(0)
+  await openMenu(page, 'Nhân vật AI')
   await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
   await expect(page.locator('.chat-answer')).toHaveCount(1)
   await expect(page.locator('.chat-sources small').first()).toContainText('trang PDF')
@@ -103,6 +105,7 @@ test.describe('accounts', () => {
     await page.locator('.login-form button[type=submit]').click()
     await page.locator('.grade-onboarding .button-primary').click()
     await expect(page).toHaveURL(/\/home$/)
+    await openMenu(page, 'Nhân vật AI')
     await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
     await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
     await expect(page.locator('.chat-answer')).toContainText('938')
@@ -115,6 +118,7 @@ test.describe('accounts', () => {
     await page.goto('/dang-nhap')
     await page.getByRole('button', { name: /Học thử không cần tài khoản/ }).click()
     await expect(page).toHaveURL(/\/home$/)
+    await openMenu(page, 'Nhân vật AI')
     await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
     await expect(page.locator('.chat-exchange')).toHaveCount(0)
     await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
@@ -131,6 +135,7 @@ test.describe('accounts', () => {
     await page.getByRole('button', { name: 'Điền tài khoản mẫu' }).click()
     await page.locator('.login-form button[type=submit]').click()
     await expect(page).toHaveURL(/\/home$/)
+    await openMenu(page, 'Nhân vật AI')
     await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
     await expect(page.locator('.chat-exchange')).toHaveCount(1)
     await expect(page.locator('.chat-exchange .user-bubble')).toHaveText('Ngô Quyền thắng trận Bạch Đằng năm nào?')
@@ -162,7 +167,7 @@ test.describe('accounts', () => {
 })
 
 test('corrupt, outdated or mismatched stored data is ignored and chatting still works', async ({ page }) => {
-  await page.goto('/home')
+  await page.goto('/home#characters')
   const key = `${prefix}:guest:ngo-quyen`
   for (const raw of ['{khong-phai-json', JSON.stringify({ version: 0, owner: 'guest', characterId: 'ngo-quyen', exchanges: [] }), JSON.stringify({ version: 1, owner: 'minh@xuyensuki.vn', characterId: 'ngo-quyen', exchanges: [{ id: 'x', question: 'Của người khác', askedAt: 1, answeredAt: 2, reply: { mode: 'textbook', answer: 'RIENG-TU-CUA-MINH', sources: [] } }] })]) {
     await page.evaluate(([name, value]) => localStorage.setItem(name, value), [key, raw])

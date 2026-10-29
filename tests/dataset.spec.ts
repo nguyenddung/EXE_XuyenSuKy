@@ -1,7 +1,9 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 
 test('dataset backend drives library, grade filters, chapter filters and pagination', async ({ page }) => {
-  await page.goto('/home')
+  await page.goto('/home#library')
   await expect(page.locator('.dataset-stats')).toContainText('130')
   await expect(page.locator('.dataset-card')).toHaveCount(6)
   await page.getByRole('combobox', { name: 'Lọc lớp sách giáo khoa' }).selectOption('12')
@@ -16,7 +18,7 @@ test('dataset backend drives library, grade filters, chapter filters and paginat
 })
 
 test('real dataset reader keeps sources, notes, read progress and bookmarks after reload', async ({ page }) => {
-  await page.goto('/home')
+  await page.goto('/home#library')
   await page.getByRole('combobox', { name: 'Lọc lớp sách giáo khoa' }).selectOption('7')
   await expect(page.locator('.library-result-count')).toContainText('23 bài học')
   await page.locator('.library-open').first().click()
@@ -28,7 +30,9 @@ test('real dataset reader keeps sources, notes, read progress and bookmarks afte
   await page.getByRole('button', { name: 'Đánh dấu đã đọc' }).click()
   await page.getByRole('dialog').getByRole('button', { name: 'Cần đọc lại', exact: true }).click()
   await page.keyboard.press('Escape')
+  await openMenu(page, 'Trang chủ')
   await expect(page.getByRole('progressbar', { name: 'Tỉ lệ bài đã đọc của lớp hiện tại' })).toContainText('4%')
+  await openMenu(page, 'Học tập')
   await page.reload()
   await page.getByRole('button', { name: 'Đã lưu', exact: true }).click()
   await expect(page.locator('.dataset-card')).toHaveCount(1)
@@ -37,7 +41,7 @@ test('real dataset reader keeps sources, notes, read progress and bookmarks afte
 })
 
 test('source lookup is accent insensitive, cites PDF page and opens the original lesson', async ({ page }) => {
-  await page.goto('/home')
+  await page.goto('/home#library')
   await page.getByRole('button', { name: 'Tra cứu đoạn có nguồn' }).click()
   await page.getByRole('searchbox', { name: 'Tìm kiếm sách giáo khoa' }).fill('bach dang')
   await expect(page.locator('.dataset-source-card').first()).toBeVisible()
@@ -53,7 +57,7 @@ test('grade 12 selection survives reload; reader is usable on mobile and backend
   await page.setViewportSize({ width: 390, height: 844 })
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
-  await page.goto('/home')
+  await page.goto('/home#library')
   await page.locator('.class-card').filter({ has: page.getByRole('heading', { name: 'Lớp 12', exact: true }) }).getByRole('button').click()
   await expect(page.locator('.dataset-recommendation')).toContainText('LỚP 12')
   await page.reload()
