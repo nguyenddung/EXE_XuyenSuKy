@@ -4,14 +4,15 @@ import type { JourneyState } from '../hooks/useJourney'
 import type { JournalKind } from '../hooks/useLearningJournal'
 import { JourneyVideo } from './JourneyVideo'
 import {
-  answerComplete, checkOpen, clockLabel, correctNeeded, gradeAnswer, videoLength, interviewCharacters, mastery, missionOpen, nextReviewDay, pagesLabel, pickVariant, QUESTIONS_PER_MISSION, recordFirstTry, schedule, stageOfMission, startAnswer, writtenStages, xpFor,
+  answerComplete, CHAPTER_CHECK_XP, chapterOpen, checkOpen, clockLabel, correctNeeded, gradeAnswer, videoLength, interviewCharacters, mastery, missionOpen, nextReviewDay, pagesLabel, pickVariant, QUESTIONS_PER_MISSION, recordFirstTry, schedule, stageOfMission, startAnswer, writtenStages, xpFor,
   type Answer, type Grade, type Journey, type Mission, type Narration, type Question, type Reflection, type Stage,
 } from '../lib/journey'
 
-export type JourneyRequest = { name: 'mission'; missionId: string } | { name: 'check'; stageId: string } | { name: 'review' } | { name: 'collection' } | { name: 'videos' }
+export type JourneyRequest = { name: 'mission'; missionId: string } | { name: 'check'; stageId: string } | { name: 'chapter' } | { name: 'review' } | { name: 'collection' } | { name: 'videos' }
 export type JourneyView =
   | { name: 'mission'; missionId: string; token: number }
   | { name: 'check'; stageId: string; questions: { question: Question; missionId: string | null }[]; token: number }
+  | { name: 'chapter'; questions: { question: Question; missionId: string | null }[]; token: number }
   | { name: 'review'; queue: { missionId: string; question: Question }[]; token: number }
   | { name: 'collection'; token: number }
   | { name: 'videos'; token: number }
@@ -150,7 +151,7 @@ function MissionView({ state, open, onNotice, onRecord, onInterview, mission, st
     const due = progress.objectives[mission.objective.id]?.due
     const percent = Math.round(100 * (Math.min(level.variants, level.need) + Math.min(level.days, level.needDays)) / (level.need + level.needDays))
     body = <section className="journey-panel"><span className="journey-eyebrow">Hoàn thành nhiệm vụ</span><p className="journey-big">+{earned + bonus} XP</p>{bonus > 0 && <p className="journey-hint-line">Gồm {bonus} XP thưởng hoàn thành nhiệm vụ.</p>}
-      <h3>Mức nắm vững</h3><p className="journey-hint-line">Đúng ngay lần đầu ở {level.variants}/{level.need} câu khác nhau, trong {level.days}/{level.needDays} ngày khác nhau.</p><div className="journey-meter" role="progressbar" aria-label="Mức nắm vững" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${percent}%` }} /></div>
+      <h3>Mức nắm vững</h3><p className="journey-hint-line">Đúng ngay lần đầu ở {Math.min(level.variants, level.need)}/{level.need} câu khác nhau, trong {Math.min(level.days, level.needDays)}/{level.needDays} ngày khác nhau.</p><div className="journey-meter" role="progressbar" aria-label="Mức nắm vững" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${percent}%` }} /></div>
       <div className={`journey-piece ${owned ? 'is-owned' : ''}`}><Award size={20} /><span><strong>{piece.title}</strong><small>{owned ? 'Em đã nắm vững mục tiêu này và nhận được mảnh Sử Ký.' : `Mảnh Sử Ký trao khi em nắm vững. Nhiệm vụ sẽ quay lại trong Ôn tập${typeof due === 'number' ? ` sau ${Math.max(0, due - today)} ngày` : ''}.`}</small></span></div>
       <div className="journey-actions"><button className="button-outline" type="button" onClick={() => open({ name: 'collection' })}>Bộ sưu tập</button>{next && missionOpen(progress, journey, stage, index + 1) && <button className="button-primary" type="button" onClick={() => open({ name: 'mission', missionId: next.id })}>Nhiệm vụ tiếp: {next.title} <ArrowRight size={16} /></button>}{!next && checkOpen(progress, journey, stage) && <button className="button-primary" type="button" onClick={() => open({ name: 'check', stageId: stage.id })}>Kiểm tra cuối chặng <ArrowRight size={16} /></button>}</div></section>
   }
@@ -163,8 +164,9 @@ function ReflectionCard({ reflection }: { reflection: Reflection }) {
   return <section className="journey-panel"><span className="journey-eyebrow">Suy ngẫm · tự đối chiếu, không chấm điểm</span><p className="journey-prompt">{reflection.prompt}</p><label className="journey-reflection"><span>Bài làm của em</span><textarea value={text} maxLength={2000} rows={4} onChange={(event) => setText(event.target.value)} /></label>{shown ? <><div className="journey-rubric"><strong>Bài của em đã có những ý này chưa?</strong>{reflection.rubric.map((item) => <label key={item}><input type="checkbox" /> <span>{item}</span></label>)}</div><p className="journey-clue"><strong>Bài mẫu:</strong> {reflection.sample_answer}</p></> : <button className="button-outline" type="button" onClick={() => setShown(true)}>So với bài mẫu</button>}</section>
 }
 
-function CheckView({ state, open, onNotice, onRecord, stage, questions }: Shared & { stage: Stage; questions: { question: Question; missionId: string | null }[] }) {
-  const { journey, update, today } = state
+/** End-of-stage check, or with no stage the end-of-chapter test over the whole chapter. */
+function CheckView({ state, open, onNotice, onRecord, stage, questions }: Shared & { stage?: Stage; questions: { question: Question; missionId: string | null }[] }) {
+  const { journey, progress, update, today } = state
   const rules = journey.rules
   const [index, setIndex] = useState(0)
   const [answer, setAnswer] = useState<Answer>(() => startAnswer(questions[0].question))
@@ -190,27 +192,33 @@ function CheckView({ state, open, onNotice, onRecord, stage, questions }: Shared
   function next() {
     if (index + 1 < questions.length) { setIndex(index + 1); setAnswer(startAnswer(questions[index + 1].question)); setResult(null); return }
     const ratio = score / questions.length
+    const prize = stage ? rules.xp.stage_check_pass : rules.xp.chapter_check_pass ?? CHAPTER_CHECK_XP
     const reward = update((draft) => {
-      const record = draft.stages[stage.id] ||= { passed: false, best: 0 }
+      const record = stage ? (draft.stages[stage.id] ||= { passed: false, best: 0 }) : (draft.chapter ||= { passed: false, best: 0 })
       record.best = Math.max(record.best, ratio)
       if (score < needed || record.passed) return 0
       record.passed = true
-      draft.xp += rules.xp.stage_check_pass
-      return rules.xp.stage_check_pass
+      draft.xp += prize
+      return prize
     }) || 0
-    onRecord(`journey:${stage.id}:check`, 'quiz')
+    onRecord(stage ? `journey:${stage.id}:check` : `journey:${journey.id}:chapter`, 'quiz')
     setGain(reward); setPhase('result')
   }
 
-  const reflections = stage.stage_check?.reflection || []
+  const reflections = stage?.stage_check?.reflection || []
+  const retry = () => open(stage ? { name: 'check', stageId: stage.id } : { name: 'chapter' })
+  const written = writtenStages(journey)
+  const isLast = !!stage && written[written.length - 1] === stage
   let body: ReactNode
-  if (phase === 'quiz') body = <section className="journey-panel"><span className="journey-eyebrow">Câu {index + 1}/{questions.length} · đúng {needed}/{questions.length} câu là qua chặng · mỗi câu trả lời một lần</span><QuestionCard question={current.question} answer={answer} onChange={setAnswer} locked={!!result} result={result} />{result && <Feedback ok={result.ok}><strong>{result.ok ? 'Đúng.' : 'Chưa đúng.'}</strong>{result.why && <span>{result.why}</span>}<span>{current.question.explanation}</span>{!result.ok && <small>{pagesLabel(current.question.sources)}</small>}</Feedback>}<div className="journey-actions">{result ? <button className="button-primary" type="button" onClick={next}>{index + 1 < questions.length ? 'Câu tiếp' : 'Xem điểm'} <ArrowRight size={16} /></button> : <button className="button-primary" type="button" disabled={!answerComplete(answer)} onClick={check}>Kiểm tra</button>}</div></section>
+  if (phase === 'quiz') body = <section className="journey-panel"><span className="journey-eyebrow">Câu {index + 1}/{questions.length} · đúng {needed}/{questions.length} câu là qua {stage ? 'chặng' : 'chương'} · mỗi câu trả lời một lần</span><QuestionCard question={current.question} answer={answer} onChange={setAnswer} locked={!!result} result={result} />{result && <Feedback ok={result.ok}><strong>{result.ok ? 'Đúng.' : 'Chưa đúng.'}</strong>{result.why && <span>{result.why}</span>}<span>{current.question.explanation}</span>{!result.ok && <small>{pagesLabel(current.question.sources)}</small>}</Feedback>}<div className="journey-actions">{result ? <button className="button-primary" type="button" onClick={next}>{index + 1 < questions.length ? 'Câu tiếp' : 'Xem điểm'} <ArrowRight size={16} /></button> : <button className="button-primary" type="button" disabled={!answerComplete(answer)} onClick={check}>Kiểm tra</button>}</div></section>
   else if (phase === 'result') {
     const ratio = score / questions.length
     const passed = score >= needed
-    body = <section className="journey-panel"><span className="journey-eyebrow">Kết quả</span><p className="journey-big">{score}/{questions.length}</p><p className="journey-hint-line">{Math.round(ratio * 100)}% · cần đúng {needed}/{questions.length} câu để qua chặng</p><p role="status">{passed ? `Em đã qua chặng${gain ? ` và nhận ${gain} XP` : ''}. Chặng tiếp theo đã mở.` : 'Chưa đủ điểm qua chặng. Em có thể làm lại ngay; mỗi lần làm sẽ gặp câu hỏi khác.'}</p><div className="journey-actions">{!passed && <button className="button-primary" type="button" onClick={() => open({ name: 'check', stageId: stage.id })}><RotateCcw size={16} /> Làm lại (đề mới)</button>}{reflections.length > 0 && <button className={passed ? 'button-primary' : 'button-outline'} type="button" onClick={() => setPhase('reflect')}>Câu hỏi suy ngẫm</button>}</div></section>
+    body = <section className="journey-panel"><span className="journey-eyebrow">Kết quả</span><p className="journey-big">{score}/{questions.length}</p><p className="journey-hint-line">{Math.round(ratio * 100)}% · cần đúng {needed}/{questions.length} câu để qua {stage ? 'chặng' : 'chương'}</p><p role="status">{stage
+        ? passed ? `Em đã qua chặng${gain ? ` và nhận ${gain} XP` : ''}. ${isLast ? 'Bài kiểm tra chương đã mở.' : 'Chặng tiếp theo đã mở.'}` : 'Chưa đủ điểm qua chặng. Em có thể làm lại ngay; mỗi lần làm sẽ gặp câu hỏi khác.'
+        : passed ? `Em đã hoàn thành chương${gain ? ` và nhận ${gain} XP` : ''}.` : 'Chưa đủ điểm qua chương. Em có thể ôn lại các nhiệm vụ rồi làm lại; mỗi lần làm sẽ gặp câu hỏi khác.'}</p><div className="journey-actions">{!passed && <button className="button-primary" type="button" onClick={retry}><RotateCcw size={16} /> Làm lại (đề mới)</button>}{reflections.length > 0 && <button className={passed ? 'button-primary' : 'button-outline'} type="button" onClick={() => setPhase('reflect')}>Câu hỏi suy ngẫm</button>}{passed && isLast && chapterOpen(progress, journey) && <button className="button-primary" type="button" onClick={() => open({ name: 'chapter' })}>Kiểm tra chương <ArrowRight size={16} /></button>}</div></section>
   } else body = <>{reflections.map((reflection) => <ReflectionCard key={reflection.id} reflection={reflection} />)}</>
-  return <><p className="journey-modal-kicker">Kiểm tra cuối chặng</p><h2 id="journey-modal-title" tabIndex={-1}>{stage.title}</h2>{body}</>
+  return <><p className="journey-modal-kicker">{stage ? 'Kiểm tra cuối chặng' : `Kiểm tra chương · ${questions.length} câu`}</p><h2 id="journey-modal-title" tabIndex={-1}>{stage ? stage.title : journey.title}</h2>{body}</>
 }
 
 function ReviewView({ state, onNotice, onRecord, queue }: Shared & { queue: { missionId: string; question: Question }[] }) {
@@ -287,6 +295,8 @@ export function JourneyModal(props: Shared & { view: JourneyView }) {
   } else if (view.name === 'check') {
     const stage = writtenStages(state.journey).find((item) => item.id === view.stageId)
     if (stage && view.questions.length) content = <CheckView key={view.token} {...props} stage={stage} questions={view.questions} />
+  } else if (view.name === 'chapter') {
+    if (view.questions.length) content = <CheckView key={view.token} {...props} questions={view.questions} />
   } else if (view.name === 'review') content = <ReviewView key={view.token} {...props} queue={view.queue} />
   else if (view.name === 'videos') content = <VideosView key={view.token} {...props} />
   else content = <CollectionView key={view.token} {...props} />

@@ -7,7 +7,7 @@ import { loadDataset } from '../server/dataset.mjs'
 import { handleApi } from '../server/handler.mjs'
 import { defaultJourneyPath, JourneyError, validateJourney } from '../server/journeys.mjs'
 import {
-  answerComplete, checkLength, checkOpen, checkQuestions, clockLabel, correctNeeded, dueMissions, emptyProgress, gradeAnswer, mastery, missionOpen, parseProgress, pickVariant, recordFirstTry, schedule, sceneAt, stageOpen, startAnswer, videoLength, writtenStages, xpFor,
+  answerComplete, CHAPTER_CHECK_QUESTIONS, chapterOpen, chapterQuestions, checkLength, checkOpen, checkQuestions, clockLabel, correctNeeded, dueMissions, emptyProgress, gradeAnswer, mastery, missionOpen, parseProgress, pickVariant, QUESTIONS_PER_MISSION, recordFirstTry, schedule, sceneAt, stageOpen, startAnswer, videoLength, writtenStages, xpFor,
 } from '../src/lib/journey.ts'
 
 let dataset, source, server, base
@@ -46,7 +46,7 @@ test('validation rejects fabricated quotes, thin question pools, missing hint ca
   reject((journey) => { mission(journey).cards[0].sources[0].quote = 'Mùa xuân năm 41, Hai Bà Trưng dựng cờ khởi nghĩa' }, /quote is not in chunk/)
   reject((journey) => { mission(journey).cards[0].sources[0].chunk_id = 'LS7_B01_C001' }, /not in the grade 6 dataset/)
   reject((journey) => { mission(journey).cards[0].sources[0].pages = [70, 70] }, /pages do not match/)
-  reject((journey) => { mission(journey).challenge_pool.splice(2) }, /challenge_pool needs >= 3/)
+  reject((journey) => { mission(journey).challenge_pool.splice(4) }, /challenge_pool needs >= 5/)
   reject((journey) => { mission(journey).challenge_pool[0].hints.card = 'b16_m9.c1' }, /hint card .* does not exist/)
   reject((journey) => { delete mission(journey).challenge_pool[0].hints.narrow }, /every hint level/)
   reject((journey) => { mission(journey).challenge_pool[0].answer = 9 }, /valid answer index/)
@@ -117,6 +117,39 @@ test('equivalent questions never repeat the last one and prefer questions not ye
   const drawn = checkQuestions(emptyProgress(), stage, () => 0)
   assert.equal(drawn.length, stage.missions.length + stage.stage_check.extra.length)
   assert.deepEqual(drawn.slice(0, stage.missions.length).map((item) => item.missionId), stage.missions.map((item) => item.id))
+})
+
+test('every mission asks five different questions, and the chapter test draws twenty from the whole chapter once every stage is passed', async () => {
+  assert.equal(QUESTIONS_PER_MISSION, 5)
+  assert.equal(CHAPTER_CHECK_QUESTIONS, 20)
+  for (const n of [1, 2, 3, 4, 5]) {
+    const journey = JSON.parse(await readFile(resolve(defaultJourneyPath, `lop6_chuong${n}.json`), 'utf8'))
+    const missions = writtenStages(journey).flatMap((stage) => stage.missions)
+    for (const mission of missions) assert.ok(new Set(mission.challenge_pool.map((question) => question.prompt)).size >= QUESTIONS_PER_MISSION, `${mission.id} has five different questions`)
+    for (const random of [() => 0, () => 0.99, sequence(0.3, 0.7, 0.1)]) {
+      const drawn = chapterQuestions(emptyProgress(), journey, random)
+      assert.equal(drawn.length, 20, journey.id)
+      assert.equal(new Set(drawn.map((item) => item.question.id)).size, 20, `${journey.id} never repeats a question`)
+      const covered = new Set(drawn.map((item) => item.missionId).filter(Boolean))
+      assert.equal(covered.size, Math.min(missions.length, 20), `${journey.id} covers every mission`)
+      const places = drawn.map((item) => item.missionId ? missions.findIndex((mission) => mission.id === item.missionId) : missions.length)
+      assert.deepEqual(places, [...places].sort((a, b) => a - b), `${journey.id} is in lesson order`)
+    }
+  }
+  const journey = copy()
+  const progress = emptyProgress()
+  assert.equal(chapterOpen(progress, journey), false)
+  for (const stage of writtenStages(journey).slice(0, -1)) progress.stages[stage.id] = { passed: true, best: 0.9 }
+  assert.equal(chapterOpen(progress, journey), false, 'the last stage must be passed too')
+  progress.stages[writtenStages(journey).at(-1).id] = { passed: false, best: 0.5 }
+  assert.equal(chapterOpen(progress, journey), false)
+  progress.stages[writtenStages(journey).at(-1).id] = { passed: true, best: 0.8 }
+  assert.equal(chapterOpen(progress, journey), true)
+  assert.equal(chapterOpen({ ...emptyProgress(), unlockAll: true }, journey), true)
+  // The chapter result survives a reload; anything malformed is dropped.
+  assert.deepEqual(parseProgress({ ...emptyProgress(), chapter: { passed: true, best: 0.85 } }).chapter, { passed: true, best: 0.85 })
+  assert.equal(parseProgress({ ...emptyProgress(), chapter: { passed: true, best: 7 } }).chapter, null)
+  assert.equal(parseProgress({ v: 1 }).chapter, null)
 })
 
 test('answer sheets are shuffled, never start solved, and grade every question type', () => {

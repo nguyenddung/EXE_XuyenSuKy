@@ -50,7 +50,7 @@
       "max_items_per_session": 5
     },
     "challenge": {
-      "min_variants_per_objective": 3,
+      "min_variants_per_objective": 5,
       "shuffle_choices": true
     },
     "stage_check": {
@@ -851,6 +851,46 @@
                   "content_type": "did_you_know"
                 }
               ]
+            },
+            {
+              "id": "b4_m1.q5",
+              "type": "trac_nghiem",
+              "prompt": "Người tối cổ xuất hiện cách đây khoảng bao lâu?",
+              "choices": [
+                "Khoảng 4 triệu năm",
+                "Khoảng 15 vạn năm",
+                "Khoảng 4 vạn năm",
+                "Khoảng 4 000 năm"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Người tối cổ xuất hiện trước Người tinh khôn rất lâu.",
+                "card": "b4_m1.c2",
+                "narrow": "Con số tính bằng triệu năm."
+              },
+              "explanation": "Người tối cổ xuất hiện khoảng 4 triệu năm trước; đến khoảng 15 vạn năm trước thì biến đổi thành Người tinh khôn.",
+              "sources": [
+                {
+                  "quote": "Từ loài Vượn người, một nhánh đã phát triển lên thành người tối cổ.",
+                  "chunk_id": "LS6_B04_C004",
+                  "lesson_number": 4,
+                  "pages": [
+                    18,
+                    18
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Dạng người này xuất hiện khoảng 4 triệu năm trước, đến khoảng 15 vạn năm trước thì biến đổi thành người tinh khôn.",
+                  "chunk_id": "LS6_B04_C004",
+                  "lesson_number": 4,
+                  "pages": [
+                    18,
+                    18
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -1594,6 +1634,130 @@
               "sources": [
                 {
                   "quote": "có niên đại cách ngày nay 80 vạn năm",
+                  "chunk_id": "LS6_B04_C009",
+                  "lesson_number": 4,
+                  "pages": [
+                    20,
+                    20
+                  ],
+                  "content_type": "did_you_know"
+                },
+                {
+                  "quote": "Đây là dấu tích cổ xưa nhất chứng tỏ sự xuất hiện sớm của người nguyên thuỷ",
+                  "chunk_id": "LS6_B04_C009",
+                  "lesson_number": 4,
+                  "pages": [
+                    20,
+                    20
+                  ],
+                  "content_type": "did_you_know"
+                }
+              ]
+            },
+            {
+              "id": "b4_m2.q4",
+              "type": "trac_nghiem",
+              "prompt": "Dấu vết xưa nhất của Người tối cổ ở Đông Nam Á được phát hiện ở đâu?",
+              "choices": [
+                "Hang Ni-a (Ma-lai-xi-a)",
+                "An Khê (Gia Lai)",
+                "Núi Đọ (Thanh Hoá)",
+                "Đảo Gia-va (In-đô-nê-xi-a)"
+              ],
+              "answer": 3,
+              "hints": {
+                "nudge": "Hoá thạch này có niên đại khoảng 2 triệu năm.",
+                "card": "b4_m2.c2",
+                "narrow": "Nơi đó là một hòn đảo của In-đô-nê-xi-a."
+              },
+              "explanation": "Hoá thạch trên đảo Gia-va, khoảng 2 triệu năm trước, là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á.",
+              "sources": [
+                {
+                  "quote": "hoá thạch phát hiện trên đảo Gia-va (In-đô-nê-xi-a) có niên đại khoảng 2 triệu năm trước là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á",
+                  "chunk_id": "LS6_B04_C007",
+                  "lesson_number": 4,
+                  "pages": [
+                    19,
+                    19
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Chiếc sọ Người tinh khôn tìm thấy ở hang Ni-a (Ma-lai-xi-a) có niên đại cách ngày nay khoảng 4 vạn năm.",
+                  "chunk_id": "LS6_B04_C008",
+                  "lesson_number": 4,
+                  "pages": [
+                    19,
+                    20
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b4_m2.q5",
+              "type": "phan_loai",
+              "prompt": "Xếp mỗi phát hiện vào nơi tìm thấy.",
+              "groups": {
+                "Ở nước khác thuộc Đông Nam Á": [
+                  "Hoá thạch Người tối cổ trên đảo Gia-va",
+                  "Sọ Người tinh khôn ở hang Ni-a"
+                ],
+                "Ở Việt Nam": [
+                  "Răng Người tối cổ ở Thẩm Khuyên",
+                  "Công cụ đá ở Núi Đọ",
+                  "Hơn 3 000 hiện vật đá ở An Khê"
+                ]
+              },
+              "hints": {
+                "nudge": "Lạng Sơn, Thanh Hoá, Gia Lai là các tỉnh của nước ta.",
+                "card": "b4_m2.c3",
+                "narrow": "Gia-va thuộc In-đô-nê-xi-a, Ni-a thuộc Ma-lai-xi-a."
+              },
+              "explanation": "Gia-va và Ni-a ở In-đô-nê-xi-a, Ma-lai-xi-a; Thẩm Khuyên, Núi Đọ, An Khê ở Việt Nam.",
+              "sources": [
+                {
+                  "quote": "Ở Việt Nam cũng đã phát hiện răng của Người tối cổ ở Thẩm Khuyên, Thẩm Hai (Lạng Sơn)",
+                  "chunk_id": "LS6_B04_C008",
+                  "lesson_number": 4,
+                  "pages": [
+                    19,
+                    20
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Những công cụ đá được ghẻ đẽo thô sơ của Người tối cổ cũng đã có mặt ở An Khê (Gia Lai), Núi Đọ (Thanh Hoá), Xuân Lộc (Đồng Nai)",
+                  "chunk_id": "LS6_B04_C008",
+                  "lesson_number": 4,
+                  "pages": [
+                    19,
+                    20
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "hoá thạch phát hiện trên đảo Gia-va (In-đô-nê-xi-a) có niên đại khoảng 2 triệu năm trước là dấu vết xưa nhất của Người tối cổ ở Đông Nam Á",
+                  "chunk_id": "LS6_B04_C007",
+                  "lesson_number": 4,
+                  "pages": [
+                    19,
+                    19
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Chiếc sọ Người tinh khôn tìm thấy ở hang Ni-a (Ma-lai-xi-a) có niên đại cách ngày nay khoảng 4 vạn năm.",
+                  "chunk_id": "LS6_B04_C008",
+                  "lesson_number": 4,
+                  "pages": [
+                    19,
+                    20
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "người ta đã phát hiện được trên 3 000 hiện vật đá (gồm rìu tay, công cụ ghè đẽo thô sơ,...) có niên đại cách ngày nay 80 vạn năm",
                   "chunk_id": "LS6_B04_C009",
                   "lesson_number": 4,
                   "pages": [
@@ -2465,6 +2629,86 @@
                   "content_type": "did_you_know"
                 }
               ]
+            },
+            {
+              "id": "b5_m1.q4",
+              "type": "trac_nghiem",
+              "prompt": "Ở giai đoạn bầy người nguyên thuỷ, con người kiếm sống chủ yếu bằng cách nào?",
+              "choices": [
+                "Trồng lúa nước",
+                "Buôn bán đường biển",
+                "Luyện kim",
+                "Săn bắt và hái lượm"
+              ],
+              "answer": 3,
+              "hints": {
+                "nudge": "Lúc này con người chưa biết trồng trọt.",
+                "card": "b5_m1.c2",
+                "narrow": "Họ lấy những gì tự nhiên có sẵn."
+              },
+              "explanation": "Bầy người nguyên thuỷ sống trong hang động, dựa vào săn bắt và hái lượm.",
+              "sources": [
+                {
+                  "quote": "Sống trong hang, động, dựa vào săn bắt và hái lượm.",
+                  "chunk_id": "LS6_B05_C003",
+                  "lesson_number": 5,
+                  "pages": [
+                    21,
+                    21
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Sống thành bầy, có người đứng đầu, có sự phân công lao động và cùng chăm sóc con cái.",
+                  "chunk_id": "LS6_B05_C003",
+                  "lesson_number": 5,
+                  "pages": [
+                    21,
+                    21
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b5_m1.q5",
+              "type": "trac_nghiem",
+              "prompt": "Trong công xã thị tộc, mọi người làm việc và hưởng thành quả như thế nào?",
+              "choices": [
+                "Mỗi người tự làm, tự hưởng",
+                "Làm chung và hưởng chung",
+                "Người đứng đầu hưởng tất cả",
+                "Chỉ người già được hưởng"
+              ],
+              "answer": 1,
+              "hints": {
+                "nudge": "Thị tộc gồm những người cùng dòng máu.",
+                "card": "b5_m1.c3",
+                "narrow": "Hai việc đều có chữ \"chung\"."
+              },
+              "explanation": "Công xã thị tộc gồm 2 - 3 thế hệ cùng dòng máu, làm chung và hưởng chung.",
+              "sources": [
+                {
+                  "quote": "Biết trồng trọt, chăn nuôi, dệt vải và làm gốm.",
+                  "chunk_id": "LS6_B05_C003",
+                  "lesson_number": 5,
+                  "pages": [
+                    21,
+                    21
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Công xã thị tộc gồm 2, 3 thế hệ, có cùng dòng máu, làm chung và hưởng chung.",
+                  "chunk_id": "LS6_B05_C003",
+                  "lesson_number": 5,
+                  "pages": [
+                    21,
+                    21
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -3087,6 +3331,76 @@
                 },
                 {
                   "quote": "Nhờ có lao động, con người đã từng bước tự cải biến, hoàn thiện mình và làm cho đời sống ngày càng phong phú hơn.",
+                  "chunk_id": "LS6_B05_C006",
+                  "lesson_number": 5,
+                  "pages": [
+                    22,
+                    22
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b5_m2.q4",
+              "type": "trac_nghiem",
+              "prompt": "Theo SGK, nhờ đâu cơ thể người nguyên thuỷ dần biến đổi để trở thành Người hiện đại?",
+              "choices": [
+                "Nhờ có sẵn thức ăn mà không phải làm gì",
+                "Nhờ học chữ viết",
+                "Nhờ khí hậu thay đổi đột ngột",
+                "Nhờ quá trình lao động, tìm kiếm thức ăn"
+              ],
+              "answer": 3,
+              "hints": {
+                "nudge": "Đôi tay khéo léo dần khi làm việc.",
+                "card": "b5_m2.c1",
+                "narrow": "Đáp án là \"lao động\"."
+              },
+              "explanation": "Trong quá trình lao động, tìm kiếm thức ăn, đôi tay khéo léo hơn, cơ thể dần biến đổi để trở thành Người hiện đại.",
+              "sources": [
+                {
+                  "quote": "Trong quá trình lao động, tìm kiếm thức ăn, đôi bàn tay của người nguyên thuỷ dần trở nên khéo léo hơn, cơ thể cũng dần biến đổi để trở thành Người hiện đại.",
+                  "chunk_id": "LS6_B05_C006",
+                  "lesson_number": 5,
+                  "pages": [
+                    22,
+                    22
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b5_m2.q5",
+              "type": "trac_nghiem",
+              "prompt": "Hình 2 của Bài 5 là hình ảnh thực nghiệm việc gì?",
+              "choices": [
+                "Cách đúc trống đồng",
+                "Cách chế tạo công cụ đá của người nguyên thuỷ",
+                "Cách làm lịch",
+                "Cách dệt vải"
+              ],
+              "answer": 1,
+              "hints": {
+                "nudge": "Đó là một việc lao động rất sớm của con người.",
+                "card": "b5_m2.c1",
+                "narrow": "Công cụ được làm bằng đá."
+              },
+              "explanation": "Hình 2 là hình ảnh thực nghiệm cách chế tạo công cụ đá của người nguyên thuỷ: lao động làm đôi tay khéo léo hơn.",
+              "sources": [
+                {
+                  "quote": "Trong quá trình lao động, tìm kiếm thức ăn, đôi bàn tay của người nguyên thuỷ dần trở nên khéo léo hơn, cơ thể cũng dần biến đổi để trở thành Người hiện đại.",
+                  "chunk_id": "LS6_B05_C006",
+                  "lesson_number": 5,
+                  "pages": [
+                    22,
+                    22
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Hình ảnh thực nghiệm cách chế tạo công cụ đá của người nguyên thuỷ",
                   "chunk_id": "LS6_B05_C006",
                   "lesson_number": 5,
                   "pages": [
@@ -3826,6 +4140,106 @@
                     22
                   ],
                   "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b5_m3.q4",
+              "type": "trac_nghiem",
+              "prompt": "Cư dân văn hoá Hoà Bình sống chủ yếu ở đâu?",
+              "choices": [
+                "Trong nhà xây bằng gạch nhiều tầng",
+                "Trong thành luỹ bằng đá",
+                "Trên thuyền lớn ngoài biển",
+                "Trong hang động, mái đá hoặc túp lều lợp cỏ khô, lá cây"
+              ],
+              "answer": 3,
+              "hints": {
+                "nudge": "Họ còn sống gần với tự nhiên.",
+                "card": "b5_m3.c2",
+                "narrow": "Mái nhà làm bằng cỏ, lá."
+              },
+              "explanation": "Cư dân Hoà Bình sống chủ yếu trong hang động, mái đá hoặc túp lều lợp cỏ khô, lá cây.",
+              "sources": [
+                {
+                  "quote": "Trong các hang động thuộc văn hoá Hoà Bình đã tìm thấy nhiều xương của một số loại gia súc và dấu vết của các loại cây ăn quả, rau đậu, chứng tỏ cư dân Hoà Bình đã bước đầu biết làm nông nghiệp.",
+                  "chunk_id": "LS6_B05_C008",
+                  "lesson_number": 5,
+                  "pages": [
+                    22,
+                    22
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Họ sống chủ yếu trong các hang động, mái đá hoặc các túp lều lợp bằng cỏ khô hay lá cây",
+                  "chunk_id": "LS6_B05_C008",
+                  "lesson_number": 5,
+                  "pages": [
+                    22,
+                    22
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b5_m3.q5",
+              "type": "trac_nghiem",
+              "prompt": "Người Quỳnh Văn (Nghệ An) có nghề gì rất phát triển?",
+              "choices": [
+                "Nghề đúc trống đồng",
+                "Nghề làm gốm",
+                "Nghề luyện sắt",
+                "Nghề làm giấy"
+              ],
+              "answer": 1,
+              "hints": {
+                "nudge": "SGK có in hình gốm Quỳnh Văn.",
+                "card": "b5_m3.c1",
+                "narrow": "Đồ gốm đã dần phổ biến."
+              },
+              "explanation": "Văn hoá Quỳnh Văn ở ven biển Quỳnh Lưu (Nghệ An); người Quỳnh Văn có nghề làm gốm rất phát triển.",
+              "sources": [
+                {
+                  "quote": "Ở Việt Nam, người nguyên thuỷ đã biết mài đá, tạo ra nhiều loại công cụ khác nhau (rìu, bôn, chày, cuốc đá) và vũ khí (mũi tên, mũi lao).",
+                  "chunk_id": "LS6_B05_C008",
+                  "lesson_number": 5,
+                  "pages": [
+                    22,
+                    22
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Đồ gốm đã dần phổ biến với hoa văn trang trí phong phú",
+                  "chunk_id": "LS6_B05_C008",
+                  "lesson_number": 5,
+                  "pages": [
+                    22,
+                    22
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Văn hoá Quỳnh Văn tập trung chủ yếu ở vùng ven biển Quỳnh Lưu (Nghệ An) Người Quỳnh Văn có nghề làm gốm rất phát triển",
+                  "chunk_id": "LS6_B05_C011",
+                  "lesson_number": 5,
+                  "pages": [
+                    24,
+                    24
+                  ],
+                  "content_type": "did_you_know"
+                },
+                {
+                  "quote": "Gốm Quỳnh Văn",
+                  "chunk_id": "LS6_B05_C012",
+                  "lesson_number": 5,
+                  "pages": [
+                    24,
+                    24
+                  ],
+                  "content_type": "caption"
                 }
               ]
             }
@@ -4767,6 +5181,56 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b6_m1.q5",
+              "type": "trac_nghiem",
+              "prompt": "Đồng được con người phát hiện ra như thế nào?",
+              "choices": [
+                "Một cách ngẫu nhiên, từ các đám cháy",
+                "Nhờ đào giếng thật sâu",
+                "Do thương nhân châu Âu mang tới",
+                "Khi đang luyện sắt"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Đó là một sự tình cờ.",
+                "card": "b6_m1.c2",
+                "narrow": "Những thỏi đồng nóng chảy, vón cục."
+              },
+              "explanation": "Đồng được phát hiện ngẫu nhiên từ các đám cháy: thỏi đồng nóng chảy, vón cục là đồng đỏ.",
+              "sources": [
+                {
+                  "quote": "Đồng được phát hiện một cách ngẫu nhiên, tìm thấy từ các đám cháy",
+                  "chunk_id": "LS6_B06_C003",
+                  "lesson_number": 6,
+                  "pages": [
+                    25,
+                    25
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Những thỏi đồng nóng chảy, vón cục là đồng đỏ (đồng nguyên chất). Sau đó, người ta biết pha chế,... để tạo ra đồng thau.",
+                  "chunk_id": "LS6_B06_C003",
+                  "lesson_number": 6,
+                  "pages": [
+                    25,
+                    25
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Sắt được phát hiện muộn hơn, do cứng hơn đồng nên được sử dụng rộng rãi.",
+                  "chunk_id": "LS6_B06_C003",
+                  "lesson_number": 6,
+                  "pages": [
+                    25,
+                    25
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -5414,6 +5878,85 @@
                 {
                   "quote": "phân hoá sớm hơn so với các nơi khác nhưng không triệt để",
                   "chunk_id": "LS6_B06_C006",
+                  "lesson_number": 6,
+                  "pages": [
+                    26,
+                    26
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b6_m2.q4",
+              "type": "trac_nghiem",
+              "prompt": "Ở phương Đông, cư dân phải liên kết với nhau trong các cộng đồng để làm gì?",
+              "choices": [
+                "Xây kim tự tháp",
+                "Buôn bán với châu Âu",
+                "Đúc tiền vàng",
+                "Làm thuỷ lợi và chống ngoại xâm"
+              ],
+              "answer": 3,
+              "hints": {
+                "nudge": "Họ sinh sống ven những con sông lớn.",
+                "card": "b6_m2.c3",
+                "narrow": "Một việc liên quan tới nước, một việc liên quan tới giặc."
+              },
+              "explanation": "Cư dân phương Đông sống ven sông lớn phải liên kết để làm thuỷ lợi và chống ngoại xâm.",
+              "sources": [
+                {
+                  "quote": "Ở phương Đông (Ai Cập, Lưỡng Hà, Trung Quốc,...), do sinh sống ven các con sông lớn, cư dân phải liên kết với nhau trong các cộng đồng vốn là các công xã thị tộc để làm thuỷ lợi và chống ngoại xâm",
+                  "chunk_id": "LS6_B06_C006",
+                  "lesson_number": 6,
+                  "pages": [
+                    26,
+                    26
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Do vậy, mặc dù xã hội nguyên thuỷ ở đây phân hoá sớm hơn so với các nơi khác nhưng không triệt để.",
+                  "chunk_id": "LS6_B06_C006",
+                  "lesson_number": 6,
+                  "pages": [
+                    26,
+                    26
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b6_m2.q5",
+              "type": "sap_xep",
+              "prompt": "Sắp xếp các bước dẫn tới sự tan rã của xã hội nguyên thuỷ.",
+              "items": [
+                "Công cụ bằng kim loại xuất hiện",
+                "Sản xuất phát triển, có của cải dư thừa",
+                "Xã hội phân hoá kẻ giàu, người nghèo",
+                "Xã hội nguyên thuỷ dần tan rã"
+              ],
+              "hints": {
+                "nudge": "Mọi chuyện bắt đầu từ công cụ mới.",
+                "card": "b6_m2.c2",
+                "narrow": "Tan rã là bước cuối cùng."
+              },
+              "explanation": "Công cụ kim loại giúp sản xuất phát triển, có của cải dư thừa; của cải dư thừa dẫn tới phân hoá giàu nghèo, xã hội nguyên thuỷ dần tan rã.",
+              "sources": [
+                {
+                  "quote": "Cùng với sự xuất hiện ngày càng nhiều của cải dư thừa, xã hội dần có sự phân hoá kẻ giàu, người nghèo.",
+                  "chunk_id": "LS6_B06_C005",
+                  "lesson_number": 6,
+                  "pages": [
+                    26,
+                    26
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Xã hội nguyên thuỷ dần tan rã. Tuy nhiên, quá trình này diễn ra không đều ở các khu vực trên thế giới.",
+                  "chunk_id": "LS6_B06_C005",
                   "lesson_number": 6,
                   "pages": [
                     26,
@@ -6279,6 +6822,76 @@
                   "pages": [
                     28,
                     28
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b6_m3.q5",
+              "type": "trac_nghiem",
+              "prompt": "Ở văn hoá Gò Mun, hiện vật bằng đồng chiếm khoảng bao nhiêu trong số hiện vật tìm được?",
+              "choices": [
+                "Hơn một nửa",
+                "Chỉ vài mẩu xỉ đồng",
+                "Không có hiện vật đồng nào",
+                "Khoảng một phần mười"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Gò Mun có nhiều đồ đồng nhất trong ba nền văn hoá ở Bắc Bộ.",
+                "card": "b6_m3.c2",
+                "narrow": "Nhiều hơn số hiện vật bằng chất liệu khác."
+              },
+              "explanation": "Ở văn hoá Gò Mun, hiện vật đồng chiếm hơn một nửa số hiện vật tìm được.",
+              "sources": [
+                {
+                  "quote": "Văn hoá Phùng Nguyên (Bắc Bộ) Đã tìm thấy những mẩu xỉ đồng",
+                  "chunk_id": "LS6_B06_C008",
+                  "lesson_number": 6,
+                  "pages": [
+                    27,
+                    27
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Văn hoá Đồng Đậu (Bắc Bộ) Hiện vật bằng đồng khá phổ biến",
+                  "chunk_id": "LS6_B06_C008",
+                  "lesson_number": 6,
+                  "pages": [
+                    27,
+                    27
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Văn hoá Gò Mun (Bắc Bộ) Hiện vật đồng chiếm hơn một nửa hiện vật tìm được",
+                  "chunk_id": "LS6_B06_C008",
+                  "lesson_number": 6,
+                  "pages": [
+                    27,
+                    27
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Văn hoá tiền Sa Huỳnh (Trung Bộ)",
+                  "chunk_id": "LS6_B06_C008",
+                  "lesson_number": 6,
+                  "pages": [
+                    27,
+                    27
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Văn hoá Đồng Nai (Nam Bộ)",
+                  "chunk_id": "LS6_B06_C008",
+                  "lesson_number": 6,
+                  "pages": [
+                    27,
+                    27
                   ],
                   "content_type": "body"
                 }

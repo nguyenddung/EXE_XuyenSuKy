@@ -64,7 +64,8 @@ export interface Stage {
   collection?: { title: string; badge?: { id: string; title: string } }
 }
 export interface JourneyRules {
-  xp: { first_try: number; after_retry: number[]; max_with_hint: number; mission_complete: number; stage_check_pass: number }
+  /** chapter_check_pass: XP for passing the end-of-chapter test (CHAPTER_CHECK_XP when absent). */
+  xp: { first_try: number; after_retry: number[]; max_with_hint: number; mission_complete: number; stage_check_pass: number; chapter_check_pass?: number }
   mastery: { first_try_correct_variants: number; distinct_days: number }
   review: { intervals_days: number[]; reset_on_wrong: boolean; max_items_per_session: number }
   challenge: { min_variants_per_objective: number; shuffle_choices: boolean }
@@ -75,8 +76,11 @@ export interface JourneySummary { id: string; title: string; grade: number; book
   /** The SGK lessons this chapter's written stages cover, with how many missions and videos each has. */
   lessons: { number: number; missions: number; videos: number }[] }
 
-/** Correct answers a learner gives before a mission is complete (the prototype's QUESTIONS_PER_MISSION). */
-export const QUESTIONS_PER_MISSION = 2
+/** Correct answers a learner gives before a mission is complete; each mission has at least this many different questions. */
+export const QUESTIONS_PER_MISSION = 5
+/** Questions in the end-of-chapter test, drawn from every mission of the chapter. */
+export const CHAPTER_CHECK_QUESTIONS = 20
+export const CHAPTER_CHECK_XP = 100
 
 // ---------------------------------------------------------------- progress (stored in this browser only)
 
@@ -91,6 +95,8 @@ export interface JourneyProgress {
   missions: Record<string, true>
   objectives: Record<string, ObjectiveProgress>
   stages: Record<string, { passed: boolean; best: number }>
+  /** End-of-chapter test, opened once every stage is passed. */
+  chapter: { passed: boolean; best: number } | null
   pieces: Record<string, number>
   badges: Record<string, number>
   clues: Record<string, true>
@@ -98,7 +104,7 @@ export interface JourneyProgress {
 export const journeyStorageKey = 'xuyen-su-ky-journey-v1'
 
 export function emptyProgress(): JourneyProgress {
-  return { v: 1, xp: 0, dayOffset: 0, unlockAll: false, missions: {}, objectives: {}, stages: {}, pieces: {}, badges: {}, clues: {} }
+  return { v: 1, xp: 0, dayOffset: 0, unlockAll: false, missions: {}, objectives: {}, stages: {}, chapter: null, pieces: {}, badges: {}, clues: {} }
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value)
@@ -116,8 +122,9 @@ export function parseProgress(raw: unknown): JourneyProgress {
     const box = typeof item.box === 'number' && Number.isInteger(item.box) && item.box >= 0 && item.box < 20 ? item.box : null
     return [[id, { firstTry, box, due: box === null ? null : day(item.due), lastQ: typeof item.lastQ === 'string' ? item.lastQ : null }]]
   })) : {}
-  const stages = isRecord(raw.stages) ? Object.fromEntries(Object.entries(raw.stages).flatMap(([id, item]) => isRecord(item) && typeof item.best === 'number' && item.best >= 0 && item.best <= 1 ? [[id, { passed: item.passed === true, best: item.best }]] : [])) : {}
-  return { v: 1, xp: count(raw.xp), dayOffset: Math.min(count(raw.dayOffset), 3650), unlockAll: raw.unlockAll === true, missions: flags(raw.missions), objectives, stages, pieces: days(raw.pieces), badges: days(raw.badges), clues: flags(raw.clues) }
+  const score = (item: unknown) => isRecord(item) && typeof item.best === 'number' && item.best >= 0 && item.best <= 1 ? { passed: item.passed === true, best: item.best } : null
+  const stages = isRecord(raw.stages) ? Object.fromEntries(Object.entries(raw.stages).flatMap(([id, item]) => { const record = score(item); return record ? [[id, record]] : [] })) : {}
+  return { v: 1, xp: count(raw.xp), dayOffset: Math.min(count(raw.dayOffset), 3650), unlockAll: raw.unlockAll === true, missions: flags(raw.missions), objectives, stages, chapter: score(raw.chapter), pieces: days(raw.pieces), badges: days(raw.badges), clues: flags(raw.clues) }
 }
 
 /** Calendar day (YYYY-MM-DD, Vietnam time) as a whole day number, so review intervals are plain additions. */
@@ -142,6 +149,9 @@ export const missionOpen = (progress: JourneyProgress, journey: Journey, stage: 
   stageOpen(progress, journey, stage) && (progress.unlockAll || index === 0 || !!progress.missions[stage.missions[index - 1].id])
 export const checkOpen = (progress: JourneyProgress, journey: Journey, stage: Stage) =>
   stageOpen(progress, journey, stage) && (progress.unlockAll || stage.missions.every((mission) => progress.missions[mission.id]))
+/** The chapter test opens once the learner has passed every stage of the chapter. */
+export const chapterOpen = (progress: JourneyProgress, journey: Journey) =>
+  progress.unlockAll || writtenStages(journey).every((stage) => progress.stages[stage.id]?.passed)
 
 // ---------------------------------------------------------------- mastery, rewards and spaced review
 
@@ -223,11 +233,12 @@ export function xpFor(rules: JourneyRules, attempts: number, hinted: boolean) {
 }
 
 /** End-of-stage check: fresh variants for every objective plus the stage-wide questions. */
-export const passRatio = (journey: Journey, stage: Stage) => stage.stage_check?.pass_ratio ?? journey.rules.stage_check.pass_ratio
+/** Pass ratio of a stage check; without a stage (the chapter test) the journey-wide ratio. */
+export const passRatio = (journey: Journey, stage?: Stage) => stage?.stage_check?.pass_ratio ?? journey.rules.stage_check.pass_ratio
 /** Questions in a stage check: the drawn variants per mission plus the fixed extra questions. */
 export const checkLength = (stage: Stage) => stage.missions.reduce((count, mission) => count + Math.min(Math.max(1, stage.stage_check?.draw_per_objective || 1), mission.challenge_pool.length), 0) + (stage.stage_check?.extra.length || 0)
 /** Correct answers needed to pass; the small epsilon keeps 0.6 × 5 at 3 despite floating point. */
-export const correctNeeded = (journey: Journey, stage: Stage, total = checkLength(stage)) => Math.ceil(passRatio(journey, stage) * total - 1e-9)
+export const correctNeeded = (journey: Journey, stage: Stage | undefined, total = stage ? checkLength(stage) : 0) => Math.ceil(passRatio(journey, stage) * total - 1e-9)
 
 export function checkQuestions(progress: JourneyProgress, stage: Stage, random = Math.random) {
   const draw = Math.max(1, stage.stage_check?.draw_per_objective || 1)
@@ -240,6 +251,29 @@ export function checkQuestions(progress: JourneyProgress, stage: Stage, random =
     })
   })
   return [...drawn, ...(stage.stage_check?.extra || []).map((question) => ({ question, missionId: null as string | null }))]
+}
+
+/** End-of-chapter test: questions spread over every mission (each round visits the missions in a random order, so a
+ *  long chapter does not always favour its first lessons), then the stage-wide questions, shown in lesson order. */
+export function chapterQuestions(progress: JourneyProgress, journey: Journey, random = Math.random, size = CHAPTER_CHECK_QUESTIONS) {
+  const missions = allMissions(journey)
+  const picked = new Map<string, string[]>(missions.map((mission) => [mission.id, []]))
+  const drawn: { question: Question; missionId: string | null }[] = []
+  while (drawn.length < size) {
+    const left = missions.filter((mission) => picked.get(mission.id)!.length < mission.challenge_pool.length)
+    if (!left.length) break
+    for (const mission of shuffled(left, random).slice(0, size - drawn.length)) {
+      const question = pickVariant(progress, mission, picked.get(mission.id), random)
+      picked.get(mission.id)!.push(question.id)
+      drawn.push({ question, missionId: mission.id })
+    }
+  }
+  for (const stage of writtenStages(journey)) for (const question of stage.stage_check?.extra || []) if (drawn.length < size) drawn.push({ question, missionId: null })
+  const order = (missionId: string | null, question: Question) => {
+    const at = missionId ? missions.findIndex((mission) => mission.id === missionId) : missions.length
+    return at * 1000 + (missionId ? picked.get(missionId)!.indexOf(question.id) : 0)
+  }
+  return drawn.sort((a, b) => order(a.missionId, a.question) - order(b.missionId, b.question))
 }
 
 export const videoLength = (video: MissionVideo) => Math.round(video.scenes.reduce((sum, scene) => sum + scene.duration, 0) * 10) / 10

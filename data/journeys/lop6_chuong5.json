@@ -50,7 +50,7 @@
       "max_items_per_session": 5
     },
     "challenge": {
-      "min_variants_per_objective": 3,
+      "min_variants_per_objective": 5,
       "shuffle_choices": true
     },
     "stage_check": {
@@ -572,6 +572,36 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b14_m1.q5",
+              "type": "trac_nghiem",
+              "prompt": "Vì sao vào khoảng thế kỉ VII TCN, đời sống sản xuất của người Việt cổ chuyển biến rõ rệt?",
+              "choices": [
+                "Nhờ công cụ bằng đồng và sắt phát triển",
+                "Nhờ học được chữ Hán",
+                "Nhờ buôn bán với La Mã",
+                "Nhờ có pháp luật thành văn"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Nhớ lại Chương 2: kim loại làm thay đổi sản xuất.",
+                "card": "b14_m1.c1",
+                "narrow": "Hai kim loại."
+              },
+              "explanation": "Vào khoảng thế kỉ VII TCN, nhờ công cụ bằng đồng và sắt phát triển, sản xuất của người Việt cổ chuyển biến rõ rệt.",
+              "sources": [
+                {
+                  "quote": "Vào khoảng thế kỉ VII TCN, nhờ sự phát triển của công cụ bằng đồng và sắt, đời sống sản xuất của người Việt cổ đã có sự chuyển biến rõ rệt.",
+                  "chunk_id": "LS6_B14_C003",
+                  "lesson_number": 14,
+                  "pages": [
+                    62,
+                    62
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -846,6 +876,36 @@
                 {
                   "quote": "Kinh đô của Âu Lạc đã chuyển từ miền trung du Phong Châu xuống vùng đồng bằng ở Cổ Loa",
                   "chunk_id": "LS6_B14_C007",
+                  "lesson_number": 14,
+                  "pages": [
+                    62,
+                    62
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b14_m2.q5",
+              "type": "trac_nghiem",
+              "prompt": "Theo truyền thuyết, các Hùng Vương trải qua bao nhiêu đời?",
+              "choices": [
+                "18 đời",
+                "15 đời",
+                "3 đời",
+                "100 đời"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "15 là số bộ của nước Văn Lang.",
+                "card": "b14_m2.c1",
+                "narrow": "Số đời lớn hơn số bộ."
+              },
+              "explanation": "Hùng Vương đứng đầu liên minh 15 bộ, tương truyền trải qua 18 đời, cha truyền con nối.",
+              "sources": [
+                {
+                  "quote": "Nước Văn Lang chia làm 15 bộ, đứng đầu liên minh 15 bộ là Hùng vương, tương truyền trải qua 18 đời, cha truyền con nối.",
+                  "chunk_id": "LS6_B14_C003",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -1687,6 +1747,56 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b14_m4.q5",
+              "type": "trac_nghiem",
+              "prompt": "Người Việt cổ thời Văn Lang - Âu Lạc ở loại nhà nào?",
+              "choices": [
+                "Nhà sàn làm bằng tre, nứa, lá, gỗ",
+                "Nhà xây bằng gạch nhiều tầng",
+                "Nhà bằng đá kiểu kim tự tháp",
+                "Lều bằng da thú"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Nhà làm từ vật liệu sẵn có quanh làng.",
+                "card": "b14_m4.c3",
+                "narrow": "Nhà có sàn cao."
+              },
+              "explanation": "Người Việt cổ ở nhà sàn làm bằng tre, nứa, lá, gỗ.",
+              "sources": [
+                {
+                  "quote": "Cư dân chủ yếu ở nhà sàn được làm bằng tre, nứa, lá, gỗ",
+                  "chunk_id": "LS6_B14_C010",
+                  "lesson_number": 14,
+                  "pages": [
+                    64,
+                    64
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Thức ăn chính là gạo nếp, gạo tẻ, muối, mắm cá",
+                  "chunk_id": "LS6_B14_C010",
+                  "lesson_number": 14,
+                  "pages": [
+                    64,
+                    64
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Nam đóng khố, cởi trần, đi chân đất, nữ mặc váy, mặc yếm.",
+                  "chunk_id": "LS6_B14_C010",
+                  "lesson_number": 14,
+                  "pages": [
+                    64,
+                    64
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -2233,6 +2343,46 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b16_m1.q5",
+              "type": "trac_nghiem",
+              "prompt": "Năm 43, ai chỉ huy quân Hán tấn công, đàn áp khởi nghĩa Hai Bà Trưng?",
+              "choices": [
+                "Mã Viện",
+                "Hoằng Tháo",
+                "Dương Tư Húc",
+                "Tần Thuỷ Hoàng"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Hoằng Tháo là tướng Nam Hán năm 938.",
+                "card": "b16_m1.c3",
+                "narrow": "Tên có hai chữ, bắt đầu bằng \"Mã\"."
+              },
+              "explanation": "Năm 43, quân Hán do Mã Viện chỉ huy tấn công, cuộc khởi nghĩa bị đàn áp.",
+              "sources": [
+                {
+                  "quote": "Năm 43, trước sự tấn công của quân Hán do Mã viện chỉ huy, cuộc khởi nghĩa Hai Bà Trưng bị đàn áp.",
+                  "chunk_id": "LS6_B16_C007",
+                  "lesson_number": 16,
+                  "pages": [
+                    73,
+                    73
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Nhân dân ghi nhớ công ơn và lập đền thờ Hai Bà để đời đời thờ cúng.",
+                  "chunk_id": "LS6_B16_C007",
+                  "lesson_number": 16,
+                  "pages": [
+                    73,
+                    73
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -2547,6 +2697,56 @@
               "sources": [
                 {
                   "quote": "Cuộc khởi nghĩa Bà Triệu không chỉ làm rung chuyển chính quyền đô hộ mà còn góp phần thức tỉnh ý thức dân tộc",
+                  "chunk_id": "LS6_B16_C014",
+                  "lesson_number": 16,
+                  "pages": [
+                    75,
+                    75
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b16_m2.q5",
+              "type": "trac_nghiem",
+              "prompt": "Bà Triệu anh dũng hi sinh ở đâu?",
+              "choices": [
+                "Núi Tùng",
+                "Núi Nưa",
+                "Mê Linh",
+                "Đầm Dạ Trạch"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Núi Nưa là nơi khởi nghĩa bùng nổ.",
+                "card": "b16_m2.c4",
+                "narrow": "Tên ngọn núi là một loài cây."
+              },
+              "explanation": "Nhà Ngô cử 8 000 quân sang đàn áp; Bà Triệu anh dũng hi sinh ở núi Tùng.",
+              "sources": [
+                {
+                  "quote": "nhà Ngô đã cử 8 000 quân sang đàn áp",
+                  "chunk_id": "LS6_B16_C014",
+                  "lesson_number": 16,
+                  "pages": [
+                    75,
+                    75
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Bà Triệu anh dũng hi sinh tại khu vực núi Tùng (Thanh Hoá)",
+                  "chunk_id": "LS6_B16_C014",
+                  "lesson_number": 16,
+                  "pages": [
+                    75,
+                    75
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "góp phần thức tỉnh ý thức dân tộc, tạo đà cho cuộc khởi nghĩa của Lý Bí sau này",
                   "chunk_id": "LS6_B16_C014",
                   "lesson_number": 16,
                   "pages": [
@@ -2881,6 +3081,56 @@
               "sources": [
                 {
                   "quote": "Triệu Quang Phục thay Lý Bí tiếp tục lãnh đạo cuộc kháng chiến, xây dựng căn cứ tại đầm Dạ Trạch (Hưng Yên).",
+                  "chunk_id": "LS6_B16_C016",
+                  "lesson_number": 16,
+                  "pages": [
+                    75,
+                    75
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b16_m3.q5",
+              "type": "trac_nghiem",
+              "prompt": "Triệu Quang Phục lập căn cứ kháng chiến chống quân Lương ở đâu?",
+              "choices": [
+                "Đầm Dạ Trạch (Hưng Yên)",
+                "Núi Nưa (Thanh Hoá)",
+                "Làng Giàng (Thanh Hoá)",
+                "Thành Vạn An (Nghệ An)"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Căn cứ ở vùng đầm lầy.",
+                "card": "b16_m3.c3",
+                "narrow": "Tỉnh Hưng Yên."
+              },
+              "explanation": "Triệu Quang Phục thay Lý Bí lãnh đạo kháng chiến, lập căn cứ ở đầm Dạ Trạch (Hưng Yên).",
+              "sources": [
+                {
+                  "quote": "Năm 545, quân Lương xâm lược nước Vạn Xuân, Triệu Quang Phục thay Lý Bí tiếp tục lãnh đạo cuộc kháng chiến, xây dựng căn cứ tại đầm Dạ Trạch (Hưng Yên).",
+                  "chunk_id": "LS6_B16_C016",
+                  "lesson_number": 16,
+                  "pages": [
+                    75,
+                    75
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Kháng chiến thắng lợi, Triệu Quang Phục lên làm vua",
+                  "chunk_id": "LS6_B16_C016",
+                  "lesson_number": 16,
+                  "pages": [
+                    75,
+                    75
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Triệu Việt Vương",
                   "chunk_id": "LS6_B16_C016",
                   "lesson_number": 16,
                   "pages": [
@@ -3246,6 +3496,56 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b16_m4.q5",
+              "type": "trac_nghiem",
+              "prompt": "Khởi nghĩa Mai Thúc Loan giành và giữ chính quyền độc lập trong bao lâu?",
+              "choices": [
+                "Gần 10 năm (713 – 722)",
+                "9 năm",
+                "Hơn 100 năm",
+                "Một năm"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "9 năm là thời gian Phùng Hưng tự sắp đặt việc cai trị.",
+                "card": "b16_m4.c4",
+                "narrow": "Khoảng từ năm 713 đến năm 722."
+              },
+              "explanation": "Khởi nghĩa Mai Thúc Loan giành và giữ chính quyền độc lập gần 10 năm (713 – 722).",
+              "sources": [
+                {
+                  "quote": "Khởi nghĩa Mai Thúc Loan đã giành và giữ chính quyền độc lập trong khoảng gần 10 năm (713 - 722)",
+                  "chunk_id": "LS6_B16_C019",
+                  "lesson_number": 16,
+                  "pages": [
+                    76,
+                    76
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Nhà Đường sai Dương Tư Húc dẫn đại quân sang đàn áp. Cuộc khởi nghĩa bị dập tắt.",
+                  "chunk_id": "LS6_B16_C020",
+                  "lesson_number": 16,
+                  "pages": [
+                    77,
+                    77
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Đó là một trong những cuộc khởi nghĩa lớn nhất, đánh dấu mốc quan trọng trên con đường đấu tranh để giải phóng dân tộc thời kì Bắc thuộc.",
+                  "chunk_id": "LS6_B16_C019",
+                  "lesson_number": 16,
+                  "pages": [
+                    76,
+                    76
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -3548,6 +3848,56 @@
                     78
                   ],
                   "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b16_m5.q5",
+              "type": "trac_nghiem",
+              "prompt": "Phùng Hưng là hào trưởng ở đâu?",
+              "choices": [
+                "Đường Lâm (Hà Nội)",
+                "Mê Linh",
+                "Phổ Yên (Thái Nguyên)",
+                "Hải Dương"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Ngô Quyền về sau cũng quê ở đây.",
+                "card": "b16_m5.c2",
+                "narrow": "Nơi này nay thuộc Hà Nội."
+              },
+              "explanation": "Phùng Hưng là hào trưởng đất Đường Lâm (Hà Nội), có uy tín lớn và sức khoẻ phi thường.",
+              "sources": [
+                {
+                  "quote": "Phùng Hưng là hào trưởng đất Đường Lâm (Hà Nội).",
+                  "chunk_id": "LS6_B16_C025",
+                  "lesson_number": 16,
+                  "pages": [
+                    78,
+                    78
+                  ],
+                  "content_type": "exercise"
+                },
+                {
+                  "quote": "có uy tín lớn đối với nhân dân trong vùng",
+                  "chunk_id": "LS6_B16_C025",
+                  "lesson_number": 16,
+                  "pages": [
+                    78,
+                    78
+                  ],
+                  "content_type": "exercise"
+                },
+                {
+                  "quote": "Ông có sức khoẻ phi thường, sức có thể xô ngã trâu, đánh được hổ.",
+                  "chunk_id": "LS6_B16_C025",
+                  "lesson_number": 16,
+                  "pages": [
+                    78,
+                    78
+                  ],
+                  "content_type": "exercise"
                 }
               ]
             }
@@ -4161,6 +4511,36 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b18_m1.q5",
+              "type": "trac_nghiem",
+              "prompt": "Chủ trương cai trị của Khúc Hạo là gì?",
+              "choices": [
+                "\"Chính sự cốt chuộng khoan dung, giản dị, nhân dân đều được yên vui\"",
+                "Tăng thuế để xây thành lớn",
+                "Bắt dân làm lực dịch nhiều hơn",
+                "Dựa vào nhà Đường để cai trị"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Khúc Hạo tha bỏ lực dịch cho dân bớt khổ.",
+                "card": "b18_m1.c3",
+                "narrow": "Chủ trương hướng tới sự yên vui của nhân dân."
+              },
+              "explanation": "Khúc Hạo chủ trương \"Chính sự cốt chuộng khoan dung, giản dị, nhân dân đều được yên vui\".",
+              "sources": [
+                {
+                  "quote": "Chính sự cốt chuộng khoan dung, giản dị, nhân dân đều được yên vui",
+                  "chunk_id": "LS6_B18_C004",
+                  "lesson_number": 18,
+                  "pages": [
+                    82,
+                    82
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -4487,6 +4867,106 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b18_m2.q4",
+              "type": "trac_nghiem",
+              "prompt": "Dương Đình Nghệ là ai?",
+              "choices": [
+                "Tướng của quân Nam Hán",
+                "Con trai của Khúc Hạo",
+                "Vua của nước Vạn Xuân",
+                "Thuộc tướng cũ của họ Khúc"
+              ],
+              "answer": 3,
+              "hints": {
+                "nudge": "Ông tiếp nối sự nghiệp tự chủ của họ Khúc.",
+                "card": "b18_m2.c2",
+                "narrow": "Ông từng là tướng dưới quyền họ Khúc."
+              },
+              "explanation": "Dương Đình Nghệ là thuộc tướng cũ của họ Khúc, tập hợp hào kiệt ở làng Giàng đánh quân Nam Hán.",
+              "sources": [
+                {
+                  "quote": "Năm 931, thuộc tướng cũ của họ Khúc là Dương Đình Nghệ kéo quân từ Thanh Hoá ra Bắc đánh đuổi quân Nam Hán.",
+                  "chunk_id": "LS6_B18_C008",
+                  "lesson_number": 18,
+                  "pages": [
+                    82,
+                    83
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "hào kiệt khắp nơi kéo về làng Giàng (Thanh Hoá) tụ nghĩa",
+                  "chunk_id": "LS6_B18_C009",
+                  "lesson_number": 18,
+                  "pages": [
+                    83,
+                    83
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Từ làng Giàng, Dương Đình Nghệ kéo quân vây chiếm thành Đại La.",
+                  "chunk_id": "LS6_B18_C009",
+                  "lesson_number": 18,
+                  "pages": [
+                    83,
+                    83
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Quân của Dương Đình Nghệ chặn đánh quân tiếp viện.",
+                  "chunk_id": "LS6_B18_C009",
+                  "lesson_number": 18,
+                  "pages": [
+                    83,
+                    83
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b18_m2.q5",
+              "type": "trac_nghiem",
+              "prompt": "Nam Hán là gì?",
+              "choices": [
+                "Một vương quốc trên đảo Gia-va",
+                "Một nước nhỏ ở Trung Quốc, sát biên giới nước ta",
+                "Một bộ của nước Văn Lang",
+                "Một thành bang ở Hy Lạp"
+              ],
+              "answer": 1,
+              "hints": {
+                "nudge": "Mùa thu năm 930, quân Nam Hán đánh sang nước ta.",
+                "card": "b18_m2.c1",
+                "narrow": "Một nước ở phương Bắc."
+              },
+              "explanation": "Nam Hán là một nước nhỏ ở Trung Quốc, sát biên giới nước ta; năm 930 quân Nam Hán đánh sang.",
+              "sources": [
+                {
+                  "quote": "Nam Hán là một nước nhỏ ở Trung Quốc, cai trị vùng đất sát biên giới nước ta",
+                  "chunk_id": "LS6_B18_C008",
+                  "lesson_number": 18,
+                  "pages": [
+                    82,
+                    83
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Mùa thu năm 930, quân Nam Hán đánh sang nước ta, lập lại quyền cai trị.",
+                  "chunk_id": "LS6_B18_C008",
+                  "lesson_number": 18,
+                  "pages": [
+                    82,
+                    83
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -4800,6 +5280,56 @@
                   "content_type": "body"
                 }
               ]
+            },
+            {
+              "id": "b18_m3.q5",
+              "type": "trac_nghiem",
+              "prompt": "Mực nước sông Bạch Đằng lúc triều cao và triều thấp chênh nhau khoảng bao nhiêu?",
+              "choices": [
+                "2 – 3 m",
+                "20 – 30 cm",
+                "10 – 15 m",
+                "Không chênh lệch"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Chênh lệch đủ để giấu hoặc làm lộ hàng cọc.",
+                "card": "b18_m3.c2",
+                "narrow": "Khoảng vài mét."
+              },
+              "explanation": "Mực nước sông Bạch Đằng lúc triều cao và triều thấp chênh nhau 2 – 3 m.",
+              "sources": [
+                {
+                  "quote": "Đây là con đường thuỷ tốt nhất để đi vào nước ta.",
+                  "chunk_id": "LS6_B18_C013",
+                  "lesson_number": 18,
+                  "pages": [
+                    84,
+                    84
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Mực nước vùng cửa sông lúc thuỷ triều cao nhất và thấp nhất chênh nhau tới 2 - 3m.",
+                  "chunk_id": "LS6_B18_C013",
+                  "lesson_number": 18,
+                  "pages": [
+                    84,
+                    84
+                  ],
+                  "content_type": "body"
+                },
+                {
+                  "quote": "Địa hình xung quanh có nhiều cồn gò, bãi, đầm lầy,... giúp bố trí lực lượng quân thuỷ.",
+                  "chunk_id": "LS6_B18_C013",
+                  "lesson_number": 18,
+                  "pages": [
+                    84,
+                    84
+                  ],
+                  "content_type": "body"
+                }
+              ]
             }
           ],
           "reward": {
@@ -5089,6 +5619,36 @@
                   "pages": [
                     84,
                     84
+                  ],
+                  "content_type": "body"
+                }
+              ]
+            },
+            {
+              "id": "b18_m4.q5",
+              "type": "trac_nghiem",
+              "prompt": "Khi nước triều lên, Ngô Quyền cho quân làm gì để dụ giặc?",
+              "choices": [
+                "Cho thuyền nhẹ ra khiêu chiến rồi giả thua chạy",
+                "Cho toàn quân rút lên núi",
+                "Đốt hết thuyền của ta",
+                "Mở cửa thành Đại La đón giặc"
+              ],
+              "answer": 0,
+              "hints": {
+                "nudge": "Giặc phải bị dụ vào bãi cọc khi nước còn cao.",
+                "card": "b18_m4.c1",
+                "narrow": "Quân ta giả vờ thua."
+              },
+              "explanation": "Khi nước triều lên, Ngô Quyền cho thuyền nhẹ ra khiêu chiến rồi giả thua chạy để dụ giặc đuổi theo.",
+              "sources": [
+                {
+                  "quote": "Khi nước triều lên, Quyền sai người đem thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo. Hoằng Tháo quả nhiên tiến quân vào.",
+                  "chunk_id": "LS6_B18_C015",
+                  "lesson_number": 18,
+                  "pages": [
+                    85,
+                    85
                   ],
                   "content_type": "body"
                 }

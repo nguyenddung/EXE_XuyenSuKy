@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, Award, BookOpen, CalendarClock, Check, Clapperboard, Lock, Map as MapIcon, RotateCcw } from 'lucide-react'
+import { ArrowRight, Award, BookOpen, CalendarClock, Check, Clapperboard, GraduationCap, Lock, Map as MapIcon, RotateCcw } from 'lucide-react'
 import type { JourneyState } from '../hooks/useJourney'
 import type { JournalKind } from '../hooks/useLearningJournal'
 import { historyApi } from '../lib/historyApi'
-import { allMissions, checkLength, checkOpen, checkQuestions, correctNeeded, dueMissions, emptyProgress, missionOpen, missionStatus, pickVariant, stageOpen, writtenStages } from '../lib/journey'
+import { allMissions, CHAPTER_CHECK_QUESTIONS, chapterOpen, chapterQuestions, checkLength, checkOpen, checkQuestions, correctNeeded, dueMissions, emptyProgress, missionOpen, missionStatus, pickVariant, stageOpen, writtenStages } from '../lib/journey'
 import type { Character } from '../types'
 import { GuideSays, JourneyModal, type JourneyRequest, type JourneyView } from './JourneyModal'
 import type { JourneyLaunch } from './LessonJourney'
@@ -62,7 +62,8 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord, launc
       const stage = writtenStages(journey!).find((item) => item.id === request.stageId)
       if (!stage) return
       setView({ name: 'check', stageId: stage.id, questions: update((draft) => checkQuestions(draft, stage)) || [], token })
-    } else setView({ name: 'review', queue: update((draft) => dueMissions(draft, journey!, today).map((mission) => ({ missionId: mission.id, question: pickVariant(draft, mission) }))) || [], token })
+    } else if (request.name === 'chapter') setView({ name: 'chapter', questions: update((draft) => chapterQuestions(draft, journey!)) || [], token })
+    else setView({ name: 'review', queue: update((draft) => dueMissions(draft, journey!, today).map((mission) => ({ missionId: mission.id, question: pickVariant(draft, mission) }))) || [], token })
   }
   async function interview(appId: string) {
     try { onChat(await historyApi<Character>(`characters/${appId}`)) } catch (error) { onNotice((error as Error).message) }
@@ -100,7 +101,19 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord, launc
           <div className="journey-check"><button type="button" className={canCheck && !passed ? 'button-primary' : 'button-outline'} disabled={!canCheck} onClick={() => open({ name: 'check', stageId: stage.id })}>Kiểm tra cuối chặng <ArrowRight size={16} /></button><small>{best !== undefined ? `Điểm cao nhất ${Math.round(best * 100)}%` : canCheck ? `Cần đúng ${correctNeeded(journey, stage)}/${checkLength(stage)} câu để qua chặng` : 'Hoàn thành mọi nhiệm vụ để mở'}</small></div></>}
         </div>
       </li>
-    })}</ol>
+    })}
+    {(() => {
+      // The chapter test closes the road: it opens once every stage is passed.
+      const canTake = chapterOpen(progress, journey)
+      const record = progress.chapter
+      return <li className={`journey-chapter-check ${record?.passed ? 'is-passed' : canTake ? 'is-open' : 'is-locked'}`}>
+        <span className="journey-node">{record?.passed ? <Check size={18} /> : <GraduationCap size={20} />}</span>
+        <div>
+          <div className="journey-stage-head"><div><h3>Kiểm tra chương</h3><small>{CHAPTER_CHECK_QUESTIONS} câu từ mọi bài của {journey.chapter.split(':')[0]}</small></div><span className="journey-tag">{record?.passed ? 'Đã hoàn thành chương' : canTake ? 'Đang mở' : 'Qua mọi chặng để mở'}</span></div>
+          <div className="journey-check"><button type="button" className={canTake && !record?.passed ? 'button-primary' : 'button-outline'} disabled={!canTake} onClick={() => open({ name: 'chapter' })}>Làm bài kiểm tra chương <ArrowRight size={16} /></button><small>{record ? `Điểm cao nhất ${Math.round(record.best * 100)}%` : canTake ? `Cần đúng ${correctNeeded(journey, undefined, CHAPTER_CHECK_QUESTIONS)}/${CHAPTER_CHECK_QUESTIONS} câu để hoàn thành chương` : 'Qua kiểm tra cuối mọi chặng để mở'}</small></div>
+        </div>
+      </li>
+    })()}</ol>
     <details className="journey-tools"><summary>Công cụ học thử</summary>
       <p>Đang ở ngày học thứ {today - startDay + 1}. Nắm vững cần trả lời đúng ngay lần đầu vào {rules.mastery.distinct_days} ngày khác nhau; bấm “Sang ngày hôm sau” để thử ôn tập mà không phải chờ.</p>
       <div className="journey-actions">

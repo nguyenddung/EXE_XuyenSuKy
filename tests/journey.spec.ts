@@ -113,12 +113,21 @@ test('a mission teaches first, supports mistakes with hints and an equivalent qu
   expect(swapped.id).not.toBe(first.id)
   await answer(page, swapped)
   await expect(modal(page).locator('.journey-feedback')).toContainText('Chính xác! +2 XP')
-  await modal(page).getByRole('button', { name: 'Câu tiếp theo' }).click()
-  await answer(page, await shownQuestion(page))
-  await expect(modal(page).locator('.journey-feedback')).toContainText('Chính xác! +10 XP')
+  // Five correct answers complete the mission. A question comes back only once all five of the mission have been
+  // shown (here the swap used one up, so the last answer repeats one).
+  const asked = [first.id, swapped.id]
+  for (let number = 2; number <= 5; number++) {
+    await modal(page).getByRole('button', { name: 'Câu tiếp theo' }).click()
+    await expect(modal(page).locator('.journey-eyebrow').first()).toContainText(`Thử thách ${number}/5`)
+    const next = await shownQuestion(page)
+    if (new Set(asked).size < 5) expect(asked).not.toContain(next.id)
+    asked.push(next.id)
+    await answer(page, next)
+    await expect(modal(page).locator('.journey-feedback')).toContainText('Chính xác! +10 XP')
+  }
   await modal(page).getByRole('button', { name: 'Xem kết quả' }).click()
-  await expect(modal(page).locator('.journey-big')).toHaveText('+32 XP')
-  await expect(modal(page)).toContainText('Đúng ngay lần đầu ở 1/2 câu khác nhau, trong 1/2 ngày khác nhau.')
+  await expect(modal(page).locator('.journey-big')).toHaveText('+62 XP')
+  await expect(modal(page)).toContainText('Đúng ngay lần đầu ở 2/2 câu khác nhau, trong 1/2 ngày khác nhau.')
   await expect(modal(page).locator('.journey-piece')).not.toHaveClass(/is-owned/)
   await expect(modal(page).getByRole('button', { name: /Nhiệm vụ tiếp: Bộ máy nhà nước Văn Lang/ })).toBeVisible()
   await page.keyboard.press('Escape')
@@ -126,9 +135,9 @@ test('a mission teaches first, supports mistakes with hints and an equivalent qu
 
   await expect(missionButton(section, 'Nhà nước Văn Lang ra đời')).toContainText('Hoàn thành')
   await expect(missionButton(section, 'Bộ máy nhà nước Văn Lang')).toBeEnabled()
-  await expect(section.locator('.journey-bar')).toContainText('32 XP hành trình')
+  await expect(section.locator('.journey-bar')).toContainText('62 XP hành trình')
   await openMenu(page, 'Trang chủ')
-  await expect(page.locator('.dashboard-progress-stats')).toContainText('32')
+  await expect(page.locator('.dashboard-progress-stats')).toContainText('62')
   const saved = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).lop6_chuong5, journeyKey)
   expect(saved.missions).toEqual({ b14_m1: true })
   expect(saved.objectives['b14_m1.o'].due).toBe(saved.objectives['b14_m1.o'].firstTry[0].d + 1)
@@ -183,6 +192,43 @@ test('review on another day grants mastery and the Sử Ký piece; the stage che
   await expect(section.locator('.journey-stage').nth(4)).toHaveClass(/is-open/)
   await page.reload()
   await expect(page.locator('#journey .journey-stage').nth(4)).toHaveClass(/is-open/)
+})
+
+test('the chapter test opens after every stage, asks twenty questions from the whole chapter and completes the chapter', async ({ page }) => {
+  const fresh = await openJourney(page)
+  const card = fresh.locator('.journey-chapter-check')
+  await expect(card).toHaveClass(/is-locked/)
+  await expect(card.getByRole('button', { name: 'Làm bài kiểm tra chương' })).toBeDisabled()
+  await expect(card).toContainText('Qua kiểm tra cuối mọi chặng để mở')
+
+  const passed = Object.fromEntries(journey.stages.filter((stage) => stage.status === 'da_bien_soan').map((stage) => [stage.id, { passed: true, best: 1 }]))
+  await page.evaluate(([key, stages]) => localStorage.setItem(key, JSON.stringify({ lop6_chuong5: { v: 1, xp: 0, dayOffset: 0, unlockAll: false, missions: {}, objectives: {}, stages, pieces: {}, badges: {}, clues: {} } })), [journeyKey, passed] as const)
+  await page.reload()
+  const section = page.locator('#journey')
+  await expect(section.locator('.journey-chapter-check')).toHaveClass(/is-open/)
+  await section.getByRole('button', { name: 'Làm bài kiểm tra chương' }).click()
+  await expect(modal(page).locator('.journey-modal-kicker')).toHaveText('Kiểm tra chương · 20 câu')
+  const seen: string[] = []
+  for (let index = 0; index < 20; index++) {
+    await expect(modal(page).locator('.journey-eyebrow').first()).toContainText(`Câu ${index + 1}/20`)
+    const question = await shownQuestion(page)
+    expect(seen).not.toContain(question.id)
+    seen.push(question.id)
+    await answer(page, question)
+    await expect(modal(page).locator('.journey-feedback')).toContainText('Đúng.')
+    await modal(page).getByRole('button', { name: index < 19 ? 'Câu tiếp' : 'Xem điểm' }).click()
+  }
+  // Every mission of the chapter is asked at least once.
+  const owners = new Set(seen.map((id) => id.split('.')[0]))
+  expect(owners.size).toBe(journey.stages.flatMap((stage) => stage.missions).length)
+  await expect(modal(page).locator('.journey-big')).toHaveText('20/20')
+  await expect(modal(page)).toContainText('Em đã hoàn thành chương và nhận 100 XP')
+  await page.keyboard.press('Escape')
+  await expect(section.locator('.journey-chapter-check')).toHaveClass(/is-passed/)
+  await expect(section.locator('.journey-chapter-check')).toContainText('Điểm cao nhất 100%')
+  await expect(section.locator('.journey-bar')).toContainText('100 XP hành trình')
+  await page.reload()
+  await expect(page.locator('#journey .journey-chapter-check')).toContainText('Đã hoàn thành chương')
 })
 
 test('interview opens the character chat, other grades see a note, and the dialog fits a phone screen', async ({ page }) => {

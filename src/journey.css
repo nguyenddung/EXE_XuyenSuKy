@@ -21,17 +21,19 @@
 .journey-section [data-status="done"] { border-color: var(--sky-blue); background: #cfe5ff; }
 .journey-section [data-status="mastered"] { border-color: #d29a17; background: #ffc044; }
 .journey-road { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
-.journey-stage { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px; border: 1px solid var(--sky-line); border-radius: 16px; background: #fff; box-shadow: var(--sky-shadow); }
-.journey-stage h3 { margin: 0; color: var(--sky-ink); font-size: 18px; font-weight: 800; }
-.journey-stage small { color: var(--sky-muted); font-size: 12px; line-height: 1.6; }
+.journey-stage, .journey-chapter-check { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 18px; border: 1px solid var(--sky-line); border-radius: 16px; background: #fff; box-shadow: var(--sky-shadow); }
+.journey-stage h3, .journey-chapter-check h3 { margin: 0; color: var(--sky-ink); font-size: 18px; font-weight: 800; }
+.journey-stage small, .journey-chapter-check small { color: var(--sky-muted); font-size: 12px; line-height: 1.6; }
 .journey-node { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--sky-blue-soft); color: var(--sky-blue-strong); font-weight: 800; }
-.journey-stage.is-passed .journey-node { background: #ffc044; color: var(--sky-gold-ink); }
-.journey-stage.is-locked { opacity: .75; }
+.journey-stage.is-passed .journey-node, .journey-chapter-check.is-passed .journey-node { background: #ffc044; color: var(--sky-gold-ink); }
+.journey-stage.is-locked, .journey-chapter-check.is-locked { opacity: .75; }
 .journey-stage.is-soon { box-shadow: none; background: var(--sky-canvas); }
 .journey-stage.is-soon h3 { color: var(--sky-muted); font-weight: 700; }
 .journey-stage-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .journey-tag { padding: 4px 10px; border-radius: 999px; background: var(--sky-canvas); color: var(--sky-text); font-size: 12px; font-weight: 700; white-space: nowrap; }
-.journey-stage.is-open .journey-tag { background: #e3f6ea; color: #23633a; }
+.journey-stage.is-open .journey-tag, .journey-chapter-check.is-open .journey-tag { background: #e3f6ea; color: #23633a; }
+/* The chapter test closes the road; it is not a lesson stage. */
+.journey-chapter-check { border-style: dashed; border-color: #ffc044; }
 .journey-missions { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; margin-top: 14px; }
 .journey-mission { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 14px; border: 1px solid var(--sky-line); border-radius: 12px; background: var(--sky-canvas); color: var(--sky-ink); font-size: 13px; font-weight: 700; text-align: left; }
 .journey-mission span { flex: 1; }
@@ -112,7 +114,7 @@
 .journey-rubric input { margin-top: 4px; }
 @media (max-width: 600px) {
   .journey-section .section-heading { flex-direction: column; align-items: flex-start; }
-  .journey-stage { grid-template-columns: 1fr; }
+  .journey-stage, .journey-chapter-check { grid-template-columns: 1fr; }
   .journey-modal-body { padding: 22px 18px 24px; }
   .journey-steps li { font-size: 11px; }
   .journey-pairs label, .journey-timeline li { grid-template-columns: 1fr; gap: 6px; }
