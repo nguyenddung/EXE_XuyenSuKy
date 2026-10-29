@@ -152,7 +152,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     <div className={landing ? 'landing-page' : 'learning-page'} id={landing ? 'top' : undefined}>
       {landing ? <>
         <Navbar session={session} onLogout={() => { logout(); setNotice('Bạn đã đăng xuất. Tiến độ học thử vẫn được lưu trên trình duyệt này.') }} />
-        <main><Hero authenticated={authenticated} />{timeline}{characters}{challenges}{stats}<LandingCta authenticated={authenticated} onTryGuest={() => { startGuest(); navigate('/home') }} /></main><ImageCredits /><Footer />
+        <main><Hero authenticated={authenticated} onChat={openCharacter} />{timeline}{characters}{challenges}{stats}<LandingCta authenticated={authenticated} onTryGuest={() => { startGuest(); navigate('/home') }} /></main><ImageCredits /><Footer />
       </> : <Dashboard
         learning={learning}
         sections={{ journey: journeySection, library: <>{classSelection}{learningHub}</>, timeline: <>{timeline}{stats}</>, characters, challenges, progress: userProgress }}

@@ -8,10 +8,12 @@ import { StudyPlan, type LessonCollection } from './StudyPlan'
 import type { useLearningJournal } from '../hooks/useLearningJournal'
 import type { GameId } from '../data/minigames'
 import type { DemoSession } from '../hooks/useDemoSession'
-import type { Character } from '../types'
+import type { Character, CharacterInteractionMode } from '../types'
 import { historyApi, type HistoryChunk, type HistoryLesson, type PageResult } from '../lib/historyApi'
 import { eras } from '../data/eras'
 import { showSection } from '../lib/sections'
+import { useFeaturedCharacter } from '../hooks/useFeaturedCharacter'
+import { FeaturedCharacterActions } from './FeaturedCharacterActions'
 
 const navigation = [
   { label: 'Trang chủ', view: 'dashboard', icon: Home },
@@ -44,7 +46,7 @@ interface Props {
   onSelectGrade: (grade: number) => void
   onQuiz: (activity: DemoActivity) => void
   onGame: (game: GameId) => void
-  onChat: (character: Character) => void
+  onChat: (character: Character, mode?: CharacterInteractionMode) => void
 }
 
 export function Dashboard({ learning, onCollection, sections, footer, session, readCount, gradeCount, recommendedLessonId, learningStreak, onLogin, onLogout, onOpenLesson, onSelectGrade, onQuiz, onGame, onChat }: Props) {
@@ -57,7 +59,7 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
   const [searchBusy, setSearchBusy] = useState(false)
   const [searchError, setSearchError] = useState('')
   const [searchResults, setSearchResults] = useState<HistoryChunk[]>([])
-  const [featured, setFeatured] = useState<Character | null>(null)
+  const featured = useFeaturedCharacter()
   const [lessons, setLessons] = useState<HistoryLesson[]>([])
   const [lessonError, setLessonError] = useState('')
   const [lessonLoading, setLessonLoading] = useState(true)
@@ -72,13 +74,6 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
   const searchInput = useRef<HTMLInputElement>(null)
   const searchRequest = useRef<AbortController | null>(null)
   const ranks = rankingsFor(session)
-
-  useEffect(() => {
-    const controller = new AbortController()
-    historyApi<{ items: Character[] }>('characters', controller.signal).then((data) => setFeatured(data.items.find((item) => item.id === 'tran-hung-dao') || data.items[0] || null)).catch(() => {})
-
-    return () => controller.abort()
-  }, [])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -183,7 +178,7 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
           <div className="dashboard-rail">
             <section className="dashboard-panel dashboard-progress" aria-labelledby="dash-progress-title"><div className="dashboard-panel-heading"><h2 id="dash-progress-title">Tiến độ học tập</h2><a href="#progress">Xem chi tiết <ArrowRight size={14} /></a></div><div className="dashboard-progress-body"><div className="dashboard-progress-ring" style={{ '--progress': `${percent}%` } as CSSProperties} role="progressbar" aria-label="Tỉ lệ bài đã đọc của lớp hiện tại" aria-valuenow={readCount} aria-valuemin={0} aria-valuemax={gradeCount || 1}><strong>{gradeCount ? `${percent}%` : '…'}</strong><small>Hoàn thành<br />bài lớp {session.grade}</small></div><div className="dashboard-progress-stats"><div><span className="stat-icon stat-amber"><BookOpen size={15} /></span><span>Bài học đã đọc</span><strong>{readCount}/{gradeCount || '…'}</strong></div><div><span className="stat-icon stat-green"><ShieldCheck size={15} /></span><span>Hoạt động</span><strong>{session.completedActivities.length}</strong></div><div><span className="stat-icon stat-blue"><Trophy size={15} /></span><span>XP đã nhận</span><strong>{session.earnedXp}</strong></div><div><span className="stat-icon stat-red"><Flame size={15} /></span><span>Chuỗi học tập</span><strong>{learningStreak} ngày</strong></div></div></div></section>
 
-            <section className="dashboard-panel dashboard-featured" aria-labelledby="dash-featured-title"><div className="dashboard-panel-heading"><h2 id="dash-featured-title">Nhân vật AI nổi bật</h2><a href="#characters">Xem tất cả <ArrowRight size={14} /></a></div><div className="dashboard-featured-body"><img src="/images/characters/tran-hung-dao.webp" alt="Minh họa Trần Hưng Đạo" /><div><strong>Trần Hưng Đạo</strong><small>(1228 – 1300)</small><p>“Cùng tìm hiểu hào khí Đông A và những trang sử thời Trần.”</p></div></div><button type="button" className="dashboard-yellow-button" onClick={() => featured ? onChat(featured) : showSection('characters')}><MessageCircle size={17} /> Trò chuyện ngay <ArrowRight size={17} /></button></section>
+            <section className="dashboard-panel dashboard-featured" aria-labelledby="dash-featured-title"><div className="dashboard-panel-heading"><h2 id="dash-featured-title">Nhân vật AI nổi bật</h2><a href="#characters">Xem tất cả <ArrowRight size={14} /></a></div><div className="dashboard-featured-body"><img src="/images/characters/tran-hung-dao.webp" alt="Minh họa Trần Hưng Đạo" /><div><strong>Trần Hưng Đạo</strong><small>(1228 – 1300)</small><p>“Cùng tìm hiểu hào khí Đông A và những trang sử thời Trần.”</p></div></div><FeaturedCharacterActions character={featured} onChat={onChat} /></section>
 
             <section className="dashboard-panel dashboard-ranking" aria-labelledby="dash-ranking-title"><div className="dashboard-panel-heading"><h2 id="dash-ranking-title">Bảng xếp hạng</h2><a href="#progress">Xem tất cả <ArrowRight size={14} /></a></div>{ranks.map((entry, index) => <div className={`dashboard-rank ${entry.isMe ? 'is-me' : ''}`} key={entry.name}><span className="dashboard-rank-number">{index + 1}</span><span className="dashboard-rank-avatar">{entry.avatar}</span><strong>{entry.name}</strong><span>{entry.xp.toLocaleString('vi-VN')}</span></div>)}</section>
           </div>

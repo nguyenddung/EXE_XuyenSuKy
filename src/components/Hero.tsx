@@ -1,6 +1,9 @@
 import { ArrowRight, ArrowUpRight, BookOpen, Check, MessageCircle, Search, Trophy } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { eras } from '../data/eras'
+import type { Character, CharacterInteractionMode } from '../types'
+import { useFeaturedCharacter } from '../hooks/useFeaturedCharacter'
+import { FeaturedCharacterActions } from './FeaturedCharacterActions'
 
 // Library features live inside the learning app (/home); the rest can be tried right here on the landing page.
 const features = [
@@ -10,7 +13,8 @@ const features = [
   { title: 'Chinh phục thử thách', text: '4 minigame, chơi không cần tài khoản', to: '#challenges', icon: Trophy, tone: 'mission-teal' },
 ] as const
 
-export function Hero({ authenticated }: { authenticated: boolean }) {
+export function Hero({ authenticated, onChat }: { authenticated: boolean; onChat: (character: Character, mode?: CharacterInteractionMode) => void }) {
+  const featured = useFeaturedCharacter()
   return <section className="landing-hero" aria-labelledby="hero-title">
     <div className="page-shell">
       <div className="landing-hero-grid">
@@ -28,7 +32,7 @@ export function Hero({ authenticated }: { authenticated: boolean }) {
           <article className="landing-panel landing-featured">
             <div className="landing-panel-heading"><h2>Nhân vật AI nổi bật</h2><a href="#characters">Xem tất cả <ArrowRight size={14} /></a></div>
             <div className="landing-featured-body"><img src="/images/characters/tran-hung-dao.webp" alt="Minh họa Trần Hưng Đạo" fetchPriority="high" /><div><strong>Trần Hưng Đạo</strong><small>(1228 – 1300)</small><p>“Cùng tìm hiểu hào khí Đông A và những trang sử thời Trần.”</p></div></div>
-            <a className="landing-gold-button landing-featured-action" href="#characters"><MessageCircle size={17} /> Trò chuyện ngay <ArrowRight size={17} /></a>
+            <FeaturedCharacterActions character={featured} onChat={onChat} />
           </article>
           <article className="landing-panel landing-promises">
             <h2>Học sử theo cách mới</h2>
