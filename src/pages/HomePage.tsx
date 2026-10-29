@@ -195,7 +195,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
       {activeCharacter && session.loggedIn && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}
-      {loginOpen && <LoginModal reason={pendingCharacter ? `Đăng nhập để ${pendingCharacter.mode === 'voice' ? 'nói chuyện' : 'nhắn tin'} với ${pendingCharacter.character.name}. Trò chuyện với nhân vật AI chỉ dành cho tài khoản đã đăng nhập.` : undefined} onClose={() => { setLoginOpen(false); setPendingActivity(null); setPendingCharacter(null) }} onLogin={handleLogin} />}
+      {loginOpen && <LoginModal reason={pendingCharacter ? `Đăng nhập để ${pendingCharacter.mode === 'voice' ? 'nói chuyện' : 'nhắn tin'} với ${pendingCharacter.character.name}. Trò chuyện với nhân vật AI chỉ dành cho tài khoản đã đăng nhập.` : undefined} onClose={() => { setLoginOpen(false); setPendingActivity(null); setPendingCharacter(null) }} onLogin={handleLogin} onRegistered={selectGrade} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}
         activity={activeActivity}
