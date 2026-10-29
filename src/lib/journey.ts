@@ -59,7 +59,8 @@ export interface Stage {
   order: number
   intro?: Narration
   missions: Mission[]
-  stage_check?: { draw_per_objective: number; extra: Question[]; reflection: Reflection[] }
+  /** pass_ratio overrides the journey rule for this stage, e.g. a gentler introductory stage. */
+  stage_check?: { draw_per_objective: number; extra: Question[]; reflection: Reflection[]; pass_ratio?: number }
   collection?: { title: string; badge?: { id: string; title: string } }
 }
 export interface JourneyRules {
@@ -220,6 +221,12 @@ export function xpFor(rules: JourneyRules, attempts: number, hinted: boolean) {
 }
 
 /** End-of-stage check: fresh variants for every objective plus the stage-wide questions. */
+export const passRatio = (journey: Journey, stage: Stage) => stage.stage_check?.pass_ratio ?? journey.rules.stage_check.pass_ratio
+/** Questions in a stage check: the drawn variants per mission plus the fixed extra questions. */
+export const checkLength = (stage: Stage) => stage.missions.reduce((count, mission) => count + Math.min(Math.max(1, stage.stage_check?.draw_per_objective || 1), mission.challenge_pool.length), 0) + (stage.stage_check?.extra.length || 0)
+/** Correct answers needed to pass; the small epsilon keeps 0.6 × 5 at 3 despite floating point. */
+export const correctNeeded = (journey: Journey, stage: Stage, total = checkLength(stage)) => Math.ceil(passRatio(journey, stage) * total - 1e-9)
+
 export function checkQuestions(progress: JourneyProgress, stage: Stage, random = Math.random) {
   const draw = Math.max(1, stage.stage_check?.draw_per_objective || 1)
   const drawn = stage.missions.flatMap((mission) => {

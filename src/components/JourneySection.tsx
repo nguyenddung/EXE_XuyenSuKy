@@ -3,7 +3,7 @@ import { ArrowRight, Award, CalendarClock, Check, Clapperboard, Lock, Map as Map
 import type { JourneyState } from '../hooks/useJourney'
 import type { JournalKind } from '../hooks/useLearningJournal'
 import { historyApi } from '../lib/historyApi'
-import { allMissions, checkOpen, checkQuestions, dueMissions, emptyProgress, missionOpen, missionStatus, pickVariant, stageOpen, writtenStages } from '../lib/journey'
+import { allMissions, checkLength, checkOpen, checkQuestions, correctNeeded, dueMissions, emptyProgress, missionOpen, missionStatus, pickVariant, stageOpen, writtenStages } from '../lib/journey'
 import type { Character } from '../types'
 import { GuideSays, JourneyModal, type JourneyRequest, type JourneyView } from './JourneyModal'
 
@@ -82,7 +82,7 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord }: Pro
             const available = missionOpen(progress, journey, stage, index)
             return <button key={mission.id} type="button" className="journey-mission" disabled={!available} onClick={() => open({ name: 'mission', missionId: mission.id })}><i data-status={status} aria-hidden="true" /><span>{mission.title}{mission.video && <Clapperboard className="journey-has-video" size={14} aria-label=" (có video)" />}</span><small>{available ? statusLabel[status] : <><Lock size={12} /> Khoá</>}</small></button>
           })}</div>
-          <div className="journey-check"><button type="button" className={canCheck && !passed ? 'button-primary' : 'button-outline'} disabled={!canCheck} onClick={() => open({ name: 'check', stageId: stage.id })}>Kiểm tra cuối chặng <ArrowRight size={16} /></button><small>{best !== undefined ? `Điểm cao nhất ${Math.round(best * 100)}%` : canCheck ? `Cần ${Math.round(rules.stage_check.pass_ratio * 100)}% để qua chặng` : 'Hoàn thành mọi nhiệm vụ để mở'}</small></div></>}
+          <div className="journey-check"><button type="button" className={canCheck && !passed ? 'button-primary' : 'button-outline'} disabled={!canCheck} onClick={() => open({ name: 'check', stageId: stage.id })}>Kiểm tra cuối chặng <ArrowRight size={16} /></button><small>{best !== undefined ? `Điểm cao nhất ${Math.round(best * 100)}%` : canCheck ? `Cần đúng ${correctNeeded(journey, stage)}/${checkLength(stage)} câu để qua chặng` : 'Hoàn thành mọi nhiệm vụ để mở'}</small></div></>}
         </div>
       </li>
     })}</ol>

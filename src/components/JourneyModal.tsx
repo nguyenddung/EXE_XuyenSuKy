@@ -4,7 +4,7 @@ import type { JourneyState } from '../hooks/useJourney'
 import type { JournalKind } from '../hooks/useLearningJournal'
 import { JourneyVideo } from './JourneyVideo'
 import {
-  answerComplete, checkOpen, clockLabel, gradeAnswer, videoLength, interviewCharacters, mastery, missionOpen, nextReviewDay, pagesLabel, pickVariant, QUESTIONS_PER_MISSION, recordFirstTry, schedule, stageOfMission, startAnswer, writtenStages, xpFor,
+  answerComplete, checkOpen, clockLabel, correctNeeded, gradeAnswer, videoLength, interviewCharacters, mastery, missionOpen, nextReviewDay, pagesLabel, pickVariant, QUESTIONS_PER_MISSION, recordFirstTry, schedule, stageOfMission, startAnswer, writtenStages, xpFor,
   type Answer, type Grade, type Journey, type Mission, type Narration, type Question, type Reflection, type Stage,
 } from '../lib/journey'
 
@@ -173,6 +173,7 @@ function CheckView({ state, open, onNotice, onRecord, stage, questions }: Shared
   const [phase, setPhase] = useState<'quiz' | 'result' | 'reflect'>('quiz')
   const [gain, setGain] = useState(0)
   const current = questions[index]
+  const needed = correctNeeded(journey, stage, questions.length)
 
   function check() {
     const graded = gradeAnswer(current.question, answer)
@@ -192,7 +193,7 @@ function CheckView({ state, open, onNotice, onRecord, stage, questions }: Shared
     const reward = update((draft) => {
       const record = draft.stages[stage.id] ||= { passed: false, best: 0 }
       record.best = Math.max(record.best, ratio)
-      if (ratio < rules.stage_check.pass_ratio || record.passed) return 0
+      if (score < needed || record.passed) return 0
       record.passed = true
       draft.xp += rules.xp.stage_check_pass
       return rules.xp.stage_check_pass
@@ -203,11 +204,11 @@ function CheckView({ state, open, onNotice, onRecord, stage, questions }: Shared
 
   const reflections = stage.stage_check?.reflection || []
   let body: ReactNode
-  if (phase === 'quiz') body = <section className="journey-panel"><span className="journey-eyebrow">Câu {index + 1}/{questions.length} · mỗi câu trả lời một lần, không có gợi ý</span><QuestionCard question={current.question} answer={answer} onChange={setAnswer} locked={!!result} result={result} />{result && <Feedback ok={result.ok}><strong>{result.ok ? 'Đúng.' : 'Chưa đúng.'}</strong>{result.why && <span>{result.why}</span>}<span>{current.question.explanation}</span>{!result.ok && <small>{pagesLabel(current.question.sources)}</small>}</Feedback>}<div className="journey-actions">{result ? <button className="button-primary" type="button" onClick={next}>{index + 1 < questions.length ? 'Câu tiếp' : 'Xem điểm'} <ArrowRight size={16} /></button> : <button className="button-primary" type="button" disabled={!answerComplete(answer)} onClick={check}>Kiểm tra</button>}</div></section>
+  if (phase === 'quiz') body = <section className="journey-panel"><span className="journey-eyebrow">Câu {index + 1}/{questions.length} · đúng {needed}/{questions.length} câu là qua chặng · mỗi câu trả lời một lần</span><QuestionCard question={current.question} answer={answer} onChange={setAnswer} locked={!!result} result={result} />{result && <Feedback ok={result.ok}><strong>{result.ok ? 'Đúng.' : 'Chưa đúng.'}</strong>{result.why && <span>{result.why}</span>}<span>{current.question.explanation}</span>{!result.ok && <small>{pagesLabel(current.question.sources)}</small>}</Feedback>}<div className="journey-actions">{result ? <button className="button-primary" type="button" onClick={next}>{index + 1 < questions.length ? 'Câu tiếp' : 'Xem điểm'} <ArrowRight size={16} /></button> : <button className="button-primary" type="button" disabled={!answerComplete(answer)} onClick={check}>Kiểm tra</button>}</div></section>
   else if (phase === 'result') {
     const ratio = score / questions.length
-    const passed = ratio >= rules.stage_check.pass_ratio
-    body = <section className="journey-panel"><span className="journey-eyebrow">Kết quả</span><p className="journey-big">{score}/{questions.length}</p><p className="journey-hint-line">{Math.round(ratio * 100)}% · cần {Math.round(rules.stage_check.pass_ratio * 100)}% để qua chặng</p><p role="status">{passed ? `Em đã qua chặng${gain ? ` và nhận ${gain} XP` : ''}. Chặng tiếp theo đã mở.` : 'Chưa đủ điểm qua chặng. Em có thể làm lại ngay; mỗi lần làm sẽ gặp câu hỏi khác.'}</p><div className="journey-actions">{!passed && <button className="button-primary" type="button" onClick={() => open({ name: 'check', stageId: stage.id })}><RotateCcw size={16} /> Làm lại (đề mới)</button>}{reflections.length > 0 && <button className={passed ? 'button-primary' : 'button-outline'} type="button" onClick={() => setPhase('reflect')}>Câu hỏi suy ngẫm</button>}</div></section>
+    const passed = score >= needed
+    body = <section className="journey-panel"><span className="journey-eyebrow">Kết quả</span><p className="journey-big">{score}/{questions.length}</p><p className="journey-hint-line">{Math.round(ratio * 100)}% · cần đúng {needed}/{questions.length} câu để qua chặng</p><p role="status">{passed ? `Em đã qua chặng${gain ? ` và nhận ${gain} XP` : ''}. Chặng tiếp theo đã mở.` : 'Chưa đủ điểm qua chặng. Em có thể làm lại ngay; mỗi lần làm sẽ gặp câu hỏi khác.'}</p><div className="journey-actions">{!passed && <button className="button-primary" type="button" onClick={() => open({ name: 'check', stageId: stage.id })}><RotateCcw size={16} /> Làm lại (đề mới)</button>}{reflections.length > 0 && <button className={passed ? 'button-primary' : 'button-outline'} type="button" onClick={() => setPhase('reflect')}>Câu hỏi suy ngẫm</button>}</div></section>
   } else body = <>{reflections.map((reflection) => <ReflectionCard key={reflection.id} reflection={reflection} />)}</>
   return <><p className="journey-modal-kicker">Kiểm tra cuối chặng</p><h2 id="journey-modal-title" tabIndex={-1}>{stage.title}</h2>{body}</>
 }

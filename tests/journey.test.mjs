@@ -7,7 +7,7 @@ import { loadDataset } from '../server/dataset.mjs'
 import { handleApi } from '../server/handler.mjs'
 import { defaultJourneyPath, JourneyError, validateJourney } from '../server/journeys.mjs'
 import {
-  answerComplete, checkOpen, checkQuestions, clockLabel, dueMissions, emptyProgress, gradeAnswer, mastery, missionOpen, parseProgress, pickVariant, recordFirstTry, schedule, sceneAt, stageOpen, startAnswer, videoLength, writtenStages, xpFor,
+  answerComplete, checkLength, checkOpen, checkQuestions, clockLabel, correctNeeded, dueMissions, emptyProgress, gradeAnswer, mastery, missionOpen, parseProgress, pickVariant, recordFirstTry, schedule, sceneAt, stageOpen, startAnswer, videoLength, writtenStages, xpFor,
 } from '../src/lib/journey.ts'
 
 let dataset, source, server, base
@@ -298,4 +298,24 @@ test('every Chương 2 mission has a narrated video of about two minutes, quotin
   reject('b5_m3', (scenes) => { scenes.find((scene) => scene.kind === 'phat_hien').finds[0].find = 'vang' }, /known finds/)
   reject('b5_m1', (scenes) => { scenes.find((scene) => scene.kind === 'bieu_tuong').items[0].icon = 'lua_trai' }, /known icons/)
   reject('b6_m1', (scenes) => { scenes[0].cast = ['luyen_kim', 'bay_len_troi'] }, /cast needs/)
+})
+
+test('a stage may set its own pass ratio; Bài 1 passes with 2 of its 3 check questions while other stages keep the journey rule', async () => {
+  const journey = copy()
+  const stage = writtenStages(journey)[0]
+  const total = checkLength(stage)
+  assert.equal(checkQuestions(emptyProgress(), stage).length, total)
+  assert.equal(correctNeeded(journey, stage), Math.ceil(journey.rules.stage_check.pass_ratio * total - 1e-9))
+  stage.stage_check.pass_ratio = 0.6
+  assert.equal(correctNeeded(journey, stage, 5), 3, '0.6 × 5 stays 3 despite floating point')
+  validateJourney(journey, dataset)
+  for (const bad of [0, 1.5, '0.6']) {
+    stage.stage_check.pass_ratio = bad
+    assert.throws(() => validateJourney(journey, dataset), /stage_check.pass_ratio must be in \(0, 1\]/)
+  }
+  const { body: chapter1 } = await get('journeys/lop6_chuong1')
+  const [lesson1, lesson2] = chapter1.stages
+  assert.deepEqual([checkLength(lesson1), correctNeeded(chapter1, lesson1)], [3, 2])
+  assert.equal(lesson2.stage_check.pass_ratio, undefined)
+  assert.equal(correctNeeded(chapter1, lesson2), Math.ceil(0.8 * checkLength(lesson2) - 1e-9))
 })

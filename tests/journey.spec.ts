@@ -164,7 +164,7 @@ test('review on another day grants mastery and the Sử Ký piece; the stage che
   // The teacher switch opens the stage check; a perfect score passes the stage and unlocks the next one.
   await section.getByLabel('Mở khoá mọi chặng (quyền giáo viên)').check()
   await section.locator('.journey-stage').nth(2).getByRole('button', { name: /Kiểm tra cuối chặng/ }).click()
-  await expect(modal(page)).toContainText('mỗi câu trả lời một lần, không có gợi ý')
+  await expect(modal(page).locator('.journey-eyebrow').first()).toContainText('câu là qua chặng · mỗi câu trả lời một lần')
   const total = Number((await modal(page).locator('.journey-eyebrow').first().textContent())!.match(/\/(\d+)/)![1])
   for (let index = 0; index < total; index++) {
     await answer(page, await shownQuestion(page))
@@ -329,4 +329,28 @@ test('the chapter picker shows where the videos are and Video bài học plays a
   await expect(modal(page).getByRole('button', { name: /Xem video · / })).toBeVisible()
   await modal(page).getByRole('button', { name: 'Danh sách video' }).click()
   await expect(modal(page).locator('.journey-video-list button')).toHaveCount(8)
+})
+
+test('Bài 1 is the gentle first stage: one wrong answer in its stage check still passes', async ({ page }) => {
+  const chapter5 = journey
+  journey = await (await page.request.get('/api/journeys/lop6_chuong1')).json()
+  try {
+    await page.goto('/home#journey')
+    const section = page.locator('#journey')
+    await page.getByRole('navigation', { name: 'Chọn chương' }).getByRole('button', { name: /Chương 1/ }).click()
+    await section.locator('.journey-tools summary').click()
+    await section.getByLabel('Mở khoá mọi chặng (quyền giáo viên)').check()
+    await expect(section.locator('.journey-stage').first()).toContainText('Cần đúng 2/3 câu để qua chặng')
+    await section.locator('.journey-stage').first().getByRole('button', { name: /Kiểm tra cuối chặng/ }).click()
+    await expect(modal(page).locator('.journey-eyebrow').first()).toContainText('đúng 2/3 câu là qua chặng')
+    for (let index = 0; index < 3; index++) {
+      const question = await shownQuestion(page)
+      if (index === 0) await answerWrong(page, question)
+      else await answer(page, question)
+      await modal(page).getByRole('button', { name: index < 2 ? 'Câu tiếp' : 'Xem điểm' }).click()
+    }
+    await expect(modal(page).locator('.journey-big')).toHaveText('2/3')
+    await expect(modal(page)).toContainText('cần đúng 2/3 câu để qua chặng')
+    await expect(modal(page)).toContainText('Em đã qua chặng và nhận 50 XP')
+  } finally { journey = chapter5 }
 })

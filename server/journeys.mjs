@@ -132,6 +132,7 @@ export function validateJourney(journey, dataset) {
     }
     const check = stage.stage_check
     if (!check || !Array.isArray(check.extra) || !Array.isArray(check.reflection)) fail(`${stage.id}: stage_check needs extra and reflection lists`)
+    if (check.pass_ratio !== undefined && (typeof check.pass_ratio !== 'number' || check.pass_ratio <= 0 || check.pass_ratio > 1)) fail(`${stage.id}: stage_check.pass_ratio must be in (0, 1]`)
     for (const question of check.extra) { unique(question?.id); validateQuestion(question, `${stage.id}.stage_check`, stageCards, fail); collect(question, question.id) }
     for (const question of check.reflection) {
       unique(question?.id)
