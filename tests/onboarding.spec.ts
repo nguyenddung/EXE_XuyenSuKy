@@ -2,19 +2,23 @@ import { expect, test } from '@playwright/test'
 
 test.use({ storageState: { cookies: [], origins: [] } })
 
-test('registration selects grade, filters recommendations and remembers choice', async ({ page }) => {
+test('registration asks for the grade in the form, filters recommendations and remembers choice', async ({ page }) => {
   await page.goto('/dang-nhap')
   await page.getByRole('tab', { name: 'Đăng ký' }).click()
   await page.getByLabel('Email', { exact: true }).fill('learner@example.com')
   await page.getByLabel('Mật khẩu', { exact: true }).fill('study-demo-123')
   await page.getByLabel('Xác nhận mật khẩu', { exact: true }).fill('different-password')
+  const grades = page.getByRole('group', { name: 'Bạn đang học lớp mấy?' })
+  await expect(grades.getByRole('radio')).toHaveCount(7)
+  // The grade is required: the browser keeps the form until one is chosen.
+  await page.getByRole('button', { name: 'Tạo tài khoản' }).click()
+  expect(await grades.getByRole('radio').first().evaluate((input) => (input as HTMLInputElement).validity.valueMissing)).toBe(true)
+  await grades.getByRole('radio', { name: 'Lớp 12' }).check()
   await page.getByRole('button', { name: 'Tạo tài khoản' }).click()
   await expect(page.getByRole('alert')).toContainText('chưa khớp')
   await page.getByLabel('Xác nhận mật khẩu', { exact: true }).fill('study-demo-123')
   await page.getByRole('button', { name: 'Tạo tài khoản' }).click()
-  await expect(page.getByRole('heading', { name: 'Bạn đang học lớp mấy?' })).toBeVisible()
-  await page.getByRole('button', { name: 'Lớp 12', exact: true }).click()
-  await page.getByRole('button', { name: 'Bắt đầu học lớp 12' }).click()
+  // No separate grade screen after registering: the account starts in the grade chosen in the form.
   await expect(page).toHaveURL(/\/home$/)
   await expect(page.locator('.dashboard-lesson')).toHaveCount(3)
   await expect(page.locator('.dashboard-lesson').first()).toContainText('SGK lớp 12')
@@ -31,6 +35,24 @@ test('registration selects grade, filters recommendations and remembers choice',
   await page.locator('.login-form button[type=submit]').click()
   await expect(page).toHaveURL(/\/home$/)
   await expect(page.getByLabel('Đổi lớp đề xuất')).toHaveValue('10')
+})
+
+test('a visitor who tried a grade as guest still gets the grade chosen while registering', async ({ page }) => {
+  await page.goto('/dang-nhap')
+  await page.getByRole('button', { name: /Học thử không cần tài khoản/ }).click()
+  await page.getByRole('button', { name: 'Lớp 7', exact: true }).click()
+  await page.getByRole('button', { name: 'Bắt đầu học lớp 7' }).click()
+  await expect(page).toHaveURL(/\/home$/)
+  await page.evaluate(() => sessionStorage.clear())
+  await page.goto('/dang-nhap')
+  await page.getByRole('tab', { name: 'Đăng ký' }).click()
+  await page.getByLabel('Email', { exact: true }).fill('new-learner@example.com')
+  await page.getByLabel('Mật khẩu', { exact: true }).fill('study-demo-123')
+  await page.getByLabel('Xác nhận mật khẩu', { exact: true }).fill('study-demo-123')
+  await page.getByRole('group', { name: 'Bạn đang học lớp mấy?' }).getByRole('radio', { name: 'Lớp 11' }).check()
+  await page.getByRole('button', { name: 'Tạo tài khoản' }).click()
+  await expect(page).toHaveURL(/\/home$/)
+  await expect(page.getByLabel('Đổi lớp đề xuất')).toHaveValue('11')
 })
 
 test('mobile grade selection has no horizontal overflow', async ({ page }) => {
