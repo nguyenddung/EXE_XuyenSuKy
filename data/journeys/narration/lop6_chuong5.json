@@ -41,6 +41,62 @@
       "model": "eleven_flash_v2_5",
       "bytes": 65871,
       "seconds": 8.23
+    },
+    "b18_m4.video.s1": {
+      "file": "/audio/journeys/lop6_chuong5/b18_m4.video.s1.mp3",
+      "sha256": "c0f77c7e19664c564865f23dcc8109e4344a38b1e22944eaf898a398e62d3ef9",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 46227,
+      "seconds": 5.77
+    },
+    "b18_m4.video.s2": {
+      "file": "/audio/journeys/lop6_chuong5/b18_m4.video.s2.mp3",
+      "sha256": "2fc8358b3cc28a91cc5aa2a1f19a4fe12db722d7826d7ae56a824998f69e0bac",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 79246,
+      "seconds": 9.9
+    },
+    "b18_m4.video.s3": {
+      "file": "/audio/journeys/lop6_chuong5/b18_m4.video.s3.mp3",
+      "sha256": "55da301d4b4e11ae25c9f786501af55bda06d8574c6546f596485278e57cf3c6",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 80082,
+      "seconds": 10
+    },
+    "b18_m4.video.s4": {
+      "file": "/audio/journeys/lop6_chuong5/b18_m4.video.s4.mp3",
+      "sha256": "a6341bdf683ceb9daa9d1af4033de401d22a6c07b3995f81aa53c63a2f86c9f9",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 60020,
+      "seconds": 7.5
+    },
+    "b18_m4.video.s5": {
+      "file": "/audio/journeys/lop6_chuong5/b18_m4.video.s5.mp3",
+      "sha256": "b441b091ce9eb2f5cb939a45318358fcda630ddf126fad5b1462fd619a503cf7",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 62318,
+      "seconds": 7.78
+    },
+    "b18_m4.video.s6": {
+      "file": "/audio/journeys/lop6_chuong5/b18_m4.video.s6.mp3",
+      "sha256": "4f6c124b41fc9fcdadd4dcc66bc6a1e96e5bddeddcc5dc81c27b2a176f4d3331",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 82380,
+      "seconds": 10.29
+    },
+    "b18_m4.video.s7": {
+      "file": "/audio/journeys/lop6_chuong5/b18_m4.video.s7.mp3",
+      "sha256": "fa5fe3c87212c7fa97e1b7dfb9e9edc1201859f131028f8ce0490ce3ea77e925",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_flash_v2_5",
+      "bytes": 62527,
+      "seconds": 7.81
     }
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react'
 import { clockLabel, pagesLabel, sceneAt, videoLength, type MissionVideo, type VideoIcon, type VideoScene } from '../lib/journey'
+import { NavalBattleScene } from './videoNavalBattle'
 import { CastBand, RiverCast } from './videoPeople'
 import { DiscoveryScene, EvolutionScene, PrehistoryBackdrop, prehistoryIcons, SunEmblem, TimelineScene } from './videoPrehistory'
 
@@ -143,8 +144,11 @@ export function VideoFrame({ video, t, still = false }: { video: MissionVideo; t
   const { index, scene, local } = sceneAt(video, t)
   const shown = still ? scene.duration : local
   const last = index === video.scenes.length - 1
-  const fade = still ? 1 : Math.min(clamp(local / 0.45), last ? 1 : clamp((scene.duration - local) / 0.45))
+  // Battle phases continue one another on the same river, so they cut straight to the next phase instead of fading.
+  const joined = (other?: VideoScene) => scene.kind === 'thuy_chien' && other?.kind === 'thuy_chien'
+  const fade = still ? 1 : Math.min(joined(video.scenes[index - 1]) ? 1 : clamp(local / 0.45), last || joined(video.scenes[index + 1]) ? 1 : clamp((scene.duration - local) / 0.45))
   const prehistoric = video.style === 'tien_su'
+  const paper = scene.kind === 'thuy_chien'
   return <>
     <defs><linearGradient id="jv-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#0f2747" /><stop offset="1" stopColor="#1c4a7d" /></linearGradient></defs>
     {prehistoric ? <PrehistoryBackdrop t={t} /> : <Backdrop t={t} />}
@@ -156,9 +160,10 @@ export function VideoFrame({ video, t, still = false }: { video: MissionVideo; t
       {scene.kind === 'tien_hoa' && <EvolutionScene scene={scene} local={shown} />}
       {scene.kind === 'moc_thoi_gian' && <TimelineScene scene={scene} local={shown} />}
       {scene.kind === 'phat_hien' && <DiscoveryScene scene={scene} local={shown} />}
+      {scene.kind === 'thuy_chien' && <NavalBattleScene scene={scene} local={shown} t={t} />}
     </g>
-    <text x={48} y={70} fontSize={28} fontWeight={700} fill={cream} opacity={0.75}>{video.title}</text>
-    <text x={W - 48} y={70} textAnchor="end" fontSize={26} fill={cream} opacity={0.75}>{index + 1}/{video.scenes.length}</text>
+    <text x={48} y={70} fontSize={28} fontWeight={700} fill={paper ? ink : cream} opacity={0.75}>{video.title}</text>
+    <text x={W - 48} y={70} textAnchor="end" fontSize={26} fill={paper ? ink : cream} opacity={0.75}>{index + 1}/{video.scenes.length}</text>
   </>
 }
 

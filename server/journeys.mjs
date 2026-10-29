@@ -13,7 +13,12 @@ export const questionTypes = ['trac_nghiem', 'sap_xep', 'ghep_noi', 'phan_loai']
 const exploreTypes = ['tu_lieu', 'dong_thoi_gian', 'phong_van']
 const hintLevels = ['nudge', 'card', 'narrow']
 // Same lists as course_builder/rules.py: every scene uses an animation template the app knows how to draw.
-export const videoSceneKinds = ['tieu_de', 'bieu_tuong', 'song_nuoc', 'tien_hoa', 'moc_thoi_gian', 'phat_hien']
+export const videoSceneKinds = ['tieu_de', 'bieu_tuong', 'song_nuoc', 'tien_hoa', 'moc_thoi_gian', 'phat_hien', 'thuy_chien']
+// thuy_chien: the phases of a river battle in story order, each with the roles it may label (VIDEO_BATTLE_PHASES).
+export const videoBattlePhases = {
+  tien_quan: ['dich'], chon_tran_dia: ['muc_nuoc'], dong_coc: ['coc'], nhu_dich: ['dich', 'ta', 'coc'],
+  trieu_rut: ['dich', 'coc', 'phuc_binh'], tan_vo: ['coc', 'phuc_binh'], ket_thuc: [],
+}
 export const videoIcons = ['riu_dong', 'luoi_sat', 'lua', 'nguoi', 'thuy_loi', 'khien', 'trong_dong', 'nha_san', 'hai_chan', 'ban_tay', 'bo_nao', 'tieng_noi',
   'hang_dong', 'leu', 'san_bat', 'hai_luom', 'tranh_vach', 'trang_suc', 'gom', 'det_vai', 'chan_nuoi', 'tuong', 'mo_tang', 'lua_chay', 'dong_do', 'dong_thau', 'cuoc', 'cay', 'gia_dinh', 'cua_cai', 'giau_ngheo']
 export const videoForms = ['vuon_nguoi', 'nguoi_toi_co', 'nguoi_tinh_khon']
@@ -100,6 +105,14 @@ export function validateJourney(journey, dataset) {
           if (scene.kind === 'tien_hoa' && (!Array.isArray(scene.forms) || !scene.forms.length || scene.forms.length > 3 || scene.forms.some((form, index) => videoForms.indexOf(form) < 0 || (index > 0 && videoForms.indexOf(form) <= videoForms.indexOf(scene.forms[index - 1]))))) fail(`${at}: tien_hoa needs 1–3 forms in evolutionary order`)
           if (scene.kind === 'moc_thoi_gian' && (!Array.isArray(scene.events) || scene.events.length < 2 || scene.events.length > 5 || !scene.events.every((event) => isText(event?.time) && isText(event.label) && (event.form === undefined || videoForms.includes(event.form))))) fail(`${at}: moc_thoi_gian needs 2–5 events with time and label`)
           if (scene.kind === 'phat_hien' && (!Array.isArray(scene.finds) || !scene.finds.length || scene.finds.length > 3 || !scene.finds.every((item) => videoFinds.includes(item?.find) && isText(item.label)))) fail(`${at}: phat_hien needs 1–3 known finds with labels`)
+          if (scene.kind === 'thuy_chien') {
+            const roles = Object.hasOwn(videoBattlePhases, scene.phase) ? videoBattlePhases[scene.phase] : null
+            if (!roles) fail(`${at}: thuy_chien needs a known phase (${Object.keys(videoBattlePhases).join(', ')})`)
+            const callouts = scene.callouts ?? {}
+            if (!callouts || typeof callouts !== 'object' || Array.isArray(callouts) || !Object.entries(callouts).every(([role, label]) => roles.includes(role) && isText(label))) fail(`${at}: thuy_chien ${scene.phase} callouts may only label ${roles.join(', ') || 'nothing'}`)
+            if (scene.phase === 'ket_thuc' && !isText(scene.title)) fail(`${at}: thuy_chien ket_thuc needs a title`)
+            if ((scene.title !== undefined && !isText(scene.title)) || (scene.label !== undefined && (!isText(scene.label) || !isText(scene.title)))) fail(`${at}: thuy_chien label needs a title`)
+          }
           const cast = scene.cast ?? []
           const allowed = scene.kind === 'song_nuoc' ? videoRiverCast : ['tieu_de', 'bieu_tuong'].includes(scene.kind) ? videoBandCast : []
           if (!Array.isArray(cast) || cast.length > 2 || new Set(cast).size !== cast.length || !cast.every((item) => allowed.includes(item))) fail(`${at}: cast needs 0–2 different scenes from ${allowed.join(', ')}`)

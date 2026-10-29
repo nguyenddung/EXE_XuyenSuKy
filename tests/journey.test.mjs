@@ -235,6 +235,29 @@ test('narrated scenes last as long as their recording plus a short gap, and the 
   assert.equal(mp3Seconds(Buffer.from('not audio')), 0)
 })
 
+test('the Bạch Đằng 938 video plays the river-battle phases in order, narrated and quoted from textbook pages 84–86', async () => {
+  const mission = (journey) => journey.stages.find((stage) => stage.id === 'b18').missions.find((item) => item.id === 'b18_m4')
+  const { body } = await get('journeys/lop6_chuong5')
+  const { video } = mission(body)
+  assert.equal(video.title, 'Trận Bạch Đằng năm 938')
+  assert.ok(video.scenes.every((scene) => scene.kind === 'thuy_chien'))
+  assert.deepEqual(video.scenes.map((scene) => scene.phase), ['tien_quan', 'chon_tran_dia', 'dong_coc', 'nhu_dich', 'trieu_rut', 'tan_vo', 'ket_thuc'])
+  assert.ok(video.scenes.every((scene) => scene.audio === `/audio/journeys/lop6_chuong5/${scene.id}.mp3`), 'every scene is narrated')
+  assert.ok(video.scenes.every((scene) => scene.sources.length && scene.sources.every((source) => source.lesson_number === 18 && source.pages[0] >= 84 && source.pages[1] <= 86)))
+  assert.ok(videoLength(video) >= 60 && videoLength(video) <= 90, `about a minute, got ${videoLength(video)} s`)
+  // Phases, labels and cards are validated like the other templates.
+  const reject = (change, pattern) => { const journey = copy(); change(mission(journey).video.scenes); assert.throws(() => validateJourney(journey, dataset), pattern) }
+  reject((scenes) => { scenes[0].phase = 'do_bo' }, /known phase/)
+  reject((scenes) => { scenes[0].phase = 'constructor' }, /known phase/)
+  reject((scenes) => { scenes[0].callouts.coc = 'Bãi cọc ngầm' }, /tien_quan callouts may only label dich/)
+  reject((scenes) => { scenes[1].callouts = ['2 – 3 m'] }, /callouts may only label/)
+  reject((scenes) => { scenes[3].callouts.ta = '' }, /callouts may only label/)
+  reject((scenes) => { delete scenes[6].title; delete scenes[6].label }, /ket_thuc needs a title/)
+  reject((scenes) => { delete scenes[0].title }, /label needs a title/)
+  reject((scenes) => { scenes[3].cast = ['cheo_thuyen'] }, /cast needs/)
+  assert.doesNotThrow(() => validateJourney(copy(), dataset))
+})
+
 test('video people must come from the known animations, at most two per scene, river scenes only boats and planting', () => {
   const reject = (change, pattern) => { const journey = copy(); change(journey.stages[0].missions[0].video.scenes); assert.throws(() => validateJourney(journey, dataset), pattern) }
   reject((scenes) => { scenes[0].cast = ['bay_len_troi'] }, /cast needs/)

@@ -121,6 +121,7 @@
           "video": {
             "id": "b14_m1.video",
             "title": "Nhà nước Văn Lang ra đời",
+            "style": "dong_son",
             "scenes": [
               {
                 "id": "b14_m1.video.s1",
@@ -4822,6 +4823,221 @@
             "hu_cau": true,
             "text": "Bãi cọc đã đóng xong, nước triều đang lên. Thuyền giặc đã thấp thoáng ngoài cửa biển. Em hãy theo dõi trận đánh sẽ hoàn thành lời thề của Hai Bà Trưng."
           },
+          "video": {
+            "id": "b18_m4.video",
+            "title": "Trận Bạch Đằng năm 938",
+            "style": "dong_son",
+            "scenes": [
+              {
+                "id": "b18_m4.video.s1",
+                "kind": "thuy_chien",
+                "phase": "tien_quan",
+                "duration": 10,
+                "title": "Trận Bạch Đằng",
+                "label": "Năm 938",
+                "callouts": {
+                  "dich": "Quân Nam Hán · Hoằng Tháo"
+                },
+                "caption": "Năm 938, quân Nam Hán do Hoằng Tháo làm chủ tướng theo đường biển ồ ạt tiến sang xâm lược nước ta.",
+                "sources": [
+                  {
+                    "quote": "Năm 938, quân Nam Hán do Hoằng Tháo làm chủ tướng từ Quảng Đông theo đường biển ồ ạt tiến sang xâm lược nước ta.",
+                    "chunk_id": "LS6_B18_C011",
+                    "lesson_number": 18,
+                    "pages": [
+                      84,
+                      84
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b18_m4.video.s2",
+                "kind": "thuy_chien",
+                "phase": "chon_tran_dia",
+                "duration": 12,
+                "callouts": {
+                  "muc_nuoc": "2 – 3 m"
+                },
+                "caption": "Vùng cửa sông Bạch Đằng được chọn làm trận địa. Đây là con đường thuỷ tốt nhất để đi vào nước ta; mực nước lúc triều cao nhất và thấp nhất chênh nhau tới 2 đến 3 mét.",
+                "sources": [
+                  {
+                    "quote": "Vùng cửa sông Bạch Đảng được lựa chọn để bố trí trận địa đánh giặc.",
+                    "chunk_id": "LS6_B18_C011",
+                    "lesson_number": 18,
+                    "pages": [
+                      84,
+                      84
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đây là con đường thuỷ tốt nhất để đi vào nước ta.",
+                    "chunk_id": "LS6_B18_C013",
+                    "lesson_number": 18,
+                    "pages": [
+                      84,
+                      84
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Mực nước vùng cửa sông lúc thuỷ triều cao nhất và thấp nhất chênh nhau tới 2 - 3m.",
+                    "chunk_id": "LS6_B18_C013",
+                    "lesson_number": 18,
+                    "pages": [
+                      84,
+                      84
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b18_m4.video.s3",
+                "kind": "thuy_chien",
+                "phase": "dong_coc",
+                "duration": 12,
+                "callouts": {
+                  "coc": "Bãi cọc ngầm"
+                },
+                "caption": "Ngô Quyền gấp rút chuẩn bị kế hoạch: đem cọc lớn vạt nhọn, đầu bịt sắt, đóng ngầm ở trước cửa biển. Thuyền giặc theo nước triều lên vào trong hàng cọc thì không cho chiếc nào ra thoát.",
+                "sources": [
+                  {
+                    "quote": "Trước vận nước lâm nguy, Ngô Quyền đã gấp rút chuẩn bị kế hoạch đối phó với quân nam hán.",
+                    "chunk_id": "LS6_B18_C011",
+                    "lesson_number": 18,
+                    "pages": [
+                      84,
+                      84
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nếu sai người đem cọc lớn vạt nhọn đầu bịt sắt đóng ngầm ở trước cửa biển, thuyền của bọn chúng theo nước triều lên vào trong hàng cọc thì sau đó ta dễ bề chế ngự, không cho chiếc nào ra thoát.",
+                    "chunk_id": "LS6_B18_C013",
+                    "lesson_number": 18,
+                    "pages": [
+                      84,
+                      84
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b18_m4.video.s4",
+                "kind": "thuy_chien",
+                "phase": "nhu_dich",
+                "duration": 12,
+                "callouts": {
+                  "dich": "Quân Nam Hán",
+                  "ta": "Thuyền nhẹ của ta",
+                  "coc": "Bãi cọc ngầm"
+                },
+                "caption": "Khi nước triều lên, Ngô Quyền cho thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo. Hoằng Tháo quả nhiên tiến quân vào.",
+                "sources": [
+                  {
+                    "quote": "Khi nước triều lên, Quyền sai người đem thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo. Hoằng Tháo quả nhiên tiến quân vào.",
+                    "chunk_id": "LS6_B18_C015",
+                    "lesson_number": 18,
+                    "pages": [
+                      85,
+                      85
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b18_m4.video.s5",
+                "kind": "thuy_chien",
+                "phase": "trieu_rut",
+                "duration": 12,
+                "callouts": {
+                  "coc": "Cọc nhô lên",
+                  "phuc_binh": "Quân ta đánh phục kích"
+                },
+                "caption": "Khi thuyền giặc đã vào trong vùng cắm cọc, nước triều rút, cọc nhô lên. Ngô Quyền tiến quân ra đánh, ai nấy đều liều chết chiến đấu.",
+                "sources": [
+                  {
+                    "quote": "Khi binh thuyền đã vào trong vùng cắm cọc, nước triều rút, cọc nhô lên, Quyền bèn tiến quân ra đánh, ai nấy đều liều chết chiến đấu.",
+                    "chunk_id": "LS6_B18_C015",
+                    "lesson_number": 18,
+                    "pages": [
+                      85,
+                      85
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Quân ta đánh phục kích",
+                    "chunk_id": "LS6_B18_C016",
+                    "lesson_number": 18,
+                    "pages": [
+                      85,
+                      86
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b18_m4.video.s6",
+                "kind": "thuy_chien",
+                "phase": "tan_vo",
+                "duration": 12,
+                "callouts": {
+                  "coc": "Bãi cọc ngầm"
+                },
+                "caption": "Nước triều rút xuống rất gấp, thuyền giặc đều mắc vào cọc mà lật úp, rối loạn tan vỡ, quân lính chết đuối quá nửa. Ngô Quyền thừa thắng đuổi đánh, bắt được Hoằng Tháo giết đi.",
+                "sources": [
+                  {
+                    "quote": "Quân Hoằng Tháo không kịp sửa thuyền mà nước triều rút xuống rất gấp, thuyền đều mắc vào cọc mà lật úp, rối loạn tan vỡ, quân lính chết đuối quá nửa.",
+                    "chunk_id": "LS6_B18_C015",
+                    "lesson_number": 18,
+                    "pages": [
+                      85,
+                      85
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Quyền thừa thắng đuổi đánh, bắt được Hoằng Tháo giết đi",
+                    "chunk_id": "LS6_B18_C015",
+                    "lesson_number": 18,
+                    "pages": [
+                      85,
+                      85
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b18_m4.video.s7",
+                "kind": "thuy_chien",
+                "phase": "ket_thuc",
+                "duration": 10,
+                "title": "Chiến thắng Bạch Đằng năm 938",
+                "label": "Chấm dứt vĩnh viễn thời kì Bắc thuộc, mở ra kỉ nguyên độc lập tự chủ lâu dài",
+                "caption": "Chiến thắng Bạch Đằng năm 938 đã chấm dứt vĩnh viễn thời kì Bắc thuộc và mở ra kỉ nguyên độc lập tự chủ lâu dài cho dân tộc.",
+                "sources": [
+                  {
+                    "quote": "Chiến thắng Bạch Đằng năm 938 đã chấm dứt vĩnh viễn thời kì Bắc thuộc và mở ra kỉ nguyên độc lập tự chủ lâu dài cho dân tộc.",
+                    "chunk_id": "LS6_B18_C016",
+                    "lesson_number": 18,
+                    "pages": [
+                      85,
+                      86
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b18_m4.c1",
@@ -5321,7 +5537,7 @@
     }
   ],
   "build": {
-    "date": "2026-10-28",
+    "date": "2026-10-29",
     "dataset_version": "1.0.0",
     "warnings": [
       "b16_m1.q1: câu trích lấy từ Bài 18: «Mùa thu năm 930, quân Nam Hán đánh sang nước ta»",

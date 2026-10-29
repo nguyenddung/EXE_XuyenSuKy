@@ -310,3 +310,26 @@ test('every scene of the Chương 2 videos draws without errors', async ({ page 
   }
   expect(errors).toEqual([])
 })
+
+test('the Bạch Đằng 938 video draws the river battle in every scene, from the arriving fleet to the closing card', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  const { video } = journey.stages.flatMap((stage) => stage.missions).find((mission) => mission.id === 'b18_m4') as unknown as { video: { title: string; scenes: { caption: string }[] } }
+  const section = await openJourney(page)
+  await section.locator('.journey-tools summary').click()
+  await section.getByLabel('Mở khoá mọi chặng (quyền giáo viên)').check()
+  await missionButton(section, 'Trận Bạch Đằng năm 938').click()
+  await modal(page).getByRole('button', { name: 'Nhận nhiệm vụ' }).click()
+  await expect(modal(page).locator('.journey-eyebrow').first()).toHaveText(/^Video · 1:\d\d$/)
+  // A paused scene shows its finished state, so each phase's labels from the journey file are on screen.
+  const labels = ['Quân Nam Hán · Hoằng Tháo', '2 – 3 m', 'Bãi cọc ngầm', 'Thuyền nhẹ của ta', 'Quân ta đánh phục kích', 'Bãi cọc ngầm', 'Chiến thắng Bạch Đằng năm 938']
+  const frame = modal(page).locator('svg[role="img"]')
+  for (const [index, scene] of video.scenes.entries()) {
+    await modal(page).getByRole('button', { name: `Cảnh ${index + 1}`, exact: true }).click()
+    await expect(frame).toHaveAttribute('aria-label', `${video.title}, cảnh ${index + 1}/${video.scenes.length}`)
+    await expect(modal(page).locator('.journey-video-caption p')).toHaveText(scene.caption)
+    await expect(frame).toContainText(labels[index])
+  }
+  await expect(modal(page).locator('.journey-video-caption small')).toHaveText('SGK tr. 85, 86')
+  expect(errors).toEqual([])
+})
