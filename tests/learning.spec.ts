@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test'
-async function openDemo(page: Page) { await page.goto('/home'); await page.getByRole('button', { name: 'Bài học thử', exact: true }).click() }
+async function openDemo(page: Page) { await page.goto('/home#library'); await page.getByRole('button', { name: 'Bài học thử', exact: true }).click() }
 const journalKey = 'xuyen-su-ky-journal-v1'
+const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 test('library search, grade filters, saved articles and empty state', async ({page})=>{
  await openDemo(page); await expect(page.locator('.library-card')).toHaveCount(6)
  await page.getByRole('button',{name:/Khám phá thêm/}).click(); await expect(page.locator('.library-card')).toHaveCount(12)
@@ -34,6 +35,6 @@ test('mobile reader focus, no overflow, malformed storage and unavailable storag
 
 test('reset confirms before clearing both progress and personal notebook',async({page})=>{
  await page.addInitScript(()=>{localStorage.setItem('xuyen-su-ky-demo-v1',JSON.stringify({loggedIn:true,grade:7,earnedXp:60,completedActivities:['minigame-timeline']}));localStorage.setItem('xuyen-su-ky-journal-v1',JSON.stringify({bookmarks:['lesson-6'],read:['lesson-6'],notes:{'lesson-6':'Keep this note'},review:{},events:[],goal:5}))})
- await openDemo(page);page.once('dialog',dialog=>dialog.dismiss());await page.locator('.reset-demo').click();expect(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).notes['lesson-6'],journalKey)).toBe('Keep this note')
- page.once('dialog',dialog=>dialog.accept());await page.locator('.reset-demo').click();await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).bookmarks.length,journalKey)).toBe(0);expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('xuyen-su-ky-demo-v1')!).earnedXp)).toBe(0);await expect(page.locator('.library-saved')).toContainText('0 bài đã lưu')
+ await openDemo(page);await openMenu(page,'Bảng xếp hạng');page.once('dialog',dialog=>dialog.dismiss());await page.locator('.reset-demo').click();expect(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).notes['lesson-6'],journalKey)).toBe('Keep this note')
+ page.once('dialog',dialog=>dialog.accept());await page.locator('.reset-demo').click();await expect.poll(()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)!).bookmarks.length,journalKey)).toBe(0);expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('xuyen-su-ky-demo-v1')!).earnedXp)).toBe(0);await openMenu(page,'Học tập');await expect(page.locator('.library-saved')).toContainText('0 bài đã lưu')
 })

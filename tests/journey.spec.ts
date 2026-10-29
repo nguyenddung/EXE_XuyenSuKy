@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
 
 const journeyKey = 'xuyen-su-ky-journey-v1'
+const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 type Question = { id: string; type: string; prompt: string; choices?: string[]; answer?: number; items?: string[]; pairs?: [string, string][]; groups?: Record<string, string[]> }
 type Journey = { stages: { id: string; status: string; missions: { id: string; title: string; challenge_pool: Question[] }[]; stage_check?: { extra: Question[] } }[] }
 
@@ -126,6 +127,7 @@ test('a mission teaches first, supports mistakes with hints and an equivalent qu
   await expect(missionButton(section, 'Nhà nước Văn Lang ra đời')).toContainText('Hoàn thành')
   await expect(missionButton(section, 'Bộ máy nhà nước Văn Lang')).toBeEnabled()
   await expect(section.locator('.journey-bar')).toContainText('32 XP hành trình')
+  await openMenu(page, 'Trang chủ')
   await expect(page.locator('.dashboard-progress-stats')).toContainText('32')
   const saved = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).lop6_chuong5, journeyKey)
   expect(saved.missions).toEqual({ b14_m1: true })
