@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { ArrowUp, BookOpen, LoaderCircle, MessageCircle, Mic, RotateCcw, Square, Volume2, X } from 'lucide-react'
 import type { Character, CharacterInteractionMode } from '../types'
 import { askCharacter, RateLimitError } from '../lib/characterApi'
@@ -9,6 +9,9 @@ import { useCharacterSpeech } from '../lib/useCharacterSpeech'
 import { useVoiceInput } from '../lib/useVoiceInput'
 import type { CharacterActivity } from '../lib/animatedCharacters'
 import { CharacterVoicePanel } from './CharacterVoicePanel'
+
+// The ElevenLabs SDK only loads when a student opens a live voice conversation.
+const CharacterLiveVoice = lazy(() => import('./CharacterLiveVoice'))
 
 /** `historyOwner` is the stable id of the signed-in demo account ('guest' for guests); null means the chat works but is not stored. */
 interface Props { character: Character; historyOwner: string | null; initialMode?: CharacterInteractionMode; onClose: () => void; onOpenLesson: (id: string) => void }
@@ -25,6 +28,9 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
   const [mode, setMode] = useState<CharacterInteractionMode>(initialMode)
   const modeRef = useRef(initialMode)
   const [voiceMessage, setVoiceMessage] = useState<number | null>(null)
+  // Voice mode is a live conversation when the server offers one; otherwise (or on request) the ask-one-question-by-mic flow.
+  const [liveFallback, setLiveFallback] = useState(false)
+  const live = mode === 'voice' && character.liveVoice && !liveFallback
   const [input, setInput] = useState('')
   const history = useChatHistory(historyOwner, character.id)
   const messages = history.messages
@@ -60,7 +66,7 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
   }, [])
   // A different owner, character or a fresh conversation invalidates any request still on its way.
   useEffect(() => () => { pending.current?.abort() }, [history.token])
-  useEffect(() => { if (mode === 'chat') inputRef.current?.focus(); else micRef.current?.focus() }, [mode])
+  useEffect(() => { if (mode === 'chat') inputRef.current?.focus(); else micRef.current?.focus() }, [mode, liveFallback])
   useEffect(() => { bottom.current?.scrollIntoView({ block: 'end' }) }, [messages, busy, mode])
   useEffect(() => {
     if (cooldownUntil <= Date.now()) return
@@ -167,7 +173,9 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
   return <dialog ref={dialog} aria-modal="true" aria-labelledby="chat-title" className={`chat-modal chat-modal--${mode}`} onKeyDown={trapFocus} onCancel={(event) => { event.preventDefault(); onClose() }}>
     <div className="chat-header"><div className={`chat-avatar portrait-${character.tone}${speech.phase === 'speaking' ? ' is-speaking' : ''}`}><img src={character.image} alt="" /></div><div><span>{mode === 'voice' ? 'NÓI CHUYỆN CÙNG' : 'NHẮN TIN CÙNG'}</span><h2 id="chat-title">{character.name}</h2></div><button type="button" disabled={busy} onClick={resetConversation} aria-label="Bắt đầu cuộc trò chuyện mới"><RotateCcw size={18} /></button><button type="button" onClick={onClose} aria-label="Đóng trò chuyện"><X size={21} /></button></div>
     <div className="character-mode-switch" role="group" aria-label="Chế độ trò chuyện"><button type="button" aria-pressed={mode === 'chat'} onClick={() => switchMode('chat')}><MessageCircle size={16} /> Nhắn tin</button><button type="button" aria-pressed={mode === 'voice'} onClick={() => switchMode('voice')}><Mic size={16} /> Nói chuyện</button></div>
-    {mode === 'voice' ? <>
+    {live ? <Suspense fallback={<p className="voice-loading" role="status"><LoaderCircle size={18} className="voice-spinner" /> Đang chuẩn bị trò chuyện trực tiếp…</p>}>
+      <CharacterLiveVoice character={character} onFallback={() => setLiveFallback(true)} onShowText={() => switchMode('chat')} />
+    </Suspense> : mode === 'voice' ? <>
       <CharacterVoicePanel character={character} activity={activity} studentSpeaking={mic.hearingSpeech}>
         <span className="voice-kicker">{busy ? 'ĐANG TRA CỨU' : 'LỜI NHÂN VẬT'}</span>
         {voiceExchange?.question && <p className="voice-current-question">Em hỏi: {voiceExchange.question}</p>}

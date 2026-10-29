@@ -1,0 +1,11 @@
+/* Live voice conversation (CharacterLiveVoice): reuses the voice-mode scene and dock from characters.css. */
+.live-voice-lines { display: grid; gap: 12px; margin: 16px 0 0; padding: 0; list-style: none; }
+.live-voice-line > span { color: #8b957f; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.live-voice-line > p { margin: 3px 0 0; overflow-wrap: anywhere; line-height: 1.7; }
+.live-voice-line--agent > p { font-family: 'Noto Serif', 'Be Vietnam Pro', system-ui, sans-serif; font-size: 17px; color: #294b40; }
+.live-voice-line--user > p { font-size: 13px; color: #607266; }
+.live-voice-hint { margin: 0; padding: 9px 12px; border: 1px dashed #d9ddca; border-radius: 9px; color: #6a7c6f; font-size: 12px; line-height: 1.6; }
+.live-voice-status { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 10px; color: #536a5b; font-size: 13px; line-height: 1.6; text-align: center; }
+.voice-dock .chat-error { margin: 0 0 10px; }
+.voice-dock .chat-voice-controls button { color: #426454; font-size: 12px; font-weight: 700; text-decoration: underline; }
+.voice-dock .chat-voice-controls button:disabled { opacity: .45; }

@@ -4,6 +4,7 @@ import { answerCharacterQuestion } from './rag/pipeline.mjs'
 import { clientKey, createLimiter } from './rag/limits.mjs'
 import { SpeechError, synthesizeSpeech } from './speech.mjs'
 import { getJourneys } from './journeys.mjs'
+import { createVoiceSession, liveVoiceAvailable } from './voice-agents.mjs'
 
 const defaultLimiter = createLimiter()
 
@@ -77,9 +78,10 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
     const parts = route.split('/')
     const chat = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'chat'
     const speech = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'speech'
-    if (chat || speech ? req.method !== 'POST' : !['GET', 'HEAD'].includes(req.method)) {
-      res.setHeader('Allow', chat || speech ? 'POST' : 'GET, HEAD')
-      throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : 'This dataset endpoint is read-only.')
+    const voiceSession = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'voice-session'
+    if (chat || speech || voiceSession ? req.method !== 'POST' : !['GET', 'HEAD'].includes(req.method)) {
+      res.setHeader('Allow', chat || speech || voiceSession ? 'POST' : 'GET, HEAD')
+      throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : voiceSession ? 'Use POST to start a voice conversation.' : 'This dataset endpoint is read-only.')
     }
     if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     if (speech) {
@@ -90,6 +92,13 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       res.setHeader('Cache-Control', 'no-store')
       res.setHeader('X-Content-Type-Options', 'nosniff')
       res.end(audio)
+      return
+    }
+    if (voiceSession) {
+      req.resume()
+      const rate = await limiter.allowRequest(clientKey(req))
+      if (!rate.allowed) throw new RateLimitError(rate.retryAfter)
+      send(res, 200, await (options.voiceSession || createVoiceSession)(parts[1]), head, false)
       return
     }
     const grade = integer(url.searchParams, 'grade', undefined, 6, 12)
@@ -105,11 +114,11 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       const body = await readChatBody(req)
       result = await answerCharacterQuestion({ dataset: data, characterId: parts[1], message: body.message, history: body.history, visitor, deps: { limiter, ...options.rag } })
     }
-    else if (route === 'characters') { const items = listCharacters(data, grade, query); result = { items, total: items.length, datasetVersion: data.metadata.version, mode: 'textbook' } }
+    else if (route === 'characters') { const items = listCharacters(data, grade, query); result = { items: items.map((item) => ({ ...item, liveVoice: liveVoiceAvailable(item.id) })), total: items.length, datasetVersion: data.metadata.version, mode: 'textbook' } }
     else if (parts[0] === 'characters' && parts.length === 2) {
       const entry = characterIndex(data).find((item) => item.profile.id === parts[1])
       if (!entry) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
-      result = { ...entry.public, lessons: entry.lessons }
+      result = { ...entry.public, liveVoice: liveVoiceAvailable(entry.profile.id), lessons: entry.lessons }
     }
     else if (parts[0] === 'journeys' && parts.length <= 2) {
       const journeys = await (options.journeys || getJourneys)(data)

@@ -22,6 +22,8 @@ export interface Character {
   category: string
   topics: string[]
   suggestions: string[]
+  /** True when the server can open a live ElevenLabs voice conversation with this character. */
+  liveVoice?: boolean
   grades: number[]
   lessonCount: number
   chunkCount: number

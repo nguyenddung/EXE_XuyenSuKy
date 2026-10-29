@@ -13,10 +13,13 @@
     "import:journey": "node --env-file-if-exists=.env.local scripts/import-journey.mjs",
     "build:narration": "node --env-file-if-exists=.env.local scripts/build-narration.mjs",
     "build:embeddings": "node --env-file-if-exists=.env.local scripts/build-embeddings.mjs",
-    "test:backend": "node --test tests/backend.test.mjs tests/speech.test.mjs tests/chat-history.test.mjs tests/journey.test.mjs",
-    "test:games": "playwright test"
+    "test:backend": "node --test tests/backend.test.mjs tests/speech.test.mjs tests/chat-history.test.mjs tests/journey.test.mjs tests/voice-agents.test.mjs",
+    "test:games": "playwright test",
+    "sync:voice-agents": "node --env-file-if-exists=.env.local scripts/sync-voice-agents.mjs"
   },
   "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.75.0",
+    "@elevenlabs/react": "^1.20.1",
     "ajv": "^8.20.0",
     "lucide-react": "^0.468.0",
     "openai": "^7.27.0",

@@ -12,16 +12,16 @@ const numberEnv = (name, fallback) => {
   const value = Number(process.env[name])
   return Number.isFinite(value) && value > 0 ? value : fallback
 }
+/** The ElevenLabs voice of a character, shared by spoken answers and the live voice agents. */
+export function elevenLabsVoiceId(characterId) {
+  const female = voices[characterId].voice === 'vi-VN-HoaiMyNeural'
+  const defaultVoice = female ? process.env.ELEVENLABS_FEMALE_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' : process.env.ELEVENLABS_VOICE_ID || (characterId === 'ngo-quyen' ? 'onwK4e9ZLuTAKqWW03F9' : 'JBFqnCBsd6RMkjVDRZzb')
+  return process.env[`ELEVENLABS_VOICE_${characterId.replaceAll('-', '_').toUpperCase()}`] || defaultVoice
+}
 const configuration = (characterId) => {
   const provider = process.env.SPEECH_PROVIDER || (process.env.ELEVENLABS_API_KEY ? 'elevenlabs' : 'azure')
   if (provider !== 'elevenlabs') return { provider, key: process.env.AZURE_SPEECH_KEY, region: process.env.AZURE_SPEECH_REGION }
-  const female = voices[characterId].voice === 'vi-VN-HoaiMyNeural'
-  const defaultVoice = female ? process.env.ELEVENLABS_FEMALE_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' : process.env.ELEVENLABS_VOICE_ID || (characterId === 'ngo-quyen' ? 'onwK4e9ZLuTAKqWW03F9' : 'JBFqnCBsd6RMkjVDRZzb')
-  return {
-    provider, key: process.env.ELEVENLABS_API_KEY,
-    voiceId: process.env[`ELEVENLABS_VOICE_${characterId.replaceAll('-', '_').toUpperCase()}`] || defaultVoice,
-    model: process.env.ELEVENLABS_MODEL || 'eleven_flash_v2_5',
-  }
+  return { provider, key: process.env.ELEVENLABS_API_KEY, voiceId: elevenLabsVoiceId(characterId), model: process.env.ELEVENLABS_MODEL || 'eleven_flash_v2_5' }
 }
 const escapeXml = (value) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[char])
 
