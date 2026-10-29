@@ -14,13 +14,14 @@ const exploreTypes = ['tu_lieu', 'dong_thoi_gian', 'phong_van']
 const hintLevels = ['nudge', 'card', 'narrow']
 // Same lists as course_builder/rules.py: every scene uses an animation template the app knows how to draw.
 export const videoSceneKinds = ['tieu_de', 'bieu_tuong', 'song_nuoc', 'tien_hoa', 'moc_thoi_gian', 'phat_hien']
-export const videoIcons = ['riu_dong', 'luoi_sat', 'lua', 'nguoi', 'thuy_loi', 'khien', 'trong_dong', 'nha_san', 'hai_chan', 'ban_tay', 'bo_nao', 'tieng_noi']
+export const videoIcons = ['riu_dong', 'luoi_sat', 'lua', 'nguoi', 'thuy_loi', 'khien', 'trong_dong', 'nha_san', 'hai_chan', 'ban_tay', 'bo_nao', 'tieng_noi',
+  'hang_dong', 'leu', 'san_bat', 'hai_luom', 'tranh_vach', 'trang_suc', 'gom', 'det_vai', 'chan_nuoi', 'tuong', 'mo_tang', 'lua_chay', 'dong_do', 'dong_thau', 'cuoc', 'cay', 'gia_dinh', 'cua_cai', 'giau_ngheo']
 export const videoForms = ['vuon_nguoi', 'nguoi_toi_co', 'nguoi_tinh_khon']
-export const videoFinds = ['hoa_thach', 'rang', 'so', 'riu_tay', 'cong_cu_da']
+export const videoFinds = ['hoa_thach', 'rang', 'so', 'riu_tay', 'cong_cu_da', 'riu_mai', 'manh_gom', 'vo_oc', 'dan_da', 'vong_tay', 'mat_nguoi', 'xi_dong', 'mui_ten', 'luoi_cau', 'riu_xeo', 'giao', 'chuoi_dat', 'hat']
 export const videoStyles = ['dong_son', 'tien_su']
 // Illustrated people (no words on screen): river scenes draw boats and planters, the others a band of figures below.
 export const videoRiverCast = ['cheo_thuyen', 'cay_lua']
-export const videoBandCast = ['tu_hop', 'lam_ruong', 'dao_muong', 'cam_vu_khi', 'danh_trong', 'ghe_da', 'di_bo']
+export const videoBandCast = ['tu_hop', 'lam_ruong', 'dao_muong', 'cam_vu_khi', 'danh_trong', 'ghe_da', 'di_bo', 'san_bat', 'hai_luom', 'lam_gom', 'luyen_kim']
 
 export class JourneyError extends Error {}
 
@@ -95,7 +96,7 @@ export function validateJourney(journey, dataset) {
           if (!videoSceneKinds.includes(scene.kind) || !isText(scene.caption) || typeof scene.duration !== 'number' || scene.duration < 4 || scene.duration > 20) fail(`${at}: scene needs a known kind, a caption and 4–20 seconds`)
           if (scene.kind === 'tieu_de' && !isText(scene.title)) fail(`${at}: tieu_de needs a title`)
           if (scene.kind === 'bieu_tuong' && (!Array.isArray(scene.items) || scene.items.length < 2 || scene.items.length > 4 || !scene.items.every((item) => videoIcons.includes(item?.icon) && isText(item.label)))) fail(`${at}: bieu_tuong needs 2–4 items with known icons`)
-          if (scene.kind === 'song_nuoc' && (!Array.isArray(scene.labels) || !scene.labels.length || scene.labels.length > 3 || !scene.labels.every(isText))) fail(`${at}: song_nuoc needs 1–3 labels`)
+          if (scene.kind === 'song_nuoc' && (!Array.isArray(scene.labels) || !scene.labels.length || scene.labels.length > 4 || !scene.labels.every(isText))) fail(`${at}: song_nuoc needs 1–4 labels`)
           if (scene.kind === 'tien_hoa' && (!Array.isArray(scene.forms) || !scene.forms.length || scene.forms.length > 3 || scene.forms.some((form, index) => videoForms.indexOf(form) < 0 || (index > 0 && videoForms.indexOf(form) <= videoForms.indexOf(scene.forms[index - 1]))))) fail(`${at}: tien_hoa needs 1–3 forms in evolutionary order`)
           if (scene.kind === 'moc_thoi_gian' && (!Array.isArray(scene.events) || scene.events.length < 2 || scene.events.length > 5 || !scene.events.every((event) => isText(event?.time) && isText(event.label) && (event.form === undefined || videoForms.includes(event.form))))) fail(`${at}: moc_thoi_gian needs 2–5 events with time and label`)
           if (scene.kind === 'phat_hien' && (!Array.isArray(scene.finds) || !scene.finds.length || scene.finds.length > 3 || !scene.finds.every((item) => videoFinds.includes(item?.find) && isText(item.label)))) fail(`${at}: phat_hien needs 1–3 known finds with labels`)

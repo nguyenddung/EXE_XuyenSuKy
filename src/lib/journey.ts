@@ -20,11 +20,12 @@ export type Explore =
 /** Mascot narration is fiction by design (hu_cau); the UI labels it as such. */
 export interface Narration { speaker: string; hu_cau: true; text: string }
 export type VideoIcon = 'riu_dong' | 'luoi_sat' | 'lua' | 'nguoi' | 'thuy_loi' | 'khien' | 'trong_dong' | 'nha_san' | 'hai_chan' | 'ban_tay' | 'bo_nao' | 'tieng_noi'
+  | 'hang_dong' | 'leu' | 'san_bat' | 'hai_luom' | 'tranh_vach' | 'trang_suc' | 'gom' | 'det_vai' | 'chan_nuoi' | 'tuong' | 'mo_tang' | 'lua_chay' | 'dong_do' | 'dong_thau' | 'cuoc' | 'cay' | 'gia_dinh' | 'cua_cai' | 'giau_ngheo'
 /** Stages of human evolution drawn by the tien_hoa and moc_thoi_gian templates. */
 export type HumanForm = 'vuon_nguoi' | 'nguoi_toi_co' | 'nguoi_tinh_khon'
-export type VideoFind = 'hoa_thach' | 'rang' | 'so' | 'riu_tay' | 'cong_cu_da'
+export type VideoFind = 'hoa_thach' | 'rang' | 'so' | 'riu_tay' | 'cong_cu_da' | 'riu_mai' | 'manh_gom' | 'vo_oc' | 'dan_da' | 'vong_tay' | 'mat_nguoi' | 'xi_dong' | 'mui_ten' | 'luoi_cau' | 'riu_xeo' | 'giao' | 'chuoi_dat' | 'hat'
 /** Illustrated people acting in a scene (river scenes: cheo_thuyen, cay_lua; others: the rest). */
-export type VideoCast = 'tu_hop' | 'lam_ruong' | 'dao_muong' | 'cam_vu_khi' | 'danh_trong' | 'cheo_thuyen' | 'cay_lua' | 'ghe_da' | 'di_bo'
+export type VideoCast = 'tu_hop' | 'lam_ruong' | 'dao_muong' | 'cam_vu_khi' | 'danh_trong' | 'cheo_thuyen' | 'cay_lua' | 'ghe_da' | 'di_bo' | 'san_bat' | 'hai_luom' | 'lam_gom' | 'luyen_kim'
 /** One animated scene: a template the app draws, on-screen words and a narration line, all checked against its quotes. */
 export type VideoScene = { id: string; duration: number; caption: string; sources: SourceRef[]; /** Pre-recorded narration, present only while it matches the caption. */ audio?: string; cast?: VideoCast[] } & (
   | { kind: 'tieu_de'; title: string; label?: string }

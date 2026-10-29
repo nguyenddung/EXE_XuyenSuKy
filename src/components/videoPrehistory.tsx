@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react'
 import type { HumanForm, VideoCast, VideoFind, VideoScene } from '../lib/journey'
 
-// Prehistory set for mission videos (lessons on human origins): dusk savanna backdrop, the three stages of human
-// evolution as articulated figures, a timeline, and an excavation cross-section where finds come to light.
+// Prehistory set for mission videos (Chương 2: human origins, primitive society, the first metals): dusk savanna backdrop,
+// the three stages of human evolution as articulated figures, a timeline, an excavation cross-section where finds (bones,
+// stone and bronze tools, pottery, ornaments) come to light, icons, and people hunting, gathering, firing pots, casting metal.
 // Figures are stylised silhouettes (fur for the early forms, an animal-skin wrap for Người tinh khôn), feet at (0, 0).
 // Everything is a pure function of the scene time, like the rest of the video.
 
@@ -165,6 +166,21 @@ const findArt: Record<VideoFind, ReactNode> = {
   so: <g fill="#efe3c4" stroke="#8a7650" strokeWidth={4}><path d="M -66 10 C -74 -60 70 -70 66 0 C 64 30 46 40 40 60 L -30 60 C -40 40 -62 36 -66 10 Z" /><ellipse cx={-18} cy={4} rx={16} ry={14} fill="#3b2816" /><ellipse cx={26} cy={4} rx={16} ry={14} fill="#3b2816" /><path d="M 2 18 l -6 16 l 12 0 Z" fill="#3b2816" /><path d="M -22 60 v -10 M -6 60 v -10 M 10 60 v -10 M 26 60 v -10" /></g>,
   riu_tay: <g stroke="#4f555b" strokeWidth={4}><path d="M 0 -70 C 40 -40 52 20 30 60 C 14 76 -14 76 -30 60 C -52 20 -40 -40 0 -70 Z" fill="#9aa1a8" /><path d="M 0 -60 L -16 0 L 10 40 M 18 -24 L -6 18" fill="none" opacity={0.7} /></g>,
   cong_cu_da: <g stroke="#4f555b" strokeWidth={4}><path d="M -60 10 L -30 -40 L 30 -46 L 64 -6 L 40 40 L -30 46 Z" fill="#8e959c" /><path d="M -30 -40 L -10 0 L 30 -46 M -10 0 L 40 40 M -10 0 L -30 46" fill="none" opacity={0.6} /></g>,
+  // Ground stone: smooth outline and a bright polished edge, unlike the flaked tools above.
+  riu_mai: <g><path d="M -34 -66 L 34 -66 L 50 54 C 20 70 -20 70 -50 54 Z" fill="#7f8f86" stroke="#45524b" strokeWidth={4} /><path d="M -46 50 C -18 62 18 62 46 50" stroke="#e8f0ea" strokeWidth={6} fill="none" /><path d="M -14 -50 C -20 -10 -18 20 -24 40" stroke="#c9d6cd" strokeWidth={5} fill="none" opacity={0.7} /></g>,
+  manh_gom: <g><path d="M -70 -40 C -20 -64 40 -60 72 -36 L 56 44 C 20 30 -24 34 -60 48 Z" fill="#b8693a" stroke="#7a3f1c" strokeWidth={4} /><path d="M -60 -18 l 16 -14 l 16 14 l 16 -14 l 16 14 l 16 -14 l 16 14 M -56 10 l 16 -12 l 16 12 l 16 -12 l 16 12 l 16 -12 l 16 12" stroke="#f3d3a8" strokeWidth={4} fill="none" /></g>,
+  vo_oc: <g><path d="M -86 -30 C -40 10 40 10 86 -30" stroke="#8a6234" strokeWidth={4} fill="none" />{[-64, -32, 0, 32, 64].map((x, index) => <g key={x} transform={`translate(${x} ${4 - Math.abs(x) * 0.25}) rotate(${index * 20 - 40})`}><path d="M 0 -26 C 22 -18 24 14 0 26 C -24 14 -22 -18 0 -26 Z" fill="#f2e6cf" stroke="#a88b5c" strokeWidth={3} /><path d="M 0 -18 V 18 M -8 -10 l 8 6 l 8 -6" stroke="#c9ad7c" strokeWidth={2} fill="none" /><circle cy={-18} r={4} fill="#5a3d22" /></g>)}</g>,
+  dan_da: <g>{[[-60, 100], [0, 120], [60, 90]].map(([x, length]) => <g key={x} transform={`translate(${x} 0) rotate(${x / 8})`}><path d={`M -14 ${-length / 2} L 14 ${-length / 2 + 6} L 18 ${length / 2} L -16 ${length / 2 - 4} Z`} fill="#7d838a" stroke="#4f555b" strokeWidth={4} /><path d={`M -6 ${-length / 2 + 12} L -2 ${length / 2 - 14}`} stroke="#b9bfc5" strokeWidth={3} /></g>)}</g>,
+  vong_tay: <g><circle r={54} fill="none" stroke="#8e959c" strokeWidth={22} /><circle r={54} fill="none" stroke="#c4c9ce" strokeWidth={5} strokeDasharray="12 16" /></g>,
+  mat_nguoi: <g><path d="M -84 -60 C -40 -80 50 -76 86 -54 L 80 64 C 30 76 -40 74 -86 60 Z" fill="#8b8172" stroke="#5c5448" strokeWidth={4} /><g stroke="#3b342a" strokeWidth={5} fill="none" strokeLinecap="round"><ellipse cx={0} cy={0} rx={38} ry={48} /><circle cx={-14} cy={-10} r={6} /><circle cx={14} cy={-10} r={6} /><path d="M 0 -2 v 18 M -14 28 q 14 10 28 0 M -40 -40 l -14 -12 M 40 -40 l 14 -12" /></g></g>,
+  xi_dong: <g>{[[-44, 10, 30], [10, -16, 36], [48, 22, 24], [-6, 38, 18]].map(([x, y, r]) => <path key={x} d={`M ${x - r} ${y} C ${x - r} ${y - r} ${x + r * 0.6} ${y - r * 1.1} ${x + r} ${y - r * 0.2} C ${x + r * 1.1} ${y + r * 0.7} ${x - r * 0.3} ${y + r} ${x - r} ${y} Z`} fill="#8a5a2b" stroke="#4f8a6e" strokeWidth={5} />)}</g>,
+  mui_ten: <g><path d="M 0 -80 L 34 10 L 10 0 L 8 70 L -8 70 L -10 0 L -34 10 Z" fill="#c8913a" stroke="#7a5418" strokeWidth={4} /><path d="M 0 -64 V 50" stroke="#f2c97a" strokeWidth={3} /></g>,
+  luoi_cau: <g fill="none" strokeLinecap="round"><path d="M 20 -76 V 30 C 20 66 -44 66 -44 30 L -44 6 L -30 20" stroke="#c8913a" strokeWidth={12} /><circle cx={20} cy={-80} r={10} stroke="#c8913a" strokeWidth={6} /></g>,
+  // Gò Mun axe with the slanted edge the textbook singles out.
+  riu_xeo: <g><rect x={-14} y={-80} width={28} height={50} rx={6} fill="#a8742e" stroke="#7a5418" strokeWidth={4} /><path d="M -22 -34 L 22 -34 L 60 60 C 20 40 -30 52 -48 74 Z" fill="#c8913a" stroke="#7a5418" strokeWidth={4} /><path d="M -40 66 C -20 50 20 44 54 56" stroke="#f2c97a" strokeWidth={4} fill="none" /></g>,
+  giao: <g><path d="M 0 -84 C 26 -40 30 0 14 30 L 10 76 L -10 76 L -14 30 C -30 0 -26 -40 0 -84 Z" fill="#c8913a" stroke="#7a5418" strokeWidth={4} /><path d="M 0 -70 V 40" stroke="#7a5418" strokeWidth={4} /></g>,
+  chuoi_dat: <g><path d="M -90 -40 C -50 40 50 40 90 -40" stroke="#8a6234" strokeWidth={4} fill="none" />{Array.from({ length: 7 }, (_, index) => { const u = (index + 0.5) / 7; const x = -90 + 180 * u; const y = -40 + 80 * 4 * u * (1 - u) * 0.75; return <g key={index}><circle cx={x} cy={y} r={15} fill="#b8693a" stroke="#7a3f1c" strokeWidth={3} /><circle cx={x} cy={y} r={4} fill="#3b2816" /></g> })}</g>,
+  hat: <g><path d="M -70 40 C -30 -40 30 -60 76 -70" stroke="#6f8f3a" strokeWidth={6} fill="none" /><path d="M 20 -50 C 40 -90 80 -86 76 -70 C 66 -50 40 -44 20 -50 Z" fill="#7fae55" />{[[-40, 30], [-6, 44], [28, 30], [-24, 62], [12, 70]].map(([x, y]) => <ellipse key={x} cx={x} cy={y} rx={13} ry={9} fill="#d8b46a" stroke="#8a6a30" strokeWidth={3} />)}</g>,
 }
 
 export function DiscoveryScene({ scene, local }: { scene: Extract<VideoScene, { kind: 'phat_hien' }>; local: number }) {
@@ -204,6 +220,25 @@ export const prehistoryIcons = {
   ban_tay: <g><path d="M -40 70 L -40 -10 C -40 -30 -20 -30 -20 -10 L -20 -50 C -20 -70 0 -70 0 -50 L 0 -56 C 0 -76 20 -76 20 -56 L 20 -40 C 20 -60 40 -60 40 -40 L 40 30 C 40 60 20 70 0 70 Z" fill="#e8c9a0" stroke="#a87850" strokeWidth={4} /><g transform="translate(-50 -10) scale(1.6)">{stone}</g></g>,
   bo_nao: <g><path d="M -60 60 C -80 0 -60 -70 0 -76 C 60 -80 80 -20 66 20 L 70 40 L 50 44 L 46 70 Z" fill="#e8c9a0" stroke="#a87850" strokeWidth={4} /><path d="M -40 -20 C -50 -60 20 -70 40 -36 C 56 -10 30 10 0 6 C -30 2 -36 -4 -40 -20 Z" fill="#f2a6a6" stroke="#c96b6b" strokeWidth={4} /><path d="M -24 -30 q 10 -10 20 0 q 10 10 20 0" stroke="#c96b6b" strokeWidth={3} fill="none" /></g>,
   tieng_noi: <g><path d="M -70 60 C -86 0 -70 -60 -16 -66 C 30 -70 46 -30 40 0 L 46 18 L 30 22 L 26 60 Z" fill="#e8c9a0" stroke="#a87850" strokeWidth={4} />{[0, 1, 2].map((ring) => <path key={ring} d={`M ${54 + ring * 16} -20 q ${14 + ring * 6} 20 0 ${40 + ring * 8}`} transform={`translate(0 ${-ring * 4})`} stroke={gold} strokeWidth={7} strokeLinecap="round" fill="none" />)}</g>,
+  hang_dong: <g><path d="M -104 72 C -104 -40 -54 -98 0 -98 C 54 -98 104 -40 104 72 Z" fill="#8a6a4a" stroke="#5a4028" strokeWidth={5} /><path d="M -48 72 C -48 0 -24 -38 0 -38 C 24 -38 48 0 48 72 Z" fill="#1d1408" /><path d="M -80 -20 l 20 8 M 60 -50 l 22 10 M 70 20 l 16 -6" stroke="#5a4028" strokeWidth={5} /><path d="M -110 72 H 110" stroke="#5a4028" strokeWidth={7} /></g>,
+  san_bat: <g strokeLinecap="round">{[1, -1].map((side) => <g key={side} transform={`scale(${side} 1)`}><path d="M -76 84 L 64 -64" stroke="#7a4b22" strokeWidth={10} /><path d="M 54 -54 L 92 -96 L 76 -42 Z" fill="#9aa1a8" stroke="#5d6369" strokeWidth={3} /></g>)}</g>,
+  hai_luom: <g><path d="M -80 70 C -40 20 0 -20 70 -70" stroke="#6b4a26" strokeWidth={9} fill="none" strokeLinecap="round" />{[[-40, 10, -30], [10, -34, 20], [40, -50, -20], [-10, -10, 40]].map(([x, y, r]) => <ellipse key={x} cx={x} cy={y} rx={30} ry={14} fill="#6f9f45" transform={`rotate(${r} ${x} ${y})`} />)}{[[-18, 34], [26, -8], [56, -24], [-50, 44]].map(([x, y]) => <circle key={x} cx={x} cy={y} r={15} fill="#e0603c" stroke="#9a3a1c" strokeWidth={3} />)}</g>,
+  leu: <g><path d="M 0 -96 L 100 70 H -100 Z" fill="#c9a24e" stroke="#8a6a2a" strokeWidth={5} />{[-60, -30, 0, 30, 60].map((x) => <path key={x} d={`M ${x * 0.4} -60 L ${x} 64`} stroke="#8a6a2a" strokeWidth={3} />)}<path d="M -24 70 L 0 20 L 24 70 Z" fill="#1d1408" /><path d="M -10 -96 L 0 -116 L 10 -96" stroke="#7a4b22" strokeWidth={6} fill="none" /></g>,
+  tranh_vach: <g><path d="M -100 -74 C -40 -90 50 -86 100 -70 L 96 76 C 40 88 -40 86 -100 74 Z" fill="#c9a77a" stroke="#8a6a44" strokeWidth={4} /><g fill="#9a3a1c"><ellipse cx={-6} cy={0} rx={44} ry={22} /><path d="M 30 -10 L 58 -30 L 64 -12 L 40 6 Z" /></g><path d="M 52 -30 l 10 -18 M 58 -28 l 16 -12 M -36 18 l -6 30 M -18 20 l 2 30 M 10 20 l -4 30 M 26 16 l 6 30" stroke="#9a3a1c" strokeWidth={6} strokeLinecap="round" /><g stroke="#5a2a12" strokeWidth={5} strokeLinecap="round" fill="none"><circle cx={-74} cy={-30} r={7} /><path d="M -74 -22 V 6 M -74 6 l -10 26 M -74 6 l 10 26 M -74 -12 l 26 -10 M -50 -24 l 40 6" /></g></g>,
+  trang_suc: <g><path d="M -80 -60 C -80 30 80 30 80 -60" stroke="#8a6234" strokeWidth={4} fill="none" />{Array.from({ length: 9 }, (_, index) => { const a = Math.PI * (index + 1) / 10; return <circle key={index} cx={-80 * Math.cos(a)} cy={-60 + 72 * Math.sin(a)} r={10} fill={index % 2 ? '#c8913a' : '#e8d7b0'} stroke="#8a6234" strokeWidth={3} /> })}<path d="M 0 14 C 26 22 28 56 0 76 C -28 56 -26 22 0 14 Z" fill="#f2e6cf" stroke="#a88b5c" strokeWidth={4} /></g>,
+  gom: <g><path d="M -44 -70 H 44 C 40 -54 34 -48 34 -42 C 80 -20 84 40 50 70 H -50 C -84 40 -80 -20 -34 -42 C -34 -48 -40 -54 -44 -70 Z" fill="#b8693a" stroke="#7a3f1c" strokeWidth={5} /><path d="M -62 -6 l 15 -14 l 15 14 l 15 -14 l 15 14 l 15 -14 l 15 14 l 15 -14 l 15 14 M -64 26 H 64" stroke="#f3d3a8" strokeWidth={5} fill="none" /></g>,
+  det_vai: <g><rect x={-84} y={-80} width={168} height={14} rx={6} fill="#7a4b22" /><rect x={-84} y={66} width={168} height={14} rx={6} fill="#7a4b22" />{[-64, -40, -16, 8, 32, 56].map((x) => <line key={x} x1={x} y1={-66} x2={x} y2={66} stroke="#e8d7b0" strokeWidth={4} />)}{[-50, -26, -2, 22, 46].map((y, row) => <rect key={y} x={-76} y={y} width={152} height={16} fill={row % 2 ? '#b8432f' : '#d9a441'} opacity={0.92} />)}</g>,
+  chan_nuoi: <g><ellipse cx={-6} cy={6} rx={70} ry={42} fill="#7a5a44" /><circle cx={64} cy={-14} r={30} fill="#7a5a44" /><ellipse cx={86} cy={-6} rx={14} ry={11} fill="#c49a80" /><path d="M 52 -40 l -6 -20 l 18 10 Z M -76 -8 q -24 -10 -18 14" fill="#5f4535" stroke="#5f4535" strokeWidth={5} /><circle cx={70} cy={-22} r={4} fill="#1d1408" />{[-50, -20, 20, 44].map((x) => <rect key={x} x={x - 8} y={36} width={16} height={34} rx={6} fill="#5f4535" />)}</g>,
+  tuong: <g><path d="M -26 76 C -40 30 -44 -6 -26 -26 C -40 -46 -30 -76 0 -78 C 30 -76 40 -46 26 -26 C 44 -6 40 30 26 76 Z" fill="#c4875a" stroke="#86532e" strokeWidth={4} /><path d="M -10 -54 h 4 M 6 -54 h 4 M -8 -40 q 8 6 16 0 M -26 -6 C -8 6 8 6 26 -6" stroke="#86532e" strokeWidth={4} fill="none" strokeLinecap="round" /></g>,
+  mo_tang: <g><path d="M -100 66 C -70 -10 70 -10 100 66 Z" fill="#7a5530" stroke="#4a321c" strokeWidth={5} /><path d="M -100 66 H 100" stroke="#4a321c" strokeWidth={6} /><g transform="translate(-34 30) scale(0.9)">{stone}</g>{[10, 20, 30, 40, 50].map((x) => <circle key={x} cx={x} cy={24 + Math.sin((x - 6) / 44 * Math.PI) * 18} r={5} fill="#e8d7b0" />)}<path d="M 0 -70 l 6 16 l 16 2 l -12 10 l 4 16 l -14 -8 l -14 8 l 4 -16 l -12 -10 l 16 -2 Z" fill={gold} /></g>,
+  lua_chay: <g><path d="M -40 70 C -80 30 -60 -20 -26 -50 C -24 -20 -10 -10 0 -4 C -6 -40 10 -80 40 -96 C 34 -56 76 -30 70 20 C 66 50 44 70 40 70 Z" fill="#f08a2c" /><path d="M -14 70 C -34 46 -26 14 -6 -4 C -2 18 12 24 20 30 C 22 8 32 -6 44 -14 C 46 18 56 46 30 70 Z" fill="#ffd25a" /><path d="M -70 76 L 70 64 M -60 64 L 66 78" stroke="#6b4a26" strokeWidth={10} strokeLinecap="round" /></g>,
+  dong_do: <g>{[[-36, 16, 34], [24, -14, 40], [44, 40, 24]].map(([x, y, r]) => <path key={x} d={`M ${x - r} ${y} C ${x - r} ${y - r} ${x + r * 0.7} ${y - r * 1.1} ${x + r} ${y - r * 0.1} C ${x + r * 1.1} ${y + r * 0.8} ${x - r * 0.4} ${y + r} ${x - r} ${y} Z`} fill="#c0582c" stroke="#7a2f14" strokeWidth={4} />)}<path d="M 6 -40 q 14 -6 24 4 M -54 4 q 10 -8 22 -2" stroke="#f2a070" strokeWidth={5} fill="none" strokeLinecap="round" /></g>,
+  dong_thau: <g><path d="M -74 -30 H 74 L 58 40 C 40 66 -40 66 -58 40 Z" fill="#6d5a44" stroke="#3e3226" strokeWidth={5} /><ellipse cy={-30} rx={74} ry={18} fill="#f2b24c" /><ellipse cy={-30} rx={50} ry={10} fill="#ffe08a" /><path d="M 70 -26 C 96 -20 100 10 96 40" stroke="#f2b24c" strokeWidth={10} fill="none" strokeLinecap="round" /><circle cx={96} cy={60} r={8} fill="#f2b24c" /></g>,
+  cuoc: <g strokeLinecap="round"><path d="M -70 90 L 40 -60" stroke="#7a4b22" strokeWidth={12} /><path d="M 18 -76 L 80 -30 L 64 -10 L 6 -50 Z" fill="#c8913a" stroke="#7a5418" strokeWidth={4} /></g>,
+  cay: <g strokeLinecap="round"><path d="M -96 -70 L 30 30" stroke="#7a4b22" strokeWidth={12} /><path d="M 20 26 L 90 30 L 50 62 Z" fill="#c8913a" stroke="#7a5418" strokeWidth={4} /><path d="M -10 -4 L -40 50 M -96 -70 l -10 -16" stroke="#7a4b22" strokeWidth={10} /></g>,
+  gia_dinh: <g>{([[-50, 0, 1.15, '#8a5a34'], [22, 10, 1, '#b8432f'], [70, 36, 0.62, '#d9a441']] as const).map(([x, y, size, color]) => <g key={x} transform={`translate(${x} ${y}) scale(${size})`}><circle cy={-50} r={20} fill="#e8c9a0" /><path d="M -28 66 L -22 -10 C -20 -26 20 -26 22 -10 L 28 66 Z" fill={color} /></g>)}<path d="M -84 -66 l 34 -26 l 34 26" stroke={gold} strokeWidth={8} fill="none" strokeLinecap="round" /></g>,
+  cua_cai: <g><path d="M -74 -6 H 74 L 56 70 H -56 Z" fill="#9a6a34" stroke="#5f4020" strokeWidth={5} /><path d="M -66 20 H 66 M -62 44 H 62" stroke="#5f4020" strokeWidth={4} />{Array.from({ length: 14 }, (_, index) => <ellipse key={index} cx={-60 + (index % 7) * 20} cy={-16 - Math.floor(index / 7) * 18} rx={11} ry={8} fill={gold} stroke="#9a6418" strokeWidth={2} />)}<ellipse cx={0} cy={-52} rx={11} ry={8} fill={gold} stroke="#9a6418" strokeWidth={2} /></g>,
+  giau_ngheo: <g strokeLinecap="round"><path d="M 0 -80 V 70 M -40 70 H 40 M -84 -30 L 84 -62" stroke="#c9b48a" strokeWidth={8} /><path d="M -84 -30 l -18 46 M -84 -30 l 18 46 M 84 -62 l -18 46 M 84 -62 l 18 46" stroke="#c9b48a" strokeWidth={4} /><path d="M -102 16 h 36 C -66 36 -102 36 -102 16 Z M 66 -16 h 36 C 102 4 66 4 66 -16 Z" fill="#c9b48a" />{[[-96, 6], [-84, 0], [-72, 6], [-84, -10]].map(([x, y]) => <circle key={`${x}${y}`} cx={x} cy={y} r={8} fill={gold} />)}</g>,
 }
 
 function Knapping({ t, cx }: { t: number; cx: number }) {
@@ -225,9 +260,80 @@ function Walkers({ t, cx }: { t: number; cx: number }) {
   })}</g>
 }
 
-export function isPrehistoryCast(item: VideoCast): item is 'ghe_da' | 'di_bo' { return item === 'ghe_da' || item === 'di_bo' }
+// A spear held across the raised hand, its stone tip pointing the way the figure faces.
+const spear = <g><rect x={-120} y={-4} width={230} height={8} rx={4} fill="#7a4b22" /><path d="M -120 -10 L -150 0 L -120 10 Z" fill="#9aa1a8" stroke="#5d6369" strokeWidth={2} /></g>
+
+function Deer({ x, y, t }: { x: number; y: number; t: number }) {
+  const gallop = wave(t, 9)
+  return <g transform={`translate(${x} ${y - 6 * Math.abs(gallop)})`} fill="#8a5a34">
+    {[[-46, 1], [-30, -1], [30, 1], [46, -1]].map(([dx, side]) => <rect key={dx} x={dx - 5} y={-46} width={10} height={50} rx={5} transform={`rotate(${28 * gallop * side} ${dx} -46)`} />)}
+    <ellipse cx={0} cy={-60} rx={62} ry={26} />
+    <path d="M 44 -70 L 74 -114 L 92 -104 L 64 -60 Z" />
+    <ellipse cx={92} cy={-112} rx={22} ry={12} />
+    <path d="M 84 -122 l -10 -30 M 80 -140 l -14 -6 M 94 -122 l 6 -30 M 98 -142 l 12 -8 M -60 -66 l -16 -10" stroke="#5a3a1c" strokeWidth={5} strokeLinecap="round" />
+  </g>
+}
+
+/** A hunt: two hunters with spears raised chase a deer across the strip. */
+function Hunting({ t, cx }: { t: number; cx: number }) {
+  const sway = 40 * wave(t, 0.7)
+  return <g>
+    <Deer x={cx + 220 + sway} y={850} t={t} />
+    {[[-60, 0], [-220, 1.4]].map(([dx, phase]) => <Hominin key={dx} form="nguoi_toi_co" x={cx + dx + sway} y={850} scale={1.05} walk={t * 9 + phase} armSwing={-150 + 14 * wave(t, 4, phase)} hold={spear} />)}
+  </g>
+}
+
+/** Gathering: one reaches into a fruit tree, another carries a basket; now and then a fruit drops. */
+function Gathering({ t, cx }: { t: number; cx: number }) {
+  const fall = (t * 0.9) % 1
+  const basket = <g><path d="M -30 0 H 30 L 22 34 H -22 Z" fill="#9a6a34" stroke="#5f4020" strokeWidth={3} /><circle cx={-8} cy={-2} r={8} fill="#e0603c" /><circle cx={8} cy={-4} r={8} fill="#e0603c" /></g>
+  return <g>
+    <rect x={cx - 14} y={640} width={28} height={210} rx={10} fill="#5a3a1c" />
+    {[[-70, 640, 70], [40, 610, 80], [90, 670, 60], [-20, 590, 66]].map(([dx, y, r]) => <circle key={dx} cx={cx + dx} cy={y} r={r} fill="#4f7d34" />)}
+    {[[-60, 650], [10, 600], [80, 680], [40, 640], [-30, 690]].map(([dx, y]) => <circle key={dx} cx={cx + dx} cy={y} r={11} fill="#e0603c" />)}
+    <circle cx={cx + 60} cy={700 + fall * 140} r={11} fill="#e0603c" opacity={1 - fall * 0.3} />
+    <Hominin form="nguoi_toi_co" x={cx - 130} y={850} scale={1.05} armSwing={-150 + 22 * wave(t, 3)} />
+    <Hominin form="nguoi_toi_co" x={cx + 170 + 30 * wave(t, 0.9)} y={850} scale={0.95} facing={-1} walk={t * 6} armSwing={-40} hold={basket} />
+  </g>
+}
+
+/** Pottery: shaping a pot by hand, finished pots drying beside it. */
+function Pottery({ t, cx }: { t: number; cx: number }) {
+  const pot = (x: number, size: number, color: string) => <g transform={`translate(${x} 850) scale(${size})`}><path d="M -26 -70 H 26 C 24 -60 20 -56 20 -52 C 50 -40 52 -6 30 0 H -30 C -52 -6 -50 -40 -20 -52 C -20 -56 -24 -60 -26 -70 Z" fill={color} stroke="#7a3f1c" strokeWidth={3} /><path d="M -36 -30 l 9 -8 l 9 8 l 9 -8 l 9 8 l 9 -8 l 9 8 l 9 -8 l 9 8" stroke="#f3d3a8" strokeWidth={3} fill="none" /></g>
+  const shaping = 0.5 + 0.5 * wave(t, 3)
+  return <g>
+    <Hominin form="nguoi_tinh_khon" x={cx - 110} y={850} scale={1.05} armSwing={-70 - 30 * shaping} />
+    {pot(cx + 10, 1.25, '#9a6a44')}
+    {pot(cx + 150, 1, '#b8693a')}
+    {pot(cx + 240, 0.8, '#b8693a')}
+  </g>
+}
+
+/** Metalworking: a fire under a crucible of glowing metal; one fans the flames, one holds up a finished bronze axe. */
+function Smelting({ t, cx }: { t: number; cx: number }) {
+  const flicker = (phase: number) => 1 + 0.12 * wave(t, 11, phase)
+  const axe = <g transform="rotate(180)"><rect x={-5} y={-10} width={10} height={90} rx={4} fill="#7a4b22" /><path d="M -6 70 L 34 62 L 40 96 L -6 88 Z" fill="#c8913a" stroke="#7a5418" strokeWidth={3} /></g>
+  return <g>
+    <g transform={`translate(${cx} 850)`}>
+      <path d="M -70 0 L 70 -10 M -60 -12 L 66 2" stroke="#5a3a1c" strokeWidth={12} strokeLinecap="round" />
+      <path d={`M -50 -6 C -70 -40 -40 -70 -20 ${-92 * flicker(0)} C -10 -60 10 -60 20 ${-110 * flicker(1)} C 40 -70 70 -40 50 -6 Z`} fill="#f08a2c" />
+      <path d={`M -26 -6 C -36 -30 -14 -46 0 ${-70 * flicker(2)} C 14 -46 36 -30 26 -6 Z`} fill="#ffd25a" />
+      <path d="M -54 -96 H 54 L 42 -56 C 30 -44 -30 -44 -42 -56 Z" fill="#6d5a44" stroke="#3e3226" strokeWidth={4} />
+      <ellipse cy={-96} rx={54} ry={12} fill="#ffb347" />
+      {[0, 1, 2, 3].map((index) => { const rise = (t * 0.8 + index * 0.25) % 1; return <circle key={index} cx={-30 + index * 20 + 10 * wave(t, 3, index)} cy={-110 - rise * 150} r={5 * (1 - rise)} fill="#ffd25a" /> })}
+    </g>
+    <Hominin form="nguoi_tinh_khon" x={cx - 200} y={850} scale={1.05} armSwing={-90 + 40 * wave(t, 6)} />
+    <Hominin form="nguoi_tinh_khon" x={cx + 200} y={850} scale={1.05} facing={-1} armSwing={-170} hold={axe} />
+  </g>
+}
+
+const prehistoryCast = { ghe_da: Knapping, di_bo: Walkers, san_bat: Hunting, hai_luom: Gathering, lam_gom: Pottery, luyen_kim: Smelting }
+type PrehistoryCastName = keyof typeof prehistoryCast
+
+export function isPrehistoryCast(item: VideoCast): item is PrehistoryCastName { return item in prehistoryCast }
 
 /** Band people for prehistoric scenes; drawn on the same strip as the Việt cổ figures. */
-export function PrehistoryCast({ item, t, cx }: { item: 'ghe_da' | 'di_bo'; t: number; cx: number }) {
-  return item === 'ghe_da' ? <Knapping t={t} cx={cx} /> : <Walkers t={t} cx={cx} />
+export function PrehistoryCast({ item, t, cx }: { item: PrehistoryCastName; t: number; cx: number }) {
+  const Scene = prehistoryCast[item]
+  return <Scene t={t} cx={cx} />
 }
