@@ -1,0 +1,123 @@
+/* SGK lesson reader (LessonReader). Selectors start with dialog.lesson-reader.dataset-reader so they win over the
+   older shared reader rules in learning.css, dashboard.css and theme.css, which load after component styles. */
+dialog.lesson-reader.dataset-reader { width: min(1080px, calc(100% - 28px)); height: 92dvh; background: #fff; color: var(--sky-ink); scroll-padding-top: 84px; }
+
+/* Title block */
+dialog.lesson-reader.dataset-reader > .reader-hero { padding: 34px 44px 26px; background: linear-gradient(180deg, #eef5ff 0%, #fff 100%); border-bottom: 1px solid var(--sky-line); }
+dialog.lesson-reader.dataset-reader .reader-hero h2 { max-width: 30ch; margin: 10px 0 16px; color: var(--sky-ink); font: 800 clamp(26px, 3vw, 36px)/1.25 'Be Vietnam Pro', sans-serif; letter-spacing: -.01em; text-wrap: balance; }
+dialog.lesson-reader.dataset-reader .reader-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; padding: 0; list-style: none; }
+dialog.lesson-reader.dataset-reader .reader-meta li { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border: 1px solid var(--sky-line); border-radius: 999px; background: #fff; color: var(--sky-text); font-size: 13px; font-weight: 600; }
+dialog.lesson-reader.dataset-reader .reader-meta li.is-video { border-color: #e6c27a; background: #fff8e6; color: #7a5208; }
+dialog.lesson-reader.dataset-reader .reader-meta li.is-practice { border-color: #b9dcc4; background: #effaf2; color: #23633a; }
+dialog.lesson-reader.dataset-reader .reader-hero .dataset-citation { margin: 0 0 16px; color: var(--sky-muted); font-size: 13px; line-height: 1.6; }
+dialog.lesson-reader.dataset-reader .reader-tools { display: flex; flex-wrap: wrap; gap: 8px; }
+dialog.lesson-reader.dataset-reader .reader-tools button { display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 14px; border: 1px solid #d5e0ee; border-radius: 999px; background: #fff; color: #1d3d66; font-size: 13px; font-weight: 700; cursor: pointer; transition: border-color .15s, background-color .15s; }
+dialog.lesson-reader.dataset-reader .reader-tools button:hover { border-color: #5a9de1; }
+dialog.lesson-reader.dataset-reader .reader-tools button[aria-pressed="true"] { border-color: var(--sky-blue); background: var(--sky-blue-soft); color: var(--sky-blue-strong); }
+
+/* Sticky position bar with reading progress */
+dialog.lesson-reader.dataset-reader .reader-position-bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 44px; border-bottom: 1px solid var(--sky-line); background: #ffffffeb; backdrop-filter: blur(12px); }
+dialog.lesson-reader.dataset-reader .reader-position-bar > span { display: grid; min-width: 0; }
+dialog.lesson-reader.dataset-reader .reader-position-bar > span small { margin: 0; color: var(--sky-muted); font-size: 12px; font-weight: 600; }
+dialog.lesson-reader.dataset-reader .reader-position-bar > span strong { overflow: hidden; color: var(--sky-ink); font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+dialog.lesson-reader.dataset-reader .reader-position-bar button { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #d5e0ee; border-radius: 12px; background: #fff; color: var(--sky-ink); cursor: pointer; }
+dialog.lesson-reader.dataset-reader .reader-position-bar button:disabled { cursor: default; opacity: .4; }
+dialog.lesson-reader.dataset-reader .reader-progress { position: absolute; bottom: -1px; left: 0; height: 3px; border-radius: 0 3px 3px 0; background: var(--sky-blue); transition: width .3s ease-out; }
+
+/* Contents rail + text column */
+dialog.lesson-reader.dataset-reader .reader-content { padding: 30px 44px 48px; }
+dialog.lesson-reader.dataset-reader .reader-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 44px; }
+dialog.lesson-reader.dataset-reader .reader-rail { position: sticky; top: 84px; align-self: start; max-height: calc(92dvh - 110px); overflow-y: auto; }
+dialog.lesson-reader.dataset-reader .reader-toc-container { margin: 0; padding: 0; border-radius: 0; background: none; }
+dialog.lesson-reader.dataset-reader .reader-toc-container summary { padding: 4px 0 10px; color: var(--sky-muted); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+dialog.lesson-reader.dataset-reader .dataset-toc { display: grid; gap: 2px; margin: 0; padding: 0; background: none; }
+dialog.lesson-reader.dataset-reader .dataset-toc a { display: grid; grid-template-columns: 24px 1fr auto; align-items: start; gap: 10px; padding: 8px 10px; border-radius: 10px; color: var(--sky-text); font-size: 14px; font-weight: 500; line-height: 1.45; text-decoration: none; }
+dialog.lesson-reader.dataset-reader .dataset-toc a:hover { background: var(--sky-canvas); color: var(--sky-ink); }
+dialog.lesson-reader.dataset-reader .dataset-toc a[aria-current="location"] { background: var(--sky-blue-soft); color: var(--sky-ink); font-weight: 700; }
+dialog.lesson-reader.dataset-reader .toc-mark { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--sky-canvas); color: var(--sky-muted); font-size: 12px; font-weight: 800; }
+dialog.lesson-reader.dataset-reader .dataset-toc a[aria-current="location"] .toc-mark { background: var(--sky-blue); color: #fff; }
+dialog.lesson-reader.dataset-reader .toc-video { margin-top: 4px; color: #b07d12; }
+
+/* Typeset text */
+dialog.lesson-reader.dataset-reader .reader-main { min-width: 0; }
+dialog.lesson-reader.dataset-reader .reader-prose { max-width: 680px; color: #24324a; font: 400 17.5px/1.85 'Noto Serif', Georgia, serif; }
+dialog.lesson-reader.dataset-reader .reader-prose.large { font-size: 20px; }
+dialog.lesson-reader.dataset-reader .reader-prose p { margin: 0 0 .85em; }
+dialog.lesson-reader.dataset-reader .dataset-section { margin: 0 0 44px; scroll-margin-top: 84px; }
+dialog.lesson-reader.dataset-reader .dataset-section-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 16px; }
+dialog.lesson-reader.dataset-reader .dataset-section-head h3 { flex: 1 1 260px; margin: 0; color: var(--sky-ink); font: 700 clamp(19px, 2vw, 22px)/1.35 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .dataset-section-head small { padding: 3px 10px; border: 1px solid var(--sky-line); border-radius: 999px; color: var(--sky-muted); font: 600 12px/1.5 'Be Vietnam Pro', sans-serif; white-space: nowrap; }
+dialog.lesson-reader.dataset-reader .section-badge { display: grid; flex: none; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--sky-blue-soft); color: var(--sky-blue-strong); font: 800 16px/1 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .reader-list { margin: 0 0 1em; padding-left: 1.3em; }
+dialog.lesson-reader.dataset-reader .reader-list li { margin-bottom: .45em; padding-left: .2em; }
+dialog.lesson-reader.dataset-reader .reader-list li::marker { color: var(--sky-blue); }
+dialog.lesson-reader.dataset-reader .reader-figure { display: flex; align-items: flex-start; gap: 8px; width: fit-content; max-width: 100%; padding: 8px 14px; border-radius: 10px; background: var(--sky-canvas); color: var(--sky-muted); font: italic 500 14px/1.6 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .reader-figure svg { flex: none; margin-top: 3px; }
+
+/* Objectives as a checklist, the opening story as a set-apart passage */
+dialog.lesson-reader.dataset-reader .dataset-section.is-objectives { max-width: 680px; padding: 22px 24px 10px; border: 1px solid #d4e5f8; border-radius: 16px; background: #f4f9ff; }
+dialog.lesson-reader.dataset-reader .reader-checklist { display: grid; gap: 10px; margin: 0 0 14px; padding: 0; list-style: none; font: 500 16px/1.65 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .reader-checklist li { display: flex; gap: 10px; }
+dialog.lesson-reader.dataset-reader .reader-checklist svg { flex: none; margin-top: 3px; color: var(--sky-blue); }
+dialog.lesson-reader.dataset-reader .dataset-section.is-intro { padding-left: 20px; border-left: 4px solid #e6c27a; }
+dialog.lesson-reader.dataset-reader .dataset-section.is-intro p { font-style: italic; }
+
+/* End of the lesson */
+dialog.lesson-reader.dataset-reader .reader-finish { max-width: 680px; margin: 8px 0 28px; padding-top: 28px; border-top: 1px solid var(--sky-line); }
+dialog.lesson-reader.dataset-reader .reader-finish h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; color: var(--sky-ink); font: 700 20px/1.4 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .reader-finish-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+dialog.lesson-reader.dataset-reader .reader-finish-actions button { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+dialog.lesson-reader.dataset-reader .reader-finish-actions .button-outline[aria-pressed="true"] { border-color: var(--sky-blue); background: var(--sky-blue-soft); color: var(--sky-blue-strong); }
+dialog.lesson-reader.dataset-reader .reader-notebook { max-width: 680px; margin-top: 28px; }
+dialog.lesson-reader.dataset-reader .reader-notebook label { font: 700 20px/1.4 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .reader-notebook textarea { font-size: 16px; }
+dialog.lesson-reader.dataset-reader button:focus-visible, dialog.lesson-reader.dataset-reader a:focus-visible, dialog.lesson-reader.dataset-reader summary:focus-visible { outline: 2px solid var(--sky-blue); outline-offset: 2px; }
+
+/* Focus mode: one centred column, contents folded away */
+dialog.lesson-reader.dataset-reader.is-focused { background: #fcfaf3; }
+dialog.lesson-reader.dataset-reader.is-focused .reader-layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+dialog.lesson-reader.dataset-reader.is-focused .reader-rail { position: static; max-height: none; max-width: 680px; margin: 0 auto 20px; }
+dialog.lesson-reader.dataset-reader.is-focused .reader-main { max-width: 680px; margin-inline: auto; }
+dialog.lesson-reader.dataset-reader.is-focused .reader-prose { line-height: 2; }
+
+@media (max-width: 900px) {
+  dialog.lesson-reader.dataset-reader .reader-layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  dialog.lesson-reader.dataset-reader .reader-rail { position: static; max-height: none; margin-bottom: 24px; padding: 6px 14px; border: 1px solid var(--sky-line); border-radius: 14px; background: var(--sky-canvas); }
+  dialog.lesson-reader.dataset-reader .reader-toc-container summary { padding: 8px 0; }
+  dialog.lesson-reader.dataset-reader .reader-toc-container[open] summary { margin-bottom: 4px; }
+}
+@media (max-width: 600px) {
+  dialog.lesson-reader.dataset-reader { width: calc(100% - 16px); height: 96dvh; max-height: 96dvh; }
+  dialog.lesson-reader.dataset-reader > .reader-hero { padding: 24px 18px 18px; }
+  dialog.lesson-reader.dataset-reader .reader-position-bar { padding: 8px 12px 8px 18px; }
+  dialog.lesson-reader.dataset-reader .reader-content { padding: 20px 18px 36px; }
+  dialog.lesson-reader.dataset-reader .reader-prose { font-size: 17px; line-height: 1.8; }
+  dialog.lesson-reader.dataset-reader .reader-prose.large { font-size: 19px; }
+  dialog.lesson-reader.dataset-reader .dataset-section.is-objectives { padding: 18px 16px 6px; }
+  dialog.lesson-reader.dataset-reader .dataset-section.is-intro { padding-left: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog.lesson-reader.dataset-reader .reader-progress { transition: none; }
+}
+
+/* Videos of one section sit side by side; the one playing spans the row */
+dialog.lesson-reader.dataset-reader .reader-videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; max-width: 680px; margin: 0 0 22px; }
+dialog.lesson-reader.dataset-reader .reader-videos > .lesson-video { margin: 0; }
+dialog.lesson-reader.dataset-reader .reader-videos > .lesson-video.is-playing { grid-column: 1 / -1; }
+/* "Em có biết?" boxes of the textbook */
+dialog.lesson-reader.dataset-reader .reader-note { margin: 4px 0 1.1em; padding: 14px 18px; border-radius: 14px; background: #fff8e6; color: #3d2f12; }
+dialog.lesson-reader.dataset-reader .reader-note strong { display: flex; align-items: center; gap: 6px; color: #7a5208; font: 800 14px/1.5 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .reader-note p { margin: 6px 0 0; }
+@media (max-width: 600px) {
+  dialog.lesson-reader.dataset-reader .reader-hero h2 { margin: 8px 0 10px; font-size: 25px; }
+  dialog.lesson-reader.dataset-reader .reader-meta { gap: 4px 12px; margin-bottom: 14px; }
+  dialog.lesson-reader.dataset-reader .reader-meta li { padding: 0; border: 0; background: none; font-size: 13px; }
+  dialog.lesson-reader.dataset-reader .reader-meta li.is-video, dialog.lesson-reader.dataset-reader .reader-meta li.is-practice { background: none; }
+  dialog.lesson-reader.dataset-reader .reader-hero .dataset-citation { display: none; }
+  dialog.lesson-reader.dataset-reader .reader-tools { gap: 6px; }
+  dialog.lesson-reader.dataset-reader .reader-tools button { min-height: 36px; padding: 0 10px; font-size: 12px; }
+  dialog.lesson-reader.dataset-reader .reader-autosave { display: none; }
+}
+/* Review questions the textbook asks at the end of a section */
+dialog.lesson-reader.dataset-reader .reader-question { display: flex; gap: 10px; padding: 10px 14px; border: 1px dashed #b9cfe8; border-radius: 12px; color: var(--sky-ink); font: 600 15.5px/1.6 'Be Vietnam Pro', sans-serif; }
+dialog.lesson-reader.dataset-reader .reader-question svg { flex: none; margin-top: 2px; color: var(--sky-blue); }
