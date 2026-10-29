@@ -239,7 +239,7 @@ test('recorded narration plays scene by scene even without a browser voice', asy
 })
 
 test('every grade 6 chapter has its own journey; the picker remembers the chapter and keeps progress apart', async ({ page }) => {
-  await page.addInitScript(() => localStorage.getItem('xuyen-su-ky-demo-v1')?.includes('"grade":6') || localStorage.setItem('xuyen-su-ky-demo-v1', JSON.stringify({ loggedIn: false, guest: true, gradeSelected: true, grade: 6, completedActivities: [], earnedXp: 0 })))
+  await page.addInitScript(() => localStorage.getItem('xuyen-su-ky-demo-v1')?.includes('"grade":6') || localStorage.setItem('xuyen-su-ky-demo-v1', JSON.stringify({ loggedIn: false, guest: true, expiresAt: 4102444800000, gradeSelected: true, grade: 6, completedActivities: [], earnedXp: 0 })))
   await page.goto('/home#journey')
   const picker = page.getByRole('navigation', { name: 'Chọn chương' })
   await expect(picker.getByRole('button')).toHaveCount(5)

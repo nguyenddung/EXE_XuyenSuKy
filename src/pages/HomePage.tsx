@@ -91,8 +91,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     else { setPendingActivity(activity); setLoginOpen(true) }
   }
 
-  async function handleLogin(email: string, password: string) {
-    if (!await login(email, password)) return false
+  async function handleLogin(email: string, password: string, remember: boolean) {
+    if (!await login(email, password, remember)) return false
     setLoginOpen(false)
     setNotice(`Chào mừng ${email.trim().split('@')[0]} trở lại!`)
 
@@ -141,7 +141,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       reset()
       learning.resetJournal()
       journey.reset()
-      setNotice('Đã đặt lại hành trình demo của Minh.')
+      setNotice('Đã đặt lại tiến độ học trên trình duyệt này.')
     }}
   />
   const stats = <StatsSection />

@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test'
 
 const prefix = 'xuyen-su-ky-chat-v1'
 const sessionKey = 'xuyen-su-ky-demo-v1'
-const minhSession = { loggedIn: true, guest: false, userId: 'minh@xuyensuki.vn', name: 'Minh', gradeSelected: true, grade: 7, completedActivities: [], earnedXp: 0 }
+const minhSession = { loggedIn: true, guest: false, expiresAt: 4102444800000, userId: 'minh@xuyensuki.vn', name: 'Minh', gradeSelected: true, grade: 7, completedActivities: [], earnedXp: 0 }
 
 const openMenu = (page: Page, name: string) => page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name, exact: true }).click()
 const card = (page: Page, name: string) => page.locator('.character-card').filter({ has: page.getByRole('heading', { name, exact: true }) })
@@ -130,7 +130,8 @@ test.describe('accounts', () => {
     await page.keyboard.press('Escape')
 
     await page.goto('/')
-    await page.getByRole('button', { name: 'Thoát học thử' }).click()
+    await page.getByRole('button', { name: 'Tài khoản: Khách' }).click()
+    await page.getByRole('menuitem', { name: 'Thoát học thử' }).click()
     await page.goto('/dang-nhap')
     await page.getByRole('button', { name: 'Điền tài khoản mẫu' }).click()
     await page.locator('.login-form button[type=submit]').click()

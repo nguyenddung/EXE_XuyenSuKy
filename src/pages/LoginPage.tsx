@@ -38,7 +38,7 @@ export function LoginPage() {
         <span className="section-kicker">TÀI KHOẢN HỌC SINH</span>
         <h1 id="auth-title">Đăng nhập Xuyên Sử Ký</h1>
         <p>Tiếp tục hành trình học sử, giữ tiến độ, XP và ghi chú của bạn.</p>
-        <LoginForm onLogin={async (email, password) => { if (!await login(email, password)) return false; return true }} />
+        <LoginForm onLogin={login} />
         <div className="auth-divider"><span>hoặc</span></div>
         <button type="button" className="button-outline auth-guest" onClick={() => { startGuest() }}>Học thử không cần tài khoản <ArrowRight size={17} /></button>
         <small>Chế độ học thử lưu tiến độ trên trình duyệt này. Quiz và hồ sơ cần đăng nhập. Đây là bản demo, không dùng xác thực thật.</small>
