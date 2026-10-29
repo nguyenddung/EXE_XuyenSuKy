@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { readdir, readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { lessonId } from './dataset.mjs'
 
 // Gamified journeys built by course_builder (one chapter = one journey, one lesson = one stage, one objective = one mission).
 // Every card, question and source must point at a real textbook chunk; a journey that does not validate is never served.
@@ -183,6 +184,25 @@ async function readNarration(root, filename) {
   }
 }
 
+/**
+ * Gives each mission video the section of its SGK lesson that most of its scenes quote, so the lesson reader can
+ * show the video right where that section starts. Sources quoting another lesson do not count.
+ */
+export function placeVideos(journey, dataset) {
+  for (const stage of journey.stages) for (const mission of stage.missions || []) {
+    if (!mission.video) continue
+    const lesson = lessonId({ grade: journey.grade, lesson_number: stage.lesson_number })
+    const counts = new Map()
+    for (const scene of mission.video.scenes) for (const source of scene.sources) {
+      const chunk = dataset.chunksById.get(source.chunk_id)
+      if (chunk && lessonId(chunk) === lesson) counts.set(chunk.section_index, (counts.get(chunk.section_index) || 0) + 1)
+    }
+    const [best] = [...counts].sort((a, b) => b[1] - a[1] || a[0] - b[0])
+    if (best) mission.video.section = best[0]
+  }
+  return journey
+}
+
 export function journeySummary(journey) {
   const written = journey.stages.filter((stage) => stage.status === 'da_bien_soan')
   return { id: journey.id, title: journey.title, grade: journey.grade, book: journey.book, chapter: journey.chapter, stageCount: journey.stages.length, writtenStageCount: written.length, missionCount: written.reduce((count, stage) => count + stage.missions.length, 0), videoCount: written.reduce((count, stage) => count + stage.missions.filter((mission) => mission.video).length, 0),
@@ -198,7 +218,7 @@ export async function loadJourneys(dataset, root = process.env.JOURNEY_PATH || d
     try { journey = JSON.parse(await readFile(resolve(root, filename), 'utf8')) } catch { throw new JourneyError(`${filename}: invalid JSON`) }
     if (`${journey.id}.json` !== filename) throw new JourneyError(`${filename}: id must match the file name`)
     validateJourney(journey, dataset)
-    journeys.set(journey.id, { summary: journeySummary(journey), public: attachNarration(publicCopy(journey), await readNarration(root, filename)) })
+    journeys.set(journey.id, { summary: journeySummary(journey), public: placeVideos(attachNarration(publicCopy(journey), await readNarration(root, filename)), dataset) })
   }
   return journeys
 }

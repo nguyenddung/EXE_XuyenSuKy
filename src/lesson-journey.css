@@ -1,32 +1,50 @@
-/* The journey's videos and missions shown inside the SGK reader (LessonJourney), plus the links between the two. */
-.lesson-journey { margin: 0 0 22px; padding: 18px 20px; border: 1px solid var(--sky-line); border-radius: 16px; background: var(--sky-canvas); color: var(--sky-ink); }
-.lesson-journey-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 16px; margin-bottom: 12px; }
-.lesson-journey-head h3 { margin: 4px 0 0; font-size: 18px; font-weight: 800; }
-.lesson-journey-count, .lesson-journey-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border: 1px solid #e6c27a; border-radius: 999px; background: #fff8e6; color: #7a5208; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.lesson-journey-badge { align-self: flex-start; margin: 2px 0 8px; }
-.lesson-journey-state { margin: 0; color: var(--sky-text); font-size: 14px; }
-.lesson-journey-videos ul, .lesson-journey-missions { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.lesson-journey-videos ul { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); margin-bottom: 14px; }
-.lesson-journey-videos li button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 52px; padding: 10px 14px; border: 1px solid #e6c27a; border-radius: 12px; background: #fff; color: var(--sky-ink); font-size: 14px; font-weight: 700; text-align: left; }
-.lesson-journey-videos li button > svg { flex: none; color: #b07d12; }
-.lesson-journey-videos li button[aria-pressed="true"] { background: #fff8e6; box-shadow: 0 0 0 2px #e6c27a inset; }
-.lesson-journey-videos small, .lesson-journey-missions small { display: block; margin-top: 2px; color: var(--sky-muted); font-size: 12px; font-weight: 500; line-height: 1.5; }
-.lesson-journey-player { margin-bottom: 12px; }
-.lesson-journey-player-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-.lesson-journey-player-head .button-outline, .lesson-journey-missions .button-outline, .lesson-journey-foot button { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 14px; font-size: 13px; }
-.lesson-journey-missions li { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--sky-line); border-radius: 12px; background: #fff; font-size: 14px; font-weight: 700; }
-.lesson-journey-missions li > span { flex: 1; min-width: 0; }
-.lesson-journey-missions button:disabled { cursor: not-allowed; opacity: .6; }
-.lesson-journey [data-status] { display: inline-block; flex: none; width: 11px; height: 11px; border: 2px solid #9fb2cc; border-radius: 50%; background: #fff; }
-.lesson-journey [data-status="done"] { border-color: var(--sky-blue); background: #cfe5ff; }
-.lesson-journey [data-status="mastered"] { border-color: #d29a17; background: #ffc044; }
-.lesson-journey-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-top: 14px; }
-.lesson-journey-foot p { flex: 1 1 260px; margin: 0; color: var(--sky-text); font-size: 13px; line-height: 1.6; }
-.lesson-journey-foot > div { display: flex; flex-wrap: wrap; gap: 8px; }
+/* The journey inside the SGK reader (LessonJourney): video cards at the start of a section, practice at the end,
+   plus the links between the library and Hành trình. */
+.lesson-video { display: flex; align-items: center; gap: 16px; width: 100%; max-width: 680px; margin: 0 0 22px; padding: 14px 18px; border: 0; border-radius: 16px; background: linear-gradient(135deg, #13294b 0%, #1f4a7a 100%); color: #fff; text-align: left; cursor: pointer; box-shadow: 0 8px 22px #13294b26; transition: transform .15s ease-out, box-shadow .15s ease-out; }
+.lesson-video:hover { transform: translateY(-1px); box-shadow: 0 12px 28px #13294b33; }
+.lesson-video:active { transform: scale(.99); }
+.lesson-video-play { display: grid; flex: none; place-items: center; width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(180deg, #ffe083, #ffc044); color: #33240c; }
+.lesson-video-play svg { margin-left: 3px; }
+.lesson-video-copy { display: grid; gap: 2px; min-width: 0; font-family: 'Be Vietnam Pro', sans-serif; }
+.lesson-video-kicker { color: #ffd772; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.lesson-video strong { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.lesson-video small { color: #c9d8ee; font-size: 13px; }
+.lesson-video.is-playing { display: block; padding: 14px; overflow: hidden; border: 1px solid #e6c27a; background: #fffdf6; color: var(--sky-ink); cursor: default; box-shadow: none; }
+.lesson-video.is-playing:hover { transform: none; }
+.lesson-video.is-playing figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 0 2px 12px; font-family: 'Be Vietnam Pro', sans-serif; }
+.lesson-video.is-playing .lesson-video-kicker { color: #8a5d06; }
+.lesson-video.is-playing figcaption strong { flex: 1 1 200px; }
+.lesson-video.is-playing figcaption .lesson-video-kicker { flex-basis: 100%; }
+.lesson-video.is-playing figcaption button { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid #d5e0ee; border-radius: 999px; background: #fff; color: var(--sky-ink); font-size: 13px; font-weight: 700; cursor: pointer; }
+.lesson-video.is-playing figcaption button:hover { border-color: #5a9de1; }
+
+.lesson-practice { max-width: 680px; margin: 0 0 28px; padding: 22px 24px; border: 1px solid #cfe6d6; border-radius: 18px; background: #f5fbf7; color: var(--sky-ink); font-family: 'Be Vietnam Pro', sans-serif; }
+.lesson-practice-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.lesson-practice-head h3 { margin: 2px 0 0; font-size: 20px; font-weight: 800; }
+.lesson-practice-icon { display: grid; flex: none; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: #dcf2e3; color: #23633a; }
+.lesson-practice-missions { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.lesson-practice-missions li { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--sky-line); border-radius: 12px; background: #fff; font-size: 15px; font-weight: 700; }
+.lesson-practice-missions li > span { flex: 1; min-width: 0; }
+.lesson-practice-missions small { display: block; margin-top: 2px; color: var(--sky-muted); font-size: 13px; font-weight: 500; line-height: 1.5; }
+.lesson-practice .button-outline, .lesson-practice .button-primary { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; font-size: 13px; }
+.lesson-practice button:disabled { cursor: not-allowed; opacity: .55; }
+.lesson-practice [data-status] { display: inline-block; flex: none; width: 12px; height: 12px; border: 2px solid #9fb2cc; border-radius: 50%; background: #fff; }
+.lesson-practice [data-status="done"] { border-color: var(--sky-blue); background: #cfe5ff; }
+.lesson-practice [data-status="mastered"] { border-color: #d29a17; background: #ffc044; }
+.lesson-practice-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-top: 14px; }
+.lesson-practice-foot p { flex: 1 1 260px; margin: 0; color: var(--sky-text); font-size: 14px; line-height: 1.6; }
+.lesson-practice-foot > div { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.lesson-journey-badge { display: inline-flex; align-self: flex-start; align-items: center; gap: 5px; margin: 2px 0 8px; padding: 4px 10px; border: 1px solid #e6c27a; border-radius: 999px; background: #fff8e6; color: #7a5208; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .journey-read-lesson { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 4px 0; color: var(--sky-blue-strong); font-size: 13px; font-weight: 700; text-decoration: underline; }
-.lesson-journey button:focus-visible, .journey-read-lesson:focus-visible { outline: 2px solid var(--sky-blue); outline-offset: 2px; }
-@media (max-width: 560px) {
-  .lesson-journey { padding: 14px; }
-  .lesson-journey-missions li { flex-wrap: wrap; }
-  .lesson-journey-missions li > button { width: 100%; justify-content: center; }
+.lesson-video:focus-visible, .lesson-practice button:focus-visible, .journey-read-lesson:focus-visible { outline: 2px solid var(--sky-blue); outline-offset: 2px; }
+@media (max-width: 600px) {
+  .lesson-video { gap: 12px; padding: 12px 14px; }
+  .lesson-video-play { width: 44px; height: 44px; }
+  .lesson-practice { padding: 16px; }
+  .lesson-practice-missions li { flex-wrap: wrap; }
+  .lesson-practice-missions li > button { width: 100%; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lesson-video, .lesson-video:hover, .lesson-video:active { transition: none; transform: none; }
 }

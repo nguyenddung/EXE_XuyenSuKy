@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, Bookmark, BookOpen, Check, Clapperboard, Search, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowRight, Bookmark, BookOpen, Clapperboard, Search } from 'lucide-react'
 import { historyApi, sourceLabel, type DatasetMetadata, type HistoryChunk, type HistoryLesson, type LessonDetail, type PageResult } from '../lib/historyApi'
-import { useReaderPreferences } from '../hooks/useReaderPreferences'
 import type { LessonCollection } from './StudyPlan'
 import { dayKey, streak, type useLearningJournal } from '../hooks/useLearningJournal'
 import type { JourneyState } from '../hooks/useJourney'
-import { journeyLessonOf, LessonJourney, type JourneyLaunch } from './LessonJourney'
+import { journeyLessonOf, type JourneyLaunch } from './LessonJourney'
+import { LessonReader } from './LessonReader'
 
 type Learning = ReturnType<typeof useLearningJournal>
 interface Props {
@@ -33,68 +33,6 @@ function JourneyBadge({ journeys, lessonId }: { journeys: JourneyState; lessonId
   const lesson = journeyLessonOf(journeys, lessonId)?.lesson
   if (!lesson) return null
   return <span className="lesson-journey-badge">{lesson.videos > 0 && <><Clapperboard size={13} aria-hidden="true" /> {lesson.videos} video · </>}{lesson.missions} nhiệm vụ</span>
-}
-
-function DatasetReader({ lesson, learning, onClose, journeys, onJourney }: { lesson: LessonDetail; learning: Learning; onClose: () => void; journeys: JourneyState; onJourney: (launch: JourneyLaunch) => void }) {
-  const dialog = useRef<HTMLDialogElement>(null)
-  const title = useRef<HTMLHeadingElement>(null)
-  const { large, focused, toggleLarge, toggleFocus } = useReaderPreferences()
-  const savedSection = useRef(Math.min(learning.journal.reading[lesson.id]?.section || 0, lesson.sections.length - 1))
-  const [activeSection, setActiveSection] = useState(savedSection.current)
-  const currentSection = useRef(savedSection.current)
-  const restored = useRef(false)
-  const remember = useRef(learning.rememberLesson); remember.current = learning.rememberLesson
-  function goToSection(index: number, behavior: ScrollBehavior = 'smooth') {
-    const element = dialog.current
-    const section = element?.querySelector<HTMLElement>('#dataset-section-' + index)
-    if (!element || !section) return
-    const top = section.getBoundingClientRect().top - element.getBoundingClientRect().top + element.scrollTop - 68
-    element.scrollTo({ top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : behavior })
-  }
-  function trackSection() {
-    if (!restored.current || !dialog.current) return
-    const edge = dialog.current.getBoundingClientRect().top + 100
-    const sections = Array.from(dialog.current.querySelectorAll<HTMLElement>('.dataset-section'))
-    const index = Math.max(0, sections.reduce((last, section, index) => section.getBoundingClientRect().top <= edge ? index : last, 0))
-    if (index !== currentSection.current) {
-      currentSection.current = index; setActiveSection(index); remember.current(lesson, index)
-    }
-  }
-  const [readNow, setReadNow] = useState(false)
-  useEffect(() => {
-    const previous = document.activeElement as HTMLElement | null
-    const overflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    const element = dialog.current
-    element?.showModal()
-    title.current?.focus()
-    const frame = window.requestAnimationFrame(() => {
-      if (savedSection.current > 0) goToSection(savedSection.current, 'auto')
-      restored.current = true
-      remember.current(lesson, savedSection.current)
-    })
-    return () => { window.cancelAnimationFrame(frame); element?.close(); document.body.style.overflow = overflow; previous?.focus() }
-  }, [])
-  const { journal, bookmark, note, markRead, rate, storageError } = learning
-  return <dialog ref={dialog} onScroll={trackSection} className={"lesson-reader dataset-reader" + (focused ? " is-focused" : "")} aria-modal="true" aria-labelledby="dataset-reader-title" onCancel={(event) => { event.preventDefault(); onClose() }}>
-    <header>
-      <span className="section-kicker">SÁCH GIÁO KHOA · LỚP {lesson.grade}</span>
-      <h2 id="dataset-reader-title" ref={title} tabIndex={-1}>{lesson.title}</h2>
-      <p className="dataset-citation">{sourceLabel(lesson.source)}</p>
-      <div className="reader-tools"><span>{lesson.minutes} phút đọc · {lesson.sectionCount} mục</span><button aria-pressed={large} onClick={toggleLarge}>Aa · {large ? 'Cỡ thường' : 'Chữ lớn'}</button><button aria-pressed={focused} onClick={toggleFocus}>Chế độ tập trung</button><button aria-pressed={journal.bookmarks.includes(lesson.id)} onClick={() => bookmark(lesson.id)}><Bookmark size={16} /> {journal.bookmarks.includes(lesson.id) ? 'Đã lưu' : 'Lưu bài'}</button></div>
-    </header>
-    <div className="reader-position-bar"><span>Mục {activeSection + 1}/{lesson.sections.length}<small>Vị trí đọc tự động lưu</small></span><div><button aria-label="Mục trước" disabled={activeSection === 0} onClick={() => goToSection(activeSection - 1)}>←</button><button aria-label="Mục sau" disabled={activeSection >= lesson.sections.length - 1} onClick={() => goToSection(activeSection + 1)}>→</button><button aria-label="Đóng bài đọc" onClick={onClose}><X size={20} /></button></div></div>
-    <div className="reader-content">
-      <LessonJourney lessonId={lesson.id} journeys={journeys} onLaunch={(launch) => { onClose(); onJourney(launch) }} />
-      <details className="reader-toc-container" open={!focused && !window.matchMedia('(max-width: 680px)').matches}><summary>Mục lục bài học</summary><nav className="dataset-toc" aria-label="Mục lục bài học">{lesson.sections.map((section, index) => <a href={`#dataset-section-${index}`} key={index} aria-current={activeSection === index ? 'location' : undefined} onClick={event => { event.preventDefault(); goToSection(index) }}>{section.title}</a>)}</nav></details>
-      <div className={`reader-prose ${large ? 'large' : ''}`}>{lesson.sections.map((section, index) => <section className="dataset-section" key={index} id={`dataset-section-${index}`}><h3>{section.title}</h3><small>Trang PDF {section.pageStart}{section.pageEnd !== section.pageStart ? `–${section.pageEnd}` : ''}</small>{section.content.split('\n').filter(Boolean).map((paragraph, line) => <p key={line}>{paragraph}</p>)}</section>)}</div>
-      <button className="button-outline mark-read" onClick={() => { markRead(lesson.id); setReadNow(true) }}><Check size={16} /> {readNow ? 'Đã ghi nhận hôm nay' : journal.read.includes(lesson.id) ? 'Ghi nhận đọc lại hôm nay' : 'Đánh dấu đã đọc'}</button>
-      {readNow && <p className="reader-status" role="status">Đã cập nhật mục tiêu học tập. Đọc lại cùng ngày không tăng trùng lượt.</p>}
-      <div className="review-actions dataset-review"><button className="button-outline" aria-pressed={journal.review[lesson.id] === 'again'} onClick={() => rate(lesson.id, 'again')}>Cần đọc lại</button><button className="button-primary" aria-pressed={journal.review[lesson.id] === 'remembered'} onClick={() => rate(lesson.id, 'remembered')}>Đã nắm nội dung <Check size={16} /></button></div>
-      <section className="reader-notebook"><label htmlFor="dataset-note">Sổ tay của bạn</label><p>Tóm tắt bài bằng lời của mình hoặc ghi câu hỏi cần tìm hiểu thêm.</p><textarea id="dataset-note" value={journal.notes[lesson.id] || ''} onChange={(event) => note(lesson.id, event.target.value)} maxLength={2000} rows={4} placeholder="Điều mình muốn nhớ là…" /><small>{storageError ? 'Chưa lưu được. Hãy sao chép ghi chú trước khi rời trang.' : 'Tự động lưu trên trình duyệt này'} · {(journal.notes[lesson.id] || '').length}/2000</small></section>
-      <p className="dataset-citation">{sourceLabel(lesson.source)}. File nguồn: {lesson.source.sourcePdf}. Số trang là vị trí trong PDF, không phải số in trên sách.</p>
-    </div>
-  </dialog>
 }
 
 export function DatasetLibrary({ onCollectionHandled, requestedCollection, metadata, learning, grade, requestedLessonId, onRequestHandled, journeys, onJourney }: Props) {
@@ -165,6 +103,6 @@ export function DatasetLibrary({ onCollectionHandled, requestedCollection, metad
     {!loading && !error && count === 0 && <div className="library-empty"><BookOpen size={30} /><h3>Chưa tìm thấy nội dung phù hợp</h3><p>Thử từ khóa khác hoặc bỏ bớt bộ lọc.</p><button className="button-outline" onClick={() => { setQuery(''); setFilterGrade('all'); setChapter(''); changeFilter('all') }}>Xem tất cả bài học</button></div>}
     {!loading && !error && pages > 1 && <nav className="dataset-pagination" aria-label="Phân trang dataset"><button className="button-outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>Trang trước</button><span>Trang {page}/{pages}</span><button className="button-outline" disabled={page >= pages} onClick={() => setPage(page + 1)}>Trang sau <ArrowRight size={16} /></button></nav>}
     {selectedId && !active && <div className="dataset-reader-status" role="status">{readerError || 'Đang mở bài học…'}<button onClick={() => { setSelectedId(null); setReaderError('') }}>Đóng</button></div>}
-    {active && <DatasetReader key={active.id} lesson={active} learning={learning} journeys={journeys} onJourney={onJourney} onClose={() => { setActive(null); setSelectedId(null) }} />}
+    {active && <LessonReader key={active.id} lesson={active} learning={learning} journeys={journeys} onJourney={onJourney} onClose={() => { setActive(null); setSelectedId(null) }} />}
   </div>
 }
