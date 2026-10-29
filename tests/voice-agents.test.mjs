@@ -51,7 +51,7 @@ test('every character agent speaks Vietnamese in persona, requires signed URLs a
     assert.equal(config.agent.language, 'vi')
     assert.equal(config.agent.first_message, profile.greeting)
     assert.ok(config.agent.prompt.prompt.includes(`tự xưng "${profile.persona.self}"`))
-    assert.deepEqual(config.agent.prompt.tools.map((tool) => [tool.type, tool.name, tool.expects_response]), [['client', textbookTool, true]])
+    assert.deepEqual(config.agent.prompt.tools.map((tool) => [tool.type, tool.name]), [['client', textbookTool], ['system', 'end_call']])
     assert.equal(platform.auth.enable_auth, true)
     assert.ok(config.conversation.max_duration_seconds <= 300)
   }
