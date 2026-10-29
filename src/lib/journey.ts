@@ -26,10 +26,6 @@ export type HumanForm = 'vuon_nguoi' | 'nguoi_toi_co' | 'nguoi_tinh_khon'
 export type VideoFind = 'hoa_thach' | 'rang' | 'so' | 'riu_tay' | 'cong_cu_da' | 'riu_mai' | 'manh_gom' | 'vo_oc' | 'dan_da' | 'vong_tay' | 'mat_nguoi' | 'xi_dong' | 'mui_ten' | 'luoi_cau' | 'riu_xeo' | 'giao' | 'chuoi_dat' | 'hat'
 /** Illustrated people acting in a scene (river scenes: cheo_thuyen, cay_lua; others: the rest). */
 export type VideoCast = 'tu_hop' | 'lam_ruong' | 'dao_muong' | 'cam_vu_khi' | 'danh_trong' | 'cheo_thuyen' | 'cay_lua' | 'ghe_da' | 'di_bo' | 'san_bat' | 'hai_luom' | 'lam_gom' | 'luyen_kim'
-/** Phases of the thuy_chien river battle, in story order (cross-section of the estuary: tide, hidden stakes, both fleets). */
-export type BattlePhase = 'tien_quan' | 'chon_tran_dia' | 'dong_coc' | 'nhu_dich' | 'trieu_rut' | 'tan_vo' | 'ket_thuc'
-/** What a battle label points at: enemy fleet, our light boats, the stakes, the ambush on the banks, the tide gauge. */
-export type BattleRole = 'dich' | 'ta' | 'coc' | 'phuc_binh' | 'muc_nuoc'
 /** One animated scene: a template the app draws, on-screen words and a narration line, all checked against its quotes. */
 export type VideoScene = { id: string; duration: number; caption: string; sources: SourceRef[]; /** Pre-recorded narration, present only while it matches the caption. */ audio?: string; cast?: VideoCast[] } & (
   | { kind: 'tieu_de'; title: string; label?: string }
@@ -38,8 +34,6 @@ export type VideoScene = { id: string; duration: number; caption: string; source
   | { kind: 'tien_hoa'; forms: HumanForm[]; label?: string }
   | { kind: 'moc_thoi_gian'; events: { time: string; label: string; form?: HumanForm }[] }
   | { kind: 'phat_hien'; finds: { find: VideoFind; label: string }[] }
-  /** title + label: an opening card (optional) or the closing card of ket_thuc (required there). */
-  | { kind: 'thuy_chien'; phase: BattlePhase; callouts?: Partial<Record<BattleRole, string>>; title?: string; label?: string }
 )
 /** style: dong_son (bronze-drum backdrop, default) or tien_su (dusk sky and sun, for prehistoric lessons). */
 export interface MissionVideo { id: string; title: string; style?: 'dong_son' | 'tien_su'; scenes: VideoScene[] }
