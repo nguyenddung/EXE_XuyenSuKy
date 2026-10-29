@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, Award, CalendarClock, Check, Clapperboard, Lock, Map as MapIcon, RotateCcw } from 'lucide-react'
+import { ArrowRight, Award, BookOpen, CalendarClock, Check, Clapperboard, Lock, Map as MapIcon, RotateCcw } from 'lucide-react'
 import type { JourneyState } from '../hooks/useJourney'
 import type { JournalKind } from '../hooks/useLearningJournal'
 import { historyApi } from '../lib/historyApi'
 import { allMissions, checkLength, checkOpen, checkQuestions, correctNeeded, dueMissions, emptyProgress, missionOpen, missionStatus, pickVariant, stageOpen, writtenStages } from '../lib/journey'
 import type { Character } from '../types'
 import { GuideSays, JourneyModal, type JourneyRequest, type JourneyView } from './JourneyModal'
+import type { JourneyLaunch } from './LessonJourney'
 
-interface Props { state: JourneyState; grade: number; onChat: (character: Character) => void; onNotice: (text: string) => void; onRecord: (id: string, kind: JournalKind) => void }
+interface Props {
+  state: JourneyState; grade: number; onChat: (character: Character) => void; onNotice: (text: string) => void; onRecord: (id: string, kind: JournalKind) => void
+  /** A mission, stage check or stage asked for from the SGK reader; handled once this journey is shown. */
+  launch: (JourneyLaunch & { token: number }) | null
+  onLaunched: () => void
+  onReadLesson: (lessonId: string) => void
+}
 const statusLabel = { mastered: 'Nắm vững', done: 'Hoàn thành', new: 'Bắt đầu' }
 
 /** One journey per chapter: the learner switches chapter here and sees how many pieces each chapter already gave. */
@@ -19,12 +26,19 @@ function ChapterPicker({ state }: { state: JourneyState }) {
   })}</nav>
 }
 
-export function JourneySection({ state, grade, onChat, onNotice, onRecord }: Props) {
+export function JourneySection({ state, grade, onChat, onNotice, onRecord, launch, onLaunched, onReadLesson }: Props) {
   const [view, setView] = useState<JourneyView | null>(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const { journey, progress, today, update } = state
   // Switching chapter closes whatever mission or check was open for the previous one.
   useEffect(() => { setView(null) }, [journey?.id])
+  useEffect(() => {
+    if (!launch || journey?.id !== launch.journeyId) return
+    onLaunched()
+    const { request } = launch
+    if (request.name === 'map') window.setTimeout(() => document.getElementById(`journey-stage-${request.stageId}`)?.scrollIntoView({ block: 'center' }), 120)
+    else open(request)
+  }, [launch?.token, journey?.id])
 
   if (!journey) return <section id="journey" className="section-space journey-section" aria-labelledby="journey-title"><div className="page-shell"><div className="section-heading"><div><span className="section-kicker">HÀNH TRÌNH GAME HÓA</span><h2 id="journey-title">Hành trình lịch sử</h2></div></div>
     <ChapterPicker state={state} />
@@ -73,10 +87,11 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord }: Pro
       const passed = !!progress.stages[stage.id]?.passed
       const best = progress.stages[stage.id]?.best
       const canCheck = checkOpen(progress, journey, stage)
-      return <li key={stage.id} className={`journey-stage ${passed ? 'is-passed' : opened ? 'is-open' : 'is-locked'}`}>
+      return <li key={stage.id} id={`journey-stage-${stage.id}`} className={`journey-stage ${passed ? 'is-passed' : opened ? 'is-open' : 'is-locked'}`}>
         <span className="journey-node">{passed ? <Check size={18} /> : stage.order}</span>
         <div>
           <div className="journey-stage-head"><div><h3>{stage.title}</h3><small>Bài {stage.lesson_number}: {stage.sgk_title} · SGK tr. {stage.pages?.[0]}–{stage.pages?.[1]}</small></div><span className="journey-tag">{passed ? 'Đã qua chặng' : opened ? 'Đang mở' : 'Qua chặng trước để mở'}</span></div>
+          <button type="button" className="journey-read-lesson" onClick={() => onReadLesson(`LS${journey.grade}_B${String(stage.lesson_number).padStart(2, '0')}`)}><BookOpen size={14} /> Đọc bài SGK{stage.missions.some((mission) => mission.video) ? ' và xem video' : ''}</button>
           {opened && <><div className="journey-missions">{stage.missions.map((mission, index) => {
             const status = missionStatus(progress, mission, rules)
             const available = missionOpen(progress, journey, stage, index)

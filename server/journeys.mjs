@@ -185,7 +185,9 @@ async function readNarration(root, filename) {
 
 export function journeySummary(journey) {
   const written = journey.stages.filter((stage) => stage.status === 'da_bien_soan')
-  return { id: journey.id, title: journey.title, grade: journey.grade, book: journey.book, chapter: journey.chapter, stageCount: journey.stages.length, writtenStageCount: written.length, missionCount: written.reduce((count, stage) => count + stage.missions.length, 0), videoCount: written.reduce((count, stage) => count + stage.missions.filter((mission) => mission.video).length, 0) }
+  return { id: journey.id, title: journey.title, grade: journey.grade, book: journey.book, chapter: journey.chapter, stageCount: journey.stages.length, writtenStageCount: written.length, missionCount: written.reduce((count, stage) => count + stage.missions.length, 0), videoCount: written.reduce((count, stage) => count + stage.missions.filter((mission) => mission.video).length, 0),
+    // Each written stage is one SGK lesson, so the library can show a lesson's videos and missions next to its text.
+    lessons: written.map((stage) => ({ number: stage.lesson_number, missions: stage.missions.length, videos: stage.missions.filter((mission) => mission.video).length })) }
 }
 
 export async function loadJourneys(dataset, root = process.env.JOURNEY_PATH || defaultJourneyPath) {

@@ -90,6 +90,24 @@ export function useJourney(grade: number) {
     /** Chapters the learner can switch between, with how many Sử Ký pieces each already holds. */
     choices: choices.map((item) => ({ ...item, pieces: Object.keys(store[item.id]?.pieces || {}).length })),
     chosenId: chosen?.id,
+    /** The chapter journey whose stage is this SGK lesson (any grade), if one was written. */
+    forLesson(grade: number, lessonNumber: number) {
+      const summary = summaries?.find((item) => item.grade === grade && item.lessons.some((lesson) => lesson.number === lessonNumber))
+      return summary && { summary, lesson: summary.lessons.find((lesson) => lesson.number === lessonNumber)! }
+    },
+    /** Fetches any journey (cached), e.g. to show a lesson's videos and missions inside the library reader. */
+    async load(id: string, signal?: AbortSignal) {
+      const cached = loaded.current.get(id)
+      if (cached) return cached
+      const data = await historyApi<Journey>(`journeys/${id}`, signal)
+      loaded.current.set(data.id, data)
+      return data
+    },
+    /** Progress and learning day of any journey, not only the chapter currently shown in Hành trình. */
+    progressOf(id: string) {
+      const value = store[id] || emptyProgress()
+      return { progress: value, today: dayNumber(calendarDay) + value.dayOffset }
+    },
     select(id: string) {
       const next = { ...selected, [grade]: id }
       setSelected(next)

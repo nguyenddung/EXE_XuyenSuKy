@@ -25,6 +25,7 @@ import { Footer } from '../components/Footer'
 import { LoginModal } from '../components/LoginModal'
 import { ActivityModal } from '../components/ActivityModal'
 import { JourneySection } from '../components/JourneySection'
+import type { JourneyLaunch } from '../components/LessonJourney'
 import { useJourney } from '../hooks/useJourney'
 import { showSection } from '../lib/sections'
 
@@ -63,6 +64,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   const gradeRead = learning.journal.read.filter((id) => id.startsWith(`LS${session.grade}_B`)).length
   const gradeCount = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.lessonCount || 0
   const journey = useJourney(session.grade)
+  const [journeyLaunch, setJourneyLaunch] = useState<(JourneyLaunch & { token: number }) | null>(null)
   // Journey XP is earned per answer and stored with the journey progress; progress panels show it with activity XP.
   const progressSession = { ...session, earnedXp: session.earnedXp + journey.totalXp }
   function completeLearning(id: string, reward: number) {
@@ -127,8 +129,18 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }
 
   const classSelection = <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={handleSelectGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />
-  const journeySection = <JourneySection state={journey} grade={session.grade} onChat={openCharacter} onNotice={setNotice} onRecord={learning.record} />
-  const learningHub = <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} />
+  // A lesson read in the library opens its mission (or the map) in Hành trình, which shows that chapter first.
+  function launchJourney(launch: JourneyLaunch) {
+    journey.select(launch.journeyId)
+    setJourneyLaunch({ ...launch, token: Date.now() })
+    window.setTimeout(() => showSection('journey'), 60)
+  }
+  function readLesson(id: string) {
+    setLibrarySource('dataset'); setRequestedLessonId(id)
+    window.setTimeout(() => showSection('library'), 60)
+  }
+  const journeySection = <JourneySection state={journey} grade={session.grade} onChat={openCharacter} onNotice={setNotice} onRecord={learning.record} launch={journeyLaunch} onLaunched={() => setJourneyLaunch(null)} onReadLesson={readLesson} />
+  const learningHub = <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} journeys={journey} onJourney={launchJourney} />
   const timeline = <HistoryTimeline />
   const characters = <CharacterSection onChat={openCharacter} />
   const challenges = <ChallengeSection records={session.gameRecords} completedActivities={session.completedActivities} onTry={setActiveGame} />
