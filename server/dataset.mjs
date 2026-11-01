@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import Ajv2020 from 'ajv/dist/2020.js'
+import { defaultEnrichmentPath, expandQuery, loadEnrichment } from './enrichment.mjs'
 
 export const defaultDatasetPath = fileURLToPath(new URL('../data/history/', import.meta.url))
 export const normalize = (text) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase().replace(/\s+/g, ' ').trim()
@@ -11,7 +12,7 @@ const knowledgeTypes = new Set(['body', 'source', 'did_you_know', 'caption'])
 
 export class DatasetError extends Error {}
 
-export async function loadDataset(root = process.env.DATASET_PATH || defaultDatasetPath) {
+export async function loadDataset(root = process.env.DATASET_PATH || defaultDatasetPath, enrichmentRoot = defaultEnrichmentPath) {
   const filenames = ['manifest.json', 'lessons/lessons_all.json', 'chunks/chunks_all.jsonl', 'schema/lesson.schema.json', 'schema/chunk.schema.json']
   const checksums = new Map((await readFile(resolve(root, 'SHA256SUMS.txt'), 'utf8')).trim().split(/\r?\n/).map((line) => {
     const match = line.match(/^([a-f0-9]{64})\s+\*?(.+)$/)
@@ -71,7 +72,9 @@ export async function loadDataset(root = process.env.DATASET_PATH || defaultData
     }),
     pageKind: 'pdf',
   }
-  return { manifest, metadata, lessons, chunks, byId, chunksById, lessonChunks, summaries, lessonSearch, searchableChunks, source }
+  const { events, aliasIndex } = await loadEnrichment(new Set(byId.keys()), normalize, enrichmentRoot)
+  const summaryById = new Map(summaries.map((summary) => [summary.id, summary]))
+  return { manifest, metadata, lessons, chunks, byId, chunksById, lessonChunks, summaries, summaryById, lessonSearch, searchableChunks, source, events, aliasIndex }
 }
 
 let cached
@@ -81,13 +84,18 @@ export function getDataset() {
 }
 
 export function searchChunks(dataset, query, grade) {
-  const terms = [...new Set(normalize(query).split(' ').filter(Boolean))]
-  if (!terms.length) return []
   const phrase = normalize(query)
+  if (!phrase) return []
+  // Alternative names ("Quang Trung" / "Nguyễn Huệ", "Columbus" / "Cô-lôm-bô") widen the query; each chunk keeps its best variant.
+  const variants = expandQuery(phrase, dataset.aliasIndex).map(({ query: variant, names }) => ({ phrase: variant, names, terms: [...new Set(variant.split(' ').filter(Boolean))] }))
   return dataset.searchableChunks.filter(({ chunk }) => !grade || chunk.grade === grade).map(({ chunk, text, title }) => {
-    const matches = terms.filter((term) => text.includes(term) || title.includes(term)).length
-    // Require every query term; unrelated requests return no source instead of a guess.
-    const score = matches === terms.length ? matches + (text.includes(phrase) ? 8 : 0) + (title.includes(phrase) ? 5 : 0) + (chunk.open_flags === 0 ? 0.5 : 0) : 0
+    let score = 0
+    for (const { phrase: wanted, names, terms } of variants) {
+      if (!names.every((name) => text.includes(name) || title.includes(name))) continue
+      const matches = terms.filter((term) => text.includes(term) || title.includes(term)).length
+      // Require every query term; unrelated requests return no source instead of a guess.
+      if (matches === terms.length) score = Math.max(score, matches + (text.includes(wanted) ? 8 : 0) + (title.includes(wanted) ? 5 : 0) + (chunk.open_flags === 0 ? 0.5 : 0))
+    }
     return { chunk, score }
   }).filter(({ score }) => score > 0).sort((a, b) => b.score - a.score || a.chunk.chunk_id.localeCompare(b.chunk.chunk_id))
 }

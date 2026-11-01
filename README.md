@@ -55,6 +55,10 @@ Thu hồi hook cũ trong Vercel sau khi thay secret. Các variables `VERCEL_ORG_
 
 Backend đọc snapshot trong `data/history`, nạp một lần mỗi tiến trình và xác minh checksum, JSON Schema 2020-12, số lượng, ID duy nhất và tham chiếu chunk/bài. Nếu dữ liệu lỗi, API trả `503 DATASET_UNAVAILABLE`; giao diện cho phép thử lại hoặc chọn **Bài học thử**. API không sửa dataset gốc.
 
+### Dữ liệu làm giàu
+
+`data/enrichment` chứa dữ liệu nhóm tự biên soạn, không chép văn bản SGK: 80 mốc sự kiện gắn với bài (`GET /api/events?lesson=&grade=&scope=&q=`) và 77 nhóm tên gọi khác, phiên âm gốc, viết tắt dùng để mở rộng tìm kiếm (ví dụ `CMT8`, `Bác Hồ`, `Columbus`, `Hưng Đạo Vương`). Backend kiểm tra schema và tham chiếu bài khi nạp; kiểm thử đối chiếu năm, nhân vật, địa danh với văn bản của từng bài được gắn. Chi tiết trong [data/enrichment/README.md](data/enrichment/README.md).
+
 ### Bật RAG với OpenAI
 
 Tạo API key trong [OpenAI Platform](https://platform.openai.com/api-keys). Để chạy local, thêm `OPENAI_API_KEY=...` vào `.env.local` (tệp này được Git bỏ qua), rồi khởi động lại `npm run dev`. Có thể đặt `OPENAI_MODEL=gpt-5-mini` để đổi model. Không đặt key trong biến `VITE_`, mã frontend hoặc GitHub secret của workflow deploy.

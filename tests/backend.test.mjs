@@ -12,6 +12,7 @@ import { answerCharacterQuestion, generationRequest } from '../server/rag/pipeli
 import { inspectInput, maxAnswerCharacters, tidyAnswer, validateAnswer } from '../server/rag/guardrails.mjs'
 import { createAnswerCache, createLimiter, memoryStore } from '../server/rag/limits.mjs'
 import { loadEmbeddingIndex, quantize, vectorSearch } from '../server/rag/embeddings.mjs'
+import { defaultEnrichmentPath, expandQuery } from '../server/enrichment.mjs'
 
 const unlimited = createLimiter(memoryStore(), () => ({ perMinute: 1e9, aiPerDay: 1e9, aiGlobalPerDay: 1e9 }))
 let dataset, server, base
@@ -341,6 +342,72 @@ test('importer refuses changed bytes and orphan chunks even with updated checksu
     const checksums = await readFile(checksumPath, 'utf8')
     await writeFile(checksumPath, checksums.replace(/^[a-f0-9]{64}(\s+chunks\/chunks_all\.jsonl)$/m, checksum + '$1'))
     await assert.rejects(loadDataset(root), /Invalid chunk reference/)
+  } finally {
+    if (!resolve(root).startsWith(resolve(tmpdir()) + sep)) throw new Error('Test cleanup path is outside temporary directory')
+    await rm(root, { recursive: true, force: true })
+  }
+})
+
+// Enrichment data is written by the team; these checks tie every claim back to the textbook it links to.
+const lessonText = (id) => { const lesson = dataset.byId.get(id); return normalize(`${lesson.lesson_title} ${lesson.chapter} ${lesson.sections.map((section) => section.content).join(' ')}`) }
+const hasYear = (text, year) => new RegExp(`(?<!\\d)${Math.abs(year)}(?!\\d)`).test(text)
+test('every event year and a named person or place appear in each linked textbook lesson', () => {
+  assert.ok(dataset.events.length >= 80)
+  for (const event of dataset.events) {
+    for (const id of event.lesson_ids) {
+      const text = lessonText(id)
+      assert.ok(hasYear(text, event.year), `${event.id}: year ${event.year} is not in ${id}`)
+      const names = [...event.people, ...event.places]
+      assert.ok(!names.length || names.some((name) => text.includes(normalize(name))), `${event.id}: no person or place found in ${id}`)
+    }
+    if (event.end_year !== undefined) assert.ok(event.lesson_ids.some((id) => hasYear(lessonText(id), event.end_year)), `${event.id}: end year not in its lessons`)
+  }
+})
+test('the standard spelling of every alias group occurs in the textbook passages', () => {
+  const corpus = ` ${dataset.searchableChunks.map(({ text }) => text).join(' ')} `
+  for (const entry of dataset.aliasIndex.filter((item, index, all) => all.findIndex((other) => other.group === item.group) === index)) {
+    const group = dataset.aliasIndex.filter((item) => item.group === entry.group).map((item) => item.term)
+    assert.ok(group.some((term) => corpus.includes(` ${term} `) || corpus.includes(` ${term},`) || corpus.includes(` ${term}.`)), `alias group ${entry.group} never occurs in the textbook`)
+  }
+})
+test('alias expansion finds other names, original spellings and abbreviations without loose word matches', async () => {
+  assert.deepEqual(expandQuery('cmt8 o ha noi', dataset.aliasIndex).map((variant) => variant.query).slice(0, 3), ['cmt8 o ha noi', 'cmt8 o thang long', 'cmt8 o dai la'])
+  assert.equal(expandQuery('lich su', dataset.aliasIndex).length, 1)
+  assert.ok(expandQuery('ho chi minh nguyen hue thang long', dataset.aliasIndex).length <= 12)
+  const columbus = (await get('search?q=Columbus&limit=50')).body
+  assert.ok(columbus.total > 1 && columbus.items.every((item) => normalize(item.text).includes('co-lom-bo') || normalize(item.text).includes('columbus')))
+  assert.equal((await get('search?q=CMT8&limit=1')).body.items[0].lessonId.startsWith('LS'), true)
+  assert.ok(['LS9_B08', 'LS12_B06'].includes((await get('search?q=CMT8&limit=1')).body.items[0].lessonId))
+  const uncle = (await get('search?q=B%C3%A1c%20H%E1%BB%93%20ra%20%C4%91i%20t%C3%ACm%20%C4%91%C6%B0%E1%BB%9Dng%20c%E1%BB%A9u%20n%C6%B0%E1%BB%9Bc&limit=50')).body
+  assert.ok(uncle.total > 0 && uncle.items.every((item) => ['ho chi minh', 'nguyen ai quoc', 'nguyen tat thanh', 'nguyen sinh cung', 'bac ho'].some((name) => normalize(`${item.text} ${item.lessonTitle} ${item.sectionTitle}`).includes(name))))
+  const hue = (await get('search?q=Quang%20Trung&limit=50&grade=8')).body
+  assert.ok(hue.items.every((item) => ['quang trung', 'nguyen hue', 'bac binh vuong'].some((name) => normalize(`${item.text} ${item.lessonTitle} ${item.sectionTitle}`).includes(name)) || ['quang', 'trung'].every((word) => normalize(`${item.text} ${item.lessonTitle} ${item.sectionTitle}`).includes(word))))
+})
+test('events API is sorted, filters by lesson, grade, scope and text, and validates input', async () => {
+  const all = (await get('events')).body
+  assert.equal(all.total, dataset.events.length)
+  assert.ok(all.items.every((item, index) => index === 0 || all.items[index - 1].year <= item.year))
+  assert.deepEqual(Object.keys(all.items[0]).sort(), ['category', 'id', 'lessons', 'people', 'places', 'scope', 'summary', 'title', 'year'].sort())
+  const mongol = (await get('events?lesson=LS7_B17')).body
+  assert.deepEqual(mongol.items.map((item) => item.id), ['mong-co-lan-1', 'nguyen-lan-2', 'bach-dang-1288'])
+  assert.equal(mongol.items[2].endYear, 1288)
+  assert.deepEqual(mongol.items[0].lessons, [{ id: 'LS7_B17', grade: 7, title: dataset.summaryById.get('LS7_B17').title }])
+  assert.ok((await get('events?scope=world')).body.items.every((item) => item.scope === 'world'))
+  assert.ok((await get('events?grade=6')).body.items.every((item) => item.lessons.some((lesson) => lesson.grade === 6)))
+  assert.deepEqual((await get('events?q=bach%20dang')).body.items.map((item) => item.id), ['bach-dang-938', 'le-hoan-chong-tong', 'bach-dang-1288'])
+  for (const path of ['events?lesson=../x', 'events?scope=mars', 'events?grade=5']) assert.equal((await get(path)).response.status, 400, path)
+})
+test('enrichment loader rejects unknown lessons and duplicated alias spellings', async () => {
+  const root = await mkdtemp(resolve(tmpdir(), 'xuyensuky-enrichment-test-'))
+  try {
+    await cp(defaultEnrichmentPath, root, { recursive: true })
+    const events = JSON.parse(await readFile(resolve(root, 'events.json'), 'utf8'))
+    await writeFile(resolve(root, 'events.json'), JSON.stringify([{ ...events[0], lesson_ids: ['LS7_B99'] }, ...events.slice(1)]))
+    await assert.rejects(loadDataset(defaultDatasetPath, root), /unknown lesson LS7_B99/)
+    await writeFile(resolve(root, 'events.json'), JSON.stringify(events))
+    const aliases = JSON.parse(await readFile(resolve(root, 'aliases.json'), 'utf8'))
+    await writeFile(resolve(root, 'aliases.json'), JSON.stringify([...aliases, { id: 'copy', type: 'person', terms: ['Quang Trung', 'Vua Quang Trung'] }]))
+    await assert.rejects(loadDataset(defaultDatasetPath, root), /appears in nguyen-hue and copy/)
   } finally {
     if (!resolve(root).startsWith(resolve(tmpdir()) + sep)) throw new Error('Test cleanup path is outside temporary directory')
     await rm(root, { recursive: true, force: true })

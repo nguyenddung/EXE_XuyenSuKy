@@ -4,6 +4,7 @@ import { answerCharacterQuestion } from './rag/pipeline.mjs'
 import { clientKey, createLimiter } from './rag/limits.mjs'
 import { SpeechError, synthesizeSpeech } from './speech.mjs'
 import { getJourneys } from './journeys.mjs'
+import { eventResponse } from './enrichment.mjs'
 import { createVoiceSession, liveVoiceAvailable } from './voice-agents.mjs'
 
 const defaultLimiter = createLimiter()
@@ -83,7 +84,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       res.setHeader('Allow', chat || speech || voiceSession ? 'POST' : 'GET, HEAD')
       throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : voiceSession ? 'Use POST to start a voice conversation.' : 'This dataset endpoint is read-only.')
     }
-    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys', 'events'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     if (speech) {
       const body = await readJsonBody(req, 32000)
       const audio = await (options.speech || synthesizeSpeech)({ characterId: parts[1], text: body.text, visitor: clientKey(req) })
@@ -125,6 +126,17 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       if (parts.length === 1) { const items = [...journeys.values()].map((entry) => entry.summary).filter((summary) => !grade || summary.grade === grade); result = { items, total: items.length } }
       else if (!journeys.has(parts[1])) throw new HttpError(404, 'JOURNEY_NOT_FOUND', 'Journey not found.')
       else result = journeys.get(parts[1]).public
+    }
+    else if (route === 'events') {
+      const lesson = url.searchParams.get('lesson')
+      if (lesson !== null && !/^LS\d{1,2}_B\d{2}$/.test(lesson)) badRequest('lesson must be a lesson ID such as LS7_B17.')
+      const scope = url.searchParams.get('scope')
+      if (scope !== null && !['vn', 'world'].includes(scope)) badRequest('scope must be vn or world.')
+      const terms = normalize(query).split(' ').filter(Boolean)
+      const items = data.events.filter((event) => (!lesson || event.lesson_ids.includes(lesson)) && (!scope || event.scope === scope)
+        && (!grade || event.lesson_ids.some((id) => data.summaryById.get(id).grade === grade))
+        && terms.every((term) => normalize(`${event.title} ${event.summary} ${event.people.join(' ')} ${event.places.join(' ')} ${event.year}`).includes(term)))
+      result = { items: items.map((event) => eventResponse(event, data.summaryById)), total: items.length }
     }
     else if (route === 'health') result = { status: 'ok', datasetVersion: data.metadata.version, totals: data.metadata.totals }
     else if (route === 'metadata') result = data.metadata

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "xuyen-su-ky/enrichment/event",
+  "title": "Mốc sự kiện lịch sử gắn với bài SGK",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "year", "title", "summary", "category", "scope", "people", "places", "lesson_ids"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 80 },
+    "year": { "type": "integer", "minimum": -3000, "maximum": 2100, "description": "Năm bắt đầu; số âm là trước Công nguyên." },
+    "end_year": { "type": "integer", "minimum": -3000, "maximum": 2100 },
+    "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "title": { "type": "string", "minLength": 3, "maxLength": 140 },
+    "summary": { "type": "string", "minLength": 10, "maxLength": 300 },
+    "category": { "enum": ["Dựng nước", "Bắc thuộc", "Khởi nghĩa", "Kháng chiến", "Triều đại", "Cải cách", "Văn hoá", "Cách mạng", "Ngoại giao", "Đổi mới", "Thế giới"] },
+    "scope": { "enum": ["vn", "world"] },
+    "people": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 80 }, "maxItems": 8 },
+    "places": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 80 }, "maxItems": 8 },
+    "lesson_ids": { "type": "array", "items": { "type": "string", "pattern": "^LS\\d{1,2}_B\\d{2}$" }, "minItems": 1, "uniqueItems": true }
+  }
+}
