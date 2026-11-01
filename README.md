@@ -1,317 +1,277 @@
 # Xuyên Sử Ký
 
-Nền tảng học Lịch sử lớp 6–12 dùng React, TypeScript, Vite và backend Node.js. Thư viện mặc định đọc dataset SGK thật qua API: 7 sách, 130 bài, 752 mục và 2.708 chunk. Có 12 nhân vật lịch sử minh họa hoạt hình để trò chuyện với RAG khi cấu hình OpenAI, kèm đoạn SGK có nguồn. Minigame, bài học thử, đăng nhập và bảng xếp hạng vẫn là demo.
+[![CI/CD to Vercel](https://github.com/nguyenddung/EXE_XuyenSuKy/actions/workflows/deploy-vercel.yml/badge.svg?branch=main)](https://github.com/nguyenddung/EXE_XuyenSuKy/actions/workflows/deploy-vercel.yml)
 
-**Bản demo:** [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app)
+Nền tảng học Lịch sử Việt Nam và thế giới cho học sinh lớp 6–12 (chương trình GDPT 2018). Học sinh đọc bài SGK có trích nguồn, đi hành trình game hoá theo chương, chơi minigame và trò chuyện với 12 nhân vật lịch sử bằng chữ hoặc giọng nói. Giáo viên tạo lớp, giao bài và theo dõi tiến độ; quản trị viên quản lý tài khoản.
 
-Trang `/home` dùng dashboard theo concept học tập: sidebar, tìm kiếm SGK, banner tiếp tục học, thẻ giai đoạn, nhiệm vụ, bài đề xuất, tiến độ, nhân vật nổi bật và bảng xếp hạng demo. Các thẻ giai đoạn/bài đề xuất mở bài SGK thật; ô tìm kiếm trả đoạn tư liệu có nguồn; quiz, minigame và chat mở luồng tương ứng. Chỉ số tiến độ lấy từ nhật ký học trên trình duyệt. Minh họa mới trong `public/images/dashboard` là tranh AI tưởng tượng, đã tối ưu WebP.
+**Bản demo:** [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app) · Dự án khởi nghiệp môn EXE101, FPT University.
 
-## Chạy dự án
+## Mục lục
 
-Yêu cầu Node.js 24 và npm.
+- [Tính năng](#tính-năng)
+- [Công nghệ](#công-nghệ)
+- [Bắt đầu nhanh](#bắt-đầu-nhanh)
+- [Cấu hình](#cấu-hình)
+- [Lệnh npm](#lệnh-npm)
+- [Cấu trúc thư mục](#cấu-trúc-thư-mục)
+- [Dữ liệu](#dữ-liệu)
+- [API](#api)
+- [Lưu trữ trên trình duyệt](#lưu-trữ-trên-trình-duyệt)
+- [Kiểm thử](#kiểm-thử)
+- [Triển khai](#triển-khai)
+- [Giới hạn hiện tại và lộ trình](#giới-hạn-hiện-tại-và-lộ-trình)
+- [Đóng góp](#đóng-góp)
+- [Bản quyền nội dung](#bản-quyền-nội-dung)
+
+## Tính năng
+
+### Học sinh (`/home`)
+
+- **Thư viện SGK**: 7 sách, 130 bài, 752 mục, 2.708 đoạn tư liệu. Mọi trích dẫn ghi rõ sách, bộ sách, NXB và trang. Màn đọc lưu mục đang xem, có chữ lớn, chế độ tập trung, đánh dấu đã đọc, lưu bài, ghi chú và tải sổ tay TXT.
+- **Tìm kiếm** không dấu, hiểu tên gọi khác và viết tắt (`CMT8`, `Bác Hồ`, `Columbus`, `Hưng Đạo Vương`), phím tắt Ctrl/Cmd + K.
+- **Dashboard**: kế hoạch học hôm nay (mục tiêu 1/3/5 hoạt động), chuỗi ngày học, bài đề xuất theo lớp, tiến độ, bảng xếp hạng.
+- **Hành trình game hoá** theo chương, có video nhiệm vụ, gợi ý ba bậc, mảnh Sử Ký và huy hiệu. Chi tiết: [docs/journeys.md](docs/journeys.md).
+- **Nhân vật AI**: 12 nhân vật trả lời dựa trên đoạn SGK (RAG), có nguồn; chế độ **Nhắn tin** và **Nói chuyện**, giọng đọc và trò chuyện giọng nói trực tiếp. Chi tiết: [docs/characters.md](docs/characters.md).
+- **Bốn minigame**: Xếp dòng sử, Lật thẻ ký ức, Thám tử nhân vật, Mật lệnh Bạch Đằng. XP chỉ nhận một lần mỗi trò, kỷ lục 1–3 sao.
+- **Lớp của em**: nhập mã lớp của giáo viên, xem bài được giao và hạn hoàn thành.
+- **Học thử** không cần tài khoản; quiz, trò chuyện với nhân vật và hồ sơ cần đăng nhập.
+
+### Giáo viên (`/giao-vien`)
+
+Tạo lớp theo khối với mã tham gia 6 ký tự; xem từng học sinh (bài giao đã xong, bài đã đọc, XP, quiz, hoạt động gần nhất); giao bài SGK kèm hạn; xoá học sinh khỏi lớp; lưu trữ lớp; xuất CSV tiến độ. Tài khoản giáo viên mới đăng ký phải được quản trị viên duyệt.
+
+### Quản trị viên (`/admin`)
+
+Duyệt hoặc từ chối giáo viên; tìm, lọc người dùng; đổi vai trò; khoá và mở khoá tài khoản (không thể tự khoá, hệ thống luôn còn ít nhất một quản trị viên); xem mọi lớp, phiên bản dataset, số liệu từ API và nhật ký thao tác.
+
+> Tài khoản, lớp học và tiến độ hiện là **bản demo lưu trên trình duyệt**; quyền chỉ được kiểm tra ở giao diện. Thiết kế bản chính thức (FastAPI, PostgreSQL, Docker, phân quyền ở máy chủ) nằm trong [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Công nghệ
+
+| Lớp | Công nghệ |
+|---|---|
+| Frontend | React 18, TypeScript, Vite 5, Tailwind CSS 3, React Router 6, lucide-react |
+| Backend | Node.js 24, một handler HTTP dùng chung cho dev server và Vercel Functions |
+| Kiểm tra dữ liệu | Ajv (JSON Schema 2020-12), SHA-256 checksum |
+| AI | OpenAI (sinh câu trả lời, embedding `text-embedding-3-small`, moderation) |
+| Giọng nói | ElevenLabs (TTS, Conversational AI), Azure Speech, Web Speech API |
+| Giới hạn lượt | Bộ nhớ instance hoặc Upstash Redis |
+| Kiểm thử | `node:test`, Playwright (Chromium) |
+| Hạ tầng | Vercel, GitHub Actions |
+
+## Bắt đầu nhanh
+
+Yêu cầu: **Node.js 24** và npm.
 
 ```bash
+git clone https://github.com/nguyenddung/EXE_XuyenSuKy.git
+cd EXE_XuyenSuKy
 npm ci
 npm run dev
 ```
 
-Mở địa chỉ Vite in ra trong terminal (thường là `http://localhost:5173`).
+Mở địa chỉ Vite in ra (thường là `http://localhost:5173`). Dev server phục vụ cả frontend và API `/api/*` trên cùng origin. App chạy được ngay không cần khoá API: trò chuyện trả trích đoạn SGK và giọng đọc dùng giọng của trình duyệt.
 
-Kiểm tra bản production:
+Tài khoản mẫu (mật khẩu đều là `demo123`; trang đăng nhập có nút điền nhanh):
+
+| Vai trò | Email | Trang |
+|---|---|---|
+| Học sinh | `minh@xuyensuki.vn` | `/home` |
+| Giáo viên | `lan.gv@xuyensuki.vn` | `/giao-vien` |
+| Quản trị viên | `admin@xuyensuki.vn` | `/admin` |
+
+Chạy bản production ở máy:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Triển khai Vercel
+## Cấu hình
 
-Production: [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app).
+Sao chép `.env.example` thành `.env.local` (đã được Git bỏ qua) rồi khởi động lại server. Mọi khoá chỉ nằm ở backend: **không** dùng tiền tố `VITE_` và không đưa vào mã frontend. Trên Vercel, đặt các biến trong **Project Settings → Environment Variables** rồi redeploy.
 
-[GitHub Actions](.github/workflows/deploy-vercel.yml) tự chạy khi push lên `main` hoặc mở/cập nhật pull request vào `main`:
+| Biến | Mặc định | Ý nghĩa |
+|---|---|---|
+| `OPENAI_API_KEY` | — | Bật câu trả lời RAG; thiếu thì trả trích đoạn SGK |
+| `OPENAI_MODEL` | `gpt-5-mini` | Model sinh câu trả lời |
+| `AI_DISABLED` | — | `1` để tắt AI ngay mà không xoá khoá |
+| `CHAT_RATE_PER_MINUTE` | `12` | Số câu hỏi mỗi phút mỗi IP (vượt → HTTP 429) |
+| `AI_ANSWERS_PER_DAY` / `AI_GLOBAL_ANSWERS_PER_DAY` | `40` / `500` | Hạn mức câu trả lời AI mỗi IP / toàn hệ thống |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | — | Dùng chung bộ đếm giới hạn giữa các instance |
+| `SPEECH_PROVIDER` | — | `elevenlabs` hoặc `azure` |
+| `ELEVENLABS_API_KEY`, `ELEVENLABS_MODEL`, `ELEVENLABS_VOICE_*` | — | Giọng đọc, trò chuyện trực tiếp và thuyết minh video |
+| `AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION` | — | Giọng đọc bằng Azure |
+| `SPEECH_DISABLED`, `LIVE_VOICE_DISABLED` | — | `1` để tắt giọng máy chủ / trò chuyện giọng nói trực tiếp |
+| `SPEECH_RATE_PER_MINUTE`, `SPEECH_REQUESTS_PER_DAY`, `SPEECH_GLOBAL_REQUESTS_PER_DAY` | `12`, `40`, `500` | Hạn mức tạo âm thanh |
+| `DATASET_PATH` | `data/history` | Đọc dataset từ thư mục khác (chỉ dùng ở máy local) |
+| `HOST`, `PORT` | `127.0.0.1`, `3001` | Địa chỉ của `npm run dev:backend` |
 
-1. Cài dependencies từ lockfile bằng `npm ci`.
-2. Xác minh SHA-256/schema dataset, chạy kiểm thử API, cài Chromium và chạy Playwright cho thư viện SGK, minigame, bài học thử và sổ tay.
-3. Kiểm tra TypeScript và build Vite bằng `npm run build`.
-4. Chỉ với `main` và sau khi mọi kiểm tra thành công: gọi Vercel Deploy Hook, chờ trạng thái deployment thành công từ Vercel trên đúng commit. Pull request chỉ kiểm thử/build.
+Chi tiết từng dịch vụ giọng nói và pipeline RAG: [docs/characters.md](docs/characters.md).
 
-Có thể chạy lại bằng **Actions → CI/CD to Vercel → Run workflow**, chọn nhánh `main`. Nếu commit đã có bản mới hơn trên `main`, workflow bỏ qua deploy bản cũ để bản mới nhất được triển khai.
+## Lệnh npm
 
-Project `xuyen-su-ky` đã liên kết repository `nguyenddung/EXE_XuyenSuKy`, production branch là `main`. GitHub secret `VERCEL_DEPLOY_HOOK` chứa hook riêng `github-actions-production` cho project này. URL hook là thông tin bí mật, không đưa vào source code hoặc log. CI không cần token truy cập toàn tài khoản Vercel.
+| Lệnh | Việc làm |
+|---|---|
+| `npm run dev` | Dev server (frontend + API) |
+| `npm run dev:backend` | Chỉ chạy API tại `http://127.0.0.1:3001/api/health` |
+| `npm run build` / `npm run preview` | Kiểm tra TypeScript, build và xem bản production |
+| `npm run test:backend` | Kiểm thử API, RAG, giọng nói, lịch sử chat, hành trình |
+| `npm run test:games` | Toàn bộ kiểm thử Playwright |
+| `npm run check:dataset` | Xác minh checksum, schema, số lượng và hành trình |
+| `npm run import:dataset -- <thư mục>` | Nhập snapshot dataset SGK mới |
+| `npm run import:journey -- <file.json>` | Nhập hành trình từ `course_builder` |
+| `npm run build:embeddings` | Tạo lại chỉ mục embedding (cần `OPENAI_API_KEY`) |
+| `npm run build:narration` | Thu thuyết minh video bằng ElevenLabs |
+| `npm run sync:voice-agents` | Tạo/cập nhật agent giọng nói của các nhân vật |
 
-`git.deploymentEnabled: false` trong `vercel.json` tắt deploy trực tiếp khi push Git, để chỉ workflow đã vượt qua kiểm thử kích hoạt hook. Framework là Vite, lệnh build là `npm run build`, đầu ra là `dist`; fallback về `index.html` hỗ trợ React Router.
+## Cấu trúc thư mục
 
-Khi cần thay hook: vào Vercel → Project Settings → Git → Deploy Hooks, tạo hook cho `main`, rồi nhập URL qua lệnh sau (không truyền URL trên command line):
+```text
+.
+├── api/dataset.js          # Điểm vào Vercel Function, gọi server/handler.mjs
+├── server/                 # Backend: định tuyến API, dataset, nhân vật, giọng nói, hành trình
+│   ├── handler.mjs         # Router /api/* dùng chung cho dev server và Vercel
+│   ├── dataset.mjs         # Nạp, kiểm tra và tìm kiếm dataset SGK
+│   ├── enrichment.mjs      # Mốc sự kiện và tên gọi khác
+│   └── rag/                # Guardrail, embedding, giới hạn lượt, pipeline trả lời
+├── src/                    # Frontend React
+│   ├── pages/              # HomePage (/ và /home), LoginPage, TeacherPage, AdminPage
+│   ├── components/         # Dashboard, thư viện, hành trình, nhân vật, minigame, khu quản lý
+│   ├── hooks/              # Phiên đăng nhập, sổ tay học, hành trình, lớp học
+│   ├── lib/                # Gọi API, tài khoản demo, lớp học (school.ts), lịch sử chat
+│   └── data/               # Nội dung minh hoạ: giai đoạn, minigame, bảng xếp hạng
+├── shared/                 # Hồ sơ, giọng và agent của nhân vật (dùng chung client/server)
+├── data/
+│   ├── history/            # Dataset SGK (manifest, lessons, chunks, schema, checksum)
+│   ├── enrichment/         # Dữ liệu nhóm tự biên soạn
+│   ├── embeddings/         # Chỉ mục vector cho RAG
+│   └── journeys/           # Hành trình game hoá và dấu băm thuyết minh
+├── public/                 # Ảnh nhân vật, minh hoạ dashboard, âm thanh thuyết minh
+├── scripts/                # Nhập dữ liệu, kiểm tra, tạo embedding, thu âm, đồng bộ agent
+├── tests/                  # node:test (*.test.mjs) và Playwright (*.spec.ts)
+└── docs/                   # Kiến trúc và tài liệu chi tiết
+```
+
+## Dữ liệu
+
+| Nguồn | Nội dung | Tài liệu |
+|---|---|---|
+| `data/history` | Văn bản phần Lịch sử của 7 SGK lớp 6–12, tách theo chương, bài, mục, chia chunk; phiên bản 1.0.0 | [data/history/README.md](data/history/README.md) |
+| `data/enrichment` | 80 mốc sự kiện gắn với bài và 77 nhóm tên gọi khác, nhóm tự viết, không chép SGK | [data/enrichment/README.md](data/enrichment/README.md) |
+| `data/embeddings` | `text-embedding-3-small`, 512 chiều, int8 | [docs/characters.md](docs/characters.md) |
+| `data/journeys` | 5 hành trình lớp 6 | [docs/journeys.md](docs/journeys.md) |
+
+Backend nạp dataset một lần mỗi tiến trình và kiểm tra checksum, JSON Schema, số lượng, ID duy nhất và mọi tham chiếu giữa chunk, bài, sự kiện. Dữ liệu lỗi thì API trả `503 DATASET_UNAVAILABLE` và giao diện cho phép thử lại hoặc dùng **Bài học thử**. API không bao giờ sửa dataset.
+
+Cập nhật snapshot dataset:
+
+```bash
+npm run import:dataset -- "<thư mục dataset>"
+npm run check:dataset
+npm run test:backend
+npm run build:embeddings   # khi nội dung chunk thay đổi
+```
+
+Dataset không có đáp án trắc nghiệm, vì vậy bài SGK dùng đánh dấu đã đọc, tự đánh giá và ghi chú thay vì chấm điểm tự động.
+
+## API
+
+Mọi endpoint nằm dưới `/api`, trả JSON, lỗi có dạng `{ "error": { "code", "message" } }`.
+
+| Phương thức và đường dẫn | Chức năng |
+|---|---|
+| `GET /health` | Trạng thái và thống kê dataset |
+| `GET /metadata` | Phiên bản, lớp, chương, số bài, bài gợi ý |
+| `GET /lessons?grade=7&q=bach%20dang&chapter=&ids=&excludeIds=&page=1&limit=12` | Danh sách bài: tìm không dấu, lọc, phân trang |
+| `GET /lessons/{id}` | Nội dung các mục và nguồn của bài (ví dụ `LS7_B01`) |
+| `GET /lessons/{id}/chunks?type=body` | Chunk của bài theo loại nội dung |
+| `GET /search?q=CMT8&grade=9` | Đoạn tư liệu phù hợp kèm trang; mở rộng theo tên gọi khác |
+| `GET /chunks/{id}` | Một chunk theo ID |
+| `GET /events?lesson=LS7_B17&grade=&scope=vn\|world&q=` | Mốc sự kiện gắn với bài, sắp theo năm |
+| `GET /characters?grade=7&q=` | Danh mục nhân vật đối chiếu với dataset |
+| `GET /characters/{id}` | Hồ sơ nhân vật và bài liên quan |
+| `POST /characters/{id}/chat` | `{ "message": "...", "history": [] }` → câu trả lời, nguồn, bài học |
+| `POST /characters/{id}/speech` | `{ "text": "..." }` → MP3 |
+| `POST /characters/{id}/voice-session` | Mở phiên trò chuyện giọng nói trực tiếp |
+| `GET /journeys?grade=6`, `GET /journeys/{id}` | Hành trình game hoá |
+
+Ràng buộc chung: `page ≥ 1`, `limit` 1–50, `grade` 6–12, `q` tối đa 200 ký tự (tìm kiếm cần ít nhất 2 ký tự). Tìm kiếm chỉ trả các loại `body`, `source`, `did_you_know`, `caption`, không coi câu hỏi hay bài tập là câu trả lời.
+
+## Lưu trữ trên trình duyệt
+
+Bản demo chưa có cơ sở dữ liệu người dùng; mọi dữ liệu cá nhân nằm trong `localStorage`/`sessionStorage` của trình duyệt, không đồng bộ giữa thiết bị.
+
+| Khoá | Nội dung |
+|---|---|
+| `xuyen-su-ky-demo-v1`, `xuyen-su-ky-auth-v1` | Phiên đăng nhập, lớp đã chọn, XP, minigame |
+| `xuyen-su-ky-local-account-v1` | Tài khoản đăng ký trên trình duyệt (email, mật khẩu băm có salt) |
+| `xuyen-su-ky-school-v1` | Danh bạ người dùng, vai trò, lớp học, bài giao, nhật ký quản trị |
+| `xuyen-su-ky-journal-v1` | Sổ tay: bài đã đọc, đã lưu, ghi chú, lịch học |
+| `xuyen-su-ky-reader-v1` | Tuỳ chọn màn đọc |
+| `xuyen-su-ky-journey-v1`, `xuyen-su-ky-journey-selected-v1` | Tiến độ và chương đang chọn của hành trình |
+| `xuyen-su-ky-chat-v1:<chủ sở hữu>:<nhân vật>` | Lịch sử trò chuyện |
+
+Đăng nhập không ghi nhớ chỉ kéo dài trong phiên trình duyệt; chọn **Ghi nhớ đăng nhập** để giữ 30 ngày. Không dùng mật khẩu thật cho tài khoản demo.
+
+## Kiểm thử
+
+```bash
+npm run check:dataset     # toàn vẹn dữ liệu
+npm run test:backend      # API, RAG, guardrail, giọng nói, hành trình, dữ liệu làm giàu
+npx playwright install chromium
+npm run test:games        # toàn bộ kiểm thử trình duyệt
+```
+
+Chạy một nhóm: `npx playwright test tests/roles.spec.ts`. Playwright tự khởi động dev server với `AI_DISABLED=1` và `SPEECH_DISABLED=1`, nên không gọi dịch vụ trả phí. Trên Windows có Edge: `$env:PLAYWRIGHT_CHANNEL='msedge'; npm run test:games`.
+
+| Nhóm | Tệp |
+|---|---|
+| Đăng nhập, học thử, chọn lớp | `auth`, `onboarding` |
+| Vai trò giáo viên, quản trị, lớp học | `roles` |
+| Dashboard, thư viện, sổ tay | `dashboard`, `dataset`, `learning`, `study-experience` |
+| Hành trình | `journey`, `lesson-journey`, `journey.test.mjs` |
+| Nhân vật, giọng nói, lịch sử chat | `characters`, `character-*`, `live-voice`, `chat-history` |
+| Minigame | `minigames` |
+
+## Triển khai
+
+Production: [xuyen-su-ky.vercel.app](https://xuyen-su-ky.vercel.app), project Vercel `xuyen-su-ky`, nhánh production `main`.
+
+Workflow [CI/CD to Vercel](.github/workflows/deploy-vercel.yml) chạy khi push lên `main` và khi mở hoặc cập nhật pull request vào `main`:
+
+1. `npm ci`
+2. `npm run check:dataset` và `npm run test:backend`
+3. Cài Chromium, chạy `npm run test:games`
+4. `npm run build`
+5. Chỉ với `main` và khi mọi bước trên thành công: gọi Vercel Deploy Hook rồi chờ deployment của đúng commit báo thành công. Nếu `main` đã có commit mới hơn, bản cũ bỏ qua bước deploy.
+
+Pull request chỉ kiểm thử và build. Có thể chạy lại thủ công ở **Actions → CI/CD to Vercel → Run workflow**.
+
+`vercel.json` đặt `git.deploymentEnabled: false` để chỉ workflow đã qua kiểm thử mới kích hoạt deploy; mọi đường dẫn `/api/*` được chuyển tới một function, các đường dẫn khác về `index.html` cho React Router.
+
+Deploy hook lưu trong GitHub secret `VERCEL_DEPLOY_HOOK` và là thông tin bí mật. Khi cần thay: tạo hook mới cho `main` ở **Vercel → Project Settings → Git → Deploy Hooks**, cập nhật secret bằng lệnh sau (dán URL khi được hỏi, không truyền trên dòng lệnh), rồi thu hồi hook cũ:
 
 ```bash
 gh secret set VERCEL_DEPLOY_HOOK -R nguyenddung/EXE_XuyenSuKy
 ```
 
-Thu hồi hook cũ trong Vercel sau khi thay secret. Các variables `VERCEL_ORG_ID` và `VERCEL_PROJECT_ID` có thể giữ để sử dụng CLI thủ công, workflow hiện tại không cần chúng.
+## Giới hạn hiện tại và lộ trình
 
-## Backend dataset
+- Tài khoản, vai trò, lớp học, tiến độ và lịch sử chat chỉ lưu trên trình duyệt; phân quyền chỉ ở giao diện.
+- Bảng xếp hạng, hồ sơ Minh, một số bài học thử và thống kê tổng là nội dung minh hoạ.
+- Hành trình mới có lớp 6; video nhiệm vụ mới có Chương 2 và một nhiệm vụ của Chương 5.
+- Hoạt hình nói chưa đồng bộ khẩu hình theo âm vị.
 
-`npm run dev` và `npm run preview` phục vụ cả frontend và API cùng origin. Chạy API độc lập bằng `npm run dev:backend`, mặc định tại `http://127.0.0.1:3001/api/health`.
+Lộ trình tiếp theo (chi tiết trong [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)): backend FastAPI với PostgreSQL + pgvector, đăng nhập thật và phân quyền ở máy chủ, đồng bộ tiến độ giữa thiết bị, đóng gói Docker để triển khai trên nhiều hạ tầng.
 
-Backend đọc snapshot trong `data/history`, nạp một lần mỗi tiến trình và xác minh checksum, JSON Schema 2020-12, số lượng, ID duy nhất và tham chiếu chunk/bài. Nếu dữ liệu lỗi, API trả `503 DATASET_UNAVAILABLE`; giao diện cho phép thử lại hoặc chọn **Bài học thử**. API không sửa dataset gốc.
+## Đóng góp
 
-### Dữ liệu làm giàu
+1. Tạo nhánh từ `main`: `feature/<tên>`, `fix/<tên>` hoặc `docs/<tên>`.
+2. Chạy `npm run check:dataset`, `npm run test:backend`, `npm run test:games` và `npm run build` trước khi mở pull request.
+3. Không commit `.env*`, khoá API, `dist/` hay kết quả kiểm thử; chỉ commit thay đổi thuộc nhiệm vụ.
+4. Mở pull request vào `main`; gộp khi CI xanh. Push lên `main` sẽ triển khai production.
 
-`data/enrichment` chứa dữ liệu nhóm tự biên soạn, không chép văn bản SGK: 80 mốc sự kiện gắn với bài (`GET /api/events?lesson=&grade=&scope=&q=`) và 77 nhóm tên gọi khác, phiên âm gốc, viết tắt dùng để mở rộng tìm kiếm (ví dụ `CMT8`, `Bác Hồ`, `Columbus`, `Hưng Đạo Vương`). Backend kiểm tra schema và tham chiếu bài khi nạp; kiểm thử đối chiếu năm, nhân vật, địa danh với văn bản của từng bài được gắn. Chi tiết trong [data/enrichment/README.md](data/enrichment/README.md).
+## Bản quyền nội dung
 
-### Bật RAG với OpenAI
-
-Tạo API key trong [OpenAI Platform](https://platform.openai.com/api-keys). Để chạy local, thêm `OPENAI_API_KEY=...` vào `.env.local` (tệp này được Git bỏ qua), rồi khởi động lại `npm run dev`. Có thể đặt `OPENAI_MODEL=gpt-5-mini` để đổi model. Không đặt key trong biến `VITE_`, mã frontend hoặc GitHub secret của workflow deploy.
-
-Trên Vercel, vào **Project Settings → Environment Variables**, thêm `OPENAI_API_KEY` cho **Production**, rồi redeploy production. Key nằm trong môi trường của Vercel Function, không nằm trong bundle frontend. Khi không có key hoặc OpenAI gặp lỗi, chat trả trích đoạn SGK hiện có và ghi `mode: textbook`; khi OpenAI trả lời, phản hồi ghi `mode: rag`. Giao diện hiển thị nguồn bài học cho cả hai. Câu hỏi không có đoạn nguồn phù hợp không được gửi đến OpenAI.
-
-### Giọng nói nhân vật
-
-Trần Hưng Đạo, Ngô Quyền, Hồ Chí Minh và Võ Nguyên Giáp có khung nhân vật hoạt hình 2D lớn trong chế độ **Nói chuyện**. Bốn nhân vật dùng trực tiếp tranh chân dung chi tiết của thư viện, giữ khuôn mặt, tóc/râu, trang phục và bối cảnh riêng. Các điểm điều khiển trong `src/data/characterPortraits.ts` được căn theo từng ảnh gốc; vùng đầu và vai có biên mềm, mí mắt và khẩu hình được đặt riêng cho từng nhân vật. Nhân vật chớp mắt và thở nhẹ khi chờ, gật đầu khi bật mic, suy nghĩ khi đang tra cứu, cử động miệng và cử chỉ nhẹ khi âm thanh thực sự phát. Đây là hoạt hình theo trạng thái phát âm thanh, chưa đồng bộ khẩu hình theo từng âm vị. Tắt đọc, hết âm thanh, bắt đầu dùng mic hoặc tạo cuộc trò chuyện mới sẽ kết thúc trạng thái nói. Các nhân vật còn lại hiển thị chân dung tĩnh trong chế độ nói.
-
-Khi đọc bằng giọng trình duyệt, nhân vật giữ hoạt hình nói qua tất cả các đoạn của câu trả lời; đọc xong đoạn cuối, dừng, tạm dừng hoặc gặp lỗi sẽ khép miệng về bình thường. Khi nghe học sinh nói, nhân vật có cử động miệng nhẹ kèm gật đầu và cử chỉ nhẹ. Miệng khép lại khi học sinh ngừng nói, tắt mic hoặc mic gặp lỗi. Trình duyệt thiếu sự kiện phát hiện giọng nói dùng kết quả nhận dạng tạm thời và tự kết thúc cử động sau khoảng một giây không có kết quả mới.
-
-Mỗi thẻ nhân vật có hai lối vào riêng: **Nhắn tin** mở lịch sử hội thoại, nguồn SGK và ô nhập văn bản; **Nói chuyện** mở sân khấu nhân vật, lời đang nói và nút mic lớn. Trong chế độ nói, nhấn **Nói câu hỏi**, kiểm tra bản nhận dạng rồi nhấn **Gửi câu hỏi**; câu trả lời tự phát khi bật **Tự đọc câu trả lời**. Nút **Chỉnh nội dung** chuyển sang ô nhập văn bản và giữ nguyên bản nhận dạng. Có thể chuyển chế độ trong cùng cửa sổ mà không mất lịch sử hoặc câu hỏi đang soạn; chuyển chế độ dừng mic và giọng đọc. Chế độ nhắn tin không tự phát âm thanh. Nút nghe một câu trả lời chuyển sang chế độ nói; **Xem văn bản và nguồn** quay về lịch sử. Cài đặt giảm chuyển động của hệ điều hành tắt các vòng lặp hoạt hình nhưng vẫn hiển thị trạng thái bằng chữ.
-
-### Lịch sử trò chuyện
-
-Hội thoại với từng nhân vật được lưu và khôi phục khi đóng/mở chat, đổi nhân vật, mở bài học nguồn hoặc tải lại trang. Chế độ **Nhắn tin** và **Nói chuyện** của cùng một nhân vật dùng chung lịch sử.
-
-- **Nơi lưu:** đăng nhập hiện chỉ là demo (không có tài khoản hay database thật) nên lịch sử nằm trong `localStorage` của trình duyệt, khóa `xuyen-su-ky-chat-v1:<chủ sở hữu>:<id nhân vật>`. Chủ sở hữu là định danh ổn định `userId` của phiên (email chuẩn hóa của tài khoản demo) hoặc `guest`; **tên hiển thị không bao giờ được dùng làm định danh**. Phiên đăng nhập cũ chưa có `userId` vẫn chat được nhưng không lưu cho đến khi đăng nhập lại.
-- **Giới hạn:** chỉ lưu trên trình duyệt/thiết bị này, không đồng bộ giữa thiết bị, không được bảo vệ khỏi người khác dùng chung hồ sơ trình duyệt, và đăng xuất không xóa dữ liệu (đăng nhập lại sẽ thấy lại). Hai tab cùng mở một nhân vật ghi đè lẫn nhau theo bản ghi sau cùng. Khi có backend tài khoản thật, thay `src/lib/chatHistory.ts` bằng API có kiểm tra quyền truy cập.
-- **Nội dung lưu:** câu hỏi, câu trả lời, nguồn trích dẫn (không kèm đoạn văn gốc dài) và thời gian hỏi/đáp, tối đa 40 lượt gần nhất mỗi nhân vật. Không lưu audio, API key, câu hỏi chưa được trả lời, lỗi hay trạng thái đang tải. Ngữ cảnh gửi API vẫn là 3 lượt đã trả lời gần nhất.
-- **Độ bền:** dữ liệu hỏng, sai phiên bản (`version` hiện là 1, có bảng `migrations` cho phiên bản sau) hoặc khai báo sai chủ sở hữu/nhân vật bị bỏ qua kèm thông báo. Khi hết dung lượng, các lượt cũ nhất bị bỏ dần; nếu vẫn không lưu được, chat tiếp tục trong bộ nhớ và hiện cảnh báo.
-- **Phản hồi muộn:** mỗi cập nhật gắn với token (chủ sở hữu + nhân vật + lần bắt đầu hội thoại); phản hồi đến sau khi đổi người dùng, nhân vật, đóng chat hoặc bắt đầu cuộc trò chuyện mới bị bỏ qua.
-- **Bắt đầu cuộc trò chuyện mới** chỉ xóa bản ghi của người dùng hiện tại với nhân vật đang mở.
-
-Chat có nút **Nói câu hỏi** để nhập tiếng Việt bằng Web Speech API, **Nghe câu trả lời / Dừng đọc** và tùy chọn **Tự đọc câu trả lời** (bật mặc định). Câu hỏi từ mic được đưa vào ô nhập để kiểm tra trước khi gửi. Trình duyệt cần hỗ trợ SpeechRecognition và được cấp quyền microphone; dùng HTTPS hoặc localhost. Khi chưa hỗ trợ mic, nhập văn bản vẫn hoạt động.
-
-Để dùng ElevenLabs, phần cấu hình sau đã được thêm vào `.env.local`. Điền **secret API key** vào `ELEVENLABS_API_KEY` (không dùng Key ID), rồi khởi động lại Vite/backend:
-
-```dotenv
-SPEECH_PROVIDER=elevenlabs
-ELEVENLABS_API_KEY=<secret API key>
-ELEVENLABS_MODEL=eleven_flash_v2_5
-ELEVENLABS_VOICE_TRAN_HUNG_DAO=JBFqnCBsd6RMkjVDRZzb
-ELEVENLABS_VOICE_NGO_QUYEN=onwK4e9ZLuTAKqWW03F9
-```
-
-Trên Vercel, thêm các biến này vào **Environment Variables → Production** rồi redeploy; `.env.local` chỉ dùng trên máy và không được đưa lên Git. Backend gọi [ElevenLabs Text to Speech](https://elevenlabs.io/docs/api-reference/text-to-speech/convert) bằng header `xi-api-key`, dùng model Flash v2.5 hỗ trợ tiếng Việt và trả MP3 cho cùng luồng hoạt hoạ. Trần Hưng Đạo dùng George, Ngô Quyền dùng Daniel với tốc độ riêng; có thể thay các Voice ID bằng giọng tiếng Việt của tài khoản. `ELEVENLABS_VOICE_ID` và `ELEVENLABS_FEMALE_VOICE_ID` thay giọng nam/nữ mặc định; `ELEVENLABS_VOICE_<ID_NHÂN_VẬT_VIẾT_HOA_VỚI_DẤU_GẠCH_DƯỚI>` thay riêng từng nhân vật. Khi chưa có secret key, giao diện vẫn thử giọng Việt trên trình duyệt. Khi key sai hoặc dịch vụ hết hạn mức, giao diện thông báo lỗi và giữ nội dung văn bản, không tự phát sinh lượt gọi sang nhà cung cấp khác. `SPEECH_DISABLED=1` tắt giọng máy chủ, dùng giọng trình duyệt; Playwright luôn bật biến này để không sử dụng key và hạn mức thật khi kiểm thử.
-
-Để dùng Azure TTS, đặt `SPEECH_PROVIDER=azure`, thêm vào `.env.local`, rồi khởi động lại Vite/backend:
-
-```dotenv
-AZURE_SPEECH_KEY=<key của Azure Speech resource>
-AZURE_SPEECH_REGION=southeastasia
-```
-
-Region phải đúng với resource của bạn. Trên Vercel, thêm hai biến này vào Environment Variables và redeploy. Key chỉ được gửi từ backend đến Azure; không thêm tiền tố `VITE_`. Endpoint `POST /api/characters/:id/speech` nhận `{ "text": "Câu trả lời" }`, trả MP3. Backend tự chọn giọng theo nhân vật, escape văn bản thành SSML và bỏ dấu trích dẫn `[n]` khi đọc; nội dung/nguồn trên màn hình vẫn giữ nguyên. Tích hợp theo [Azure TTS REST API](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/rest-text-to-speech).
-
-Chỉnh cấu hình của 12 nhân vật trong `shared/character-voices.json`: `voice`, `rate` (1 là tốc độ mặc định), `pitch` (1 là cao độ mặc định). Nam dùng `vi-VN-NamMinhNeural`, nữ dùng `vi-VN-HoaiMyNeural`, khác nhau về tốc độ/cao độ. Đây là giọng mô phỏng, không phải bản sao giọng thật của nhân vật lịch sử. Khi âm thanh thực sự phát, chân dung sáng lên; dừng, đóng chat, mở bài học hoặc bắt đầu cuộc trò chuyện mới sẽ hủy phần đọc. Người bật giảm chuyển động nhận hiệu ứng sáng tĩnh.
-
-Khi chưa cấu hình dịch vụ giọng nói, giao diện thử giọng tiếng Việt cài trên trình duyệt/hệ điều hành. Nếu không có giọng tiếng Việt, giao diện báo cách khắc phục; không tự chọn giọng ngôn ngữ khác. Giọng dự phòng phụ thuộc máy và có thể dùng chung một giọng nền cho nhiều nhân vật. Khi dịch vụ đã cấu hình nhưng lỗi/quá hạn mức, giao diện báo lỗi và giữ câu trả lời văn bản.
-
-Giới hạn mặc định: 6.000 ký tự mỗi lần đọc, 12 lượt/phút, 40 lần tạo âm thanh/ngày mỗi khách, 500 lần/ngày toàn hệ thống (ngày Việt Nam). Điều chỉnh bằng `SPEECH_RATE_PER_MINUTE`, `SPEECH_REQUESTS_PER_DAY`, `SPEECH_GLOBAL_REQUESTS_PER_DAY`. Phát lại âm thanh trong cache một giờ của cùng server instance không gọi lại Azure; cache tối đa 32 mục/24 MB. Các request đồng thời chưa có cache vẫn được tính riêng. Có thể dùng cấu hình Upstash ở trên để chia sẻ bộ đếm giữa các instance Vercel. Không có cơ sở dữ liệu âm thanh lâu dài.
-
-Kiểm thử: `npm run test:backend` và `npx playwright test tests/characters.spec.ts tests/character-voice.spec.ts`. Các test giọng nói dùng Azure/audio/microphone giả lập, không gọi dịch vụ trả phí.
-
-### Pipeline chat (`server/rag/`)
-
-Mỗi câu hỏi đi qua các bước rẻ trước, nên phần lớn câu hỏi không tốn token:
-
-1. **Giới hạn lượt** (`limits.mjs`): quá `CHAT_RATE_PER_MINUTE` (mặc định 12) mỗi IP → `429` + `Retry-After`.
-2. **Guardrail đầu vào** (`guardrails.mjs`): xóa ký tự ẩn (zero-width, bidi), chặn prompt injection tiếng Việt/Anh ở câu hỏi và lịch sử chat (`mode: guardrail`, `kind: blocked`).
-3. **Câu mẫu không gọi AI**: chào hỏi, cảm ơn, "bạn là ai / hỏi gì được" (`kind: smalltalk`).
-4. **Truy xuất từ khóa** (`characters.mjs`) như chế độ trích SGK.
-5. **Tra cứu đơn giản**: câu hỏi năm có đoạn trích ngắn chứa năm → trả trích SGK, không gọi AI.
-6. **Cache** câu trả lời AI (6 giờ, 500 câu) cho câu hỏi lặp lại.
-7. **Hạn mức AI**: `AI_ANSWERS_PER_DAY` mỗi IP và `AI_GLOBAL_ANSWERS_PER_DAY` toàn hệ thống; vượt thì trả trích SGK kèm `notice`.
-8. **Moderation** (miễn phí) song song với **embedding** câu hỏi. Chỉ chặn nhóm không phù hợp học sinh (tình dục, tự hại, đe dọa…), không chặn "bạo lực" vì bài sử có chiến tranh.
-9. **Truy xuất lai**: gộp thứ hạng từ khóa và cosine embedding bằng RRF trong phạm vi chunk của nhân vật, lấy tối đa 3 đoạn. Ngưỡng được hiệu chỉnh trên dữ liệu thật: dưới 0,40 coi là lạc đề và không gọi AI.
-10. **Sinh câu trả lời**: câu hỏi và tư liệu được gửi dưới dạng JSON dữ liệu, kèm chỉ dẫn không làm theo lệnh nằm trong dữ liệu.
-11. **Kiểm tra đầu ra**: bắt buộc trích dẫn `[n]` hợp lệ, không có link, mọi số 3–4 chữ số (năm) phải có trong tư liệu; sai thì trả trích SGK.
-
-Chỉ mục embedding nằm ở `data/embeddings/` (`text-embedding-3-small`, 512 chiều, lượng tử int8, khoảng 1 MB). Khi dataset thay đổi, chạy lại `npm run build:embeddings`; nếu chỉ mục không khớp phiên bản dataset, chat tự dùng truy xuất từ khóa. Bộ đếm giới hạn mặc định nằm trong bộ nhớ từng instance; đặt `UPSTASH_REDIS_REST_URL` và `UPSTASH_REDIS_REST_TOKEN` để dùng chung cho mọi instance Vercel. `AI_DISABLED=1` tắt AI ngay mà không cần xóa key.
-
-Để local đọc trực tiếp thư mục đã cung cấp, sao chép `.env.example` thành `.env.local`, thêm:
-
-```dotenv
-DATASET_PATH=D:/FALL2026/EXE/dataset/dataset
-```
-
-Khởi động lại server sau khi cập nhật dữ liệu. Trên Vercel dùng snapshot đi kèm Function, vì đường dẫn ổ D: chỉ tồn tại trên máy local. Đồng bộ snapshot mới trước khi commit/push:
-
-```powershell
-npm run import:dataset -- "D:\FALL2026\EXE\dataset\dataset"
-npm run check:dataset
-npm run test:backend
-```
-
-| Endpoint GET | Chức năng |
-|---|---|
-| `/api/health` | Trạng thái và thống kê dataset |
-| `/api/metadata` | Phiên bản, lớp, chương, số bài và bài gợi ý |
-| `/api/lessons?grade=7&q=bach%20dang&page=1&limit=6` | Tìm bài không dấu, lọc lớp, phân trang |
-| `/api/lessons?chapter=...&ids=LS7_B01,LS12_B01` | Lọc chương và bộ bài đã lưu |
-| `/api/lessons/LS7_B01` | Nội dung các mục và nguồn bài |
-| `/api/lessons/LS7_B01/chunks?type=body` | Chunk theo bài và loại nội dung |
-| `/api/search?q=bach%20dang&grade=7` | Đoạn tư liệu phù hợp, kèm nguồn và trang chính xác |
-| `/api/chunks/LS7_B01_C001` | Tra cứu một chunk theo ID |
-
-Phân trang hỗ trợ `page >= 1`, `limit` từ 1–50. `grade` nhận 6–12; `q` tối đa 200 ký tự. `ids`/`excludeIds` lọc theo danh sách ID bài. Không có đáp án trắc nghiệm trong dataset, vì vậy bài SGK dùng đánh dấu đã đọc, tự đánh giá và ghi chú; không tự chấm hay tạo đáp án giả.
-
-Tra cứu chunk dùng từ khóa chuẩn hóa tiếng Việt, yêu cầu khớp mọi từ, ưu tiên khớp cụm từ và tên mục. Chỉ tìm `body`, `source`, `did_you_know`, `caption`; không coi câu hỏi hay bài tập là câu trả lời. Truy xuất hiện là tìm kiếm văn bản, chưa dùng vector search; chat nhân vật có bước RAG bằng OpenAI khi đã cấu hình key.
-
-Giữ nguyên nội dung, metadata và README của dataset. Người cung cấp đã xác nhận có quyền công bố trong phiên làm việc ngày 03/10/2026. Trích dẫn gồm sách, bộ sách, NXB và **trang trong file PDF**; PDF gốc không nằm trong dataset nên không có link tải PDF. Ghi chú/tiến độ vẫn lưu trên trình duyệt, chưa có tài khoản hay cơ sở dữ liệu người dùng trên server.
-
-Backend triển khai qua [Vercel Node.js Functions](https://vercel.com/docs/functions/runtimes/node-js), validation dùng [Ajv draft 2020-12](https://ajv.js.org/json-schema.html#draft-2020-12).
-
-
-## Cấu trúc
-
-```text
-src/
-  components/  Các section và thành phần giao diện
-  data/        Dữ liệu mẫu cho lớp học, nhân vật, timeline, thử thách, bảng xếp hạng
-  hooks/       Trạng thái demo và lưu trữ trên trình duyệt
-  pages/       HomePage (landing công khai ở `/`, trang học ở `/home` cần đăng nhập hoặc chế độ học thử), LoginPage (`/dang-nhap`)
-  types/       Các kiểu dữ liệu chung
-  App.tsx      React Router
-  main.tsx     Điểm vào ứng dụng
-  index.css    Tailwind và style giao diện
-  demo.css     Style cho đăng nhập, bài học và thử thách
-  dashboard.css Giao diện dashboard ở `/home`
-  theme.css    Bộ nhận diện chung cho landing và dashboard: màu, nút, card, hero landing
-public/
-  images/characters/  Minh họa nhân vật (WebP)
-```
-
-## Tương tác demo
-
-- Menu điều hướng cuộn đến các section; menu mobile có nút mở/đóng.
-- Chọn một trong bốn lớp sẽ đổi bài học tương ứng và cuộn đến hành trình học.
-- Đăng nhập bằng `minh@xuyensuki.vn` / `demo123`, hoặc dùng nút **Điền tài khoản mẫu**. Đây chỉ là kiểm tra dữ liệu trên frontend.
-- Câu hỏi kiểm tra bài học yêu cầu đăng nhập; phần đọc, ghi chú và thẻ ôn tập dùng ngay không cần tài khoản; hoạt động đang chọn tự mở sau đăng nhập. Bốn minigame chơi ngay không cần tài khoản, hoàn thành nhận XP một lần mỗi trò.
-- Tiến độ, XP, huy hiệu và điểm của Minh trên bảng xếp hạng cập nhật ngay. XP chỉ nhận một lần cho mỗi hoạt động, kể cả khi chơi lại.
-- Trạng thái demo được lưu trong `localStorage`; có thể đăng xuất, đăng nhập lại hoặc dùng **Đặt lại dữ liệu demo** trong hồ sơ.
-- Nhấn **Bắt đầu trò chuyện** để hỏi nhân vật, chọn câu hỏi gợi ý và mở bài học từ nguồn trả lời. Backend gọi OpenAI khi có key và tìm được đoạn SGK liên quan.
-- Streak và lịch học được tính từ hoạt động thực trên trình duyệt. Hồ sơ Minh, bảng xếp hạng, thống kê tổng và nội dung mẫu vẫn phục vụ bản demo.
-
-## Hướng mở rộng
-
-Phase 2 có thể bổ sung tài khoản thật, đồng bộ tiến độ qua backend, bài học dài hơn, thêm màn chơi, tìm kiếm vector và quy trình đánh giá câu trả lời AI.
-
-## Trò chuyện nhân vật trong SGK
-
-Danh mục có Trần Hưng Đạo, Lý Thường Kiệt, Quang Trung, Hai Bà Trưng, Ngô Quyền, Lý Công Uẩn, Lê Lợi, Nguyễn Trãi, Hồ Chí Minh, Võ Nguyên Giáp, Trần Nhân Tông và Bà Triệu. Mỗi hồ sơ chỉ hiển thị khi dataset có tư liệu nhắc đến tên/bí danh. Có tìm kiếm không dấu, tên gọi khác, bộ lọc thời kỳ và lớp, cùng số bài liên quan.
-
-| Endpoint | Chức năng |
-|---|---|
-| `GET /api/characters?grade=7&q=ly%20thai%20to` | Danh mục được đối chiếu từ dataset |
-| `GET /api/characters/ngo-quyen` | Hồ sơ, chủ đề và bài học liên quan |
-| `POST /api/characters/ngo-quyen/chat` | Body JSON `{ "message": "Bạch Đằng năm nào?", "history": [] }`; trả lời, đoạn nguồn và bài học |
-
-Đây là **trò chuyện mô phỏng kết hợp tra cứu văn bản và RAG tùy cấu hình**; chưa dùng giọng nói. Backend chọn đoạn SGK theo nhân vật/chủ đề/câu hỏi, dùng ngữ cảnh câu hỏi trước cho câu tiếp nối ngắn. Các chủ đề dễ nhầm niên đại có đoạn nguồn đã đối chiếu; nếu snapshot thay đổi, đoạn này phải còn khớp nguyên văn mới được dùng. Khi có OpenAI key, model viết lời giải thích ngắn từ đoạn đã chọn và dẫn [1]. Nếu thiếu key hoặc API lỗi, backend trả trích đoạn nguyên văn. Câu trả lời có nút mở bài và nguồn sách/bộ sách/NXB/trang PDF. Dataset OCR có thể giữ lỗi chính tả từ bản gốc. Ngoài phạm vi hoặc chưa đủ nguồn thì trả thông báo và câu hỏi gợi ý.
-
-API giới hạn câu hỏi 1.000 ký tự, tối đa 8 lượt ngữ cảnh (2.000 ký tự/lượt), payload 16 KB; phản hồi chat không được cache. Lệnh OpenAI chỉ gửi câu hỏi hiện tại, tối đa 500 ký tự của câu hỏi trước và một đoạn nguồn; đặt `store: false` và giới hạn 500 output tokens. Backend không ghi lịch sử hay sửa dataset. Phía backend không lưu lịch sử; lịch sử do trình duyệt giữ (xem mục *Lịch sử trò chuyện* bên dưới). Có nút bắt đầu cuộc trò chuyện mới, trạng thái đang tìm, gửi lại khi lỗi và hủy yêu cầu khi đóng.
-
-Hồ sơ: `shared/characters.json`; chọn nguồn: `server/characters.mjs` và `server/character-evidence.mjs`; tạo câu trả lời AI: `server/openai-rag.mjs`; UI: `CharacterSection`, `CharacterChatModal`. Tám ảnh bổ sung được tạo bằng imagegen tích hợp, tối ưu WebP; [prompt và đường dẫn ảnh](docs/character-image-prompts.md). Kiểm thử cục bộ kiểm tra niên đại, nguồn nguyên văn, câu nối tiếp, ngoài phạm vi, fallback khi OpenAI lỗi và giao diện; chưa chạy đánh giá bằng LLM hoặc Langfuse cloud.
-
-
-## Phòng minigame
-
-- **Xếp dòng sử**: sắp xếp 5 sự kiện bằng nút lên/xuống; có gợi ý năm, phản hồi vị trí đúng (+60 XP).
-- **Lật thẻ ký ức**: 8 thẻ, ghép 4 cặp nhân vật và dấu ấn; giải thích từng cặp (+60 XP).
-- **Thám tử nhân vật**: giải 3 hồ sơ bằng manh mối, loại trừ đáp án, điểm suy luận (+80 XP).
-- **Mật lệnh Bạch Đằng**: 3 chặng quyết định về địa hình và thủy triều; giải thích từ tài liệu Bảo tàng Lịch sử Quốc gia (+80 XP).
-
-Không giới hạn thời gian hoặc lượt thử. Sao phản ánh hiệu quả của lượt chơi; gợi ý và sai đáp án không làm mất phần thưởng hoàn thành. Chơi lại không cộng trùng XP. Dữ liệu lưu cục bộ cùng phiên demo; không có đồng bộ tài khoản hoặc chống sửa điểm từ phía máy chủ. Đóng giữa chừng sẽ bắt đầu ván mới, không mất XP đã nhận.
-
-Dữ liệu và luật chơi: `src/data/minigames.ts`, `src/components/MiniGameModal.tsx`; giao diện: `src/minigames.css`.
-
-### Kiểm thử minigame
-
-```bash
-npm ci
-npx playwright install chromium
-npm run test:games
-```
-
-Máy Windows có Edge có thể dùng PowerShell: `$env:PLAYWRIGHT_CHANNEL='msedge'; npm run test:games`.
-
-Bộ kiểm thử bao gồm bốn game, đáp án sai, gợi ý, hoàn thành, chống cộng XP trùng, lưu sau reload, mobile, focus bàn phím và Escape. Chạy `npm run build` trước deploy.
-
-
-## Thư viện và sổ tay học tập
-
-- 12 bài đọc gợi ý cho lớp 6–9, mỗi bài có một thẻ ôn tập và câu hỏi nhận XP. Nội dung mock ngắn gọn, nhãn lớp không cam kết khớp một bộ sách giáo khoa cụ thể.
-- Tìm kiếm tiếng Việt có/không dấu trong tiêu đề, giai đoạn và nội dung; lọc lớp, đã lưu, chưa đọc, cần ôn hoặc có ghi chú; tải thêm bài.
-- Màn đọc hỗ trợ chữ lớn, đánh dấu đã đọc, lưu yêu thích, tự đánh giá thẻ ôn tập và ghi chú tối đa 2.000 ký tự mỗi bài.
-- Mục tiêu 1/3/5 hoạt động mỗi ngày, lịch 7 ngày, gợi ý bài theo lớp và lịch sử gần đây. Ngày tính theo múi giờ Việt Nam. Mỗi tổ hợp nội dung/loại hoạt động tính một lượt mỗi ngày. Chơi lại và ôn lại có thể duy trì chuỗi ngày nhưng không cộng thêm XP đã nhận.
-- Sổ tay lưu tại `xuyen-su-ky-journal-v1`, độc lập với khóa phiên cũ để giữ nguyên XP. Nhật ký giữ 1.000 hoạt động gần nhất. Không suy diễn ngày học cho thành tích từ trước khi nhật ký được bổ sung.
-- Có thông báo nếu trình duyệt chặn hoặc hết dung lượng lưu trữ. Đặt lại dữ liệu demo cần xác nhận và xóa cả phiên học, sổ tay, yêu thích, ghi chú.
-
-`npm run test:games` chạy cả kiểm thử minigame lẫn thư viện: lưu dữ liệu, bộ lọc, ghi chú, XP, mốc nửa đêm theo giờ Việt Nam, bàn phím, mobile và lỗi lưu trữ.
-
-## Chọn lớp và tài khoản demo
-
-Đăng nhập hoặc đăng ký lần đầu mở màn chọn lớp 6–12. Dashboard đề xuất ba bài SGK theo lớp đã chọn; đổi lớp cập nhật đề xuất và bộ lọc thư viện. Lựa chọn được lưu khi tải lại trang; phiên đăng nhập cũ giữ lớp và tiến độ. Đặt lại tiến độ giữ lựa chọn lớp.
-
-Đăng ký tạo một tài khoản demo trên trình duyệt hiện tại, lưu email và bản băm mật khẩu có salt. Đây chưa phải xác thực máy chủ hoặc đồng bộ đa thiết bị; không dùng mật khẩu thật. Tài khoản mẫu vẫn hoạt động.
-
-Minigame lưu kỷ lục 1–3 sao cho mỗi trò. Chơi lại chỉ cập nhật kỷ lục nếu tốt hơn và không cộng trùng XP.
-
-Kiểm thử luồng mới: `npx playwright test tests/auth.spec.ts tests/onboarding.spec.ts tests/minigames.spec.ts tests/dashboard.spec.ts tests/dataset.spec.ts tests/learning.spec.ts`.
-
-## Vai trò Giáo viên và Quản trị (demo)
-
-Ngoài học sinh, app có hai khu cho giáo viên và quản trị viên. Đăng nhập xong mỗi vai trò vào khu của mình; khu không đúng vai trò chuyển về trang của tài khoản.
-
-| Vai trò | Tài khoản mẫu | Mật khẩu | Khu |
-|---|---|---|---|
-| Học sinh | `minh@xuyensuki.vn` | `demo123` | `/home` |
-| Giáo viên | `lan.gv@xuyensuki.vn` | `demo123` | `/giao-vien` |
-| Quản trị viên | `admin@xuyensuki.vn` | `demo123` | `/admin` |
-
-- **Giáo viên** (`src/pages/TeacherPage.tsx`): tạo lớp theo khối, có mã tham gia 6 ký tự; xem học sinh với số bài giao đã xong, bài đã đọc, XP, quiz, hoạt động gần nhất; giao bài SGK (lấy danh sách bài từ API theo khối của lớp) kèm hạn; huỷ bài giao, xoá học sinh khỏi lớp, lưu trữ lớp, xuất CSV (UTF-8, chống công thức Excel).
-- **Quản trị viên** (`src/pages/AdminPage.tsx`): duyệt hoặc từ chối giáo viên mới đăng ký, tìm và lọc người dùng, đổi vai trò, khoá/mở khoá (không tự khoá hay tự đổi vai trò, luôn còn ít nhất một quản trị viên), xem mọi lớp, phiên bản dataset và số liệu đọc từ API, nhật ký thao tác, khôi phục dữ liệu demo. Quản trị viên mở được cả khu giáo viên.
-- **Học sinh**: khung **Lớp của em** trên dashboard để nhập mã lớp và xem bài được giao (đã đọc, còn hạn, quá hạn); bấm để mở bài. Bài đã đọc, XP và số quiz được đồng bộ vào danh bạ lớp để giáo viên theo dõi.
-- **Đăng ký giáo viên**: ở tab Đăng ký chọn *Giáo viên*, nhập họ tên và trường; tài khoản ở trạng thái chờ duyệt và chưa đăng nhập được tới khi quản trị viên duyệt. Tài khoản bị khoá cũng bị đăng xuất ở lần tải trang kế tiếp.
-
-Dữ liệu lớp, bài giao, vai trò và nhật ký nằm trong `localStorage` (`xuyen-su-ky-school-v1`), mọi thao tác đi qua các hàm thuần trong `src/lib/school.ts`. Vì là demo trên trình duyệt, quyền chỉ được kiểm tra ở giao diện; bản chính thức kiểm tra trên máy chủ theo [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Kiểm thử: `npx playwright test tests/roles.spec.ts`.
-
-## Trải nghiệm học cá nhân
-
-Dashboard có kế hoạch học hôm nay, mục tiêu 1/3/5 hoạt động, bài đang đọc dở theo lớp và lối vào nhanh bài cần đọc lại, đã lưu hoặc có ghi chú. Đề xuất ưu tiên bài SGK chưa đọc; khi đã đọc hết lớp, đề xuất chuyển sang ôn lại. Mở bài không tự tăng XP hoặc chuỗi ngày học.
-
-Màn đọc SGK lưu mục đang xem, khôi phục khi mở lại và ghi nhớ tùy chọn chữ lớn/chế độ tập trung trên trình duyệt. Thanh chuyển mục và nút đóng luôn có thể dùng khi cuộn; mục lục thu gọn mặc định trên điện thoại. Có thể tải sổ tay thành tệp TXT để giữ ghi chú.
-
-Điện thoại có thanh điều hướng dưới cùng; desktop hỗ trợ Ctrl/Cmd + K để tìm kiếm. Tìm kiếm hủy yêu cầu cũ để tránh hiển thị kết quả của từ khóa trước. Thử thách ưu tiên trò chưa hoàn thành, sau đó ưu tiên kỷ lục sao thấp hơn.
-
-Kiểm thử: npx playwright test tests/study-experience.spec.ts và npm run test:games.
-
-## Hành trình game hóa
-
-Mục **Hành trình** ở `/home` chạy các hành trình do `course_builder` (repo pipeline OCR) biên soạn: hành trình = 1 chương, chặng = 1 bài, nhiệm vụ = 1 mục tiêu học. Lớp 6 có 5 hành trình (`data/journeys/lop6_chuong1.json` … `lop6_chuong5.json`), học sinh chọn chương ở thanh "Chọn chương" (app nhớ chương đã chọn theo lớp):
-
-| Hành trình | Chặng (bài) | Nhiệm vụ |
-|---|---|---|
-| Chương 1 · Thám tử thời gian | Bài 1–3 | 7 |
-| Chương 2 · Buổi bình minh của loài người | Bài 4–6 | 8 |
-| Chương 3 · Những nền văn minh cổ đại | Bài 7–10 | 14 |
-| Chương 4 · Đông Nam Á: ngã tư đường của thế giới | Bài 11–13 | 7 |
-| Chương 5 · Hành trình giữ nước | Bài 14, 16, 18 (Bài 15, 17, 19, 20 đang biên soạn) | 13 |
-
-Các bài chưa biên soạn hiện trên bản đồ với nhãn "đang được biên soạn". Học sinh lớp khác thấy ghi chú và vẫn đi thử được. Tên Chương 3 trong dataset còn lỗi OCR ("XÃ HỘI CỔ ĐẠI KẾT"); hành trình dùng `chapter_title` để hiển thị đúng, nên sửa thêm ở `corrections/` của pipeline.
-
-- Nhiệm vụ 5 bước: nhận nhiệm vụ → kiến thức (video nếu có, rồi thẻ kiến thức kèm trang SGK) → khám phá (tư liệu, dòng thời gian, phỏng vấn nhân vật mở thẳng phòng trò chuyện nếu nhân vật đã có) → thử thách → kết quả.
-- Sai không mất lượt: gợi ý 3 bậc mở dần, sai lần 2 đổi sang câu tương đương cùng mục tiêu. XP, mốc ôn tập (1, 3, 7, 14 ngày), điều kiện nắm vững và tỉ lệ qua chặng (80%) lấy từ trường `rules` của file hành trình.
-- Mảnh Sử Ký và huy hiệu chỉ trao khi **nắm vững** (đúng ngay lần đầu ở 2 câu khác nhau vào 2 ngày khác nhau); XP thưởng công sức và được cộng vào tổng XP ở dashboard.
-- Video nhiệm vụ: "Nhà nước Văn Lang ra đời" (Chương 5, khoảng 33 giây) và cả 8 nhiệm vụ của Chương 2 (Bài 4–6, mỗi video 13–14 cảnh, dài 1 phút 54 giây đến 2 phút): Từ Vượn người đến Người tinh khôn, Dấu tích người xưa ở Đông Nam Á và Việt Nam, Bầy người và công xã thị tộc, Lao động làm nên con người, Người nguyên thuỷ trên đất Việt Nam, Phát hiện ra kim loại, Xã hội nguyên thuỷ tan rã (nền tiền sử `style: tien_su`) và Thời đồ đồng trên đất Việt (nền trống đồng). Mẫu cảnh tiền sử `tien_hoa`, `moc_thoi_gian`, `phat_hien` cùng biểu tượng, hiện vật (rìu mài, gốm, vỏ ốc, đàn đá, mũi tên và rìu lưỡi xéo bằng đồng...) vẽ trong `videoPrehistory.tsx`. Lời từng cảnh bám câu trích SGK của cảnh đó; cảnh nhắc lại bài trước (ví dụ Bài 5 nhắc Bài 4) trích đúng bài được nhắc. Video là animation vẽ bằng SVG trong `JourneyVideo.tsx`: mỗi cảnh dùng một mẫu có sẵn (`tieu_de`, `bieu_tuong`, `song_nuoc` và ba mẫu tiền sử), phụ đề = lời thuyết minh kèm trang SGK, tua và chọn cảnh được, thuyết minh bằng giọng tiếng Việt của trình duyệt nếu máy có. Khung hình là hàm thuần theo thời gian nên có thể xuất MP4 sau này (Remotion). Chữ trên hình và lời thuyết minh của từng cảnh được `course_builder` kiểm theo câu trích của chính cảnh đó.
-- Thuyết minh video được thu sẵn bằng ElevenLabs: `npm run build:narration` (cần `ELEVENLABS_API_KEY`, giọng ở `ELEVENLABS_NARRATOR_VOICE_ID` trong `.env.local`) ghi MP3 vào `public/audio/journeys/<hành trình>/` và dấu băm từng câu vào `data/journeys/narration/`. Chỉ cảnh mới hoặc đổi lời mới bị thu lại; server chỉ gắn âm thanh khi câu vẫn khớp, cảnh lệch tự quay về giọng trình duyệt. Học sinh nghe file tĩnh nên không tốn lượt gọi dịch vụ. Gói Free chỉ gọi được giọng premade (hiện dùng George). Khi có giọng thu sẵn, mỗi cảnh dài bằng câu đọc + 0,6 giây (độ dài đo từ file MP3, `scripts/mp3-duration.mjs`), nên giữa các câu chỉ có quãng ngắt ngắn. Cảnh có thể có người Việt cổ minh hoạ (`cast`, vẽ trong `videoPeople.tsx`): tụ họp, làm ruộng, đào mương, cầm vũ khí, chèo thuyền, cấy lúa, đánh trống; hoặc người nguyên thuỷ (vẽ trong `videoPrehistory.tsx`): ghè đá, đi bộ, săn bắt, hái lượm, làm gốm, luyện kim.
-- Chặng mở khi qua chặng trước; chặng đã có tiến độ thì không bị khoá lại khi biên soạn thêm bài phía trước.
-- Tiến độ lưu `localStorage` khóa `xuyen-su-ky-journey-v1`. "Công cụ học thử" có nút sang ngày hôm sau, mở khóa mọi chặng (quyền giáo viên) và xóa tiến độ hành trình.
-
-API: `GET /api/journeys?grade=6` (danh sách), `GET /api/journeys/<id>` (nội dung, chỉ kèm `chunk_id` và trang, không gửi câu trích SGK). Khi server đọc file, mọi câu trích phải có nguyên văn trong chunk được dẫn của đúng lớp và đúng trang; sai một chỗ thì cả hành trình không được phục vụ. `npm run check:dataset` kiểm tra cả hành trình.
-
-Cập nhật sau khi biên soạn thêm: chạy `python -m course_builder.build` ở repo pipeline, rồi `npm run import:journey -- <đường dẫn>/course/<id>.json`. Kiểm thử: `node --test tests/journey.test.mjs` và `npx playwright test tests/journey.spec.ts`.
+Văn bản SGK trong `data/history` thuộc bản quyền **NXB Giáo dục Việt Nam**, chỉ dùng cho mục đích học tập và nghiên cứu của nhóm, không dùng thương mại khi chưa được phép. Người cung cấp dataset đã xác nhận quyền công bố ngày 03/10/2026; PDF gốc không nằm trong repo nên trang trích dẫn là trang trong file PDF, không kèm link tải. Khi trả lời, ứng dụng luôn trích dẫn sách, bộ sách, NXB và trang. Dữ liệu trong `data/enrichment` do nhóm tự biên soạn. Minh hoạ trong `public/images/dashboard` và một phần ảnh nhân vật là tranh do AI tạo theo trí tưởng tượng, không phải tư liệu lịch sử; xem [docs/character-image-prompts.md](docs/character-image-prompts.md).
