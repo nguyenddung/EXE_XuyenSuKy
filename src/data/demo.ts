@@ -15,11 +15,11 @@ export interface DemoActivity {
 }
 
 export const demoAccount = {
-  id: 'minh',
-  name: 'Minh',
-  email: 'minh@xuyensuki.vn',
+  id: 'dung',
+  name: 'Dũng',
+  email: 'dung@xuyensuki.vn',
   password: 'demo123',
-  avatar: 'M',
+  avatar: 'D',
   baseXp: 750,
   leaderboardXp: 2350,
   streak: 7,

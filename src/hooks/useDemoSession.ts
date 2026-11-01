@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { verifyLocal } from '../lib/localAccount'
 import { demoAccount } from '../data/demo'
-import { accessProblem, demoStaff, ensureStudent, findUserByEmail, normalizeEmail, readSchool, writeSchool, type Role } from '../lib/school'
+import { accessProblem, demoStaff, ensureStudent, findUserByEmail, normalizeEmail, readSchool, roleLabels, writeSchool, type Role } from '../lib/school'
 
 export interface DemoSession {
   name?: string
@@ -103,7 +103,8 @@ export function useDemoSession() {
   }
 
   /** Returns true when signed in, otherwise the message to show. */
-  async function login(email: string, password: string, remember = false): Promise<true | string> {
+  /** `role` is the role chosen on the sign-in form; when given, the account must have that role. */
+  async function login(email: string, password: string, remember = false, role?: Role): Promise<true | string> {
     const normalized = normalizeEmail(email)
     const builtIn = (normalized === demoAccount.email && password === demoAccount.password) || demoStaff.some((account) => account.email === normalized && account.password === password)
     if (!builtIn && !await verifyLocal(email, password)) return 'Email hoặc mật khẩu chưa đúng.'
@@ -111,6 +112,8 @@ export function useDemoSession() {
     const member = findUserByEmail(school, normalized)
     const problem = accessProblem(member)
     if (problem) return problem
+    const actual = member?.role ?? 'student'
+    if (role && role !== actual) return `Tài khoản này là tài khoản ${roleLabels[actual].toLowerCase()}. Hãy chọn vai trò "${roleLabels[actual]}" để đăng nhập.`
     const name = member?.name ?? (normalized === demoAccount.email ? demoAccount.name : email.trim().split('@')[0])
     if (!member) { school = ensureStudent(school, normalized, name); writeSchool(school) }
     const expiresAt = remember ? Date.now() + rememberDays * 86_400_000 : undefined

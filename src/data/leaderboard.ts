@@ -3,12 +3,12 @@ import type { DemoSession } from '../hooks/useDemoSession'
 import { demoAccount } from './demo'
 
 export const leaderboard: LeaderboardEntry[] = [
-  { name: 'Minh', xp: 2350, avatar: 'M' },
+  { name: demoAccount.name, xp: demoAccount.leaderboardXp, avatar: demoAccount.avatar },
   { name: 'An', xp: 2180, avatar: 'A' },
   { name: 'Linh', xp: 1950, avatar: 'L' },
 ]
 
-/** Ranks with the viewer's own row: the demo member keeps Minh's history, a guest only shows the XP earned this visit. */
+/** Ranks with the viewer's own row: the demo member keeps the sample account's history, a guest only shows the XP earned this visit. */
 export function rankingsFor(session: DemoSession): (LeaderboardEntry & { isMe: boolean })[] {
   return leaderboard
     .map((entry) => entry.name !== demoAccount.name ? { ...entry, isMe: false }

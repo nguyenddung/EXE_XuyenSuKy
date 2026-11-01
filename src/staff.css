@@ -128,17 +128,15 @@
 .student-join small.is-error { color: #b4442f; font-size: 12px; }
 .student-join small.is-ok { color: #1f7a4d; font-size: 12px; font-weight: 700; }
 
-/* Sign-in: role choice when registering and quick-fill buttons for the sample staff accounts. */
+/* Sign-in and registration: role choice. */
 .login-form .login-role { display: flex; gap: 8px; margin: 6px 0 2px; padding: 0; border: 0; }
 .login-form .login-role legend { margin-bottom: 6px; color: var(--sky-ink, #101f40); font-size: 13px; font-weight: 700; }
 .login-form .login-role label { flex: 1; cursor: pointer; }
 .login-form .login-role input { position: absolute; opacity: 0; pointer-events: none; }
-.login-form .login-role span { display: block; padding: 9px 12px; border: 1.5px solid #d9e3ef; border-radius: 10px; text-align: center; font-size: 13px; font-weight: 700; color: #33496c; }
+.login-form .login-role span { display: block; padding: 9px 8px; white-space: nowrap; border: 1.5px solid #d9e3ef; border-radius: 10px; text-align: center; font-size: 13px; font-weight: 700; color: #33496c; }
 .login-form .login-role input:checked + span { border-color: #2b78c5; background: #eef6ff; color: #1264bd; }
 .login-form .login-role input:focus-visible + span { outline: 3px solid #5a9de1; outline-offset: 2px; }
 .form-info { padding: 9px 11px; border-radius: 7px; background: #e9f7ef; color: #1f6b45; font-size: 12px; }
-.demo-staff { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; grid-column: 1 / -1; margin-top: 4px; }
-.demo-staff > span { color: #87978d; font-size: 12px; font-weight: 700; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 

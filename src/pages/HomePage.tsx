@@ -12,7 +12,7 @@ import { ImageCredits } from '../components/ImageCredits'
 import type { Character, CharacterInteractionMode } from '../types'
 import type { DemoActivity } from '../data/demo'
 import { hasAppAccess, isLearner, storageOwner, useDemoSession } from '../hooks/useDemoSession'
-import { findUserByEmail, readSchool, syncProgress, writeSchool } from '../lib/school'
+import { findUserByEmail, readSchool, syncProgress, writeSchool, type Role } from '../lib/school'
 import { Navbar } from '../components/Navbar'
 import { Hero, LandingCta } from '../components/Hero'
 import { ClassSelection } from '../components/ClassSelection'
@@ -97,8 +97,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     else { setPendingCharacter(null); setPendingActivity(activity); setLoginOpen(true) }
   }
 
-  async function handleLogin(email: string, password: string, remember: boolean) {
-    const result = await login(email, password, remember)
+  async function handleLogin(email: string, password: string, remember: boolean, role: Role) {
+    const result = await login(email, password, remember, role)
     if (result !== true) return result
     setLoginOpen(false)
     // Teachers and admins start in their own area; students stay where they signed in.

@@ -76,8 +76,8 @@ Tài khoản mẫu (mật khẩu đều là `demo123`; trang đăng nhập có n
 
 | Vai trò | Email | Trang |
 |---|---|---|
-| Học sinh | `minh@xuyensuki.vn` | `/home` |
-| Giáo viên | `lan.gv@xuyensuki.vn` | `/giao-vien` |
+| Học sinh | `dung@xuyensuki.vn` | `/home` |
+| Giáo viên | `dung.gv@xuyensuki.vn` | `/giao-vien` |
 | Quản trị viên | `admin@xuyensuki.vn` | `/admin` |
 
 Chạy bản production ở máy:
@@ -259,7 +259,7 @@ gh secret set VERCEL_DEPLOY_HOOK -R nguyenddung/EXE_XuyenSuKy
 ## Giới hạn hiện tại và lộ trình
 
 - Tài khoản, vai trò, lớp học, tiến độ và lịch sử chat chỉ lưu trên trình duyệt; phân quyền chỉ ở giao diện.
-- Bảng xếp hạng, hồ sơ Minh, một số bài học thử và thống kê tổng là nội dung minh hoạ.
+- Bảng xếp hạng, hồ sơ mẫu của Dũng, một số bài học thử và thống kê tổng là nội dung minh hoạ.
 - Hành trình mới có lớp 6; video nhiệm vụ mới có Chương 2 và một nhiệm vụ của Chương 5.
 - Hoạt hình nói chưa đồng bộ khẩu hình theo âm vị.
 

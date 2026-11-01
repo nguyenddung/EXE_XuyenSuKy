@@ -24,13 +24,14 @@ export interface StudentProgress { read: string[]; xp: number; quizzes: number; 
 export interface AuditEntry { id: string; at: string; actorId: string; action: string; detail: string }
 export interface SchoolStore { version: 1; users: SchoolUser[]; classes: SchoolClass[]; assignments: Assignment[]; progress: Record<string, StudentProgress>; audit: AuditEntry[] }
 
-export const schoolKey = 'xuyen-su-ky-school-v1'
+// v2: the sample student and teacher are Dũng; a new key re-seeds browsers that kept the older sample accounts.
+export const schoolKey = 'xuyen-su-ky-school-v2'
 export const roleLabels: Record<Role, string> = { student: 'Học sinh', teacher: 'Giáo viên', admin: 'Quản trị viên' }
 export const statusLabels: Record<AccountStatus, string> = { active: 'Đang hoạt động', pending: 'Chờ duyệt', locked: 'Đã khoá' }
 
 /** Built-in demo accounts. The student is the existing demo account; the password is the same for all three. */
 export const demoStaff = [
-  { role: 'teacher' as const, email: 'lan.gv@xuyensuki.vn', password: 'demo123', label: 'Giáo viên' },
+  { role: 'teacher' as const, email: 'dung.gv@xuyensuki.vn', password: 'demo123', label: 'Giáo viên' },
   { role: 'admin' as const, email: 'admin@xuyensuki.vn', password: 'demo123', label: 'Admin' },
 ]
 
@@ -58,16 +59,16 @@ export function seedSchool(now = Date.now()): SchoolStore {
   const created = iso(-60, now)
   const users: SchoolUser[] = [
     { id: 'u-admin', email: 'admin@xuyensuki.vn', name: 'Quản trị viên', role: 'admin', status: 'active', createdAt: created },
-    { id: 'u-lan', email: 'lan.gv@xuyensuki.vn', name: 'Cô Nguyễn Thị Lan', role: 'teacher', status: 'active', school: 'THCS Nguyễn Du', createdAt: created },
+    { id: 'u-thay-dung', email: 'dung.gv@xuyensuki.vn', name: 'Thầy Dũng', role: 'teacher', status: 'active', school: 'THCS Nguyễn Du', createdAt: created },
     { id: 'u-hung', email: 'hung.gv@xuyensuki.vn', name: 'Thầy Trần Văn Hùng', role: 'teacher', status: 'active', school: 'THCS Lê Lợi', createdAt: created },
     { id: 'u-nam', email: 'nam.gv@xuyensuki.vn', name: 'Thầy Lê Hoài Nam', role: 'teacher', status: 'pending', school: 'THCS Chu Văn An', createdAt: iso(-1, now) },
-    { id: 'u-minh', email: 'minh@xuyensuki.vn', name: 'Minh', role: 'student', status: 'active', grade: 7, createdAt: created },
+    { id: 'u-dung-demo', email: 'dung@xuyensuki.vn', name: 'Dũng', role: 'student', status: 'active', grade: 7, createdAt: created },
     ...sampleStudents.map(([id, name, grade]) => ({ id: `u-${id}`, email: `${id}.hs@xuyensuki.vn`, name, role: 'student' as const, status: 'active' as const, grade, createdAt: created })),
   ]
   const progress = Object.fromEntries(sampleStudents.map(([id, , , read, xp, quizzes], index) => [`u-${id}`, { read, xp, quizzes, lastActive: iso(-(index % 5), now) }]))
   const classes: SchoolClass[] = [
-    { id: 'c-7a1', name: '7A1', grade: 7, teacherId: 'u-lan', joinCode: 'LAN7A1', schoolYear: '2026–2027', studentIds: ['u-an', 'u-binh', 'u-chi', 'u-dung', 'u-giang', 'u-ha', 'u-khoa', 'u-linh'], archived: false, createdAt: created },
-    { id: 'c-8a2', name: '8A2', grade: 8, teacherId: 'u-lan', joinCode: 'LAN8A2', schoolYear: '2026–2027', studentIds: ['u-my', 'u-phuc', 'u-quan'], archived: false, createdAt: created },
+    { id: 'c-7a1', name: '7A1', grade: 7, teacherId: 'u-thay-dung', joinCode: 'DUN7A1', schoolYear: '2026–2027', studentIds: ['u-an', 'u-binh', 'u-chi', 'u-dung', 'u-giang', 'u-ha', 'u-khoa', 'u-linh'], archived: false, createdAt: created },
+    { id: 'c-8a2', name: '8A2', grade: 8, teacherId: 'u-thay-dung', joinCode: 'DUN8A2', schoolYear: '2026–2027', studentIds: ['u-my', 'u-phuc', 'u-quan'], archived: false, createdAt: created },
     { id: 'c-7a3', name: '7A3', grade: 7, teacherId: 'u-hung', joinCode: 'HUNG73', schoolYear: '2026–2027', studentIds: ['u-son'], archived: false, createdAt: created },
   ]
   const assignments: Assignment[] = [

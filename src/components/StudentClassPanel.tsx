@@ -40,7 +40,7 @@ export function StudentClassPanel({ userId, readLessons, onOpenLesson }: Props) 
     {classes.length > 0 && assignments.length === 0 && <p className="student-class-empty">Thầy cô chưa giao bài nào.</p>}
     <form className="student-join" onSubmit={submit}>
       <label htmlFor="join-code">{classes.length ? 'Tham gia lớp khác' : 'Tham gia lớp bằng mã thầy cô gửi'}</label>
-      <div><input id="join-code" value={code} onChange={(event) => { setCode(event.target.value.toUpperCase()); setMessage(null) }} placeholder="VD: LAN7A1" maxLength={8} autoComplete="off" required /><button type="submit">Tham gia lớp</button></div>
+      <div><input id="join-code" value={code} onChange={(event) => { setCode(event.target.value.toUpperCase()); setMessage(null) }} placeholder="VD: DUN7A1" maxLength={8} autoComplete="off" required /><button type="submit">Tham gia lớp</button></div>
       {message && <small role={message.error ? 'alert' : 'status'} className={message.error ? 'is-error' : 'is-ok'}>{message.text}</small>}
     </form>
   </section>

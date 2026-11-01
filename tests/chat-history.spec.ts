@@ -3,7 +3,7 @@ import { memberSession as minhSession, signInAsMember } from './member'
 
 const prefix = 'xuyen-su-ky-chat-v1'
 const sessionKey = 'xuyen-su-ky-demo-v1'
-const minh = 'minh%40xuyensuki.vn'
+const minh = encodeURIComponent(minhSession.userId)
 // Conversations need a signed-in member; the account tests sign in and out themselves.
 test.beforeEach(({ page }, testInfo) => { if (!testInfo.titlePath.includes('accounts')) return signInAsMember(page) })
 
@@ -112,7 +112,7 @@ test.describe('accounts', () => {
     await card(page, 'Ngô Quyền').getByRole('button', { name: 'Nhắn tin', exact: true }).click()
     await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
     await expect(page.locator('.chat-answer')).toContainText('938')
-    expect(await storedKeys(page)).toEqual([`${prefix}:minh%40xuyensuki.vn:ngo-quyen`])
+    expect(await storedKeys(page)).toEqual([`${prefix}:${minh}:ngo-quyen`])
     await page.keyboard.press('Escape')
 
     await page.getByRole('button', { name: 'Tài khoản' }).click()
