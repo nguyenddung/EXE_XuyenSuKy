@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight, BookOpen, MessageCircle, Trophy } from 'lucide-r
 import { Link, Navigate, useLocation, useNavigate, type Location } from 'react-router-dom'
 import { GradeOnboarding } from '../components/GradeOnboarding'
 import { LoginForm } from '../components/LoginForm'
-import { hasAppAccess, useDemoSession } from '../hooks/useDemoSession'
+import { hasAppAccess, isLearner, roleHome, useDemoSession } from '../hooks/useDemoSession'
 
 const perks = [
   { icon: BookOpen, text: 'Bài học SGK lớp 6–12 có trích nguồn' },
@@ -16,10 +16,10 @@ export function LoginPage() {
   const location = useLocation()
   // A protected page that sent the visitor here; sign-in returns there with its state (e.g. a lesson to open).
   const from = (location.state as { from?: Location } | null)?.from
-  const destination = from ? `${from.pathname}${from.search}${from.hash}` : '/home'
+  const destination = from ? `${from.pathname}${from.search}${from.hash}` : roleHome(session)
   const enter = () => navigate(destination, { replace: true, state: from?.state })
 
-  if (hasAppAccess(session) && !session.gradeSelected) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={grade => { selectGrade(grade); enter() }} /></main></div>
+  if (hasAppAccess(session) && !session.gradeSelected && isLearner(session)) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={grade => { selectGrade(grade); enter() }} /></main></div>
 
   if (hasAppAccess(session)) return <Navigate to={destination} replace state={from?.state} />
 
@@ -35,7 +35,7 @@ export function LoginPage() {
     <main className="auth-main">
       <Link to="/" className="auth-back"><ArrowLeft size={16} /> Về trang giới thiệu</Link>
       <section className="auth-card" aria-labelledby="auth-title">
-        <span className="section-kicker">TÀI KHOẢN HỌC SINH</span>
+        <span className="section-kicker">HỌC SINH · GIÁO VIÊN · QUẢN TRỊ</span>
         <h1 id="auth-title">Đăng nhập Xuyên Sử Ký</h1>
         <p>Tiếp tục hành trình học sử, giữ tiến độ, XP và ghi chú của bạn.</p>
         <LoginForm onLogin={login} onRegistered={selectGrade} />

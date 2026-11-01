@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { LockKeyhole, X } from 'lucide-react'
 import { LoginForm } from './LoginForm'
 
-interface Props { onClose: () => void; onLogin: (email: string, password: string, remember: boolean) => Promise<boolean>; onRegistered: (grade: number) => void; /** Why this action needs an account; defaults to the XP and profile explanation. */ reason?: string }
+interface Props { onClose: () => void; onLogin: (email: string, password: string, remember: boolean) => Promise<true | string>; onRegistered: (grade: number) => void; /** Why this action needs an account; defaults to the XP and profile explanation. */ reason?: string }
 
 // In-app sign-in for guests who reach an activity that needs an account (quiz, saved profile, AI character conversations).
 export function LoginModal({ onClose, onLogin, onRegistered, reason }: Props) {

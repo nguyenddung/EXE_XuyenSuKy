@@ -11,7 +11,8 @@ import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character, CharacterInteractionMode } from '../types'
 import type { DemoActivity } from '../data/demo'
-import { hasAppAccess, storageOwner, useDemoSession } from '../hooks/useDemoSession'
+import { hasAppAccess, isLearner, storageOwner, useDemoSession } from '../hooks/useDemoSession'
+import { findUserByEmail, readSchool, syncProgress, writeSchool } from '../lib/school'
 import { Navbar } from '../components/Navbar'
 import { Hero, LandingCta } from '../components/Hero'
 import { ClassSelection } from '../components/ClassSelection'
@@ -97,8 +98,12 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }
 
   async function handleLogin(email: string, password: string, remember: boolean) {
-    if (!await login(email, password, remember)) return false
+    const result = await login(email, password, remember)
+    if (result !== true) return result
     setLoginOpen(false)
+    // Teachers and admins start in their own area; students stay where they signed in.
+    const member = findUserByEmail(readSchool(), email)
+    if (member && member.role !== 'student') { navigate(member.role === 'admin' ? '/admin' : '/giao-vien'); return true }
     setNotice(`Chào mừng ${email.trim().split('@')[0]} trở lại!`)
 
     return true
@@ -167,7 +172,18 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   />
   const stats = <StatsSection />
 
-  if (!landing && authenticated && !session.gradeSelected) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={selectGrade} /></main></div>
+  // Teachers see the progress of their classes: keep this student's reading, XP and quizzes in the demo school directory.
+  const quizCount = session.completedActivities.filter((id) => !id.startsWith('minigame-')).length
+  useEffect(() => {
+    if (!session.loggedIn || session.role !== 'student' || !session.userId) return
+    const school = readSchool()
+    const member = findUserByEmail(school, session.userId)
+    if (!member) return
+    const next = syncProgress(school, member.id, { read: learning.journal.read, xp: progressSession.earnedXp, quizzes: quizCount })
+    if (next !== school) writeSchool(next)
+  }, [session.loggedIn, session.role, session.userId, learning.journal.read, progressSession.earnedXp, quizCount])
+
+  if (!landing && authenticated && !session.gradeSelected && isLearner(session)) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={selectGrade} /></main></div>
 
   return (
     <div className={landing ? 'landing-page' : 'learning-page'} id={landing ? 'top' : undefined}>

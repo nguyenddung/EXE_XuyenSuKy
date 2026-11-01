@@ -263,6 +263,23 @@ Minigame lưu kỷ lục 1–3 sao cho mỗi trò. Chơi lại chỉ cập nhậ
 
 Kiểm thử luồng mới: `npx playwright test tests/auth.spec.ts tests/onboarding.spec.ts tests/minigames.spec.ts tests/dashboard.spec.ts tests/dataset.spec.ts tests/learning.spec.ts`.
 
+## Vai trò Giáo viên và Quản trị (demo)
+
+Ngoài học sinh, app có hai khu cho giáo viên và quản trị viên. Đăng nhập xong mỗi vai trò vào khu của mình; khu không đúng vai trò chuyển về trang của tài khoản.
+
+| Vai trò | Tài khoản mẫu | Mật khẩu | Khu |
+|---|---|---|---|
+| Học sinh | `minh@xuyensuki.vn` | `demo123` | `/home` |
+| Giáo viên | `lan.gv@xuyensuki.vn` | `demo123` | `/giao-vien` |
+| Quản trị viên | `admin@xuyensuki.vn` | `demo123` | `/admin` |
+
+- **Giáo viên** (`src/pages/TeacherPage.tsx`): tạo lớp theo khối, có mã tham gia 6 ký tự; xem học sinh với số bài giao đã xong, bài đã đọc, XP, quiz, hoạt động gần nhất; giao bài SGK (lấy danh sách bài từ API theo khối của lớp) kèm hạn; huỷ bài giao, xoá học sinh khỏi lớp, lưu trữ lớp, xuất CSV (UTF-8, chống công thức Excel).
+- **Quản trị viên** (`src/pages/AdminPage.tsx`): duyệt hoặc từ chối giáo viên mới đăng ký, tìm và lọc người dùng, đổi vai trò, khoá/mở khoá (không tự khoá hay tự đổi vai trò, luôn còn ít nhất một quản trị viên), xem mọi lớp, phiên bản dataset và số liệu đọc từ API, nhật ký thao tác, khôi phục dữ liệu demo. Quản trị viên mở được cả khu giáo viên.
+- **Học sinh**: khung **Lớp của em** trên dashboard để nhập mã lớp và xem bài được giao (đã đọc, còn hạn, quá hạn); bấm để mở bài. Bài đã đọc, XP và số quiz được đồng bộ vào danh bạ lớp để giáo viên theo dõi.
+- **Đăng ký giáo viên**: ở tab Đăng ký chọn *Giáo viên*, nhập họ tên và trường; tài khoản ở trạng thái chờ duyệt và chưa đăng nhập được tới khi quản trị viên duyệt. Tài khoản bị khoá cũng bị đăng xuất ở lần tải trang kế tiếp.
+
+Dữ liệu lớp, bài giao, vai trò và nhật ký nằm trong `localStorage` (`xuyen-su-ky-school-v1`), mọi thao tác đi qua các hàm thuần trong `src/lib/school.ts`. Vì là demo trên trình duyệt, quyền chỉ được kiểm tra ở giao diện; bản chính thức kiểm tra trên máy chủ theo [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Kiểm thử: `npx playwright test tests/roles.spec.ts`.
+
 ## Trải nghiệm học cá nhân
 
 Dashboard có kế hoạch học hôm nay, mục tiêu 1/3/5 hoạt động, bài đang đọc dở theo lớp và lối vào nhanh bài cần đọc lại, đã lưu hoặc có ghi chú. Đề xuất ưu tiên bài SGK chưa đọc; khi đã đọc hết lớp, đề xuất chuyển sang ôn lại. Mở bài không tự tăng XP hoặc chuỗi ngày học.
