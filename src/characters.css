@@ -194,3 +194,4 @@
 }
 .chat-time { display: block; margin: -8px 2px 12px; text-align: right; color: #7b8c85; font-size: 12px; }
 .chat-history-note { margin: -8px 0 16px; text-align: center; color: #6a7766; font-size: 12px; line-height: 1.6; }
+.chat-source-other { display: block; margin-top: 6px; color: #7a6a4f; font-size: 12px; font-style: italic; }

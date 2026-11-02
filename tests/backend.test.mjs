@@ -413,3 +413,26 @@ test('enrichment loader rejects unknown lessons and duplicated alias spellings',
     await rm(root, { recursive: true, force: true })
   }
 })
+test('a student grade answers from that grade first, and from the whole textbook when the grade has no fitting passage', async () => {
+  const question = 'Ngô Quyền thắng trận Bạch Đằng năm nào?'
+  for (const grade of [6, 10]) {
+    const reply = characterReply(dataset, 'ngo-quyen', question, [], grade)
+    assert.equal(reply.kind, 'grounded')
+    assert.ok(reply.sources.every((source) => source.grade === grade), `grade ${grade} sources`)
+    assert.ok(reply.relatedLessons.every((lesson) => lesson.grade === grade), `grade ${grade} lessons`)
+    assert.match(reply.sources[0].quote, /938/)
+  }
+  // Grade 7 never states the year of the 938 victory: the answer comes from grade 6 instead of a wrong grade 7 passage.
+  const fallback = characterReply(dataset, 'ngo-quyen', question, [], 7)
+  assert.equal(fallback.sources[0].lessonId, 'LS6_B18')
+  assert.match(fallback.sources[0].quote, /938/)
+  // Other questions about the same character stay in grade 7.
+  const own = characterReply(dataset, 'ngo-quyen', 'Ngô Quyền xưng vương ở đâu?', [], 7)
+  assert.ok(own.sources.length && own.sources.every((source) => source.grade === 7))
+  // A grade where the character never appears uses the whole textbook.
+  assert.deepEqual(characterReply(dataset, 'vo-nguyen-giap', 'Chiến dịch Điện Biên Phủ', [], 6), characterReply(dataset, 'vo-nguyen-giap', 'Chiến dịch Điện Biên Phủ'))
+  const { response, body } = await chat('ngo-quyen', { message: 'Ngô Quyền xưng vương ở đâu?', grade: 7 })
+  assert.equal(response.status, 200)
+  assert.ok(body.sources.every((source) => source.grade === 7))
+  for (const grade of [5, 13, '7', 7.5]) assert.equal((await chat('ngo-quyen', { message: question, grade })).response.status, 400, String(grade))
+})

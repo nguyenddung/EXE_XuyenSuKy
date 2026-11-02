@@ -30,10 +30,10 @@ const defaultDeps = {
  * guardrails → templates → keyword retrieval → simple lookups → cache → AI budget → moderation + embedding
  * → hybrid passages → generation → output validation. Any failure falls back to the cited textbook reply.
  */
-export async function answerCharacterQuestion({ dataset, characterId, message, history = [], visitor = 'unknown', deps: overrides = {} }) {
+export async function answerCharacterQuestion({ dataset, characterId, message, history = [], grade, visitor = 'unknown', deps: overrides = {} }) {
   const deps = { ...defaultDeps, ...overrides }
   const question = sanitizeText(message)
-  const retrieval = characterRetrieval(dataset, characterId, question, history)
+  const retrieval = characterRetrieval(dataset, characterId, question, history, grade)
   const { entry } = retrieval
   const voice = voiceOf(entry.profile)
   const template = (answer, kind, mode = 'textbook') => ({ ...replyBase(entry), answer: answer(entry.profile, voice), sources: [], kind, mode })
@@ -50,7 +50,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
   // A date question answered by a short passage that contains the year is already a complete answer.
   if (textbook.kind === 'grounded' && retrieval.intent === 'date' && !retrieval.previousQuestion && textbook.sources[0].quote.length <= 240 && /\b\d{3,4}\b/.test(textbook.sources[0].quote)) return textbook
 
-  const cacheKey = `${characterId}|${normalize(retrieval.previousQuestion)}|${normalize(question)}`
+  const cacheKey = `${characterId}|${grade ?? ''}|${normalize(retrieval.previousQuestion)}|${normalize(question)}`
   const cached = deps.cache.get(cacheKey)
   if (cached) return cached
 

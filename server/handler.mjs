@@ -66,7 +66,8 @@ async function readChatBody(req) {
   if (typeof body.message !== 'string' || !body.message.trim() || body.message.length > 1000) throw new HttpError(400, 'INVALID_BODY', 'message must contain 1–1000 characters.')
   const history = body.history ?? []
   if (!Array.isArray(history) || history.length > 8 || history.some((turn) => !turn || !['user', 'assistant'].includes(turn.role) || typeof turn.content !== 'string' || turn.content.length > 2000)) throw new HttpError(400, 'INVALID_BODY', 'Invalid conversation history.')
-  return { message: body.message.trim(), history }
+  if (body.grade !== undefined && (!Number.isInteger(body.grade) || body.grade < 6 || body.grade > 12)) throw new HttpError(400, 'INVALID_BODY', 'grade must be an integer between 6 and 12.')
+  return { message: body.message.trim(), history, grade: body.grade }
 }
 
 // options.limiter and options.rag let tests replace the rate limiter and the OpenAI-facing dependencies.
@@ -113,7 +114,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       if (!rate.allowed) { req.resume(); throw new RateLimitError(rate.retryAfter) }
       if (!characterIndex(data).some((entry) => entry.profile.id === parts[1])) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
       const body = await readChatBody(req)
-      result = await answerCharacterQuestion({ dataset: data, characterId: parts[1], message: body.message, history: body.history, visitor, deps: { limiter, ...options.rag } })
+      result = await answerCharacterQuestion({ dataset: data, characterId: parts[1], message: body.message, history: body.history, grade: body.grade, visitor, deps: { limiter, ...options.rag } })
     }
     else if (route === 'characters') { const items = listCharacters(data, grade, query); result = { items: items.map((item) => ({ ...item, liveVoice: liveVoiceAvailable(item.id) })), total: items.length, datasetVersion: data.metadata.version, mode: 'textbook' } }
     else if (parts[0] === 'characters' && parts.length === 2) {
