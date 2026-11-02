@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prepare": "git config core.hooksPath .githooks || true",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "dev:backend": "node --env-file-if-exists=.env.local server/index.mjs",

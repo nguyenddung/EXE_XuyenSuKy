@@ -267,10 +267,13 @@ Lộ trình tiếp theo (chi tiết trong [docs/ARCHITECTURE.md](docs/ARCHITECTU
 
 ## Đóng góp
 
-1. Tạo nhánh từ `main`: `feature/<tên>`, `fix/<tên>` hoặc `docs/<tên>`.
-2. Chạy `npm run check:dataset`, `npm run test:backend`, `npm run test:games` và `npm run build` trước khi mở pull request.
-3. Không commit `.env*`, khoá API, `dist/` hay kết quả kiểm thử; chỉ commit thay đổi thuộc nhiệm vụ.
-4. Mở pull request vào `main`; gộp khi CI xanh. Push lên `main` sẽ triển khai production.
+Quy trình đầy đủ trong [CONTRIBUTING.md](CONTRIBUTING.md). Tóm tắt:
+
+1. Tạo nhánh từ `main` theo loại việc: `feature/…`, `fix/…`, `docs/…`, `refactor/…`, `chore/…`. Không commit thẳng lên `main`.
+2. Commit theo [Conventional Commits](https://www.conventionalcommits.org/): `<type>(<scope>): <mô tả>`, ví dụ `feat(library): show only lessons of the student's grade`, `fix(auth): keep the registration grade`. Hook `.githooks/commit-msg` (bật tự động khi `npm ci`) và workflow **Commit messages** trên mỗi PR kiểm tra định dạng.
+3. Trước khi mở PR: `npm run check:dataset`, `npm run test:backend`, `npm run test:games`, `npm run build`.
+4. Mở PR vào `main` với tiêu đề cùng định dạng, điền mẫu PR, chờ CI xanh và review, gộp bằng **Squash and merge**. Gộp vào `main` sẽ deploy production.
+5. Không commit `.env*`, khoá API, `dist/` hay kết quả kiểm thử.
 
 ## Bản quyền nội dung
 

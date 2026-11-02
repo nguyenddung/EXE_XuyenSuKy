@@ -1,7 +1,9 @@
 #!/bin/sh
-# Strip AI attribution from commit messages: Claude/Anthropic co-author trailers,
-# "Generated with Claude Code" footers and Claude session links.
-# Enable once per clone: git config core.hooksPath .githooks
+# 1. Strip AI attribution from commit messages: Claude/Anthropic co-author trailers,
+#    "Generated with Claude Code" footers and Claude session links.
+# 2. Require Conventional Commits: <type>(<scope>): <description>, first line at most 72 characters.
+#    See CONTRIBUTING.md. Merge, revert, fixup! and squash! commits are accepted as Git writes them.
+# Enabled by `npm ci` / `npm install` (prepare script), or once per clone: git config core.hooksPath .githooks
 
 msg_file="$1"
 tmp_file="$msg_file.clean"
@@ -18,5 +20,35 @@ rm -f "$tmp_file"
 
 if ! grep -q -v -E '^[[:space:]]*(#|$)' "$msg_file"; then
   echo "commit-msg: commit message is empty after removing AI attribution." >&2
+  exit 1
+fi
+
+subject=$(grep -v -E '^[[:space:]]*(#|$)' "$msg_file" | head -n 1)
+
+case "$subject" in
+  "Merge "*|"Revert \""*|"fixup! "*|"squash! "*|"amend! "*) exit 0 ;;
+esac
+
+types='feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert'
+if ! printf '%s\n' "$subject" | grep -q -E "^($types)(\([a-z0-9][a-z0-9-]*(,[a-z0-9][a-z0-9-]*)*\))?!?: [^ ].*[^.]$"; then
+  {
+    echo "commit-msg: the first line must follow Conventional Commits (see CONTRIBUTING.md):"
+    echo ""
+    echo "    <type>(<scope>): <description>"
+    echo ""
+    echo "  type:  feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+    echo "  scope: optional, lower-case, e.g. auth, library, journey, rag, teacher, admin"
+    echo "  e.g.:  feat(library): show only lessons of the student's grade"
+    echo ""
+    echo "  got:   $subject"
+  } >&2
+  exit 1
+fi
+
+# Count UTF-8 characters whatever the locale: drop continuation bytes (0x80-0xBF), count the rest.
+length=$(printf '%s' "$subject" | LC_ALL=C tr -d '\200-\277' | wc -c | tr -d ' ')
+if [ "$length" -gt 72 ]; then
+  echo "commit-msg: the first line has $length characters; keep it at most 72 (details go in the body)." >&2
+  echo "  got:   $subject" >&2
   exit 1
 fi
