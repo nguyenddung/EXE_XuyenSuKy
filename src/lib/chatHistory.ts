@@ -16,10 +16,10 @@ const MAX_TITLE = 300
 const MAX_QUOTE = 600
 const MAX_SOURCES = 5
 const MODES = ['textbook', 'rag', 'guardrail']
-const KINDS = ['grounded', 'not_found', 'greeting', 'smalltalk', 'blocked']
+const KINDS = ['grounded', 'not_found', 'greeting', 'smalltalk', 'blocked', 'anachronism']
 
 export interface ChatSource { id: string; lessonId: string; lessonTitle: string; source: HistorySource; quote?: string }
-export interface ChatReply { mode: CharacterReply['mode']; kind?: CharacterReply['kind']; answer: string; notice?: string; sources: ChatSource[] }
+export interface ChatReply { mode: CharacterReply['mode']; kind?: CharacterReply['kind']; answer: string; notice?: string; sources: ChatSource[]; redirect?: { characterId: string; name: string } }
 export interface ChatExchange {
   id: string
   question: string
@@ -70,12 +70,14 @@ function cleanReply(value: unknown): ChatReply | null {
   if (!answer || typeof value.mode !== 'string' || !MODES.includes(value.mode)) return null
   const notice = text(value.notice, MAX_NOTICE)
   const sources = Array.isArray(value.sources) ? value.sources.map(cleanSource).filter((source): source is ChatSource => source !== null).slice(0, MAX_SOURCES) : []
+  const redirect = isRecord(value.redirect) && typeof value.redirect.characterId === 'string' && /^[a-z0-9-]{1,40}$/.test(value.redirect.characterId) ? text(value.redirect.name, 80) : null
   return {
     mode: value.mode as ChatReply['mode'],
     ...(typeof value.kind === 'string' && KINDS.includes(value.kind) ? { kind: value.kind as ChatReply['kind'] } : {}),
     answer,
     ...(notice ? { notice } : {}),
     sources,
+    ...(redirect && isRecord(value.redirect) ? { redirect: { characterId: value.redirect.characterId as string, name: redirect } } : {}),
   }
 }
 

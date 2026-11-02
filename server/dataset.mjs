@@ -72,9 +72,9 @@ export async function loadDataset(root = process.env.DATASET_PATH || defaultData
     }),
     pageKind: 'pdf',
   }
-  const { events, aliasIndex } = await loadEnrichment(new Set(byId.keys()), normalize, enrichmentRoot)
+  const { events, aliasIndex, timeline } = await loadEnrichment(new Set(byId.keys()), normalize, enrichmentRoot)
   const summaryById = new Map(summaries.map((summary) => [summary.id, summary]))
-  return { manifest, metadata, lessons, chunks, byId, chunksById, lessonChunks, summaries, summaryById, lessonSearch, searchableChunks, source, events, aliasIndex }
+  return { manifest, metadata, lessons, chunks, byId, chunksById, lessonChunks, summaries, summaryById, lessonSearch, searchableChunks, source, events, aliasIndex, timeline }
 }
 
 let cached

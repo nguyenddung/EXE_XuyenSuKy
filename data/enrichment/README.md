@@ -7,7 +7,8 @@ gắn với mã bài SGK (`LS7_B17`…) và được kiểm thử tự động �
 |---|---|---|
 | `events.json` | 80 mốc sự kiện (Việt Nam và thế giới), có năm, năm kết thúc, tóm tắt tự viết, nhân vật, địa danh và bài SGK liên quan | `GET /api/events` |
 | `aliases.json` | 77 nhóm tên gọi tương đương: tên khác của nhân vật (Quang Trung / Nguyễn Huệ), phiên âm gốc (Columbus / Cô-lôm-bô), tên cũ của địa danh (Phú Xuân / Huế), viết tắt (CMT8, LHQ, CTTG2) | Mở rộng truy vấn của `GET /api/search` |
-| `schema/*.schema.json` | JSON Schema 2020-12 cho hai file trên | Backend kiểm tra khi nạp |
+| `timeline.json` | Người, triều đại, sự kiện, tổ chức, địa danh, phát minh kèm năm xuất hiện và nhân vật nên hỏi; năm sinh của 12 nhân vật | Nhân vật AI không nói về điều sau thời mình ([docs/characters.md](../../docs/characters.md)) |
+| `schema/*.schema.json` | JSON Schema 2020-12 cho các file trên | Backend kiểm tra khi nạp |
 
 ## Quy tắc biên soạn
 

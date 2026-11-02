@@ -4,7 +4,10 @@ export interface CharacterReply {
   characterId: string
   /** textbook: quoted passage · rag: AI answer grounded in passages · guardrail: request refused before any model call */
   mode: 'textbook' | 'rag' | 'guardrail'
-  kind: 'grounded' | 'not_found' | 'greeting' | 'smalltalk' | 'blocked'
+  /** anachronism: the question names someone or something after the character's lifetime (see `redirect`). */
+  kind: 'grounded' | 'not_found' | 'greeting' | 'smalltalk' | 'blocked' | 'anachronism'
+  /** The character who lived at that time, to continue the conversation with. */
+  redirect?: { characterId: string; name: string }
   answer: string
   /** Set when the AI quota is used up and the answer falls back to the textbook quote. */
   notice?: string

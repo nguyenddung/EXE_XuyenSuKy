@@ -29,6 +29,7 @@ import { JourneySection } from '../components/JourneySection'
 import type { JourneyLaunch } from '../components/LessonJourney'
 import { useJourney } from '../hooks/useJourney'
 import { showSection } from '../lib/sections'
+import { historyApi } from '../lib/historyApi'
 
 export function HomePage({ landing = false }: { landing?: boolean }) {
   const navigate = useNavigate()
@@ -87,6 +88,11 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   function openCharacter(character: Character, mode: CharacterInteractionMode = 'chat') {
     if (!session.loggedIn) { setPendingActivity(null); setPendingCharacter({ character, mode }); setLoginOpen(true); return }
     setCharacterMode(mode); setActiveCharacter(character)
+  }
+  // A character who cannot know about a later time hands the student over to one who lived then.
+  async function switchCharacter(characterId: string) {
+    try { const next = await historyApi<Character>(`characters/${characterId}`); setCharacterMode('chat'); setActiveCharacter(next) }
+    catch (error) { setNotice((error as Error).message) }
   }
   const [activeActivity, setActiveActivity] = useState<DemoActivity | null>(null)
   const [pendingActivity, setPendingActivity] = useState<DemoActivity | null>(null)
@@ -227,7 +233,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       />}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && session.loggedIn && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} grade={gradeLocked(session) ? session.grade : undefined} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}
+      {activeCharacter && session.loggedIn && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} grade={gradeLocked(session) ? session.grade : undefined} onSwitchCharacter={switchCharacter} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}
       {loginOpen && <LoginModal reason={pendingCharacter ? `Đăng nhập để ${pendingCharacter.mode === 'voice' ? 'nói chuyện' : 'nhắn tin'} với ${pendingCharacter.character.name}. Trò chuyện với nhân vật AI chỉ dành cho tài khoản đã đăng nhập.` : undefined} onClose={() => { setLoginOpen(false); setPendingActivity(null); setPendingCharacter(null) }} onLogin={handleLogin} onRegistered={selectGrade} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}

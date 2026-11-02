@@ -19,6 +19,8 @@ let dataset, server, base
 before(async () => {
   dataset = await loadDataset()
   server = createServer((req, res) => handleApi(req, res, async () => dataset, { limiter: unlimited }))
+  // Long synchronous tests block the event loop; keep idle connections open so the next request does not reuse a closed one.
+  server.keepAliveTimeout = 60000
   await new Promise((done) => server.listen(0, '127.0.0.1', done))
   base = `http://127.0.0.1:${server.address().port}/api/`
 })
@@ -226,7 +228,9 @@ test('follow-up uses the prior topic; unknown facts and out-of-scope questions d
   assert.equal(followup.kind, 'grounded')
   assert.match(followup.answer, /rồng cuộn hổ ngồi/)
   assert.notEqual(first.answer, followup.answer)
-  for (const question of ['Hôm nay thời tiết thế nào?', 'Bạn thích ăn pizza không?', '2 + 2 bằng mấy?', 'Ngô Quyền thắng Bạch Đằng năm 2026?', 'Vì sao?']) {
+  // A year after the character's death is answered in character instead (see the time-horizon tests).
+  assert.equal(characterReply(dataset, 'ngo-quyen', 'Ngô Quyền thắng Bạch Đằng năm 2026?').kind, 'anachronism')
+  for (const question of ['Hôm nay thời tiết thế nào?', 'Bạn thích ăn pizza không?', '2 + 2 bằng mấy?', 'Vì sao?']) {
     const reply = characterReply(dataset, 'ngo-quyen', question)
     assert.equal(reply.kind, 'not_found', question)
     assert.deepEqual(reply.sources, [])
@@ -408,6 +412,83 @@ test('enrichment loader rejects unknown lessons and duplicated alias spellings',
     const aliases = JSON.parse(await readFile(resolve(root, 'aliases.json'), 'utf8'))
     await writeFile(resolve(root, 'aliases.json'), JSON.stringify([...aliases, { id: 'copy', type: 'person', terms: ['Quang Trung', 'Vua Quang Trung'] }]))
     await assert.rejects(loadDataset(defaultDatasetPath, root), /appears in nguyen-hue and copy/)
+  } finally {
+    if (!resolve(root).startsWith(resolve(tmpdir()) + sep)) throw new Error('Test cleanup path is outside temporary directory')
+    await rm(root, { recursive: true, force: true })
+  }
+})
+
+// Each character only knows the world up to the year they died (shared/characters.json `died`, data/enrichment/timeline.json).
+test('every character refuses people, events, inventions, years and centuries after their lifetime, in their own voice', async () => {
+  const profiles = characterIndex(dataset).map((entry) => entry.profile)
+  assert.equal(profiles.length, 12)
+  const born = (id) => dataset.timeline.entries.find((entry) => entry.id === id).from
+  for (const profile of profiles) {
+    assert.ok(Number.isInteger(profile.died) && born(profile.id) <= profile.died, profile.id)
+    // Their own suggestions, topics and introduction are never refused.
+    for (const question of [...profile.suggestions, ...profile.topics.map((topic) => `Kể về ${topic}`), 'Bạn là ai?', `${profile.name} là ai?`]) {
+      assert.notEqual(characterReply(dataset, profile.id, question).kind, 'anachronism', `${profile.id}: ${question}`)
+    }
+    // Every other character: refused exactly when born after this one died, and then pointed to that character.
+    for (const other of profiles.filter((item) => item.id !== profile.id)) {
+      const reply = characterReply(dataset, profile.id, `${other.name} là ai?`)
+      const later = born(other.id) > profile.died
+      assert.equal(reply.kind === 'anachronism', later, `${profile.id} asked about ${other.id}`)
+      if (later) {
+        assert.deepEqual(reply.redirect, { characterId: other.id, name: other.name })
+        assert.deepEqual(reply.sources, [])
+        assert.ok(reply.answer.startsWith(`${profile.persona.self.charAt(0).toUpperCase()}${profile.persona.self.slice(1)} sống vào thế kỷ`), reply.answer)
+        assert.ok(reply.answer.includes(`đã mất năm ${profile.died}`))
+      }
+    }
+    // A later year and the century after their death; the year of their death itself is fine.
+    assert.equal(characterReply(dataset, profile.id, `Năm ${profile.died + 1} có chuyện gì?`).kind, 'anachronism', profile.id)
+    assert.notEqual(characterReply(dataset, profile.id, `Năm ${profile.died} có chuyện gì?`).kind, 'anachronism', profile.id)
+    if (profile.died < 2001) assert.equal(characterReply(dataset, profile.id, 'Thế kỷ XXI có gì?').kind, 'anachronism', profile.id)
+  }
+})
+
+test('the reported questions to Trần Hưng Đạo are answered in character and hand over to the right character', async () => {
+  const uncle = characterReply(dataset, 'tran-hung-dao', 'Ông có biết Bác Hồ là ai không?')
+  assert.equal(uncle.kind, 'anachronism')
+  assert.equal(uncle.answer, 'Ta sống vào thế kỷ XIII và đã mất năm 1300, nên ta không thể biết Bác Hồ là ai: người ấy sinh năm 1890, 590 năm sau thời của ta. Con hãy trò chuyện trực tiếp với Hồ Chí Minh nhé.')
+  assert.deepEqual(uncle.redirect, { characterId: 'ho-chi-minh', name: 'Hồ Chí Minh' })
+  const dbp = characterReply(dataset, 'tran-hung-dao', 'Ông biết gì về chiến dịch Điện Biên Phủ?')
+  assert.deepEqual([dbp.kind, dbp.redirect?.characterId], ['anachronism', 'vo-nguyen-giap'])
+  // The longest name wins: "Thành phố Hồ Chí Minh" is a place named in 1976, not the person.
+  assert.match(characterReply(dataset, 'tran-hung-dao', 'Thành phố Hồ Chí Minh ở đâu?').answer, /không thể biết về Thành phố Hồ Chí Minh: tên ấy có từ năm 1976/)
+  // Inventions get a playful question back instead of a character to ask.
+  const phone = characterReply(dataset, 'ngo-quyen', 'Ông có dùng điện thoại không?')
+  assert.equal(phone.redirect, undefined)
+  assert.match(phone.answer, /chưa từng thấy điện thoại bao giờ.*Con kể cho ta nghe điện thoại là gì được không\?$/)
+  // Contemporaries and earlier history stay answerable; "năm 179 TCN" is not a later year.
+  for (const [id, question] of [['quang-trung', 'Ông đánh Nguyễn Ánh thế nào?'], ['le-loi', 'Nguyễn Trãi giúp ông thế nào?'], ['ho-chi-minh', 'Trần Hưng Đạo là ai?'], ['ho-chi-minh', 'Bác Hồ sinh năm nào?'], ['tran-hung-dao', 'Ngô Quyền thắng trận Bạch Đằng năm nào?'], ['ba-trieu', 'Năm 179 TCN có chuyện gì?']]) {
+    assert.notEqual(characterReply(dataset, id, question).kind, 'anachronism', `${id}: ${question}`)
+  }
+  assert.match(characterReply(dataset, 'ly-thuong-kiet', 'Ông biết quân Mông Cổ không?').answer, /^Ta sống vào thế kỷ XI – XII/)
+  // Through the API and the RAG pipeline: no OpenAI call at all.
+  const fake = fakeOpenAI()
+  const reply = await ask('tran-hung-dao', 'Ông có biết Bác Hồ là ai không?', ragDeps(fake))
+  assert.deepEqual([reply.kind, reply.mode, reply.redirect?.characterId], ['anachronism', 'textbook', 'ho-chi-minh'])
+  assert.deepEqual(fake.calls, { responses: [], moderations: 0, embeddings: 0 })
+  const { body } = await chat('tran-hung-dao', { message: 'Hồ Chí Minh là ai?' })
+  assert.deepEqual([body.kind, body.redirect], ['anachronism', { characterId: 'ho-chi-minh', name: 'Hồ Chí Minh' }])
+  // The live voice agents get the same rule in their prompt.
+  const { agentPrompt } = await import('../server/voice-agents.mjs')
+  assert.match(agentPrompt(characterIndex(dataset)[0].profile), /đã mất năm 1300\. Ta không biết người, sự kiện/)
+})
+
+test('timeline loader rejects unknown characters to ask and a name in two entries', async () => {
+  const root = await mkdtemp(resolve(tmpdir(), 'xuyensuky-timeline-test-'))
+  try {
+    await cp(defaultEnrichmentPath, root, { recursive: true })
+    const entries = JSON.parse(await readFile(resolve(root, 'timeline.json'), 'utf8'))
+    await writeFile(resolve(root, 'timeline.json'), JSON.stringify([...entries, { id: 'x', kind: 'event', from: 2000, terms: ['Sự kiện X'], ask: 'khong-co' }]))
+    await assert.rejects(loadDataset(defaultDatasetPath, root), /asks unknown character khong-co/)
+    await writeFile(resolve(root, 'timeline.json'), JSON.stringify([...entries, { id: 'x', kind: 'person', from: 1890, terms: ['Bác Hồ'] }]))
+    await assert.rejects(loadDataset(defaultDatasetPath, root), /"Bác Hồ" appears in ho-chi-minh and x/)
+    await writeFile(resolve(root, 'timeline.json'), JSON.stringify(entries.filter((entry) => entry.id !== 'ngo-quyen')))
+    await assert.rejects(loadDataset(defaultDatasetPath, root), /Character ngo-quyen needs "died"/)
   } finally {
     if (!resolve(root).startsWith(resolve(tmpdir()) + sep)) throw new Error('Test cleanup path is outside temporary directory')
     await rm(root, { recursive: true, force: true })

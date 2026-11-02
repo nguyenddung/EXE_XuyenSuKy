@@ -44,7 +44,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
   if (guard.kind === 'meta') return template(metaAnswer, 'smalltalk')
 
   const textbook = retrieval.reply
-  if (textbook.kind === 'greeting') return textbook
+  if (textbook.kind === 'greeting' || textbook.kind === 'anachronism') return textbook
   const openai = deps.openai()
   if (!openai) return textbook
   // A date question answered by a short passage that contains the year is already a complete answer.

@@ -2,6 +2,8 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import Ajv2020 from 'ajv/dist/2020.js'
+import profiles from '../shared/characters.json' with { type: 'json' }
+import { buildTimeline } from './time-horizon.mjs'
 
 // Team-written data that enriches the textbook dataset without copying it: historical events linked to lessons and
 // alternative names (other names, original spellings, abbreviations) that widen search queries.
@@ -14,7 +16,7 @@ const read = async (root, name) => JSON.parse(await readFile(resolve(root, name)
 
 /** Loads and validates events.json and aliases.json. `lessonIds` holds the IDs of the loaded textbook dataset. */
 export async function loadEnrichment(lessonIds, normalize, root = defaultEnrichmentPath) {
-  const [events, aliases, eventSchema, aliasSchema] = await Promise.all(['events.json', 'aliases.json', 'schema/event.schema.json', 'schema/alias.schema.json'].map((name) => read(root, name)))
+  const [events, aliases, timelineEntries, eventSchema, aliasSchema, timelineSchema] = await Promise.all(['events.json', 'aliases.json', 'timeline.json', 'schema/event.schema.json', 'schema/alias.schema.json', 'schema/timeline.schema.json'].map((name) => read(root, name)))
   const ajv = new Ajv2020()
   const validateEvent = ajv.compile(eventSchema)
   const validateAlias = ajv.compile(aliasSchema)
@@ -41,8 +43,29 @@ export async function loadEnrichment(lessonIds, normalize, root = defaultEnrichm
       owner.set(key, group.id)
     }
   }
+  const validateTimeline = ajv.compile(timelineSchema)
+  if (!Array.isArray(timelineEntries)) throw new EnrichmentError('timeline.json must be an array')
+  const timelineIds = new Set()
+  const timelineTerms = new Map()
+  const characterIds = new Set(profiles.map((profile) => profile.id))
+  for (const entry of timelineEntries) {
+    if (!validateTimeline(entry)) throw new EnrichmentError(`Invalid timeline entry: ${entry?.id}`)
+    if (timelineIds.has(entry.id)) throw new EnrichmentError(`Duplicate timeline ID: ${entry.id}`)
+    timelineIds.add(entry.id)
+    if (entry.ask && !characterIds.has(entry.ask)) throw new EnrichmentError(`Timeline entry ${entry.id} asks unknown character ${entry.ask}`)
+    for (const term of entry.terms) {
+      const key = normalize(term)
+      if (timelineTerms.has(key)) throw new EnrichmentError(`Timeline term "${term}" appears in ${timelineTerms.get(key)} and ${entry.id}`)
+      timelineTerms.set(key, entry.id)
+    }
+  }
+  // Every AI character needs a lifespan: the year they died, and a person entry with the year they were born.
+  for (const profile of profiles) {
+    const person = timelineEntries.find((entry) => entry.id === profile.id)
+    if (!Number.isInteger(profile.died) || !person || person.kind !== 'person' || person.from > profile.died) throw new EnrichmentError(`Character ${profile.id} needs "died" and a person entry in timeline.json`)
+  }
   const sorted = [...events].sort((a, b) => a.year - b.year || (a.end_year ?? a.year) - (b.end_year ?? b.year) || a.id.localeCompare(b.id))
-  return { events: sorted, aliasIndex: buildAliasIndex(aliases, normalize) }
+  return { events: sorted, aliasIndex: buildAliasIndex(aliases, normalize), timeline: buildTimeline(timelineEntries, normalize) }
 }
 
 /** Normalised alias terms, longest first, each with every other spelling of its group. */

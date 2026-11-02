@@ -1,6 +1,7 @@
 import profiles from '../shared/characters.json' with { type: 'json' }
 import { chunkResponse, lessonId, normalize } from './dataset.mjs'
 import { reviewedPassage } from './character-evidence.mjs'
+import { anachronismAnswer, findAnachronism, redirectFor } from './time-horizon.mjs'
 
 const cache = new WeakMap()
 const tokens = (text) => normalize(text).match(/[a-z0-9]+/g) || []
@@ -98,6 +99,12 @@ export function characterRetrieval(dataset, characterId, message, history = []) 
   const scopeChunkIds = related.map(({ chunk }) => chunk.chunk_id)
   const result = (reply, extra = {}) => ({ reply, entry, intent: 'fact', rankedChunkIds: [], scopeChunkIds, previousQuestion: '', ...extra })
   if (/^(xin chao|chao|hello|hi)(\s|$)/.test(q) && tokens(q).length < 7) return result({ ...base, answer: profile.greeting, sources: [], kind: 'greeting' })
+  // A character never talks about people, events or things that came after their lifetime.
+  const later = findAnachronism(q, profile, dataset.timeline)
+  if (later) {
+    const redirect = redirectFor(later, profile, profiles, dataset.timeline)
+    return result({ ...base, answer: anachronismAnswer(later, profile, voiceOf(profile), redirect, dataset.timeline.entries.find((item) => item.id === profile.id)?.from), sources: [], kind: 'anachronism', ...(redirect ? { redirect } : {}) })
+  }
   const introduction = /\b(la ai|gioi thieu|tieu su|ve ban|ve ong|ve bac|ve ba)\b/.test(q) || profile.aliases.some((alias) => q === normalize(alias))
   let terms = queryTerms(message, profile)
   const followup = /\b(them|tiep|sau do|khi do|y nghia|vi sao|the nao|o dau|do|nay)\b/.test(q) && terms.length <= 4

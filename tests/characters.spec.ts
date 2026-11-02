@@ -143,3 +143,17 @@ test('rate-limited chat locks every way of asking and counts down until the serv
   await expect(page.locator('.chat-answer')).toContainText('938')
   expect(requests).toBe(2)
 })
+
+test('a character cannot know later times: Trần Hưng Đạo hands a question about Bác Hồ over to Hồ Chí Minh', async ({ page }) => {
+  await openCharacter(page, 'Trần Hưng Đạo')
+  await page.locator('#chat-input').fill('Ông có biết Bác Hồ là ai không?')
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.chat-answer').last()).toContainText('Ta sống vào thế kỷ XIII và đã mất năm 1300, nên ta không thể biết Bác Hồ là ai')
+  await expect(page.locator('.chat-sources')).toHaveCount(0)
+  // The hand-over survives closing and reopening the conversation.
+  await page.keyboard.press('Escape')
+  await page.locator('.character-card').filter({ has: page.getByRole('heading', { name: 'Trần Hưng Đạo', exact: true }) }).getByRole('button', { name: 'Nhắn tin', exact: true }).click()
+  await page.getByRole('button', { name: 'Trò chuyện với Hồ Chí Minh' }).click()
+  await expect(page.locator('#chat-title')).toContainText('Hồ Chí Minh')
+  await expect(page.locator('#chat-input')).toBeFocused()
+})

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "xuyen-su-ky/enrichment/timeline",
+  "title": "Người, sự kiện, tổ chức, địa danh, phát minh kèm năm xuất hiện, để nhân vật không nói về điều sau thời mình",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "from", "terms"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 80, "description": "Với 12 nhân vật AI: trùng id trong shared/characters.json." },
+    "kind": { "enum": ["person", "dynasty", "event", "organization", "place", "invention"] },
+    "from": { "type": "integer", "minimum": -3000, "maximum": 2100, "description": "Năm sinh (người) hoặc năm xuất hiện." },
+    "when": { "type": "string", "minLength": 3, "maxLength": 80, "description": "Cách nói mốc thời gian khi không dùng câu mặc định theo kind." },
+    "terms": { "type": "array", "items": { "type": "string", "minLength": 2, "maxLength": 80 }, "minItems": 1, "maxItems": 10, "uniqueItems": true },
+    "ask": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "description": "Nhân vật AI nên được hỏi về mục này." }
+  }
+}

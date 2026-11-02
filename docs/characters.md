@@ -52,6 +52,25 @@ Giới hạn API: câu hỏi tối đa 1.000 ký tự, tối đa 8 lượt ngữ
 
 Bộ đếm giới hạn mặc định nằm trong bộ nhớ từng instance; đặt `UPSTASH_REDIS_REST_URL` và `UPSTASH_REDIS_REST_TOKEN` để dùng chung cho mọi instance Vercel.
 
+## Mốc thời gian: nhân vật không biết chuyện sau thời mình
+
+Mỗi nhân vật có năm mất (`died` trong `shared/characters.json`). `data/enrichment/timeline.json` liệt kê người, triều đại, sự kiện, tổ chức, địa danh đổi tên và phát minh kèm năm xuất hiện, và nhân vật nên được hỏi (`ask`). 12 nhân vật đều có một mục `person` ghi năm sinh.
+
+Trước mọi bước tìm tư liệu (và trước khi gọi OpenAI), `server/time-horizon.mjs` tìm trong câu hỏi:
+
+- tên trong `timeline.json`, ưu tiên cụm dài nhất ("Thành phố Hồ Chí Minh" là địa danh có từ năm 1976, không phải nhắc tới Bác Hồ);
+- `năm X` (bỏ qua `năm X TCN`) và `thế kỷ X` / `thế kỉ 20`.
+
+Nếu có điều xuất hiện sau năm mất, nhân vật trả lời đúng vai, không trích nguồn (`kind: anachronism`):
+
+> Ta sống vào thế kỷ XIII và đã mất năm 1300, nên ta không thể biết Bác Hồ là ai: người ấy sinh năm 1890, 590 năm sau thời của ta. Con hãy trò chuyện trực tiếp với Hồ Chí Minh nhé.
+
+Phản hồi kèm `redirect: { characterId, name }`: nhân vật trong `ask`, hoặc một nhân vật còn sống vào năm đó. Giao diện hiện nút **Trò chuyện với …** mở ngay cuộc trò chuyện ấy; nút được lưu cùng lịch sử. Phát minh (điện thoại, máy bay, internet…) không có ai để chuyển tới: nhân vật hỏi lại học sinh "đó là gì".
+
+Agent trò chuyện giọng nói trực tiếp nhận cùng quy tắc trong prompt (mục *Thời đại*). Sau khi đổi prompt, chạy `npm run sync:voice-agents` để cập nhật agent trên ElevenLabs.
+
+Thêm mục mới: sửa `timeline.json` rồi chạy `npm run test:backend`. Kiểm thử hỏi chéo 12 nhân vật với nhau, thử năm và thế kỷ sau năm mất, và bảo đảm mọi câu gợi ý, chủ đề của từng nhân vật không bị chặn nhầm. Backend từ chối nạp nếu một tên nằm ở hai mục, `ask` trỏ tới nhân vật không tồn tại hoặc nhân vật thiếu năm sinh, năm mất.
+
 ## Hai chế độ: Nhắn tin và Nói chuyện
 
 Mỗi thẻ nhân vật có hai lối vào:
