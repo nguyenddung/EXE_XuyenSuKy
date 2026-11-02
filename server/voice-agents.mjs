@@ -2,7 +2,7 @@ import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js'
 import profiles from '../shared/characters.json' with { type: 'json' }
 import agents from '../shared/character-agents.json' with { type: 'json' }
 import { voiceOf } from './characters.mjs'
-import { elevenLabsVoiceId, SpeechError } from './speech.mjs'
+import { elevenLabsSettings, elevenLabsVoiceId, SpeechError } from './speech.mjs'
 
 // Live voice conversations run on one ElevenLabs agent per character (ids in shared/character-agents.json,
 // created and updated by `npm run sync:voice-agents`). The agents require signed URLs, so only this server,
@@ -65,7 +65,7 @@ export function agentDefinition(profile) {
           }, { type: 'system', name: 'end_call', description: 'Kết thúc cuộc gọi khi học sinh chào tạm biệt.', params: { system_tool_type: 'end_call' } }],
         },
       },
-      tts: { voice_id: elevenLabsVoiceId(profile.id), model_id: 'eleven_flash_v2_5', stability: 0.6, similarity_boost: 0.75 },
+      tts: { voice_id: elevenLabsVoiceId(profile.id), model_id: 'eleven_flash_v2_5', stability: elevenLabsSettings(profile.id).stability, similarity_boost: 0.75, speed: elevenLabsSettings(profile.id).speed },
       turn: { turn_eagerness: 'patient' },
       // Caps what one conversation can spend.
       conversation: { max_duration_seconds: 300 },

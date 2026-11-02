@@ -16,7 +16,10 @@
     "build:embeddings": "node --env-file-if-exists=.env.local scripts/build-embeddings.mjs",
     "test:backend": "node --test tests/backend.test.mjs tests/speech.test.mjs tests/chat-history.test.mjs tests/journey.test.mjs tests/voice-agents.test.mjs",
     "test:games": "playwright test",
-    "sync:voice-agents": "node --env-file-if-exists=.env.local scripts/sync-voice-agents.mjs"
+    "sync:voice-agents": "node --env-file-if-exists=.env.local scripts/sync-voice-agents.mjs",
+    "voices:design": "node --env-file-if-exists=.env.local scripts/design-voices.mjs design",
+    "voices:create": "node --env-file-if-exists=.env.local scripts/design-voices.mjs create",
+    "voices:reset": "node scripts/design-voices.mjs reset"
   },
   "dependencies": {
     "@elevenlabs/elevenlabs-js": "^2.75.0",

@@ -96,7 +96,30 @@ ELEVENLABS_API_KEY=<secret API key, không phải Key ID>
 ELEVENLABS_MODEL=eleven_flash_v2_5
 ```
 
-`ELEVENLABS_VOICE_ID` và `ELEVENLABS_FEMALE_VOICE_ID` đổi giọng nam/nữ mặc định; `ELEVENLABS_VOICE_<ID_NHAN_VAT>` (ví dụ `ELEVENLABS_VOICE_TRAN_HUNG_DAO`) đổi giọng riêng từng nhân vật.
+**Mỗi nhân vật một giọng.** `shared/character-voices.json` gán cho mỗi nhân vật một giọng mặc định khác nhau của ElevenLabs (dùng được cả với gói Free), chọn theo tuổi, giới tính và tính cách, kèm độ ổn định (`stability`), độ biểu cảm (`style`) và tốc độ (`rate`) riêng:
+
+| Nhân vật | Giọng | Nhân vật | Giọng |
+|---|---|---|---|
+| Hồ Chí Minh | Bill: nam lớn tuổi, ấm, chậm rãi | Lý Thường Kiệt | Charlie: tự tin, dứt khoát |
+| Võ Nguyên Giáp | Brian: trầm, mạch lạc | Lý Công Uẩn | Eric: êm, ân cần |
+| Trần Hưng Đạo | George: ấm, điềm tĩnh | Lê Lợi | Chris: mộc mạc, chân thành |
+| Ngô Quyền | Daniel: chắc, trầm tĩnh | Nguyễn Trãi | Liam: rõ ràng, có chất văn |
+| Quang Trung | Callum: mạnh, nhiều khí thế | Trần Nhân Tông | Will: nhẹ nhàng, thư thái |
+| Hai Bà Trưng | Jessica: nữ trẻ, truyền lửa | Bà Triệu | Alice: nữ, khảng khái |
+
+Thứ tự chọn giọng: `ELEVENLABS_VOICE_<ID_NHAN_VAT>` (ví dụ `ELEVENLABS_VOICE_TRAN_HUNG_DAO`), rồi giọng Việt đã thiết kế (`designedVoiceId`), rồi giọng mặc định của nhân vật. `ELEVENLABS_VOICE_ID` chỉ còn dùng cho thuyết minh video.
+
+**Giọng Việt thiết kế riêng (giống nhân vật hơn).** Giọng mặc định là giọng tiếng Anh đọc tiếng Việt, không có giọng vùng miền. Với [Voice Design](https://elevenlabs.io/docs/eleven-api/guides/how-to/voices/voice-design), mỗi nhân vật có một mô tả (`design`) về tuổi, giọng vùng miền và tính cách, ví dụ Hồ Chí Minh: người đàn ông Việt bảy mươi tuổi, giọng Nghệ An, nhẹ, ấm, nói chậm. Mô tả không nêu tên người thật và không dùng bản ghi âm của ai: đây là giọng mô phỏng, không sao chép giọng thật.
+
+```bash
+npm run voices:design                          # 3 bản thử cho mỗi nhân vật: voice-previews/<id>/1.mp3 … 3.mp3
+npm run voices:design -- ho-chi-minh ba-trieu  # chỉ vài nhân vật
+npm run voices:create -- ho-chi-minh=2 ba-trieu=1   # lưu bản thử đã chọn; ghi designedVoiceId vào shared/character-voices.json
+npm run voices:reset -- ho-chi-minh            # quay về giọng mặc định
+npm run sync:voice-agents                      # cập nhật agent trò chuyện trực tiếp
+```
+
+Mỗi giọng đã lưu chiếm một suất giọng tự tạo của tài khoản ElevenLabs: gói Free 3, Starter 10, Creator 30. Đủ 12 nhân vật cần gói Creator; với gói nhỏ hơn, nên thiết kế trước cho các nhân vật học sinh hay trò chuyện. Commit `shared/character-voices.json` sau khi lưu để bản deploy dùng giọng mới.
 
 **Azure Speech** (`SPEECH_PROVIDER=azure`):
 

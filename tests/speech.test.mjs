@@ -1,7 +1,9 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
-import { createSpeechService, SpeechError, speechSsml } from '../server/speech.mjs'
+import { readFile } from 'node:fs/promises'
+import { createSpeechService, elevenLabsVoiceId, SpeechError, speechSsml } from '../server/speech.mjs'
+import voices from '../shared/character-voices.json' with { type: 'json' }
 import { memoryStore } from '../server/rag/limits.mjs'
 import { handleApi } from '../server/handler.mjs'
 
@@ -53,7 +55,7 @@ test('ElevenLabs receives server-selected Vietnamese voice settings and caches p
   assert.match(calls[1][0], /onwK4e9ZLuTAKqWW03F9/)
 })
 
-test('ElevenLabs environment configuration supports the two characters and server voice overrides', async () => {
+test('ElevenLabs environment configuration gives each character its own voice and keeps per-character overrides', async () => {
   const names = ['SPEECH_PROVIDER', 'SPEECH_DISABLED', 'ELEVENLABS_API_KEY', 'ELEVENLABS_MODEL', 'ELEVENLABS_VOICE_ID', 'ELEVENLABS_FEMALE_VOICE_ID', 'ELEVENLABS_VOICE_TRAN_HUNG_DAO', 'ELEVENLABS_VOICE_NGO_QUYEN', 'ELEVENLABS_VOICE_BA_TRIEU']
   const before = Object.fromEntries(names.map((name) => [name, process.env[name]]))
   const calls = []
@@ -64,8 +66,12 @@ test('ElevenLabs environment configuration supports the two characters and serve
     for (const characterId of ['tran-hung-dao', 'ngo-quyen', 'ba-trieu']) await synthesize({ ...request(), characterId })
     assert.match(calls[0][0], /JBFqnCBsd6RMkjVDRZzb/)
     assert.match(calls[1][0], /onwK4e9ZLuTAKqWW03F9/)
-    assert.match(calls[2][0], /EXAVITQu4vr4xnSDxMaL/)
-    assert.equal(JSON.parse(calls[0][1].body).voice_settings.speed, 0.88)
+    assert.match(calls[2][0], /Xb7hH8MSUJpSbSDYk0k2/)
+    assert.deepEqual(JSON.parse(calls[0][1].body).voice_settings, { stability: 0.7, similarity_boost: 0.75, style: 0.2, use_speaker_boost: true, speed: 0.88 })
+    // The old shared defaults no longer put every character on one voice.
+    process.env.ELEVENLABS_VOICE_ID = 'SharedMaleVoice'; process.env.ELEVENLABS_FEMALE_VOICE_ID = 'SharedFemaleVoice'
+    assert.equal(elevenLabsVoiceId('tran-hung-dao'), 'JBFqnCBsd6RMkjVDRZzb')
+    assert.equal(elevenLabsVoiceId('ba-trieu'), 'Xb7hH8MSUJpSbSDYk0k2')
     process.env.ELEVENLABS_VOICE_NGO_QUYEN = 'TeacherVoiceOverride'
     await synthesize(request())
     assert.match(calls[3][0], /TeacherVoiceOverride/)
@@ -165,4 +171,31 @@ test('speech HTTP endpoint validates JSON, enforces POST, handles Vercel routing
     assert.equal((await post(path, '{"text":"hello"}', 'text/plain')).status, 415)
     assert.equal((await post(path, JSON.stringify({ text: 'a'.repeat(33000) }))).status, 413)
   } finally { await new Promise((resolve) => server.close(resolve)) }
+})
+
+// Each character speaks with a voice of their own (shared/character-voices.json).
+test('the 12 characters have 12 different default voices that fit them, and a designed voice wins', async () => {
+  const defaults = { George: 'JBFqnCBsd6RMkjVDRZzb', Daniel: 'onwK4e9ZLuTAKqWW03F9', Brian: 'nPczCjzI2devNBz1zQrb', Bill: 'pqHfZKP75CvOlQylNhV4', Callum: 'N2lVS1w4EtoT3dr4eOWO', Charlie: 'IKne3meq5aSn9XLyUdCD', Eric: 'cjVigY5qzO86Huf0OWal', Chris: 'iP95p4xoKVk53GoZ742B', Liam: 'TX3LPaxmHKxFdv7VOQHJ', Will: 'bIHbv24MWmeRgasZH58o', Jessica: 'cgSgspJ2msm6clMCkdW9', Alice: 'Xb7hH8MSUJpSbSDYk0k2' }
+  const female = new Set(['Jessica', 'Alice'])
+  const ids = Object.keys(voices)
+  assert.equal(ids.length, 12)
+  assert.equal(new Set(ids.map((id) => voices[id].elevenlabs.voiceId)).size, 12)
+  for (const id of ids) {
+    const { name, voiceId, stability, style, design } = voices[id].elevenlabs
+    assert.equal(defaults[name], voiceId, `${id}: ${name}`)
+    assert.equal(female.has(name), voices[id].voice === 'vi-VN-HoaiMyNeural', `${id}: voice gender`)
+    assert.ok(stability >= 0.3 && stability <= 0.9 && style >= 0 && style <= 0.6 && voices[id].rate >= 0.7 && voices[id].rate <= 1.2, id)
+    assert.match(design, /speaking Vietnamese with a .*accent/, id)
+    const { sampleText, designRequest, createRequest } = await import('../server/voice-design.mjs')
+    assert.ok(sampleText(id).length >= 100 && sampleText(id).length <= 1000, id)
+    assert.deepEqual(Object.keys(designRequest(id)).sort(), ['guidance_scale', 'loudness', 'model_id', 'text', 'voice_description'])
+    assert.equal(createRequest(id, 'gen-1').generated_voice_id, 'gen-1')
+  }
+  // Hồ Chí Minh speaks slowly and steadily, Quang Trung fast and fiery.
+  assert.ok(voices['ho-chi-minh'].rate < voices['quang-trung'].rate && voices['ho-chi-minh'].elevenlabs.stability > voices['quang-trung'].elevenlabs.stability)
+  const { formatVoices } = await import('../server/voice-design.mjs')
+  assert.equal(formatVoices(voices), await readFile(new URL('../shared/character-voices.json', import.meta.url), 'utf8'))
+  voices['ho-chi-minh'].elevenlabs.designedVoiceId = 'DesignedVietnameseVoice'
+  try { assert.equal(elevenLabsVoiceId('ho-chi-minh'), 'DesignedVietnameseVoice') } finally { delete voices['ho-chi-minh'].elevenlabs.designedVoiceId }
+  assert.equal(elevenLabsVoiceId('ho-chi-minh'), 'pqHfZKP75CvOlQylNhV4')
 })

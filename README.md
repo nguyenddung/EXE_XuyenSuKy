@@ -100,7 +100,8 @@ Sao chép `.env.example` thành `.env.local` (đã được Git bỏ qua) rồi 
 | `AI_ANSWERS_PER_DAY` / `AI_GLOBAL_ANSWERS_PER_DAY` | `40` / `500` | Hạn mức câu trả lời AI mỗi IP / toàn hệ thống |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | — | Dùng chung bộ đếm giới hạn giữa các instance |
 | `SPEECH_PROVIDER` | — | `elevenlabs` hoặc `azure` |
-| `ELEVENLABS_API_KEY`, `ELEVENLABS_MODEL`, `ELEVENLABS_VOICE_*` | — | Giọng đọc, trò chuyện trực tiếp và thuyết minh video |
+| `ELEVENLABS_API_KEY`, `ELEVENLABS_MODEL` | — | Giọng đọc, trò chuyện trực tiếp và thuyết minh video; mỗi nhân vật một giọng riêng trong `shared/character-voices.json` |
+| `ELEVENLABS_VOICE_<ID_NHAN_VAT>` | — | Thay giọng của một nhân vật (ví dụ `ELEVENLABS_VOICE_TRAN_HUNG_DAO`) |
 | `AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION` | — | Giọng đọc bằng Azure |
 | `SPEECH_DISABLED`, `LIVE_VOICE_DISABLED` | — | `1` để tắt giọng máy chủ / trò chuyện giọng nói trực tiếp |
 | `SPEECH_RATE_PER_MINUTE`, `SPEECH_REQUESTS_PER_DAY`, `SPEECH_GLOBAL_REQUESTS_PER_DAY` | `12`, `40`, `500` | Hạn mức tạo âm thanh |
@@ -124,6 +125,7 @@ Chi tiết từng dịch vụ giọng nói và pipeline RAG: [docs/characters.md
 | `npm run build:embeddings` | Tạo lại chỉ mục embedding (cần `OPENAI_API_KEY`) |
 | `npm run build:narration` | Thu thuyết minh video bằng ElevenLabs |
 | `npm run sync:voice-agents` | Tạo/cập nhật agent giọng nói của các nhân vật |
+| `npm run voices:design` / `voices:create` / `voices:reset` | Thiết kế giọng Việt riêng cho từng nhân vật bằng ElevenLabs Voice Design ([chi tiết](docs/characters.md)) |
 
 ## Cấu trúc thư mục
 

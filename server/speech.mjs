@@ -12,11 +12,19 @@ const numberEnv = (name, fallback) => {
   const value = Number(process.env[name])
   return Number.isFinite(value) && value > 0 ? value : fallback
 }
-/** The ElevenLabs voice of a character, shared by spoken answers and the live voice agents. */
+/**
+ * The ElevenLabs voice of a character, shared by spoken answers and the live voice agents: a per-character
+ * override (ELEVENLABS_VOICE_<ID>), else the Vietnamese voice designed for it (`designedVoiceId`, written by
+ * `npm run voices:create`), else its own default voice. Every character has a different voice.
+ */
 export function elevenLabsVoiceId(characterId) {
-  const female = voices[characterId].voice === 'vi-VN-HoaiMyNeural'
-  const defaultVoice = female ? process.env.ELEVENLABS_FEMALE_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL' : process.env.ELEVENLABS_VOICE_ID || (characterId === 'ngo-quyen' ? 'onwK4e9ZLuTAKqWW03F9' : 'JBFqnCBsd6RMkjVDRZzb')
-  return process.env[`ELEVENLABS_VOICE_${characterId.replaceAll('-', '_').toUpperCase()}`] || defaultVoice
+  const { designedVoiceId, voiceId } = voices[characterId].elevenlabs
+  return process.env[`ELEVENLABS_VOICE_${characterId.replaceAll('-', '_').toUpperCase()}`] || designedVoiceId || voiceId
+}
+/** Delivery of each character: steadier for calm elders, more expressive for fiery leaders. */
+export function elevenLabsSettings(characterId) {
+  const { rate, elevenlabs } = voices[characterId]
+  return { stability: elevenlabs.stability, similarity_boost: 0.75, style: elevenlabs.style, use_speaker_boost: true, speed: rate }
 }
 const configuration = (characterId) => {
   const provider = process.env.SPEECH_PROVIDER || (process.env.ELEVENLABS_API_KEY ? 'elevenlabs' : 'azure')
@@ -50,7 +58,7 @@ export function createSpeechService({ config = configuration, fetchAudio = fetch
     const quota = limits()
     const minute = await store.increment(`speech:min:${visitor}`, 60_000)
     if (minute.count > quota.perMinute) throw new SpeechError(429, 'SPEECH_RATE_LIMITED', 'Bạn đang nghe quá nhanh. Hãy thử lại sau.', Math.max(1, Math.ceil((minute.resetAt - Date.now()) / 1000)))
-    const body = provider === 'elevenlabs' ? JSON.stringify({ text: spokenText(text), model_id: model, language_code: 'vi', voice_settings: { stability: 0.65, similarity_boost: 0.75, speed: voices[characterId].rate } }) : speechSsml(characterId, text)
+    const body = provider === 'elevenlabs' ? JSON.stringify({ text: spokenText(text), model_id: model, language_code: 'vi', voice_settings: elevenLabsSettings(characterId) }) : speechSsml(characterId, text)
     const url = provider === 'elevenlabs' ? `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128` : `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`
     const headers = provider === 'elevenlabs' ? { 'xi-api-key': key, 'Content-Type': 'application/json', Accept: 'audio/mpeg' } : { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'XuyenSuKy' }
     const cacheKey = createHash('sha256').update(`${url}:${key}:${body}`).digest('hex')
