@@ -152,7 +152,7 @@ Chi tiết từng dịch vụ giọng nói và pipeline RAG: [docs/characters.md
 ├── public/                 # Ảnh nhân vật, minh hoạ dashboard, âm thanh thuyết minh
 ├── scripts/                # Nhập dữ liệu, kiểm tra, tạo embedding, thu âm, đồng bộ agent
 ├── tests/                  # node:test (*.test.mjs) và Playwright (*.spec.ts)
-└── docs/                   # Kiến trúc và tài liệu chi tiết
+└── docs/                   # Kiến trúc, lộ trình và tài liệu chi tiết
 ```
 
 ## Dữ liệu
@@ -265,7 +265,15 @@ gh secret set VERCEL_DEPLOY_HOOK -R nguyenddung/EXE_XuyenSuKy
 - Hành trình mới có lớp 6; video nhiệm vụ mới có Chương 2 và một nhiệm vụ của Chương 5.
 - Hoạt hình nói chưa đồng bộ khẩu hình theo âm vị.
 
-Lộ trình tiếp theo (chi tiết trong [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)): backend FastAPI với PostgreSQL + pgvector, đăng nhập thật và phân quyền ở máy chủ, đồng bộ tiến độ giữa thiết bị, đóng gói Docker để triển khai trên nhiều hạ tầng.
+Định hướng phát triển đầy đủ nằm trong **[docs/ROADMAP.md](docs/ROADMAP.md)**: tầm nhìn, 5 giai đoạn, chỉ số theo dõi, rủi ro và các việc nhóm cần quyết định. Tóm tắt:
+
+| Giai đoạn | Thời gian (đề xuất) | Trọng tâm |
+|---|---|---|
+| 1 · MVP cho EXE101 | 11 – 12/2026 | Hoàn thiện hành trình lớp 6, giọng Việt riêng, dùng thử với học sinh và giáo viên |
+| 2 · Nền tảng thật | 01 – 04/2027 | FastAPI + PostgreSQL + Docker ([docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)), đăng nhập thật, đồng bộ tiến độ |
+| 3 · Nội dung THCS | 03 – 06/2027 | Hành trình lớp 7 – 9, ngân hàng câu hỏi có nguồn |
+| 4 · Thí điểm nhà trường | 07 – 10/2027 | Lớp học thật, báo cáo cho giáo viên, khảo sát trước – sau |
+| 5 · Bền vững | từ 09/2027 | Bản quyền nội dung, mô hình kinh doanh, PWA, lớp 10 – 12 |
 
 ## Đóng góp
 
