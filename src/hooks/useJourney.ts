@@ -22,8 +22,11 @@ function readSelected(): Record<string, string> {
   } catch { return {} }
 }
 
-/** Loads the journeys (one per chapter) of the learner's grade and keeps their progress in this browser. */
-export function useJourney(grade: number) {
+/**
+ * Loads the journeys (one per chapter) of the learner's grade and keeps their progress in this browser.
+ * `onlyGrade`: a signed-in student sees only journeys of their own grade, never another grade's as a fallback.
+ */
+export function useJourney(grade: number, onlyGrade = false) {
   const [summaries, setSummaries] = useState<JourneySummary[] | null>(null)
   const [journey, setJourney] = useState<Journey | null>(null)
   const [error, setError] = useState('')
@@ -42,9 +45,9 @@ export function useJourney(grade: number) {
     historyApi<{ items: JourneySummary[] }>('journeys', controller.signal).then((data) => setSummaries(data.items)).catch((reason) => { if (!controller.signal.aborted) setError((reason as Error).message) })
     return () => controller.abort()
   }, [retry])
-  // Chapters of this grade; other grades fall back to all journeys so there is still something to try.
+  // Chapters of this grade; visitors of a grade without journeys may still try the others.
   const forGradeList = summaries?.filter((item) => item.grade === grade) || []
-  const choices = forGradeList.length ? forGradeList : summaries || []
+  const choices = forGradeList.length || onlyGrade ? forGradeList : summaries || []
   // Reopen the last chapter chosen for this grade, else the first one already started, else the first chapter.
   const chosen = choices.find((item) => item.id === selected[grade]) || choices.find((item) => store[item.id]?.xp) || choices[0]
   useEffect(() => {
@@ -73,7 +76,7 @@ export function useJourney(grade: number) {
   }
 
   const progress = (journey && store[journey.id]) || emptyProgress()
-  const status = journey && journey.id === chosen?.id ? 'ready' : error ? 'error' : summaries && !summaries.length ? 'empty' : 'loading'
+  const status = journey && journey.id === chosen?.id ? 'ready' : error ? 'error' : summaries && !choices.length ? 'empty' : 'loading'
   return {
     status: status as 'ready' | 'error' | 'empty' | 'loading',
     error,

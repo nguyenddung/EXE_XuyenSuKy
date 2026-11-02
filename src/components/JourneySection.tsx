@@ -40,9 +40,9 @@ export function JourneySection({ state, grade, onChat, onNotice, onRecord, launc
     else open(request)
   }, [launch?.token, journey?.id])
 
-  if (!journey) return <section id="journey" className="section-space journey-section" aria-labelledby="journey-title"><div className="page-shell"><div className="section-heading"><div><span className="section-kicker">HÀNH TRÌNH GAME HÓA</span><h2 id="journey-title">Hành trình lịch sử</h2></div></div>
+  if (!journey) return <section id="journey" className="section-space journey-section" aria-labelledby="journey-title"><div className="page-shell"><div className="section-heading"><div><span className="section-kicker">HÀNH TRÌNH GAME HÓA</span><h2 id="journey-title">Hành trình lịch sử · Lớp {grade}</h2></div></div>
     <ChapterPicker state={state} />
-    {state.status === 'error' ? <p role="alert" className="journey-state">{state.error} <button className="button-outline" type="button" onClick={state.retry}>Thử lại</button></p> : state.status === 'empty' ? <p className="journey-state">Chưa có hành trình nào được biên soạn.</p> : <p role="status" className="journey-state">Đang tải hành trình…</p>}
+    {state.status === 'error' ? <p role="alert" className="journey-state">{state.error} <button className="button-outline" type="button" onClick={state.retry}>Thử lại</button></p> : state.status === 'empty' ? <p className="journey-state">Hành trình game hoá cho Lớp {grade} đang được biên soạn. Trong lúc chờ, em hãy đọc các bài SGK lớp {grade} ở thư viện bên dưới.</p> : <p role="status" className="journey-state">Đang tải hành trình…</p>}
   </div></section>
 
   const ready = { ...state, journey }

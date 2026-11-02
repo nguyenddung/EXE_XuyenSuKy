@@ -151,3 +151,5 @@
   .staff-inline-form label, .staff-inline-form .staff-button { flex: 1 1 100%; }
   .staff-notice { right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); }
 }
+.staff-grade-cell { display: flex; align-items: center; gap: 8px; }
+.staff-grade-cell select { min-height: 34px !important; }

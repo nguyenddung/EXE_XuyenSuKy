@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { signInAsMember } from './member'
+import { asGuest, memberInGrade, signInAsMember } from './member'
 
 // Character conversations are for signed-in members.
 test.beforeEach(({ page }) => signInAsMember(page))
@@ -11,7 +11,8 @@ async function openCharacter(page: import('@playwright/test').Page, name: string
   await expect(page.locator('#chat-input')).toBeFocused()
 }
 
-test('12 illustrated characters load; aliases, era, grade and empty filters work', async ({ page }) => {
+test('12 illustrated characters load for a visitor; aliases, era, grade and empty filters work', async ({ page }) => {
+  await asGuest(page)
   await page.goto('/home#characters')
   await expect(page.locator('.character-card')).toHaveCount(12)
   for (const card of await page.locator('.character-card').all()) {
@@ -31,6 +32,14 @@ test('12 illustrated characters load; aliases, era, grade and empty filters work
   await expect(page.getByRole('heading', { name: 'Chưa tìm thấy nhân vật phù hợp' })).toBeVisible()
   await page.getByRole('button', { name: 'Xem tất cả nhân vật' }).click()
   await expect(page.locator('.character-card')).toHaveCount(12)
+})
+
+test('a signed-in student sees only the characters of their grade, without a grade filter', async ({ page }) => {
+  await page.goto('/home#characters')
+  await expect(page.locator('.character-card')).toHaveCount(9)
+  await expect(page.getByRole('combobox', { name: 'Lọc lớp có nhân vật' })).toHaveCount(0)
+  await expect(page.locator('#characters .heading-decoration')).toHaveText('9 NHÂN VẬT · LỚP 7')
+  await expect(page.locator('.character-card').filter({ hasText: 'Võ Nguyên Giáp' })).toHaveCount(0)
 })
 
 test('suggestions, contextual follow-ups and citations open the real lesson', async ({ page }) => {
@@ -89,6 +98,7 @@ test('mobile chat fits viewport, traps focus and Escape restores the trigger', a
   await page.setViewportSize({ width: 390, height: 844 })
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
+  await memberInGrade(page, 9)
   await openCharacter(page, 'Võ Nguyên Giáp')
   await page.getByRole('button', { name: 'Điện Biên Phủ diễn ra năm nào?', exact: true }).click()
   await expect(page.locator('.chat-answer')).toContainText('1954')

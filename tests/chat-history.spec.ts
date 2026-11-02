@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { memberSession as minhSession, signInAsMember } from './member'
+import { memberInGrade, memberSession as minhSession, signInAsMember } from './member'
 
 const prefix = 'xuyen-su-ky-chat-v1'
 const sessionKey = 'xuyen-su-ky-demo-v1'
@@ -26,6 +26,8 @@ async function useSession(page: Page, session: object) {
 }
 
 test('conversation survives reload, close and source lessons, and text and voice modes share it', async ({ page }) => {
+  // The Bạch Đằng 938 passage is in the grade 6 textbook: a grade 6 student can open it.
+  await memberInGrade(page, 6)
   await openCharacter(page, 'Ngô Quyền')
   await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
   await expect(page.locator('.chat-answer')).toContainText('938')

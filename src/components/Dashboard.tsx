@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
-import { ArrowRight, Bell, BookOpen, Check, ChevronDown, Compass, Flame, Home, Map as MapIcon, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Trophy, UserRound, X } from 'lucide-react'
+import { ArrowRight, Bell, BookOpen, Check, ChevronDown, Compass, Flame, Home, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Trophy, UserRound, X } from 'lucide-react'
 import { challengeActivities, demoAccount } from '../data/demo'
 import { rankingsFor } from '../data/leaderboard'
 import type { DemoActivity } from '../data/demo'
@@ -19,7 +19,6 @@ import { Link } from 'react-router-dom'
 
 const navigation = [
   { label: 'Trang chủ', view: 'dashboard', icon: Home },
-  { label: 'Hành trình', view: 'journey', icon: MapIcon },
   { label: 'Học tập', view: 'library', icon: BookOpen },
   { label: 'Khám phá', view: 'timeline', icon: Compass },
   { label: 'Nhân vật AI', view: 'characters', icon: UserRound },
@@ -29,7 +28,8 @@ const navigation = [
 
 export type LearningView = typeof navigation[number]['view']
 // Each menu item shows only its own section. Anchors inside a section open the section that holds them; other hashes keep the current one.
-const anchorViews: Record<string, LearningView> = { 'daily-missions': 'dashboard', classes: 'library', ...Object.fromEntries(navigation.map(item => [item.view, item.view])) }
+// "Học tập" holds the gamified journey (#journey) above the textbook library (#library).
+const anchorViews: Record<string, LearningView> = { 'daily-missions': 'dashboard', classes: 'library', journey: 'library', ...Object.fromEntries(navigation.map(item => [item.view, item.view])) }
 const viewFor = (hash: string): LearningView | undefined => anchorViews[decodeURIComponent(hash.replace(/^#/, ''))]
 
 interface Props {
@@ -46,12 +46,15 @@ interface Props {
   onLogout: () => void
   onOpenLesson: (id: string) => void
   onSelectGrade: (grade: number) => void
+  /** Signed-in student: everything stays in their own grade and there is no grade switch. */
+  gradeLocked?: boolean
   onQuiz: (activity: DemoActivity) => void
   onGame: (game: GameId) => void
   onChat: (character: Character, mode?: CharacterInteractionMode) => void
 }
 
-export function Dashboard({ learning, onCollection, sections, footer, session, readCount, gradeCount, recommendedLessonId, learningStreak, onLogin, onLogout, onOpenLesson, onSelectGrade, onQuiz, onGame, onChat }: Props) {
+export function Dashboard({ learning, onCollection, sections, footer, session, readCount, gradeCount, recommendedLessonId, learningStreak, onLogin, onLogout, onOpenLesson, onSelectGrade, gradeLocked = false, onQuiz, onGame, onChat }: Props) {
+  const shownEras = gradeLocked ? eras.filter((era) => era.grade === session.grade) : eras
   const [menuOpen, setMenuOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [view, setView] = useState<LearningView>(() => viewFor(window.location.hash) || 'dashboard')
@@ -61,7 +64,7 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
   const [searchBusy, setSearchBusy] = useState(false)
   const [searchError, setSearchError] = useState('')
   const [searchResults, setSearchResults] = useState<HistoryChunk[]>([])
-  const featured = useFeaturedCharacter()
+  const featured = useFeaturedCharacter(gradeLocked ? session.grade : undefined)
   const [lessons, setLessons] = useState<HistoryLesson[]>([])
   const [lessonError, setLessonError] = useState('')
   const [lessonLoading, setLessonLoading] = useState(true)
@@ -129,7 +132,7 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
     const controller = new AbortController(); searchRequest.current = controller
     setSearchBusy(true); setSearchOpen(true); setSearchError(''); setSearchResults([])
     try {
-      const data = await historyApi<PageResult<HistoryChunk>>(`search?q=${encodeURIComponent(query.trim())}&limit=5`, controller.signal)
+      const data = await historyApi<PageResult<HistoryChunk>>(`search?q=${encodeURIComponent(query.trim())}&limit=5${gradeLocked ? `&grade=${session.grade}` : ''}`, controller.signal)
       if (!controller.signal.aborted) setSearchResults(data.items)
     } catch (error) { if (!controller.signal.aborted) setSearchError((error as Error).message) }
     finally { if (!controller.signal.aborted) setSearchBusy(false) }
@@ -157,9 +160,9 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
     <div className="dashboard-main">
       <header className="dashboard-topbar">
         <button className="dashboard-menu-button" type="button" aria-label="Mở menu" onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
-        <form className="dashboard-search" role="search" onSubmit={submitSearch}><Search size={19} /><input ref={searchInput} type="search" value={query} onChange={(event) => { searchRequest.current?.abort(); setSearchBusy(false); setSearchResults([]); setSearchError(''); setQuery(event.target.value) }} onFocus={() => { if (searchResults.length || searchError) setSearchOpen(true) }} onKeyDown={(event) => { if (event.key === 'Escape') setSearchOpen(false) }} aria-label="Tìm sự kiện, nhân vật, thời kỳ" placeholder="Tìm kiếm sự kiện, nhân vật, thời kỳ..." /><kbd className="search-shortcut" aria-hidden="true">Ctrl K</kbd><button type="submit">Tìm</button></form>
+        <form className="dashboard-search" role="search" onSubmit={submitSearch}><Search size={19} /><input ref={searchInput} type="search" value={query} onChange={(event) => { searchRequest.current?.abort(); setSearchBusy(false); setSearchResults([]); setSearchError(''); setQuery(event.target.value) }} onFocus={() => { if (searchResults.length || searchError) setSearchOpen(true) }} onKeyDown={(event) => { if (event.key === 'Escape') setSearchOpen(false) }} aria-label="Tìm sự kiện, nhân vật, thời kỳ" placeholder={gradeLocked ? `Tìm trong SGK lớp ${session.grade}...` : "Tìm kiếm sự kiện, nhân vật, thời kỳ..."} /><kbd className="search-shortcut" aria-hidden="true">Ctrl K</kbd><button type="submit">Tìm</button></form>
         <div className="dashboard-top-actions"><a className="dashboard-notification" href="#daily-missions" aria-label="Xem nhiệm vụ hôm nay"><Bell size={21} /><i /></a><div className="dashboard-account"><button type="button" className="dashboard-account-button" aria-expanded={profileOpen} aria-label="Tài khoản" onClick={() => setProfileOpen(!profileOpen)}><span className={`dashboard-account-avatar ${session.loggedIn ? '' : 'is-guest'}`}>{session.loggedIn ? (session.name?.slice(0, 1).toUpperCase() || demoAccount.avatar) : 'K'}</span><span><strong>{session.loggedIn ? (session.name || demoAccount.name) : 'Khách'}</strong><small>{!session.loggedIn ? `Học thử · Lớp ${session.grade}` : session.role === 'admin' ? 'Quản trị viên' : session.role === 'teacher' ? 'Giáo viên' : `Học sinh lớp ${session.grade}`}</small></span><ChevronDown size={16} /></button>{profileOpen && <div className="dashboard-account-menu">{session.loggedIn && session.role === 'admin' && <Link to="/admin">Trang quản trị</Link>}{session.loggedIn && (session.role === 'teacher' || session.role === 'admin') && <Link to="/giao-vien">Khu giáo viên</Link>}<a href="#progress" onClick={() => setProfileOpen(false)}>Xem tiến độ</a>{!session.loggedIn && <button onClick={() => { onLogin(); setProfileOpen(false) }}>Đăng nhập để lưu tiến độ</button>}<a href="/" onClick={(event) => { event.preventDefault(); setProfileOpen(false); onLogout() }}>{session.loggedIn ? 'Đăng xuất' : 'Thoát chế độ học thử'}</a></div>}</div></div>
-        {searchOpen && <div className="dashboard-search-results" role="region" aria-label="Kết quả tìm kiếm"><div className="dashboard-search-results-head"><strong>Kết quả trong sách giáo khoa</strong><button type="button" aria-label="Đóng kết quả tìm kiếm" onClick={() => setSearchOpen(false)}><X size={17} /></button></div>{searchBusy ? <p>Đang tìm tư liệu…</p> : searchError ? <p role="alert">{searchError}</p> : searchResults.length ? searchResults.map((result) => <button type="button" key={result.id} onClick={() => openLesson(result.lessonId)}><BookOpen size={16} /><span><strong>{result.lessonTitle}</strong><small>Lớp {result.grade} · {result.sectionTitle}</small></span><ArrowRight size={15} /></button>) : <p>Chưa tìm thấy tư liệu. Thử từ khóa khác nhé.</p>}</div>}
+        {searchOpen && <div className="dashboard-search-results" role="region" aria-label="Kết quả tìm kiếm"><div className="dashboard-search-results-head"><strong>{gradeLocked ? `Kết quả trong SGK lớp ${session.grade}` : 'Kết quả trong sách giáo khoa'}</strong><button type="button" aria-label="Đóng kết quả tìm kiếm" onClick={() => setSearchOpen(false)}><X size={17} /></button></div>{searchBusy ? <p>Đang tìm tư liệu…</p> : searchError ? <p role="alert">{searchError}</p> : searchResults.length ? searchResults.map((result) => <button type="button" key={result.id} onClick={() => openLesson(result.lessonId)}><BookOpen size={16} /><span><strong>{result.lessonTitle}</strong><small>Lớp {result.grade} · {result.sectionTitle}</small></span><ArrowRight size={15} /></button>) : <p>Chưa tìm thấy tư liệu. Thử từ khóa khác nhé.</p>}</div>}
       </header>
 
       {view === 'dashboard' && <main className="dashboard-overview" id="dashboard" tabIndex={-1}>
@@ -170,18 +173,18 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
 
             <StudyPlan learning={learning} grade={session.grade} nextLesson={recommended[0]} onOpenLesson={openLesson} onCollection={onCollection} />
 
-            <section className="dashboard-section" aria-labelledby="era-title"><div className="dashboard-section-heading"><h2 id="era-title">Chọn giai đoạn lịch sử</h2><a href="#timeline">Xem tất cả <ArrowRight size={15} /></a></div><div className="dashboard-era-grid">{eras.map((era) => <button type="button" className="dashboard-era" key={era.title} onClick={() => openEra(era.grade, era.lessonId)}><img src={`/images/dashboard/${era.image}.webp`} alt="" loading="lazy" /><strong>{era.title}</strong></button>)}</div></section>
+            {shownEras.length > 0 && <section className="dashboard-section" aria-labelledby="era-title"><div className="dashboard-section-heading"><h2 id="era-title">Chọn giai đoạn lịch sử</h2><a href="#timeline">Xem tất cả <ArrowRight size={15} /></a></div><div className="dashboard-era-grid">{shownEras.map((era) => <button type="button" className="dashboard-era" key={era.title} onClick={() => openEra(era.grade, era.lessonId)}><img src={`/images/dashboard/${era.image}.webp`} alt="" loading="lazy" /><strong>{era.title}</strong></button>)}</div></section>}
 
             <section className="dashboard-section" id="daily-missions" aria-labelledby="missions-title"><div className="dashboard-section-heading"><h2 id="missions-title">Nhiệm vụ hôm nay</h2></div><div className="dashboard-mission-grid"><button className="dashboard-mission mission-blue" onClick={() => openLesson(`LS${session.grade}_B01`)}><span><BookOpen size={27} /></span><strong>Hoàn thành<br />bài học</strong><small>Mở bài lớp {session.grade}</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-orange" onClick={() => onQuiz(challengeActivities.quiz)}><span><Check size={26} /></span><strong>Làm câu quiz</strong><small>Ôn tập kiến thức</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-purple" onClick={() => featured ? onChat(featured) : showSection('characters')}><span><MessageCircle size={27} /></span><strong>Trò chuyện với<br />nhân vật AI</strong><small>Đặt một câu hỏi</small><ArrowRight size={17} /></button><button className="dashboard-mission mission-teal" onClick={() => onGame(nextGame.id)}><span><Trophy size={27} /></span><strong>Tham gia thử thách</strong><small>{nextGame.title}</small><ArrowRight size={17} /></button></div></section>
 
-            <section className="dashboard-section" aria-labelledby="lessons-title"><div className="dashboard-section-heading"><h2 id="lessons-title">Bài học đề xuất · Lớp {session.grade}</h2><a href="#library">Xem tất cả <ArrowRight size={15} /></a></div><label className="recommendation-grade">Lớp học <select aria-label="Đổi lớp đề xuất" value={session.grade} onChange={event => onSelectGrade(Number(event.target.value))}>{[6, 7, 8, 9, 10, 11, 12].map(grade => <option key={grade} value={grade}>Lớp {grade}</option>)}</select></label>{lessonLoading && <p role="status">Đang tải bài giảng…</p>}{lessonError && <p role="alert">{lessonError} <button onClick={() => setRetry(value => value + 1)}>Thử lại</button></p>}{!lessonLoading && !lessonError && !lessons.length && <p>Chưa có bài giảng cho lớp này.</p>}<div className="dashboard-lesson-grid">{recommended.map((item) => <button type="button" className="dashboard-lesson" key={item.id} onClick={() => openLesson(item.id)}><div className="dashboard-lesson-image"><img src={`/images/dashboard/${['bach-dang-938', 'ly', 'tay-son'][item.number % 3]}.webp`} alt="" loading="lazy" /><span>Lớp {item.grade} · Bài {item.number}</span></div><div className="dashboard-lesson-copy"><strong>{item.title}</strong><small>SGK lớp {item.grade} · {item.minutes} phút đọc</small><small className="recommendation-reason">{learning.journal.read.includes(item.id) ? "Ôn lại kiến thức đã đọc" : "Bài mới trong lộ trình của bạn"}</small><span><ArrowRight size={18} /></span></div></button>)}</div></section>
+            <section className="dashboard-section" aria-labelledby="lessons-title"><div className="dashboard-section-heading"><h2 id="lessons-title">Bài học đề xuất · Lớp {session.grade}</h2><a href="#library">Xem tất cả <ArrowRight size={15} /></a></div>{!gradeLocked && <label className="recommendation-grade">Lớp học <select aria-label="Đổi lớp đề xuất" value={session.grade} onChange={event => onSelectGrade(Number(event.target.value))}>{[6, 7, 8, 9, 10, 11, 12].map(grade => <option key={grade} value={grade}>Lớp {grade}</option>)}</select></label>}{lessonLoading && <p role="status">Đang tải bài giảng…</p>}{lessonError && <p role="alert">{lessonError} <button onClick={() => setRetry(value => value + 1)}>Thử lại</button></p>}{!lessonLoading && !lessonError && !lessons.length && <p>Chưa có bài giảng cho lớp này.</p>}<div className="dashboard-lesson-grid">{recommended.map((item) => <button type="button" className="dashboard-lesson" key={item.id} onClick={() => openLesson(item.id)}><div className="dashboard-lesson-image"><img src={`/images/dashboard/${['bach-dang-938', 'ly', 'tay-son'][item.number % 3]}.webp`} alt="" loading="lazy" /><span>Lớp {item.grade} · Bài {item.number}</span></div><div className="dashboard-lesson-copy"><strong>{item.title}</strong><small>SGK lớp {item.grade} · {item.minutes} phút đọc</small><small className="recommendation-reason">{learning.journal.read.includes(item.id) ? "Ôn lại kiến thức đã đọc" : "Bài mới trong lộ trình của bạn"}</small><span><ArrowRight size={18} /></span></div></button>)}</div></section>
           </div>
 
           <div className="dashboard-rail">
             {session.loggedIn && <StudentClassPanel userId={session.userId} readLessons={learning.journal.read} onOpenLesson={openLesson} />}
             <section className="dashboard-panel dashboard-progress" aria-labelledby="dash-progress-title"><div className="dashboard-panel-heading"><h2 id="dash-progress-title">Tiến độ học tập</h2><a href="#progress">Xem chi tiết <ArrowRight size={14} /></a></div><div className="dashboard-progress-body"><div className="dashboard-progress-ring" style={{ '--progress': `${percent}%` } as CSSProperties} role="progressbar" aria-label="Tỉ lệ bài đã đọc của lớp hiện tại" aria-valuenow={readCount} aria-valuemin={0} aria-valuemax={gradeCount || 1}><strong>{gradeCount ? `${percent}%` : '…'}</strong><small>Hoàn thành<br />bài lớp {session.grade}</small></div><div className="dashboard-progress-stats"><div><span className="stat-icon stat-amber"><BookOpen size={15} /></span><span>Bài học đã đọc</span><strong>{readCount}/{gradeCount || '…'}</strong></div><div><span className="stat-icon stat-green"><ShieldCheck size={15} /></span><span>Hoạt động</span><strong>{session.completedActivities.length}</strong></div><div><span className="stat-icon stat-blue"><Trophy size={15} /></span><span>XP đã nhận</span><strong>{session.earnedXp}</strong></div><div><span className="stat-icon stat-red"><Flame size={15} /></span><span>Chuỗi học tập</span><strong>{learningStreak} ngày</strong></div></div></div></section>
 
-            <section className="dashboard-panel dashboard-featured" aria-labelledby="dash-featured-title"><div className="dashboard-panel-heading"><h2 id="dash-featured-title">Nhân vật AI nổi bật</h2><a href="#characters">Xem tất cả <ArrowRight size={14} /></a></div><div className="dashboard-featured-body"><img src="/images/characters/tran-hung-dao.webp" alt="Minh họa Trần Hưng Đạo" /><div><strong>Trần Hưng Đạo</strong><small>(1228 – 1300)</small><p>“Cùng tìm hiểu hào khí Đông A và những trang sử thời Trần.”</p></div></div><FeaturedCharacterActions character={featured} onChat={onChat} /></section>
+            <section className="dashboard-panel dashboard-featured" aria-labelledby="dash-featured-title"><div className="dashboard-panel-heading"><h2 id="dash-featured-title">Nhân vật AI nổi bật</h2><a href="#characters">Xem tất cả <ArrowRight size={14} /></a></div><div className="dashboard-featured-body">{!featured || featured.id === 'tran-hung-dao' ? <><img src="/images/characters/tran-hung-dao.webp" alt="Minh họa Trần Hưng Đạo" /><div><strong>Trần Hưng Đạo</strong><small>(1228 – 1300)</small><p>“Cùng tìm hiểu hào khí Đông A và những trang sử thời Trần.”</p></div></> : <><img src={featured.image} alt={`Minh họa ${featured.name}`} /><div><strong>{featured.name}</strong><small>{featured.period}</small><p>“{featured.greeting}”</p></div></>}</div><FeaturedCharacterActions character={featured} onChat={onChat} /></section>
 
             <section className="dashboard-panel dashboard-ranking" aria-labelledby="dash-ranking-title"><div className="dashboard-panel-heading"><h2 id="dash-ranking-title">Bảng xếp hạng</h2><a href="#progress">Xem tất cả <ArrowRight size={14} /></a></div>{ranks.map((entry, index) => <div className={`dashboard-rank ${entry.isMe ? 'is-me' : ''}`} key={entry.name}><span className="dashboard-rank-number">{index + 1}</span><span className="dashboard-rank-avatar">{entry.avatar}</span><strong>{entry.name}</strong><span>{entry.xp.toLocaleString('vi-VN')}</span></div>)}</section>
           </div>

@@ -62,7 +62,8 @@ export function seedSchool(now = Date.now()): SchoolStore {
     { id: 'u-thay-dung', email: 'dung.gv@xuyensuki.vn', name: 'Thầy Dũng', role: 'teacher', status: 'active', school: 'THCS Nguyễn Du', createdAt: created },
     { id: 'u-hung', email: 'hung.gv@xuyensuki.vn', name: 'Thầy Trần Văn Hùng', role: 'teacher', status: 'active', school: 'THCS Lê Lợi', createdAt: created },
     { id: 'u-nam', email: 'nam.gv@xuyensuki.vn', name: 'Thầy Lê Hoài Nam', role: 'teacher', status: 'pending', school: 'THCS Chu Văn An', createdAt: iso(-1, now) },
-    { id: 'u-dung-demo', email: 'dung@xuyensuki.vn', name: 'Dũng', role: 'student', status: 'active', grade: 7, createdAt: created },
+    // The sample student has no grade yet: like a new registration, the first sign-in asks for it and then keeps it.
+    { id: 'u-dung-demo', email: 'dung@xuyensuki.vn', name: 'Dũng', role: 'student', status: 'active', createdAt: created },
     ...sampleStudents.map(([id, name, grade]) => ({ id: `u-${id}`, email: `${id}.hs@xuyensuki.vn`, name, role: 'student' as const, status: 'active' as const, grade, createdAt: created })),
   ]
   const progress = Object.fromEntries(sampleStudents.map(([id, , , read, xp, quizzes], index) => [`u-${id}`, { read, xp, quizzes, lastActive: iso(-(index % 5), now) }]))
@@ -212,6 +213,7 @@ export function joinClass(store: SchoolStore, student: SchoolUser, code: string)
   const item = store.classes.find((entry) => entry.joinCode === code.trim().toUpperCase() && !entry.archived)
   if (!item) throw new Error('Mã lớp không đúng hoặc lớp đã đóng.')
   if (item.studentIds.includes(student.id)) throw new Error(`Bạn đã ở trong lớp ${item.name}.`)
+  if (student.grade !== item.grade) throw new Error(`Lớp ${item.name} dành cho học sinh lớp ${item.grade}; em đang học lớp ${student.grade ?? '?'}.`)
   return { ...store, classes: store.classes.map((entry) => entry.id === item.id ? { ...entry, studentIds: [...entry.studentIds, student.id] } : entry) }
 }
 
@@ -219,6 +221,13 @@ export function syncProgress(store: SchoolStore, studentId: string, progress: Om
   const previous = store.progress[studentId]
   if (previous && previous.xp === progress.xp && previous.quizzes === progress.quizzes && previous.read.length === progress.read.length && previous.read.every((id) => progress.read.includes(id))) return store
   return { ...store, progress: { ...store.progress, [studentId]: { ...progress, lastActive: new Date().toISOString() } } }
+}
+
+/** A student's own first choice of grade (registration or first sign-in). Later changes go through an admin. */
+export function chooseOwnGrade(store: SchoolStore, studentId: string, grade: number): SchoolStore {
+  const user = userById(store, studentId)
+  if (!user || user.role !== 'student' || user.grade !== undefined || ![6, 7, 8, 9, 10, 11, 12].includes(grade)) return store
+  return { ...store, users: store.users.map((entry) => entry.id === studentId ? { ...entry, grade } : entry) }
 }
 
 export const classesOfStudent = (store: SchoolStore, studentId: string) => store.classes.filter((item) => !item.archived && item.studentIds.includes(studentId))
@@ -241,6 +250,17 @@ export function setRole(store: SchoolStore, actor: SchoolUser, userId: string, r
   if (user.role === 'admin' && user.status === 'active' && activeAdmins(store) <= 1) throw new Error('Hệ thống cần ít nhất một quản trị viên.')
   const next = { ...store, users: store.users.map((entry) => entry.id === userId ? { ...entry, role, grade: role === 'student' ? entry.grade ?? 7 : entry.grade } : entry) }
   return log(next, actor.id, 'Đổi vai trò', `${user.name}: ${roleLabels[user.role]} → ${roleLabels[role]}.`)
+}
+
+/** Admin fixes a student's grade; the student leaves classes of the old grade. */
+export function setGrade(store: SchoolStore, actor: SchoolUser, userId: string, grade: number): SchoolStore {
+  const user = requireOther(store, actor, userId)
+  if (user.role !== 'student') throw new Error('Chỉ học sinh mới có lớp học.')
+  if (![6, 7, 8, 9, 10, 11, 12].includes(grade)) throw new Error('Khối lớp không hợp lệ.')
+  if (user.grade === grade) return store
+  const left = store.classes.filter((item) => item.studentIds.includes(userId) && item.grade !== grade)
+  const next = { ...store, users: store.users.map((entry) => entry.id === userId ? { ...entry, grade } : entry), classes: store.classes.map((item) => left.includes(item) ? { ...item, studentIds: item.studentIds.filter((id) => id !== userId) } : item) }
+  return log(next, actor.id, 'Đổi lớp học sinh', `${user.name}: lớp ${user.grade ?? '—'} → lớp ${grade}${left.length ? `, rời ${left.map((item) => item.name).join(', ')}` : ''}.`)
 }
 
 export function setStatus(store: SchoolStore, actor: SchoolUser, userId: string, status: AccountStatus): SchoolStore {

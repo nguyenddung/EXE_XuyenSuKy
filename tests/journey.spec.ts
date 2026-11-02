@@ -231,7 +231,7 @@ test('the chapter test opens after every stage, asks twenty questions from the w
   await expect(page.locator('#journey .journey-chapter-check')).toContainText('Đã hoàn thành chương')
 })
 
-test('a guest who asks for an interview signs in over the mission, then the chat opens; other grades see a note; the dialog fits a phone screen', async ({ page }) => {
+test('a guest who asks for an interview signs in over the mission, then the chat opens; other grades see a note; a signed-in student stays in their grade', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
@@ -255,9 +255,10 @@ test('a guest who asks for an interview signs in over the mission, then the chat
   await expect(page.locator('#chat-title')).toContainText('Ngô Quyền')
   await page.keyboard.press('Escape')
   await expect(page.locator('dialog.chat-modal')).toHaveCount(0)
-  await expect(modal(page)).toBeVisible()
-  await modal(page).getByRole('button', { name: 'Vào thử thách' }).click()
-  expect(await modal(page).evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
+  // Signed in, the student keeps the grade 7 chosen as a guest: the grade 6 journey closes and grade 7 shows its own (none yet).
+  await expect(modal(page)).toHaveCount(0)
+  await expect(page.locator('#journey')).toContainText('Hành trình game hoá cho Lớp 7 đang được biên soạn')
+  await expect(page.getByRole('navigation', { name: 'Chọn chương' })).toHaveCount(0)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   expect(errors).toEqual([])
 })

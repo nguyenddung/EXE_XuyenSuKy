@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { registerLocal } from '../lib/localAccount'
 import { demoAccount } from '../data/demo'
-import { demoStaff, findUserByEmail, readSchool, requestTeacher, roleLabels, writeSchool, type Role } from '../lib/school'
+import { demoStaff, ensureStudent, findUserByEmail, readSchool, requestTeacher, roleLabels, writeSchool, type Role } from '../lib/school'
 import { rememberDays } from '../hooks/useDemoSession'
 
 interface Props {
@@ -51,6 +51,8 @@ export function LoginForm({ onLogin, onRegistered, autoFocus = true }: Props) {
           setInfo('Đã gửi yêu cầu tài khoản giáo viên. Bạn đăng nhập được sau khi quản trị viên duyệt.')
           return
         }
+        // The grade chosen in the form belongs to the account from the start, whatever was tried before as a guest.
+        if (grade) writeSchool(ensureStudent(readSchool(), email, email.trim().split('@')[0], grade))
       }
       // A new student signs straight in; an existing account must match the role chosen above the form.
       const result = await onLogin(email, password, remember, registering ? 'student' : loginRole)

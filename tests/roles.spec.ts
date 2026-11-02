@@ -94,8 +94,13 @@ test('a teacher registers, waits for approval, then the student joins the class 
   await page.goto('/dang-nhap')
   await page.getByRole('button', { name: 'Điền tài khoản mẫu' }).click()
   await page.locator('.login-form button[type=submit]').click()
+  // The student picks grade 6 once; from then on only grade 6 content and grade 6 classes are open to them.
+  await page.locator('.grade-onboarding').getByRole('button', { name: 'Lớp 6' }).click()
   await page.locator('.grade-onboarding .button-primary').click()
   await expect(page).toHaveURL(/\/home$/)
+  await page.locator('#join-code').fill('DUN7A1')
+  await page.getByRole('button', { name: 'Tham gia lớp', exact: true }).click()
+  await expect(page.locator('.student-join [role=alert]')).toContainText('dành cho học sinh lớp 7')
   await page.locator('#join-code').fill('SAI000')
   await page.getByRole('button', { name: 'Tham gia lớp', exact: true }).click()
   await expect(page.locator('.student-join [role=alert]')).toContainText('Mã lớp không đúng')

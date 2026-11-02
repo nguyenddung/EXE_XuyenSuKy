@@ -5,7 +5,7 @@ import { StaffLayout, StaffNotice, StaffStat, formatDate, formatDateTime } from 
 import { useDemoSession } from '../hooks/useDemoSession'
 import { useSchool } from '../hooks/useSchool'
 import { historyApi } from '../lib/historyApi'
-import { findUserByEmail, reviewTeacher, roleLabels, setRole, setStatus, statusLabels, systemStats, userById, type Role } from '../lib/school'
+import { findUserByEmail, reviewTeacher, roleLabels, setGrade, setRole, setStatus, statusLabels, systemStats, userById, type Role } from '../lib/school'
 
 const nav = [
   { id: 'overview', label: 'Tổng quan', icon: Activity },
@@ -87,7 +87,7 @@ export function AdminPage() {
             <th scope="row"><span className="staff-person"><span className={`staff-person-avatar role-${user.role}`}>{user.name.replace(/^(Cô|Thầy)\s+/, '').slice(0, 1)}</span><span><strong>{user.name}{self ? ' (bạn)' : ''}</strong><small>{user.email}</small></span></span></th>
             <td><select aria-label={`Vai trò của ${user.name}`} value={user.role} disabled={self} onChange={(event) => { const role = event.target.value as Role; if (window.confirm(`Đổi vai trò của ${user.name} thành ${roleLabels[role]}?`)) run((current) => setRole(current, actor, user.id, role), `${user.name} giờ là ${roleLabels[role].toLowerCase()}.`) }}>{(['student', 'teacher', 'admin'] as const).map((role) => <option key={role} value={role}>{roleLabels[role]}</option>)}</select></td>
             <td><span className={`staff-status status-${user.status}`}>{statusLabels[user.status]}</span></td>
-            <td><small>{user.role === 'student' ? `Lớp ${user.grade ?? '—'} · ${classCount} lớp học` : user.role === 'teacher' ? `${user.school ?? 'Chưa ghi trường'} · ${classCount} lớp` : 'Quản trị hệ thống'}</small></td>
+            <td>{user.role === 'student' ? <span className="staff-grade-cell"><select aria-label={`Lớp của ${user.name}`} value={user.grade ?? ''} onChange={(event) => { const grade = Number(event.target.value); if (window.confirm(`Chuyển ${user.name} sang lớp ${grade}? Học sinh sẽ chỉ thấy bài học lớp ${grade} và rời các lớp học khác khối.`)) run((current) => setGrade(current, actor, user.id, grade), `${user.name} giờ học lớp ${grade}.`) }}>{user.grade === undefined && <option value="">Chưa chọn lớp</option>}{[6, 7, 8, 9, 10, 11, 12].map((grade) => <option key={grade} value={grade}>Lớp {grade}</option>)}</select><small>{classCount} lớp học</small></span> : <small>{user.role === 'teacher' ? `${user.school ?? 'Chưa ghi trường'} · ${classCount} lớp` : 'Quản trị hệ thống'}</small>}</td>
             <td>{!self && <button type="button" className={`staff-button is-ghost ${user.status === 'active' ? 'is-danger-text' : ''}`} onClick={() => run((current) => setStatus(current, actor, user.id, user.status === 'active' ? 'locked' : 'active'), user.status === 'active' ? `Đã khoá ${user.name}.` : `Đã mở khoá ${user.name}.`)}>{user.status === 'active' ? <><Lock size={15} /> Khoá</> : <><LockOpen size={15} /> Mở khoá</>}</button>}</td>
           </tr>
         })}</tbody>

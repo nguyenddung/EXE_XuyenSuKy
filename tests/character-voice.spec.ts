@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { signInAsMember } from './member'
+import { memberInGrade, signInAsMember } from './member'
 
 // Character conversations are for signed-in members.
 test.beforeEach(({ page }) => signInAsMember(page))
@@ -243,6 +243,8 @@ test('stopping pending speech prevents late audio playback', async ({ page }) =>
 })
 
 test('browser fallback uses Vietnamese and per-character prosody, and stops when opening a source', async ({ page }) => {
+  // The cited Bạch Đằng 938 passage is in the grade 6 textbook.
+  await memberInGrade(page, 6)
   await installVoiceMocks(page)
   await mockUnconfigured(page)
   await openCharacter(page)
@@ -319,6 +321,7 @@ const animatedPeople = [
 
 for (const { name, id, prompt } of animatedPeople) {
   test(`${name} animates listening, waits for actual playback, and returns to rest on stop/end/reset`, async ({ page }) => {
+    if (id === 'vo-nguyen-giap') await memberInGrade(page, 9)
     await installVoiceMocks(page, true, true, true)
     await mockAzure(page)
     let release = () => {}
@@ -383,6 +386,7 @@ for (const { name, id, prompt } of animatedPeople) {
   })
 
   test(`${name} reads every browser speech chunk and closes the mouth only after the final chunk`, async ({ page }) => {
+    if (id === 'vo-nguyen-giap') await memberInGrade(page, 9)
     await installVoiceMocks(page)
     await mockUnconfigured(page)
     const answer = `${'Chiến thắng Bạch Đằng cho thấy trí tuệ và tinh thần đoàn kết của nhân dân. '.repeat(12)}Câu chuyện đến đây là hết. [1]`
@@ -417,6 +421,7 @@ for (const { name, id, prompt } of animatedPeople) {
   })
 
   test(`${name} painted portrait keeps its likeness, Vietnamese labels and controls across screen sizes`, async ({ page }) => {
+    if (id === 'vo-nguyen-giap') await memberInGrade(page, 9)
     const errors: string[] = []
     page.on('pageerror', (error) => errors.push(error.message))
     await installVoiceMocks(page)

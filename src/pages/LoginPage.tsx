@@ -19,7 +19,7 @@ export function LoginPage() {
   const destination = from ? `${from.pathname}${from.search}${from.hash}` : roleHome(session)
   const enter = () => navigate(destination, { replace: true, state: from?.state })
 
-  if (hasAppAccess(session) && !session.gradeSelected && isLearner(session)) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={grade => { selectGrade(grade); enter() }} /></main></div>
+  if (hasAppAccess(session) && !session.gradeSelected && isLearner(session)) return <div className="auth-page"><main className="auth-main"><GradeOnboarding permanent={session.loggedIn} grade={session.grade} onSelect={grade => { selectGrade(grade); enter() }} /></main></div>
 
   if (hasAppAccess(session)) return <Navigate to={destination} replace state={from?.state} />
 

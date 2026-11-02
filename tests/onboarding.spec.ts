@@ -23,10 +23,21 @@ test('registration asks for the grade in the form, filters recommendations and r
   await expect(page.locator('.dashboard-lesson')).toHaveCount(3)
   await expect(page.locator('.dashboard-lesson').first()).toContainText('SGK lớp 12')
   await expect(page.getByRole('button', { name: 'Tài khoản' })).toContainText('learner')
-  await page.getByLabel('Đổi lớp đề xuất').selectOption('10')
-  await expect(page.locator('.dashboard-lesson').first()).toContainText('SGK lớp 10')
+  // The grade stays with the account: no grade switch, and the library and search stay in grade 12.
+  await expect(page.getByLabel('Đổi lớp đề xuất')).toHaveCount(0)
   await page.reload()
-  await expect(page.getByLabel('Đổi lớp đề xuất')).toHaveValue('10')
+  await expect(page.locator('.dashboard-lesson').first()).toContainText('SGK lớp 12')
+  await page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name: 'Học tập', exact: true }).click()
+  await expect(page.locator('.learning-tabs-grade')).toHaveText('Lớp 12')
+  await expect(page.locator('#dataset-library-title')).toHaveText('Sách giáo khoa Lịch sử lớp 12')
+  await expect(page.getByLabel('Lọc lớp sách giáo khoa')).toHaveCount(0)
+  await expect(page.locator('#classes')).toHaveCount(0)
+  await expect(page.locator('.dataset-card').first()).toContainText('LỚP 12')
+  await expect(page.locator('#journey')).toContainText('Hành trình game hoá cho Lớp 12 đang được biên soạn')
+  await page.getByRole('searchbox', { name: 'Tìm sự kiện, nhân vật, thời kỳ' }).fill('Bach Dang')
+  await page.getByRole('button', { name: 'Tìm', exact: true }).click()
+  await expect(page.locator('.dashboard-search-results')).toContainText('Kết quả trong SGK lớp 12')
+  for (const item of await page.locator('.dashboard-search-results small').all()) await expect(item).toContainText('Lớp 12')
   await page.getByRole('button', { name: 'Tài khoản' }).click()
   await page.getByRole('link', { name: 'Đăng xuất' }).click()
   await page.goto('/dang-nhap')
@@ -34,7 +45,7 @@ test('registration asks for the grade in the form, filters recommendations and r
   await page.getByLabel('Mật khẩu', { exact: true }).fill('study-demo-123')
   await page.locator('.login-form button[type=submit]').click()
   await expect(page).toHaveURL(/\/home$/)
-  await expect(page.getByLabel('Đổi lớp đề xuất')).toHaveValue('10')
+  await expect(page.locator('.dashboard-lesson').first()).toContainText('SGK lớp 12')
 })
 
 test('a visitor who tried a grade as guest still gets the grade chosen while registering', async ({ page }) => {
@@ -52,7 +63,8 @@ test('a visitor who tried a grade as guest still gets the grade chosen while reg
   await page.getByRole('group', { name: 'Bạn đang học lớp mấy?' }).getByRole('radio', { name: 'Lớp 11' }).check()
   await page.getByRole('button', { name: 'Tạo tài khoản' }).click()
   await expect(page).toHaveURL(/\/home$/)
-  await expect(page.getByLabel('Đổi lớp đề xuất')).toHaveValue('11')
+  await expect(page.locator('.dashboard-lesson').first()).toContainText('SGK lớp 11')
+  await expect(page.getByLabel('Đổi lớp đề xuất')).toHaveCount(0)
 })
 
 test('mobile grade selection has no horizontal overflow', async ({ page }) => {

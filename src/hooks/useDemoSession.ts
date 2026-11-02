@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { verifyLocal } from '../lib/localAccount'
 import { demoAccount } from '../data/demo'
-import { accessProblem, demoStaff, ensureStudent, findUserByEmail, normalizeEmail, readSchool, roleLabels, writeSchool, type Role } from '../lib/school'
+import { accessProblem, chooseOwnGrade, demoStaff, ensureStudent, findUserByEmail, normalizeEmail, readSchool, roleLabels, writeSchool, type Role } from '../lib/school'
 
 export interface DemoSession {
   name?: string
@@ -35,7 +35,8 @@ function parse(storage: () => Storage, key: string) {
   try { return JSON.parse(storage().getItem(key) || 'null') as Partial<DemoSession> | null } catch { return null }
 }
 
-function readAuth(saved: Partial<DemoSession> | null): Auth {
+/** Auth plus the grade the directory keeps for a signed-in student. */
+function readAuth(saved: Partial<DemoSession> | null): Auth & { directoryGrade?: number } {
   const fromTab = parse(() => sessionStorage, authKey)
   const remembered = typeof saved?.expiresAt === 'number' && saved.expiresAt > Date.now()
   const source = fromTab || (remembered ? saved : null)
@@ -52,13 +53,16 @@ function readAuth(saved: Partial<DemoSession> | null): Auth {
     userId,
     name: loggedIn && typeof source.name === 'string' ? source.name : undefined,
     expiresAt: fromTab ? undefined : saved!.expiresAt,
+    directoryGrade: loggedIn && member?.role === 'student' ? member.grade : undefined,
   }
 }
 
 export function readSession(): DemoSession {
   const saved = parse(() => localStorage, storageKey)
-  const auth = readAuth(saved)
-  if (!saved) return { ...initialSession, ...auth }
+  const { directoryGrade, ...auth } = readAuth(saved)
+  // A signed-in student learns in the grade the directory keeps. (Signing in already drops a guest's earlier choice.)
+  const studentGrade = auth.loggedIn && auth.role === 'student' && directoryGrade !== undefined ? { grade: directoryGrade, gradeSelected: true } : null
+  if (!saved) return { ...initialSession, ...auth, ...studentGrade }
   return {
     ...auth,
     gradeSelected: saved.gradeSelected === true || (saved.gradeSelected === undefined && auth.loggedIn && [6, 7, 8, 9, 10, 11, 12].includes(saved.grade ?? 0)),
@@ -66,6 +70,7 @@ export function readSession(): DemoSession {
     grade: [6, 7, 8, 9, 10, 11, 12].includes(saved.grade ?? 0) ? saved.grade! : 7,
     completedActivities: Array.isArray(saved.completedActivities) ? saved.completedActivities.filter((id): id is string => typeof id === 'string') : [],
     earnedXp: typeof saved.earnedXp === 'number' && Number.isFinite(saved.earnedXp) && saved.earnedXp >= 0 ? saved.earnedXp : 0,
+    ...studentGrade,
   }
 }
 
@@ -84,6 +89,8 @@ export const hasAppAccess = (session: DemoSession) => session.loggedIn || sessio
 
 /** Students and guests learn at /home; teachers and admins start at their own area. */
 export const roleHome = (session: DemoSession) => session.loggedIn && session.role === 'admin' ? '/admin' : session.loggedIn && session.role === 'teacher' ? '/giao-vien' : '/home'
+/** A signed-in student keeps the grade chosen at registration: the learning app shows only that grade. */
+export const gradeLocked = (session: DemoSession) => session.loggedIn && session.role === 'student' && session.gradeSelected
 /** Grade onboarding only concerns learners. */
 export const isLearner = (session: DemoSession) => !session.loggedIn || !session.role || session.role === 'student'
 
@@ -117,13 +124,25 @@ export function useDemoSession() {
     const name = member?.name ?? (normalized === demoAccount.email ? demoAccount.name : email.trim().split('@')[0])
     if (!member) { school = ensureStudent(school, normalized, name); writeSchool(school) }
     const expiresAt = remember ? Date.now() + rememberDays * 86_400_000 : undefined
-    update((previous) => ({ ...previous, loggedIn: true, guest: false, userId: normalized, name, role: member?.role ?? 'student', expiresAt }))
+    // The directory's grade wins; a student without one keeps the grade already chosen in this browser (e.g. as a guest), else picks it next.
+    const studentGrade = actual === 'student' ? { grade: member?.grade ?? latest.current.grade, gradeSelected: member?.grade !== undefined || latest.current.gradeSelected } : {}
+    update((previous) => ({ ...previous, loggedIn: true, guest: false, userId: normalized, name, role: actual, expiresAt, ...studentGrade }))
     return true
   }
 
   function startGuest() { update((previous) => ({ ...previous, ...signedOut, guest: true })) }
   function logout() { update((previous) => ({ ...previous, ...signedOut })) }
-  function selectGrade(grade: number) { if (![6, 7, 8, 9, 10, 11, 12].includes(grade)) return; update((previous) => ({ ...previous, grade, gradeSelected: true })) }
+  function selectGrade(grade: number) {
+    const current = latest.current
+    if (![6, 7, 8, 9, 10, 11, 12].includes(grade) || gradeLocked(current)) return
+    // A student's first choice is kept in the directory; from then on only an admin changes it.
+    if (current.loggedIn && current.role === 'student' && current.userId) {
+      const school = readSchool()
+      const member = findUserByEmail(school, current.userId)
+      if (member) writeSchool(chooseOwnGrade(school, member.id, grade))
+    }
+    update((previous) => ({ ...previous, grade, gradeSelected: true }))
+  }
   function recordGame(id: string, stars: number) { update(previous => ({ ...previous, gameRecords: { ...previous.gameRecords, [id]: Math.max(previous.gameRecords[id] || 0, stars) } })) }
   function reset() { update((previous) => ({ ...initialSession, loggedIn: previous.loggedIn, guest: previous.guest, name: previous.name, userId: previous.userId, role: previous.role, expiresAt: previous.expiresAt, grade: previous.grade, gradeSelected: previous.gradeSelected })) }
 

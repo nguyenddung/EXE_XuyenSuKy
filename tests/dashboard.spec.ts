@@ -51,7 +51,7 @@ test('dashboard navigation works on mobile without horizontal overflow', async (
 
 test('each menu item shows only its own section', async ({ page }) => {
   await page.goto('/home')
-  const sections = { 'Trang chủ': '#dashboard', 'Hành trình': '#journey', 'Học tập': '#library', 'Khám phá': '#timeline', 'Nhân vật AI': '#characters', 'Thử thách': '#challenges', 'Bảng xếp hạng': '#progress' }
+  const sections = { 'Trang chủ': '#dashboard', 'Học tập': '#library', 'Khám phá': '#timeline', 'Nhân vật AI': '#characters', 'Thử thách': '#challenges', 'Bảng xếp hạng': '#progress' }
   for (const [name, selector] of Object.entries(sections)) {
     await openMenu(page, name)
     await expect(page).toHaveURL(new RegExp(`${selector}$`))
@@ -59,7 +59,17 @@ test('each menu item shows only its own section', async ({ page }) => {
     await expect(page.locator(selector)).toBeVisible()
     for (const other of Object.values(sections).filter(item => item !== selector)) await expect(page.locator(other)).toHaveCount(0)
   }
-  await page.goBack()
+  // "Học tập" holds the journey above the textbook library; #journey opens the same section.
+  await openMenu(page, 'Học tập')
+  await expect(page.locator('#journey')).toBeVisible()
+  await expect(page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name: 'Hành trình', exact: true })).toHaveCount(0)
+  await page.getByRole('navigation', { name: 'Các phần của Học tập' }).getByRole('link', { name: 'Hành trình' }).click()
+  await expect(page).toHaveURL(/#journey$/)
+  await expect(page.getByRole('navigation', { name: 'Các khu vực' }).getByRole('link', { name: 'Học tập', exact: true })).toHaveAttribute('aria-current', 'page')
+  await expect(page.locator('#library')).toBeVisible()
+  await openMenu(page, 'Bảng xếp hạng')
+  // History: … #challenges, #progress, #library, #journey, #progress.
+  for (let step = 0; step < 4; step++) await page.goBack()
   await expect(page.locator('#challenges')).toBeVisible()
   await expect(page.locator('#progress')).toHaveCount(0)
 })

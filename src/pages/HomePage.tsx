@@ -11,8 +11,8 @@ import { Dashboard } from '../components/Dashboard'
 import { ImageCredits } from '../components/ImageCredits'
 import type { Character, CharacterInteractionMode } from '../types'
 import type { DemoActivity } from '../data/demo'
-import { hasAppAccess, isLearner, storageOwner, useDemoSession } from '../hooks/useDemoSession'
-import { findUserByEmail, readSchool, syncProgress, writeSchool, type Role } from '../lib/school'
+import { gradeLocked, hasAppAccess, isLearner, storageOwner, useDemoSession } from '../hooks/useDemoSession'
+import { chooseOwnGrade, findUserByEmail, readSchool, syncProgress, writeSchool, type Role } from '../lib/school'
 import { Navbar } from '../components/Navbar'
 import { Hero, LandingCta } from '../components/Hero'
 import { ClassSelection } from '../components/ClassSelection'
@@ -41,6 +41,8 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   }, [landing])
   const { session, login, startGuest, logout, selectGrade, reset, completeActivity, recordGame } = useDemoSession()
   const authenticated = hasAppAccess(session)
+  // A signed-in student sees only their own grade; grade choices stay on the landing page and in guest mode.
+  const locked = !landing && gradeLocked(session)
   const chatOwner = storageOwner(session)
   const learning = useLearningJournal()
   const dataset = useHistoryDataset()
@@ -55,6 +57,11 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   useEffect(() => {
     const request = location.state as { lessonId?: string; grade?: number } | null
     if (landing || !request?.lessonId) return
+    if (gradeLocked(session) && !request.lessonId.startsWith(`LS${session.grade}_B`)) {
+      navigate(location.pathname, { replace: true, state: null })
+      setNotice(`Bài này thuộc lớp khác. Tài khoản của em học Lớp ${session.grade}.`)
+      return
+    }
     if (request.grade) selectGrade(request.grade)
     setLibrarySource('dataset')
     setRequestedLessonId(request.lessonId)
@@ -64,7 +71,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
   const recommendation = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.recommendation
   const gradeRead = learning.journal.read.filter((id) => id.startsWith(`LS${session.grade}_B`)).length
   const gradeCount = dataset.metadata?.grades.find((item) => item.grade === session.grade)?.lessonCount || 0
-  const journey = useJourney(session.grade)
+  const journey = useJourney(session.grade, locked)
   const [journeyLaunch, setJourneyLaunch] = useState<(JourneyLaunch & { token: number }) | null>(null)
   // Journey XP is earned per answer and stored with the journey progress; progress panels show it with activity XP.
   const progressSession = { ...session, earnedXp: session.earnedXp + journey.totalXp }
@@ -131,6 +138,13 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     navigate('/home', { state: { lessonId } })
   }
 
+  // Landing page: visitors pick a grade and start learning it (in guest mode unless already signed in).
+  function startGrade(grade: number) {
+    if (!session.loggedIn && !session.guest) startGuest()
+    selectGrade(grade)
+    navigate('/home#library')
+  }
+
   function handleSelectGrade(grade: number) {
     selectGrade(grade)
     showSection('library')
@@ -154,9 +168,9 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     window.setTimeout(() => showSection('library'), 60)
   }
   const journeySection = <JourneySection state={journey} grade={session.grade} onChat={openCharacter} onNotice={setNotice} onRecord={learning.record} launch={journeyLaunch} onLaunched={() => setJourneyLaunch(null)} onReadLesson={readLesson} />
-  const learningHub = <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} journeys={journey} onJourney={launchJourney} />
+  const learningHub = <LearningHub onCollectionHandled={() => setRequestedCollection(null)} requestedCollection={requestedCollection} learning={learning} grade={session.grade} completed={session.completedActivities} onQuiz={openActivity} dataset={dataset} source={librarySource} onSourceChange={setLibrarySource} requestedLessonId={requestedLessonId} onRequestHandled={() => setRequestedLessonId(null)} journeys={journey} onJourney={launchJourney} gradeLocked={locked} />
   const timeline = <HistoryTimeline />
-  const characters = <CharacterSection onChat={openCharacter} />
+  const characters = <CharacterSection onChat={openCharacter} lockedGrade={locked ? session.grade : undefined} />
   const challenges = <ChallengeSection records={session.gameRecords} completedActivities={session.completedActivities} onTry={setActiveGame} />
   const userProgress = <UserProgress
     session={progressSession}
@@ -179,20 +193,22 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
     const school = readSchool()
     const member = findUserByEmail(school, session.userId)
     if (!member) return
-    const next = syncProgress(school, member.id, { read: learning.journal.read, xp: progressSession.earnedXp, quizzes: quizCount })
+    // A session kept from before grades were stored in the directory records its grade there once.
+    const withGrade = session.gradeSelected ? chooseOwnGrade(school, member.id, session.grade) : school
+    const next = syncProgress(withGrade, member.id, { read: learning.journal.read, xp: progressSession.earnedXp, quizzes: quizCount })
     if (next !== school) writeSchool(next)
-  }, [session.loggedIn, session.role, session.userId, learning.journal.read, progressSession.earnedXp, quizCount])
+  }, [session.loggedIn, session.role, session.userId, session.gradeSelected, session.grade, learning.journal.read, progressSession.earnedXp, quizCount])
 
-  if (!landing && authenticated && !session.gradeSelected && isLearner(session)) return <div className="auth-page"><main className="auth-main"><GradeOnboarding grade={session.grade} onSelect={selectGrade} /></main></div>
+  if (!landing && authenticated && !session.gradeSelected && isLearner(session)) return <div className="auth-page"><main className="auth-main"><GradeOnboarding permanent={session.loggedIn} grade={session.grade} onSelect={selectGrade} /></main></div>
 
   return (
     <div className={landing ? 'landing-page' : 'learning-page'} id={landing ? 'top' : undefined}>
       {landing ? <>
         <Navbar session={session} onLogout={() => { logout(); setNotice('Bạn đã đăng xuất. Tiến độ học thử vẫn được lưu trên trình duyệt này.') }} />
-        <main><Hero authenticated={authenticated} onChat={openCharacter} />{timeline}{characters}{challenges}{stats}<LandingCta authenticated={authenticated} onTryGuest={() => { startGuest(); navigate('/home') }} /></main><ImageCredits /><Footer />
+        <main><Hero authenticated={authenticated} onChat={openCharacter} />{!gradeLocked(session) && <ClassSelection selectedGrade={session.grade} completedActivities={session.completedActivities} onSelect={startGrade} metadata={dataset.metadata} readLessons={learning.journal.read} />}{timeline}{characters}{challenges}{stats}<LandingCta authenticated={authenticated} onTryGuest={() => { startGuest(); navigate('/home') }} /></main><ImageCredits /><Footer />
       </> : <Dashboard
         learning={learning}
-        sections={{ journey: journeySection, library: <>{classSelection}{learningHub}</>, timeline: <>{timeline}{stats}</>, characters, challenges, progress: userProgress }}
+        sections={{ library: <><LearningTabs grade={session.grade} locked={locked} />{journeySection}{!locked && classSelection}{learningHub}</>, timeline: <>{timeline}{stats}</>, characters, challenges, progress: userProgress }}
         footer={<><ImageCredits /><Footer /></>}
         onCollection={filter => { setLibrarySource('dataset'); setRequestedCollection({ filter, token: Date.now() }); window.setTimeout(() => showSection('library'), 60) }}
         session={progressSession}
@@ -204,13 +220,14 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         onLogout={handleLogout}
         onOpenLesson={(id) => { setLibrarySource('dataset'); setRequestedLessonId(id) }}
         onSelectGrade={selectGrade}
+        gradeLocked={locked}
         onQuiz={openActivity}
         onGame={setActiveGame}
         onChat={openCharacter}
       />}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
-      {activeCharacter && session.loggedIn && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}
+      {activeCharacter && session.loggedIn && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} grade={gradeLocked(session) ? session.grade : undefined} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}
       {loginOpen && <LoginModal reason={pendingCharacter ? `Đăng nhập để ${pendingCharacter.mode === 'voice' ? 'nói chuyện' : 'nhắn tin'} với ${pendingCharacter.character.name}. Trò chuyện với nhân vật AI chỉ dành cho tài khoản đã đăng nhập.` : undefined} onClose={() => { setLoginOpen(false); setPendingActivity(null); setPendingCharacter(null) }} onLogin={handleLogin} onRegistered={selectGrade} />}
       {activeActivity && <ActivityModal
         key={activeActivity.id}
@@ -222,4 +239,13 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
       />}
     </div>
   )
+}
+
+// "Học tập" holds the journey and the textbook library; these links jump between the two parts.
+function LearningTabs({ grade, locked }: { grade: number; locked: boolean }) {
+  return <nav className="page-shell learning-tabs" aria-label="Các phần của Học tập">
+    {locked && <span className="learning-tabs-grade">Lớp {grade}</span>}
+    <a href="#journey">Hành trình</a>
+    <a href="#library">Thư viện SGK</a>
+  </nav>
 }

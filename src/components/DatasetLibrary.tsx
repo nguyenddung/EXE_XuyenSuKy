@@ -14,6 +14,8 @@ interface Props {
   metadata: DatasetMetadata
   learning: Learning
   grade: number
+  /** A signed-in student only sees their own grade: no grade filter, every list and search stays in it. */
+  gradeLocked?: boolean
   requestedLessonId: string | null
   onRequestHandled: () => void
   journeys: JourneyState
@@ -35,10 +37,11 @@ function JourneyBadge({ journeys, lessonId }: { journeys: JourneyState; lessonId
   return <span className="lesson-journey-badge">{lesson.videos > 0 && <><Clapperboard size={13} aria-hidden="true" /> {lesson.videos} video · </>}{lesson.missions} nhiệm vụ</span>
 }
 
-export function DatasetLibrary({ onCollectionHandled, requestedCollection, metadata, learning, grade, requestedLessonId, onRequestHandled, journeys, onJourney }: Props) {
+export function DatasetLibrary({ onCollectionHandled, requestedCollection, metadata, learning, grade, gradeLocked = false, requestedLessonId, onRequestHandled, journeys, onJourney }: Props) {
   const [query, setQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const [filterGrade, setFilterGrade] = useState(String(grade))
+  const shownGrade = gradeLocked ? String(grade) : filterGrade
   const [chapter, setChapter] = useState('')
   const [filter, setFilter] = useState('all')
   const [mode, setMode] = useState<'lessons' | 'search'>('lessons')
@@ -66,7 +69,7 @@ export function DatasetLibrary({ onCollectionHandled, requestedCollection, metad
     const controller = new AbortController()
     setError(''); setLoading(true)
     const params = new URLSearchParams({ page: String(page), limit: '6' })
-    if (filterGrade !== 'all') params.set('grade', filterGrade)
+    if (shownGrade !== 'all') params.set('grade', shownGrade)
     if (mode === 'search' && debouncedQuery.trim().length < 2) { setSources(null); setLoading(false); return () => controller.abort() }
     if (debouncedQuery) params.set('q', debouncedQuery)
     if (chapter && mode === 'lessons') params.set('chapter', chapter)
@@ -75,8 +78,9 @@ export function DatasetLibrary({ onCollectionHandled, requestedCollection, metad
     const promise = mode === 'lessons' ? historyApi<PageResult<HistoryLesson>>(`lessons?${params}`, controller.signal).then(data => { if (!controller.signal.aborted) setResult(data) }) : historyApi<PageResult<HistoryChunk>>(`search?${params}`, controller.signal).then(data => { if (!controller.signal.aborted) setSources(data) })
     promise.catch((failure: Error) => { if (!controller.signal.aborted) setError(failure.message) }).finally(() => { if (!controller.signal.aborted) setLoading(false) })
     return () => controller.abort()
-  }, [page, filterGrade, chapter, debouncedQuery, filter, collectionIds, mode, retry])
-  useEffect(() => { if (requestedLessonId) { setSelectedId(requestedLessonId); onRequestHandled() } }, [requestedLessonId, onRequestHandled])
+  }, [page, shownGrade, chapter, debouncedQuery, filter, collectionIds, mode, retry])
+  // A lesson of another grade (an old link, a search from before) never opens for a student locked to their grade.
+  useEffect(() => { if (requestedLessonId) { if (!gradeLocked || requestedLessonId.startsWith(`LS${grade}_B`)) setSelectedId(requestedLessonId); onRequestHandled() } }, [requestedLessonId, onRequestHandled])
   useEffect(() => {
     if (!selectedId) return
     const controller = new AbortController()
@@ -92,9 +96,9 @@ export function DatasetLibrary({ onCollectionHandled, requestedCollection, metad
   return <div className="dataset-library">
     <DatasetDailyGoal learning={learning} />
     {recommended && <div className="dataset-recommendation"><div><span className="section-kicker">BẮT ĐẦU VỚI LỚP {grade}</span><h3>{recommended.title}</h3><p>{gradeInfo.bookSeries} · {gradeInfo.lessonCount} bài học</p></div><button className="button-primary" onClick={() => setSelectedId(recommended.id)}>Mở bài học <ArrowRight size={16} /></button></div>}
-    <div className="dataset-stats"><span><strong>{metadata.totals.lessons}</strong> bài học</span><span><strong>{metadata.totals.chunks}</strong> đoạn tra cứu</span><span><strong>{metadata.grades.length}</strong> khối lớp</span><span>Nguồn SGK · v{metadata.version}</span></div>
-    <div className="library-toolbar"><label className="library-search"><Search size={19} /><span className="sr-only">Tìm kiếm sách giáo khoa</span><input type="search" value={query} maxLength={200} onChange={(event) => { setQuery(event.target.value); setPage(1) }} placeholder="Thử tìm: Bach Dang, Ho Chi Minh…" /></label><label><span className="sr-only">Lọc lớp sách giáo khoa</span><select value={filterGrade} onChange={(event) => { setFilterGrade(event.target.value); setChapter(''); setPage(1) }}><option value="all">Tất cả các lớp</option>{metadata.grades.map((item) => <option key={item.grade} value={item.grade}>Lớp {item.grade}</option>)}</select></label></div>
-    {filterGrade !== 'all' && mode === 'lessons' && <label className="dataset-chapter"><span>Lọc chương / chủ đề</span><select value={chapter} onChange={(event) => { setChapter(event.target.value); setPage(1) }}><option value="">Tất cả chương / chủ đề</option>{metadata.grades.find((item) => String(item.grade) === filterGrade)?.chapters.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>}
+    <div className="dataset-stats">{gradeLocked && gradeInfo ? <><span><strong>Lớp {grade}</strong> · {gradeInfo.bookSeries}</span><span><strong>{gradeInfo.lessonCount}</strong> bài học</span><span><strong>{gradeInfo.chunkCount}</strong> đoạn tra cứu</span></> : <><span><strong>{metadata.totals.lessons}</strong> bài học</span><span><strong>{metadata.totals.chunks}</strong> đoạn tra cứu</span><span><strong>{metadata.grades.length}</strong> khối lớp</span></>}<span>Nguồn SGK · v{metadata.version}</span></div>
+    <div className="library-toolbar"><label className="library-search"><Search size={19} /><span className="sr-only">Tìm kiếm sách giáo khoa</span><input type="search" value={query} maxLength={200} onChange={(event) => { setQuery(event.target.value); setPage(1) }} placeholder="Thử tìm: Bach Dang, Ho Chi Minh…" /></label>{!gradeLocked && <label><span className="sr-only">Lọc lớp sách giáo khoa</span><select value={shownGrade} onChange={(event) => { setFilterGrade(event.target.value); setChapter(''); setPage(1) }}><option value="all">Tất cả các lớp</option>{metadata.grades.map((item) => <option key={item.grade} value={item.grade}>Lớp {item.grade}</option>)}</select></label>}</div>
+    {shownGrade !== 'all' && mode === 'lessons' && <label className="dataset-chapter"><span>Lọc chương / chủ đề</span><select value={chapter} onChange={(event) => { setChapter(event.target.value); setPage(1) }}><option value="">Tất cả chương / chủ đề</option>{metadata.grades.find((item) => String(item.grade) === shownGrade)?.chapters.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>}
     <div className="library-filters" role="group" aria-label="Cách tra cứu dataset"><button aria-pressed={mode === 'lessons'} onClick={() => { setMode('lessons'); setPage(1) }}>Bài học</button><button aria-pressed={mode === 'search'} onClick={() => { setMode('search'); setPage(1) }}>Tra cứu đoạn có nguồn</button></div>
     {mode === 'lessons' && <div className="library-filters" role="group" aria-label="Lọc bài học sách giáo khoa">{[['all', 'Tất cả'], ['saved', 'Đã lưu'], ['unread', 'Chưa đọc'], ['review', 'Cần đọc lại'], ['notes', 'Có ghi chú']].map(([id, label]) => <button key={id} aria-pressed={filter === id} onClick={() => changeFilter(id)}>{label}</button>)}</div>}
     <div className="library-result-count" role="status">{loading ? 'Đang tải dữ liệu…' : error || (mode === 'search' && debouncedQuery.trim().length < 2 ? 'Nhập ít nhất 2 ký tự để tìm đoạn tư liệu có nguồn.' : `${count || 0} ${mode === 'lessons' ? 'bài học' : 'đoạn tư liệu'} phù hợp`)}{error && <button className="button-outline" onClick={() => setRetry((value) => value + 1)}>Thử lại</button>}</div>
