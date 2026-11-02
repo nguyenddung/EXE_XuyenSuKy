@@ -14,7 +14,7 @@ import { CharacterVoicePanel } from './CharacterVoicePanel'
 const CharacterLiveVoice = lazy(() => import('./CharacterLiveVoice'))
 
 /** `historyOwner` is the stable id of the signed-in demo account ('guest' for guests); null means the chat works but is not stored. */
-interface Props { character: Character; historyOwner: string | null; initialMode?: CharacterInteractionMode; onClose: () => void; onOpenLesson: (id: string) => void; /** Signed-in student's grade: answers come from that grade's textbook. */ grade?: number }
+interface Props { character: Character; historyOwner: string | null; initialMode?: CharacterInteractionMode; onClose: () => void; onOpenLesson: (id: string) => void; /** Signed-in student's grade: sources of other grades are shown but do not open their lesson. */ grade?: number }
 
 const timeLabel = (at?: number) => at && at > 0 ? new Date(at).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : ''
 const historyNoteFor = (notice: ReturnType<typeof useChatHistory>['notice']) =>
@@ -99,7 +99,7 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
     const context = apiContext(messages.slice(0, index))
     const settle = (change: (message: ChatExchange) => ChatExchange) => history.update(token, (previous) => previous.map((message) => message.id === id ? change(message) : message))
     try {
-      const reply = await askCharacter(character.id, question, context, controller.signal, grade)
+      const reply = await askCharacter(character.id, question, context, controller.signal)
       if (!controller.signal.aborted && tokenRef.current === token) {
         settle((message) => ({ id: message.id, question: message.question, askedAt: message.askedAt, reply: toChatReply(reply), answeredAt: Date.now() }))
         if (autoReadRef.current && modeRef.current === 'voice') void speech.play(reply.answer, index)

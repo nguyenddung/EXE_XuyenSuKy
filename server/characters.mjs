@@ -81,31 +81,17 @@ function candidates(chunk, terms, profile, intent, phrases, intro) {
   }).filter(Boolean)
 }
 
-export function characterReply(dataset, characterId, message, history = [], grade) {
-  return characterRetrieval(dataset, characterId, message, history, grade)?.reply ?? null
+export function characterReply(dataset, characterId, message, history = []) {
+  return characterRetrieval(dataset, characterId, message, history)?.reply ?? null
 }
 
 export const replyBase = (entry) => ({ characterId: entry.profile.id, mode: 'textbook', suggestions: entry.profile.suggestions, relatedLessons: entry.lessons.slice(0, 3).map(({ id, title, grade }) => ({ id, title, grade })) })
 
 // Lexical retrieval for one question. Besides the textbook reply it exposes what the RAG step reuses:
 // the intent, the chunks ranked by keyword evidence and the character's searchable scope.
-// `grade` (a student's own grade) answers from that grade's textbook first. When it has no fitting passage
-// (nothing found, or a date question whose passage holds no year), the whole textbook answers instead, so the
-// student never gets a wrong passage just because the event is taught in another grade.
-export function characterRetrieval(dataset, characterId, message, history = [], grade) {
-  const full = characterIndex(dataset).find((item) => item.profile.id === characterId)
-  if (!full) return null
-  const inGrade = grade ? full.related.filter(({ chunk }) => chunk.grade === grade) : []
-  if (inGrade.length) {
-    const scoped = retrieveIn(dataset, characterId, { ...full, related: inGrade, lessons: full.lessons.filter((lesson) => lesson.grade === grade) }, message, history, grade)
-    const quote = scoped.reply.sources?.[0]?.quote || ''
-    const fits = scoped.reply.kind !== 'not_found' && (scoped.intent !== 'date' || scoped.reply.kind !== 'grounded' || /\b\d{3,4}\b/.test(quote))
-    if (fits) return scoped
-  }
-  return retrieveIn(dataset, characterId, full, message, history)
-}
-
-function retrieveIn(dataset, characterId, entry, message, history, gradeOf) {
+export function characterRetrieval(dataset, characterId, message, history = []) {
+  const entry = characterIndex(dataset).find((item) => item.profile.id === characterId)
+  if (!entry) return null
   const { profile, related, lessons } = entry
   const q = normalize(message)
   const base = replyBase(entry)
@@ -137,8 +123,7 @@ function retrieveIn(dataset, characterId, entry, message, history, gradeOf) {
     ranked = dataset.searchableChunks.filter(({ chunk }) => ids.has(lessonId(chunk))).flatMap(({ chunk }) => candidates(chunk, terms, profile, intent, phrases, intro))
   }
   ranked.sort((a, b) => b.score - a.score || a.chunk.chunk_id.localeCompare(b.chunk.chunk_id))
-  const curated = !intro && reviewedPassage(dataset, characterId, contextualQuery, intent, terms.filter((term) => /^\d{3,4}$/.test(term)))
-  const reviewed = curated && (!gradeOf || curated.chunk.grade === gradeOf) ? curated : null
+  const reviewed = !intro && reviewedPassage(dataset, characterId, contextualQuery, intent, terms.filter((term) => /^\d{3,4}$/.test(term)))
   const best = reviewed || ranked[0]
   const rankedChunkIds = [...new Set([...(reviewed ? [reviewed.chunk.chunk_id] : []), ...ranked.map(({ chunk }) => chunk.chunk_id)])]
   const extra = { intent, rankedChunkIds, previousQuestion }

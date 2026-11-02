@@ -4,8 +4,8 @@ import type { Page } from '@playwright/test'
 export const memberSession = { loggedIn: true, guest: false, expiresAt: 4102444800000, userId: 'dung@xuyensuki.vn', name: 'Dũng', gradeSelected: true, grade: 7, completedActivities: [], earnedXp: 0 }
 
 /**
- * Puts the signed-in member in another grade once per tab (after signInAsMember), e.g. to reach a character who is only
- * in the textbook of grade 9. Later navigations keep whatever the page itself saved.
+ * Puts the signed-in member in another grade once per tab (after signInAsMember), e.g. to open a source lesson that is only
+ * in the grade 6 textbook. Later navigations keep whatever the page itself saved.
  */
 export const memberInGrade = (page: Page, grade: number) => page.addInitScript(([value, marker]) => {
   if (sessionStorage.getItem(marker)) return

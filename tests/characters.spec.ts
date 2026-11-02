@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { asGuest, memberInGrade, signInAsMember } from './member'
+import { asGuest, signInAsMember } from './member'
 
 // Character conversations are for signed-in members.
 test.beforeEach(({ page }) => signInAsMember(page))
@@ -34,12 +34,21 @@ test('12 illustrated characters load for a visitor; aliases, era, grade and empt
   await expect(page.locator('.character-card')).toHaveCount(12)
 })
 
-test('a signed-in student sees only the characters of their grade, without a grade filter', async ({ page }) => {
+test('a signed-in student sees every character, those of their grade first, and other grades\' sources only as text', async ({ page }) => {
   await page.goto('/home#characters')
-  await expect(page.locator('.character-card')).toHaveCount(9)
+  await expect(page.locator('.character-card')).toHaveCount(12)
   await expect(page.getByRole('combobox', { name: 'Lọc lớp có nhân vật' })).toHaveCount(0)
-  await expect(page.locator('#characters .heading-decoration')).toHaveText('9 NHÂN VẬT · LỚP 7')
-  await expect(page.locator('.character-card').filter({ hasText: 'Võ Nguyên Giáp' })).toHaveCount(0)
+  await expect(page.locator('#characters .heading-decoration')).toHaveText('12 NHÂN VẬT · 9 TRONG SGK LỚP 7')
+  await expect(page.locator('.character-group-title')).toHaveText(['Trong SGK lớp 7 9', 'Ở các lớp khác 3'])
+  await expect(page.locator('.character-card').first()).not.toContainText('Võ Nguyên Giáp')
+  await expect(page.locator('.character-card').last()).toContainText('Võ Nguyên Giáp')
+
+  // The Bạch Đằng 938 passage is in the grade 6 textbook: cited and quoted, but its lesson does not open for grade 7.
+  await page.locator('.character-card').filter({ has: page.getByRole('heading', { name: 'Ngô Quyền', exact: true }) }).getByRole('button', { name: 'Nhắn tin', exact: true }).click()
+  await page.getByRole('button', { name: 'Ngô Quyền thắng trận Bạch Đằng năm nào?', exact: true }).click()
+  await expect(page.locator('.chat-answer').first()).toContainText('938')
+  await expect(page.locator('.chat-source-other').first()).toContainText('SGK lớp 6 · ngoài chương trình lớp 7')
+  await expect(page.locator('.chat-sources button')).toHaveCount(0)
 })
 
 test('suggestions, contextual follow-ups and citations open the real lesson', async ({ page }) => {
@@ -98,7 +107,6 @@ test('mobile chat fits viewport, traps focus and Escape restores the trigger', a
   await page.setViewportSize({ width: 390, height: 844 })
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
-  await memberInGrade(page, 9)
   await openCharacter(page, 'Võ Nguyên Giáp')
   await page.getByRole('button', { name: 'Điện Biên Phủ diễn ra năm nào?', exact: true }).click()
   await expect(page.locator('.chat-answer')).toContainText('1954')

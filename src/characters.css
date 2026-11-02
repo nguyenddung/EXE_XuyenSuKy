@@ -195,3 +195,7 @@
 .chat-time { display: block; margin: -8px 2px 12px; text-align: right; color: #7b8c85; font-size: 12px; }
 .chat-history-note { margin: -8px 0 16px; text-align: center; color: #6a7766; font-size: 12px; line-height: 1.6; }
 .chat-source-other { display: block; margin-top: 6px; color: #7a6a4f; font-size: 12px; font-style: italic; }
+.character-group-title { display: flex; align-items: center; gap: 8px; margin: 26px 0 12px; color: #101f40; font-size: 17px; font-weight: 800; }
+.character-group-title:first-of-type { margin-top: 8px; }
+.character-group-title span { padding: 2px 9px; border-radius: 999px; background: #eaf4ff; color: #1264bd; font-size: 12px; }
+.character-group-note { margin: -4px 0 12px; color: #5d6f8f; font-size: 13px; }
