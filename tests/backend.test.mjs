@@ -498,3 +498,15 @@ test('a textbook fallback says why the AI answer was not used', async () => {
   failing.client.moderations.create = async () => { throw Object.assign(new Error('no'), { status: 401 }) }
   assert.equal((await ask('ngo-quyen', 'Vì sao ông đánh Nam Hán?', ragDeps(failing))).fallback, 'openai_401_check')
 })
+
+test('an answer model the key cannot use falls back to the second model and is skipped afterwards', async () => {
+  const fake = fakeOpenAI()
+  const create = fake.client.responses.create
+  const models = []
+  fake.client.responses.create = async (request) => { models.push(request.model); if (request.model === 'gpt-5-mini') throw Object.assign(new Error('model not found'), { status: 404 }); return create(request) }
+  const deps = ragDeps(fake, { model: () => 'gpt-5-mini', fallbackModel: () => 'gpt-4.1-mini', missingModels: new Set() })
+  assert.equal((await ask('ngo-quyen', 'Vì sao ông đánh Nam Hán?', deps)).mode, 'rag')
+  assert.equal((await ask('ngo-quyen', 'Trận Bạch Đằng diễn ra ở đâu?', deps)).mode, 'rag')
+  assert.deepEqual(models, ['gpt-5-mini', 'gpt-4.1-mini', 'gpt-4.1-mini'])
+  assert.equal(fake.calls.responses.at(-1).reasoning, undefined)
+})

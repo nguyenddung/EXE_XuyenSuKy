@@ -95,6 +95,7 @@ Sao chép `.env.example` thành `.env.local` (đã được Git bỏ qua) rồi 
 |---|---|---|
 | `OPENAI_API_KEY` | — | Bật câu trả lời RAG; thiếu thì trả trích đoạn SGK |
 | `OPENAI_MODEL` | `gpt-5-mini` | Model sinh câu trả lời |
+| `OPENAI_FALLBACK_MODEL` | `gpt-4.1-mini` | Model dự phòng khi key không dùng được `OPENAI_MODEL` (OpenAI trả 404) |
 | `AI_DISABLED` | — | `1` để tắt AI ngay mà không xoá khoá |
 | `CHAT_RATE_PER_MINUTE` | `12` | Số câu hỏi mỗi phút mỗi IP (vượt → HTTP 429) |
 | `AI_ANSWERS_PER_DAY` / `AI_GLOBAL_ANSWERS_PER_DAY` | `40` / `500` | Hạn mức câu trả lời AI mỗi IP / toàn hệ thống |

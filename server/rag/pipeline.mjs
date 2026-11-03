@@ -23,6 +23,9 @@ const defaultDeps = {
   limiter: createLimiter(),
   cache: createAnswerCache(),
   model: () => process.env.OPENAI_MODEL || 'gpt-5-mini',
+  // Used when the key's OpenAI project cannot use the model above (the API answers 404).
+  fallbackModel: () => process.env.OPENAI_FALLBACK_MODEL || 'gpt-4.1-mini',
+  missingModels: new Set(),
 }
 
 /**
@@ -71,7 +74,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     if (!passages.length) return fellBack(textbook, 'no_passages')
 
     step = 'answer'
-    const response = await openai.responses.create(generationRequest(deps.model(), entry.profile, retrieval.previousQuestion, question, passages))
+    const response = await createAnswer(openai, deps, entry.profile, retrieval.previousQuestion, question, passages)
     const usage = response.usage
     // One line per AI answer so token spend can be followed in the Vercel logs.
     if (usage) console.info('[character-rag] tokens', JSON.stringify({ character: characterId, input: usage.input_tokens, output: usage.output_tokens, reasoning: usage.output_tokens_details?.reasoning_tokens ?? 0, status: response.status }))
@@ -117,6 +120,20 @@ export function selectPassages(dataset, retrieval, index, queryVector) {
   lexical.forEach((id, rank) => fused.set(id, (fused.get(id) || 0) + 1 / (60 + rank)))
   semantic.forEach(({ id }, rank) => fused.set(id, (fused.get(id) || 0) + 1 / (60 + rank)))
   return [...fused].sort((a, b) => b[1] - a[1]).slice(0, maxPassages).map(([id]) => ({ chunk: dataset.chunksById.get(id), text: dataset.chunksById.get(id).text }))
+}
+
+// A key whose project cannot use the configured model gets 404: retry once on the fallback model and
+// remember that for the rest of this process, so later questions skip the failing call.
+async function createAnswer(openai, deps, ...args) {
+  const preferred = deps.model(), fallback = deps.fallbackModel?.() || ''
+  const missing = deps.missingModels || new Set()
+  const model = missing.has(preferred) && fallback ? fallback : preferred
+  try { return await openai.responses.create(generationRequest(model, ...args)) } catch (error) {
+    if (error?.status !== 404 || !fallback || model === fallback) throw error
+    missing.add(model)
+    console.warn(`[character-rag] Model ${model} is not available to this key; using ${fallback}`)
+    return openai.responses.create(generationRequest(fallback, ...args))
+  }
 }
 
 // Role-play prompt: the voice comes from the character's persona, the facts only from the passages.
