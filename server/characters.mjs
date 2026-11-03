@@ -137,11 +137,11 @@ export function characterRetrieval(dataset, characterId, message, history = []) 
   const selected = best ? [{ ...chunkResponse(best.chunk), quote: best.quote }] : []
   if (!selected.length) return result(notFoundReply(entry), extra)
   const { self, Self, address, Address } = voiceOf(profile)
-  const answer = `${intro ? `${Self} kể ${address} nghe về mình qua những trang sách giáo khoa nhé:` : `Để ${self} kể ${address} nghe điều sách giáo khoa còn ghi lại:`}\n\n${selected.map((source, index) => `[${index + 1}] “${source.quote}”`).join('\n\n')}\n\n${Address} mở bài học ở phần nguồn để đọc trọn câu chuyện, rồi hỏi ${self} thêm nhé.`
+  const answer = `${intro ? `${Self} kể ${address} nghe đôi điều về mình nhé. Sử sách chép rằng:` : `Chuyện ấy ${self} nhớ chứ. Sử sách chép lại thế này:`}\n\n${selected.map((source, index) => `[${index + 1}] “${source.quote}”`).join('\n\n')}\n\n${Address} muốn nghe kỹ hơn phần nào thì cứ hỏi tiếp ${self} nhé.`
   return result({ ...base, answer, sources: selected, kind: 'grounded' }, extra)
 }
 
 export const notFoundReply = (entry) => {
   const { self, Self, address, Address } = voiceOf(entry.profile)
-  return { ...replyBase(entry), answer: `${Self} lật mãi mà chưa thấy trang sách giáo khoa nào ghi lại điều ${address} hỏi, nên ${self} không dám kể sai. ${Address} hỏi ${self} về ${entry.profile.topics.join(', ')} hoặc chọn một câu gợi ý bên dưới nhé.`, sources: [], kind: 'not_found' }
+  return { ...replyBase(entry), answer: `Chuyện ấy ${self} chưa tìm được ghi chép nào đáng tin, nên ${self} không dám kể bừa. ${Address} hỏi ${self} về ${entry.profile.topics.join(', ')} hoặc chọn một câu gợi ý bên dưới nhé.`, sources: [], kind: 'not_found' }
 }
