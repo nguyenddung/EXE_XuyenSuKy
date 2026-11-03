@@ -1,0 +1,48 @@
+name: Chat smoke test
+
+# Manual check of the live AI characters: asks a few questions to production and prints the replies.
+# Each run spends a few AI answers from the daily budget, so it never runs on its own.
+on:
+  workflow_dispatch:
+    inputs:
+      questions:
+        description: "One question per line as character-id|question (empty = default set)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ask the live characters
+        env:
+          SITE: https://xuyen-su-ky.vercel.app
+          QUESTIONS: ${{ inputs.questions }}
+        run: |
+          node --input-type=module <<'JS'
+          const defaults = [
+            'ngo-quyen|Chiến thắng Bạch Đằng diễn ra năm nào?',
+            'tran-hung-dao|Ông đánh quân Nguyên thế nào?',
+            'ho-chi-minh|Bác ra đi tìm đường cứu nước khi nào?',
+            'hai-ba-trung|Vì sao hai bà khởi nghĩa?',
+            'ly-cong-uan|Vì sao ông dời đô về Thăng Long?',
+            'quang-trung|Ông là ai?',
+          ]
+          const lines = (process.env.QUESTIONS || '').split('\n').map((line) => line.trim()).filter(Boolean)
+          let failed = 0
+          for (const line of lines.length ? lines : defaults) {
+            const [id, message] = line.split('|')
+            const response = await fetch(`${process.env.SITE}/api/characters/${id}/chat`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message, history: [] }) })
+            const body = await response.json().catch(() => ({}))
+            if (!response.ok) failed++
+            console.log(`\n=== ${id}: ${message}`)
+            console.log(`HTTP ${response.status} · mode=${body.mode} · kind=${body.kind} · sources=${body.sources?.length ?? 0}${body.notice ? ` · notice: ${body.notice}` : ''}`)
+            console.log(body.answer ?? JSON.stringify(body))
+            for (const source of body.sources ?? []) console.log(`  - Lớp ${source.grade}: ${source.lessonTitle} (${source.source?.book}, tr. ${source.source?.pageStart})`)
+          }
+          process.exit(failed ? 1 : 0)
+          JS
