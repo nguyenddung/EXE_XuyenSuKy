@@ -303,3 +303,10 @@
 .login-grade-options input:checked + span { border-color: #273d65; background: #273d65; color: #fff; }
 .login-grade-options input:focus-visible + span { outline: 2px solid var(--sky-blue); outline-offset: 2px; }
 .login-form .login-grade small { color: var(--sky-text); font-size: 12px; line-height: 1.5; }
+
+/* The whole grade card opens the grade, not only "Khám phá": the button's hit area is stretched over the card. */
+.class-card { cursor: pointer; }
+.class-card .class-action::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.class-card:hover .class-action { color: #1c79cc; }
+.class-card:has(.class-action:focus-visible) { outline: 3px solid #5a9de1; outline-offset: 3px; }
+.class-card .class-action:focus-visible { outline: none; }

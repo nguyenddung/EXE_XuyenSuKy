@@ -94,3 +94,12 @@ test('the bell opens notifications that lead somewhere, instead of jumping to th
   await expect(page.getByRole('button', { name: /^Thông báo/ }).locator('i')).toHaveCount(0)
 })
 
+test('a grade card opens from anywhere on the card, not only from "Khám phá"', async ({ page }) => {
+  await page.goto('/')
+  const card = page.locator('.class-card').filter({ hasText: 'Lớp 8' })
+  await card.scrollIntoViewIfNeeded()
+  const title = (await card.locator('h3').boundingBox())!
+  await page.mouse.click(title.x + title.width / 2, title.y + title.height / 2)
+  await expect(page).toHaveURL(/\/home#library$/)
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('xuyen-su-ky-demo-v1')!).grade)).toBe(8)
+})
