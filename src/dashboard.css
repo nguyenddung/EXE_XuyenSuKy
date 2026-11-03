@@ -132,4 +132,13 @@
 .dashboard-notification-panel li small { display: block; margin-top: 2px; font-size: 12px; line-height: 1.5; color: #66758c; }
 .dashboard-notification-empty { padding: 18px 8px; margin: 0; font-size: 13px; color: #66758c; text-align: center; }
 @media (max-width: 680px) { .dashboard-notification-panel { position: fixed; top: 64px; right: 12px; left: 12px; width: auto; } }
+
+/* Spotlight: pointing at, focusing or pressing one card dims its neighbours, so the chosen one stands out. */
+:is(.dashboard-era-grid, .dashboard-mission-grid, .dashboard-lesson-grid) > * { transition: opacity .22s ease, filter .22s ease, transform .2s, box-shadow .2s; }
+@media (hover: hover) {
+  :is(.dashboard-era-grid, .dashboard-mission-grid, .dashboard-lesson-grid):has(> :hover) > :not(:hover) { opacity: .5; filter: saturate(.55); }
+}
+:is(.dashboard-era-grid, .dashboard-mission-grid, .dashboard-lesson-grid):has(> :focus-visible, > :active) > :not(:focus-visible, :active) { opacity: .5; filter: saturate(.55); }
+:is(.dashboard-era-grid, .dashboard-mission-grid, .dashboard-lesson-grid) > :is(:hover, :focus-visible, :active) { opacity: 1; filter: none; }
+@media (prefers-reduced-motion: reduce) { :is(.dashboard-era-grid, .dashboard-mission-grid, .dashboard-lesson-grid) > * { transition: none; } }
 @media (max-width: 680px) { .dashboard-topbar { gap: 10px; }.dashboard-search { flex: 1 1 auto; min-width: 0; }.dashboard-top-actions { flex: none; gap: 2px; } }
