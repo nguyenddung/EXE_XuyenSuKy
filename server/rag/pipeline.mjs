@@ -22,9 +22,9 @@ const defaultDeps = {
   index: (dataset) => (indexPromise ??= loadEmbeddingIndex(dataset)),
   limiter: createLimiter(),
   cache: createAnswerCache(),
-  model: () => process.env.OPENAI_MODEL || 'gpt-5-mini',
-  // Used when the key's OpenAI project cannot use the model above (the API answers 404).
-  fallbackModel: () => process.env.OPENAI_FALLBACK_MODEL || 'gpt-4.1-mini',
+  // Answer models in order of preference. OPENAI_MODEL may list several, comma-separated. A model the key's
+  // OpenAI project cannot use answers 404 and the next one is tried; OPENAI_FALLBACK_MODEL is the last resort.
+  models: () => [...new Set([...(process.env.OPENAI_MODEL || 'gpt-5-mini,gpt-5,gpt-5-nano').split(','), process.env.OPENAI_FALLBACK_MODEL || 'gpt-4.1-mini'].map((name) => name.trim()).filter(Boolean))],
   missingModels: new Set(),
 }
 
@@ -74,7 +74,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     if (!passages.length) return fellBack(textbook, 'no_passages')
 
     step = 'answer'
-    const response = await createAnswer(openai, deps, entry.profile, retrieval.previousQuestion, question, passages)
+    const { response, model } = await createAnswer(openai, deps, entry.profile, retrieval.previousQuestion, question, passages)
     const usage = response.usage
     // One line per AI answer so token spend can be followed in the Vercel logs.
     if (usage) console.info('[character-rag] tokens', JSON.stringify({ character: characterId, input: usage.input_tokens, output: usage.output_tokens, reasoning: usage.output_tokens_details?.reasoning_tokens ?? 0, status: response.status }))
@@ -88,13 +88,13 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     const order = new Map(verdict.cited.sort((a, b) => a - b).map((index, position) => [index, position + 1]))
     const answer = draft.replace(/\[(\d{1,2})\]/g, (_, index) => `[${order.get(Number(index))}]`)
     const sources = verdict.cited.map((index) => { const { chunk } = passages[index - 1]; return { ...chunkResponse(chunk), quote: chunk.text } })
-    const reply = { ...replyBase(entry), kind: 'grounded', mode: 'rag', answer, sources }
+    const reply = { ...replyBase(entry), kind: 'grounded', mode: 'rag', model, answer, sources }
     deps.cache.set(cacheKey, reply)
     return withQuotaNotice(reply, budget.remaining)
   } catch (error) {
     console.warn('[character-rag] OpenAI request failed:', error?.status || error?.code || error?.name || 'unknown')
     // The step tells a wrong model name (404 on "answer") from a moderation or embedding problem (404 on "check").
-    return fellBack(textbook, `openai_${error?.status || error?.code || error?.name || 'error'}_${step}${step === 'answer' ? `(${deps.model()})` : ''}`)
+    return fellBack(textbook, `openai_${error?.status || error?.code || error?.name || 'error'}_${step}${step === 'answer' ? `(${deps.models().join(',')})` : ''}`)
   }
 }
 
@@ -122,17 +122,18 @@ export function selectPassages(dataset, retrieval, index, queryVector) {
   return [...fused].sort((a, b) => b[1] - a[1]).slice(0, maxPassages).map(([id]) => ({ chunk: dataset.chunksById.get(id), text: dataset.chunksById.get(id).text }))
 }
 
-// A key whose project cannot use the configured model gets 404: retry once on the fallback model and
-// remember that for the rest of this process, so later questions skip the failing call.
+// A key whose OpenAI project cannot use a model gets 404: move on to the next model in the list and remember
+// that for the rest of this process, so later questions skip the failing call.
 async function createAnswer(openai, deps, ...args) {
-  const preferred = deps.model(), fallback = deps.fallbackModel?.() || ''
   const missing = deps.missingModels || new Set()
-  const model = missing.has(preferred) && fallback ? fallback : preferred
-  try { return await openai.responses.create(generationRequest(model, ...args)) } catch (error) {
-    if (error?.status !== 404 || !fallback || model === fallback) throw error
-    missing.add(model)
-    console.warn(`[character-rag] Model ${model} is not available to this key; using ${fallback}`)
-    return openai.responses.create(generationRequest(fallback, ...args))
+  const models = deps.models()
+  const usable = models.filter((model) => !missing.has(model))
+  for (const [position, model] of (usable.length ? usable : models).entries()) {
+    try { return { response: await openai.responses.create(generationRequest(model, ...args)), model } } catch (error) {
+      if (error?.status !== 404 || position === usable.length - 1) throw error
+      missing.add(model)
+      console.warn(`[character-rag] Model ${model} is not available to this key; trying the next one`)
+    }
   }
 }
 
