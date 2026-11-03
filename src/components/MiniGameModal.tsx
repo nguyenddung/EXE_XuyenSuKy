@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowDown, ArrowUp, ArrowRight, Lightbulb, RotateCcw, Trophy, X } from 'lucide-react'
+import { ArrowRight, Lightbulb, RotateCcw, Trophy, X } from 'lucide-react'
+import { SortableList } from './SortableList'
 import { cases, decisions, games, milestones, pairs, shuffle, type GameId } from '../data/minigames'
 
 type Finish = (summary: string, stars: number) => void
@@ -12,7 +13,7 @@ function TimelineGame({ finish }: { finish: Finish }) {
   const [message, setMessage] = useState('')
   function move(index: number, direction: number) { setOrder(old => { const next = [...old]; [next[index], next[index + direction]] = [next[index + direction], next[index]]; return next }); setMessage('') }
   function check() { const correct = order.filter((item, i) => item.year === milestones[i].year).length; setChecks(checks + 1); if (correct === order.length) finish('Bạn đã nối đúng 5 dấu mốc từ năm 40 đến 1789. Nhớ phân biệt hai chiến thắng Bạch Đằng: Ngô Quyền năm 938 và nhà Trần năm 1288.', hint ? 1 : checks === 0 ? 3 : 2); else setMessage(`${correct}/5 vị trí chính xác. Hãy tìm sự kiện sớm nhất trước, rồi kiểm tra lại. Bạn không mất lượt!`) }
-  return <><p className="game-instruction">Dùng nút ↑ ↓ để xếp từ <strong>sớm nhất đến muộn nhất</strong>. Có thể dùng bàn phím Tab và Enter.</p><ol className="timeline-puzzle">{order.map((item, index) => <li key={item.year}><span className="slot-number">{index + 1}</span><span>{item.label}{hint && <small>Năm {item.year}</small>}</span><div><button aria-label={`Đưa ${item.label} lên`} disabled={index === 0} onClick={() => move(index, -1)}><ArrowUp size={16} /></button><button aria-label={`Đưa ${item.label} xuống`} disabled={index === order.length - 1} onClick={() => move(index, 1)}><ArrowDown size={16} /></button></div></li>)}</ol>{message && <Feedback>{message}</Feedback>}<div className="game-controls"><button className="button-primary" onClick={check}>Kiểm tra dòng sử <ArrowRight size={16} /></button><button className="game-text-button" onClick={() => setHint(true)} disabled={hint}><Lightbulb size={16} /> {hint ? 'Đã mở năm gợi ý' : 'Gợi ý năm'}</button></div></>
+  return <><p className="game-instruction">Kéo thả để xếp từ <strong>sớm nhất đến muộn nhất</strong>. Có thể chọn một dòng bằng Tab rồi dùng phím ↑ ↓.</p><SortableList className="timeline-puzzle" numberClassName="slot-number" onMove={(from, to) => move(from, to - from)} items={order.map(item => ({ key: String(item.year), label: item.label, content: <>{item.label}{hint && <small>Năm {item.year}</small>}</> }))} />{message && <Feedback>{message}</Feedback>}<div className="game-controls"><button className="button-primary" onClick={check}>Kiểm tra dòng sử <ArrowRight size={16} /></button><button className="game-text-button" onClick={() => setHint(true)} disabled={hint}><Lightbulb size={16} /> {hint ? 'Đã mở năm gợi ý' : 'Gợi ý năm'}</button></div></>
 }
 
 function MemoryGame({ finish }: { finish: Finish }) {

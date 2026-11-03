@@ -23,7 +23,7 @@ async function answer(page: Page, question: Question) {
   if (question.type === 'sap_xep') {
     for (const [target, item] of question.items!.entries()) {
       const current = (await sheet.locator('.journey-order li > span:nth-child(2)').allTextContents()).indexOf(item)
-      for (let step = current; step > target; step--) await sheet.getByRole('button', { name: `Đưa lên: ${item}`, exact: true }).click()
+      for (let step = current; step > target; step--) await sheet.locator('.journey-order li').nth(step).press('ArrowUp')
     }
   }
   if (question.type === 'ghep_noi') for (const [left, right] of question.pairs!) await sheet.getByLabel(left, { exact: true }).selectOption({ label: right })

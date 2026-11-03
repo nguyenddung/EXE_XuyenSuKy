@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Award, BookOpen, Check, Clapperboard, Lightbulb, MessageCircle, Play, RotateCcw, Search, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Award, BookOpen, Check, Clapperboard, Lightbulb, MessageCircle, Play, RotateCcw, Search, X } from 'lucide-react'
+import { SortableList } from './SortableList'
 import type { JourneyState } from '../hooks/useJourney'
 import type { JournalKind } from '../hooks/useLearningJournal'
 import { JourneyVideo } from './JourneyVideo'
@@ -45,7 +46,7 @@ function QuestionCard({ question, answer, onChange, locked, result }: { question
   }
   if (question.type === 'sap_xep' && answer.type === 'sap_xep') {
     const move = (from: number, to: number) => { const sequence = [...answer.sequence];[sequence[from], sequence[to]] = [sequence[to], sequence[from]]; onChange({ ...answer, sequence }) }
-    body = <><p className="journey-hint-line">Dùng nút ↑ ↓ để đổi chỗ, sự kiện sớm nhất ở trên cùng.</p><ol className="journey-order">{answer.sequence.map((item, position) => <li key={item}><span className="journey-order-number">{position + 1}</span><span>{question.items[item]}</span><span className="journey-order-moves"><button type="button" aria-label={`Đưa lên: ${question.items[item]}`} disabled={locked || position === 0} onClick={() => move(position, position - 1)}><ArrowUp size={16} /></button><button type="button" aria-label={`Đưa xuống: ${question.items[item]}`} disabled={locked || position === answer.sequence.length - 1} onClick={() => move(position, position + 1)}><ArrowDown size={16} /></button></span></li>)}</ol></>
+    body = <><p className="journey-hint-line">Kéo thả để đổi chỗ, sự kiện sớm nhất ở trên cùng.</p><SortableList className="journey-order" numberClassName="journey-order-number" disabled={locked} onMove={move} items={answer.sequence.map(item => ({ key: String(item), label: question.items[item], content: question.items[item] }))} /></>
   }
   if (question.type === 'ghep_noi' && answer.type === 'ghep_noi') {
     body = <div className="journey-pairs">{question.pairs.map((pair, index) => <label key={pair[0]}><span>{pair[0]}</span><select aria-label={pair[0]} value={answer.match[index]} disabled={locked} onChange={(event) => onChange({ ...answer, match: answer.match.map((value, at) => at === index ? Number(event.target.value) : value) })}><option value={-1}>Chọn…</option>{answer.rights.map((right) => <option key={right} value={right}>{question.pairs[right][1]}</option>)}</select></label>)}</div>
