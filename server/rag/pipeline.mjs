@@ -46,14 +46,14 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
   const textbook = retrieval.reply
   if (textbook.kind === 'greeting' || textbook.kind === 'anachronism') return textbook
   const openai = deps.openai()
-  if (!openai) return textbook
+  if (!openai) return fellBack(textbook, 'ai_off')
 
   const cacheKey = `${characterId}|${normalize(retrieval.previousQuestion)}|${normalize(question)}`
   const cached = deps.cache.get(cacheKey)
   if (cached) return cached
 
   const budget = await deps.limiter.allowAiAnswer(visitor)
-  if (!budget.allowed) return { ...textbook, notice: budget.reason === 'visitor' ? 'Bạn đã dùng hết lượt trả lời bằng AI hôm nay, nên câu trả lời được trích trực tiếp từ sách giáo khoa.' : 'Hệ thống tạm dừng trả lời bằng AI vì đã đạt giới hạn hôm nay, nên câu trả lời được trích trực tiếp từ sách giáo khoa.' }
+  if (!budget.allowed) return { ...fellBack(textbook, 'budget'), notice: budget.reason === 'visitor' ? 'Bạn đã dùng hết lượt trả lời bằng AI hôm nay, nên câu trả lời được trích trực tiếp từ sách giáo khoa.' : 'Hệ thống tạm dừng trả lời bằng AI vì đã đạt giới hạn hôm nay, nên câu trả lời được trích trực tiếp từ sách giáo khoa.' }
 
   try {
     const index = await deps.index(dataset)
@@ -67,7 +67,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     if (blockedCategories.some((category) => categories[category])) return template(moderationAnswer, 'blocked', 'guardrail')
 
     const passages = selectPassages(dataset, retrieval, index, queryVector)
-    if (!passages.length) return textbook
+    if (!passages.length) return fellBack(textbook, 'no_passages')
 
     const response = await openai.responses.create(generationRequest(deps.model(), entry.profile, retrieval.previousQuestion, question, passages))
     const usage = response.usage
@@ -77,7 +77,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     const verdict = validateAnswer(draft, passages, { question, allowed: [voice.self, voice.address, ...voice.self.split(' '), ...entry.profile.aliases] })
     if (!verdict.ok) {
       console.warn('[character-rag] Answer rejected:', response.status === 'incomplete' ? `incomplete (${response.incomplete_details?.reason})` : verdict.reason)
-      return textbook
+      return fellBack(textbook, response.status === 'incomplete' ? 'incomplete' : `rejected: ${verdict.reason}`)
     }
     // Keep only cited passages and renumber citations to match the source list shown to the student.
     const order = new Map(verdict.cited.sort((a, b) => a - b).map((index, position) => [index, position + 1]))
@@ -88,9 +88,13 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     return withQuotaNotice(reply, budget.remaining)
   } catch (error) {
     console.warn('[character-rag] OpenAI request failed:', error?.status || error?.code || error?.name || 'unknown')
-    return textbook
+    return fellBack(textbook, `openai_${error?.status || error?.code || error?.name || 'error'}`)
   }
 }
+
+// Why a reply is a textbook quote rather than an AI answer, so the live site can be diagnosed without server logs.
+// Only a short code: never the key, the prompt or the provider's error message.
+const fellBack = (reply, reason) => ({ ...reply, fallback: reason })
 
 // Warn before a visitor's daily AI answers run out; the cached reply itself stays notice-free.
 const withQuotaNotice = (reply, remaining) => remaining !== undefined && remaining <= 5

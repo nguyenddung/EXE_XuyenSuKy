@@ -40,7 +40,7 @@ jobs:
             const body = await response.json().catch(() => ({}))
             if (!response.ok) failed++
             console.log(`\n=== ${id}: ${message}`)
-            console.log(`HTTP ${response.status} · mode=${body.mode} · kind=${body.kind} · sources=${body.sources?.length ?? 0}${body.notice ? ` · notice: ${body.notice}` : ''}`)
+            console.log(`HTTP ${response.status} · mode=${body.mode} · kind=${body.kind} · sources=${body.sources?.length ?? 0}${body.fallback ? ` · fallback=${body.fallback}` : ''}${body.notice ? ` · notice: ${body.notice}` : ''}`)
             console.log(body.answer ?? JSON.stringify(body))
             for (const source of body.sources ?? []) console.log(`  - Lớp ${source.grade}: ${source.lessonTitle} (${source.source?.book}, tr. ${source.source?.pageStart})`)
           }

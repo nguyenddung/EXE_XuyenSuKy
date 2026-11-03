@@ -491,3 +491,10 @@ test('timeline loader rejects unknown characters to ask and a name in two entrie
     await rm(root, { recursive: true, force: true })
   }
 })
+
+test('a textbook fallback says why the AI answer was not used', async () => {
+  assert.equal((await ask('ngo-quyen', 'Vì sao ông đánh Nam Hán?', ragDeps(fakeOpenAI(), { openai: () => null }))).fallback, 'ai_off')
+  const failing = fakeOpenAI()
+  failing.client.moderations.create = async () => { throw Object.assign(new Error('no'), { status: 401 }) }
+  assert.equal((await ask('ngo-quyen', 'Vì sao ông đánh Nam Hán?', ragDeps(failing))).fallback, 'openai_401')
+})
