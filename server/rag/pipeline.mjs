@@ -24,7 +24,7 @@ const defaultDeps = {
   cache: createAnswerCache(),
   // Answer models in order of preference. OPENAI_MODEL may list several, comma-separated. A model the key's
   // OpenAI project cannot use answers 404 and the next one is tried; OPENAI_FALLBACK_MODEL is the last resort.
-  models: () => [...new Set([...(process.env.OPENAI_MODEL || 'gpt-5-mini,gpt-5,gpt-5-nano').split(','), process.env.OPENAI_FALLBACK_MODEL || 'gpt-4.1-mini'].map((name) => name.trim()).filter(Boolean))],
+  models: () => [...new Set([...(process.env.OPENAI_MODEL || 'gpt-5-mini,gpt-5').split(','), process.env.OPENAI_FALLBACK_MODEL || 'gpt-4.1-mini'].map((name) => name.trim()).filter(Boolean))],
   missingModels: new Set(),
 }
 

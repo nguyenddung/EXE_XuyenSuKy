@@ -94,8 +94,8 @@ Sao chép `.env.example` thành `.env.local` (đã được Git bỏ qua) rồi 
 | Biến | Mặc định | Ý nghĩa |
 |---|---|---|
 | `OPENAI_API_KEY` | — | Bật câu trả lời RAG; thiếu thì trả trích đoạn SGK |
-| `OPENAI_MODEL` | `gpt-5-mini,gpt-5,gpt-5-nano` | Các model sinh câu trả lời theo thứ tự ưu tiên, cách nhau bằng dấu phẩy; model nào key không dùng được (OpenAI trả 404) thì chuyển sang model sau |
-| `OPENAI_FALLBACK_MODEL` | `gpt-4.1-mini` | Model cuối cùng khi không model nào ở trên dùng được |
+| `OPENAI_MODEL` | `gpt-5-mini,gpt-5` | Các model sinh câu trả lời theo thứ tự ưu tiên, cách nhau bằng dấu phẩy; model nào key không dùng được (OpenAI trả 404) thì chuyển sang model sau |
+| `OPENAI_FALLBACK_MODEL` | `gpt-4.1-mini` | Model cuối cùng khi không model nào ở trên dùng được. Không xếp `gpt-5-nano` trước model này: thử trên câu hỏi thật, nano trả lời kém hơn |
 | `AI_DISABLED` | — | `1` để tắt AI ngay mà không xoá khoá |
 | `CHAT_RATE_PER_MINUTE` | `12` | Số câu hỏi mỗi phút mỗi IP (vượt → HTTP 429) |
 | `AI_ANSWERS_PER_DAY` / `AI_GLOBAL_ANSWERS_PER_DAY` | `40` / `500` | Hạn mức câu trả lời AI mỗi IP / toàn hệ thống |
