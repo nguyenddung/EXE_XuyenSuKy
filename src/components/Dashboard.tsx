@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from 'react'
-import { ArrowRight, Bell, BookOpen, Check, ChevronDown, Compass, Flame, Home, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Trophy, UserRound, X } from 'lucide-react'
+import { ArrowRight, BookOpen, CalendarClock, Check, ChevronDown, Compass, Flame, Gamepad2, Home, LogIn, Target, Menu, MessageCircle, Search, ShieldCheck, Sparkles, Trophy, UserRound, X } from 'lucide-react'
 import { challengeActivities, demoAccount } from '../data/demo'
 import { rankingsFor } from '../data/leaderboard'
 import type { DemoActivity } from '../data/demo'
@@ -16,6 +16,11 @@ import { useFeaturedCharacter } from '../hooks/useFeaturedCharacter'
 import { FeaturedCharacterActions } from './FeaturedCharacterActions'
 import { StudentClassPanel } from './StudentClassPanel'
 import { Link } from 'react-router-dom'
+import { NotificationMenu, type Notice } from './NotificationMenu'
+import { useSchool } from '../hooks/useSchool'
+import { classesOfStudent, findUserByEmail } from '../lib/school'
+import { dayKey } from '../hooks/useLearningJournal'
+import { formatDate } from './StaffLayout'
 
 const navigation = [
   { label: 'Trang chủ', view: 'dashboard', icon: Home },
@@ -79,6 +84,8 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
   const searchInput = useRef<HTMLInputElement>(null)
   const searchRequest = useRef<AbortController | null>(null)
   const ranks = rankingsFor(session)
+  const { store: school } = useSchool()
+  const notices = buildNotices()
 
   useEffect(() => {
     const controller = new AbortController()
@@ -144,6 +151,26 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
     showSection('library')
   }
 
+  // What needs attention now, most urgent first: class assignments, the lesson left half-read, today's goal, a new game.
+  function buildNotices(): Notice[] {
+    const list: Notice[] = []
+    const today = dayKey()
+    const student = session.loggedIn && session.userId ? findUserByEmail(school, session.userId) : undefined
+    if (student?.role === 'student') {
+      const classIds = classesOfStudent(school, student.id).map(item => item.id)
+      school.assignments.filter(entry => classIds.includes(entry.classId) && !learning.journal.read.includes(entry.lessonId)).sort((a, b) => a.dueAt.localeCompare(b.dueAt)).forEach(entry => {
+        const overdue = Date.parse(entry.dueAt) < Date.now()
+        list.push({ id: `assignment-${entry.id}`, icon: <CalendarClock size={18} />, urgent: overdue || Date.parse(entry.dueAt) - Date.now() < 2 * 86400000, title: `Bài được giao: ${entry.lessonTitle}`, detail: `${overdue ? 'Quá hạn' : 'Hạn'} ${formatDate(entry.dueAt)}`, onOpen: () => openLesson(entry.lessonId) })
+      })
+    }
+    if (resume) list.push({ id: `resume-${resume[0]}`, icon: <BookOpen size={18} />, title: 'Đọc tiếp bài đang dở', detail: resume[1].title, onOpen: () => openLesson(resume[0]) })
+    const done = learning.journal.events.filter(event => event.day === today).length
+    if (done < learning.journal.goal) list.push({ id: `goal-${today}`, icon: done === 0 && learningStreak > 0 ? <Flame size={18} /> : <Target size={18} />, title: done === 0 && learningStreak > 0 ? `Giữ chuỗi ${learningStreak} ngày học` : 'Mục tiêu hôm nay', detail: `Còn ${learning.journal.goal - done} hoạt động để đạt mục tiêu ${learning.journal.goal} hoạt động/ngày.`, onOpen: () => document.getElementById('study-plan-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' }) })
+    if (nextGame && !session.completedActivities.includes('minigame-' + nextGame.id)) list.push({ id: `game-${nextGame.id}`, icon: <Gamepad2 size={18} />, title: `Thử thách mới: ${nextGame.title}`, detail: `Hoàn thành để nhận ${nextGame.reward} XP.`, onOpen: () => onGame(nextGame.id) })
+    if (!session.loggedIn) list.push({ id: 'guest-login', icon: <LogIn size={18} />, title: 'Lưu tiến độ của bạn', detail: 'Đăng nhập để giữ tiến độ, làm quiz và có hồ sơ học tập.', onOpen: onLogin })
+    return list
+  }
+
   function openEra(grade: number, lessonId: string) {
     onSelectGrade(grade)
     openLesson(lessonId)
@@ -161,7 +188,7 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
       <header className="dashboard-topbar">
         <button className="dashboard-menu-button" type="button" aria-label="Mở menu" onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
         <form className="dashboard-search" role="search" onSubmit={submitSearch}><Search size={19} /><input ref={searchInput} type="search" value={query} onChange={(event) => { searchRequest.current?.abort(); setSearchBusy(false); setSearchResults([]); setSearchError(''); setQuery(event.target.value) }} onFocus={() => { if (searchResults.length || searchError) setSearchOpen(true) }} onKeyDown={(event) => { if (event.key === 'Escape') setSearchOpen(false) }} aria-label="Tìm sự kiện, nhân vật, thời kỳ" placeholder={gradeLocked ? `Tìm trong SGK lớp ${session.grade}...` : "Tìm kiếm sự kiện, nhân vật, thời kỳ..."} /><kbd className="search-shortcut" aria-hidden="true">Ctrl K</kbd><button type="submit">Tìm</button></form>
-        <div className="dashboard-top-actions"><a className="dashboard-notification" href="#daily-missions" aria-label="Xem nhiệm vụ hôm nay"><Bell size={21} /><i /></a><div className="dashboard-account"><button type="button" className="dashboard-account-button" aria-expanded={profileOpen} aria-label="Tài khoản" onClick={() => setProfileOpen(!profileOpen)}><span className={`dashboard-account-avatar ${session.loggedIn ? '' : 'is-guest'}`}>{session.loggedIn ? (session.name?.slice(0, 1).toUpperCase() || demoAccount.avatar) : 'K'}</span><span><strong>{session.loggedIn ? (session.name || demoAccount.name) : 'Khách'}</strong><small>{!session.loggedIn ? `Học thử · Lớp ${session.grade}` : session.role === 'admin' ? 'Quản trị viên' : session.role === 'teacher' ? 'Giáo viên' : `Học sinh lớp ${session.grade}`}</small></span><ChevronDown size={16} /></button>{profileOpen && <div className="dashboard-account-menu">{session.loggedIn && session.role === 'admin' && <Link to="/admin">Trang quản trị</Link>}{session.loggedIn && (session.role === 'teacher' || session.role === 'admin') && <Link to="/giao-vien">Khu giáo viên</Link>}<a href="#progress" onClick={() => setProfileOpen(false)}>Xem tiến độ</a>{!session.loggedIn && <button onClick={() => { onLogin(); setProfileOpen(false) }}>Đăng nhập để lưu tiến độ</button>}<a href="/" onClick={(event) => { event.preventDefault(); setProfileOpen(false); onLogout() }}>{session.loggedIn ? 'Đăng xuất' : 'Thoát chế độ học thử'}</a></div>}</div></div>
+        <div className="dashboard-top-actions"><NotificationMenu notices={notices} /><div className="dashboard-account"><button type="button" className="dashboard-account-button" aria-expanded={profileOpen} aria-label="Tài khoản" onClick={() => setProfileOpen(!profileOpen)}><span className={`dashboard-account-avatar ${session.loggedIn ? '' : 'is-guest'}`}>{session.loggedIn ? (session.name?.slice(0, 1).toUpperCase() || demoAccount.avatar) : 'K'}</span><span><strong>{session.loggedIn ? (session.name || demoAccount.name) : 'Khách'}</strong><small>{!session.loggedIn ? `Học thử · Lớp ${session.grade}` : session.role === 'admin' ? 'Quản trị viên' : session.role === 'teacher' ? 'Giáo viên' : `Học sinh lớp ${session.grade}`}</small></span><ChevronDown size={16} /></button>{profileOpen && <div className="dashboard-account-menu">{session.loggedIn && session.role === 'admin' && <Link to="/admin">Trang quản trị</Link>}{session.loggedIn && (session.role === 'teacher' || session.role === 'admin') && <Link to="/giao-vien">Khu giáo viên</Link>}<a href="#progress" onClick={() => setProfileOpen(false)}>Xem tiến độ</a>{!session.loggedIn && <button onClick={() => { onLogin(); setProfileOpen(false) }}>Đăng nhập để lưu tiến độ</button>}<a href="/" onClick={(event) => { event.preventDefault(); setProfileOpen(false); onLogout() }}>{session.loggedIn ? 'Đăng xuất' : 'Thoát chế độ học thử'}</a></div>}</div></div>
         {searchOpen && <div className="dashboard-search-results" role="region" aria-label="Kết quả tìm kiếm"><div className="dashboard-search-results-head"><strong>{gradeLocked ? `Kết quả trong SGK lớp ${session.grade}` : 'Kết quả trong sách giáo khoa'}</strong><button type="button" aria-label="Đóng kết quả tìm kiếm" onClick={() => setSearchOpen(false)}><X size={17} /></button></div>{searchBusy ? <p>Đang tìm tư liệu…</p> : searchError ? <p role="alert">{searchError}</p> : searchResults.length ? searchResults.map((result) => <button type="button" key={result.id} onClick={() => openLesson(result.lessonId)}><BookOpen size={16} /><span><strong>{result.lessonTitle}</strong><small>Lớp {result.grade} · {result.sectionTitle}</small></span><ArrowRight size={15} /></button>) : <p>Chưa tìm thấy tư liệu. Thử từ khóa khác nhé.</p>}</div>}
       </header>
 
