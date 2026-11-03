@@ -55,6 +55,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
   const budget = await deps.limiter.allowAiAnswer(visitor)
   if (!budget.allowed) return { ...fellBack(textbook, 'budget'), notice: budget.reason === 'visitor' ? 'Bạn đã dùng hết lượt trả lời bằng AI hôm nay, nên câu trả lời được trích trực tiếp từ sách giáo khoa.' : 'Hệ thống tạm dừng trả lời bằng AI vì đã đạt giới hạn hôm nay, nên câu trả lời được trích trực tiếp từ sách giáo khoa.' }
 
+  let step = 'check'
   try {
     const index = await deps.index(dataset)
     const searchText = retrieval.previousQuestion ? `${retrieval.previousQuestion}\n${question}` : question
@@ -69,6 +70,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     const passages = selectPassages(dataset, retrieval, index, queryVector)
     if (!passages.length) return fellBack(textbook, 'no_passages')
 
+    step = 'answer'
     const response = await openai.responses.create(generationRequest(deps.model(), entry.profile, retrieval.previousQuestion, question, passages))
     const usage = response.usage
     // One line per AI answer so token spend can be followed in the Vercel logs.
@@ -88,7 +90,8 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     return withQuotaNotice(reply, budget.remaining)
   } catch (error) {
     console.warn('[character-rag] OpenAI request failed:', error?.status || error?.code || error?.name || 'unknown')
-    return fellBack(textbook, `openai_${error?.status || error?.code || error?.name || 'error'}`)
+    // The step tells a wrong model name (404 on "answer") from a moderation or embedding problem (404 on "check").
+    return fellBack(textbook, `openai_${error?.status || error?.code || error?.name || 'error'}_${step}${step === 'answer' ? `(${deps.model()})` : ''}`)
   }
 }
 
