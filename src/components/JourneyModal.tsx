@@ -32,7 +32,7 @@ const stepNames = ['Nhiệm vụ', 'Kiến thức', 'Khám phá', 'Thử thách'
 export const guideName = (journey: Journey) => journey.mascot.name.replace(/\s*\(.*\)\s*$/, '') || 'Người dẫn đường'
 
 export function GuideSays({ journey, narration }: { journey: Journey; narration: Narration }) {
-  return <div className="journey-say"><span className="journey-guide" aria-hidden="true">史</span><p><strong>{guideName(journey)} <small>lời dẫn truyện, hư cấu</small></strong>{narration.text}</p></div>
+  return <div className="journey-say"><span className="journey-guide" aria-hidden="true"><img src="/images/brand/xuyen-su-ky-mascot-brand-avatar.svg" alt="" width={46} height={46} /></span><p><strong>{guideName(journey)} <small>lời dẫn truyện, hư cấu</small></strong>{narration.text}</p></div>
 }
 
 /** Answer sheet for the four auto-graded question types; choices are always shown shuffled. */
