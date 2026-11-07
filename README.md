@@ -97,6 +97,7 @@ Sao chép `.env.example` thành `.env.local` (đã được Git bỏ qua) rồi 
 | `OPENAI_MODEL` | `gpt-5-mini,gpt-5` | Các model sinh câu trả lời theo thứ tự ưu tiên, cách nhau bằng dấu phẩy; model nào key không dùng được (OpenAI trả 404) thì chuyển sang model sau |
 | `OPENAI_FALLBACK_MODEL` | `gpt-4.1-mini` | Model cuối cùng khi không model nào ở trên dùng được. Không xếp `gpt-5-nano` trước model này: thử trên câu hỏi thật, nano trả lời kém hơn |
 | `AI_DISABLED` | — | `1` để tắt AI ngay mà không xoá khoá |
+| `TEACHER_GUIDES_API` | — | `1` để mở API sách giáo viên (`/api/teacher-guides`). Mặc định đóng: SGV có đáp án bài tập và chưa xác nhận quyền công bố |
 | `CHAT_RATE_PER_MINUTE` | `12` | Số câu hỏi mỗi phút mỗi IP (vượt → HTTP 429) |
 | `AI_ANSWERS_PER_DAY` / `AI_GLOBAL_ANSWERS_PER_DAY` | `40` / `500` | Hạn mức câu trả lời AI mỗi IP / toàn hệ thống |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | — | Dùng chung bộ đếm giới hạn giữa các instance |

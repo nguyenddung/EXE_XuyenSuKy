@@ -18,7 +18,7 @@ const unlimited = createLimiter(memoryStore(), () => ({ perMinute: 1e9, aiPerDay
 let dataset, server, base
 before(async () => {
   dataset = await loadDataset()
-  server = createServer((req, res) => handleApi(req, res, async () => dataset, { limiter: unlimited }))
+  server = createServer((req, res) => handleApi(req, res, async () => dataset, { limiter: unlimited, teacherGuides: true }))
   // Long synchronous tests block the event loop; keep idle connections open so the next request does not reuse a closed one.
   server.keepAliveTimeout = 60000
   await new Promise((done) => server.listen(0, '127.0.0.1', done))
@@ -284,6 +284,18 @@ test('teacher guides (SGV) keep their own IDs, link to matching textbook lessons
   assert.ok(dataset.searchableChunks.every(({ chunk }) => chunk.book_type === 'sgk'))
   assert.equal((await get('teacher-guides/GV7_B99')).response.status, 404)
   assert.equal((await get('teacher-guides/GV7_B11/chunks?type=body')).response.status, 400)
+})
+test('teacher guides stay closed unless TEACHER_GUIDES_API is set', async () => {
+  const closed = createServer((req, res) => handleApi(req, res, async () => dataset, { limiter: unlimited }))
+  await new Promise((resolve) => closed.listen(0, '127.0.0.1', resolve))
+  const at = (path) => fetch(`http://127.0.0.1:${closed.address().port}/api/${path}`)
+  try {
+    assert.equal((await at('teacher-guides?grade=7')).status, 404)
+    assert.equal((await at('teacher-guides/GV7_B11')).status, 404)
+    const sgvChunk = dataset.guideChunks.get('GV7_B11')[0].chunk_id
+    assert.equal((await at(`chunks/${sgvChunk}`)).status, 404)
+    assert.equal((await at('lessons/LS7_B11')).status, 200)
+  } finally { closed.close() }
 })
 test('metadata and paginated lesson list omit full lesson text', async () => {
   const { body } = await get('lessons?grade=12&limit=4&page=2')

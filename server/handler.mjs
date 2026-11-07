@@ -10,6 +10,9 @@ import { createVoiceSession, liveVoiceAvailable } from './voice-agents.mjs'
 const defaultLimiter = createLimiter()
 const sgkTypes = ['body', 'source', 'did_you_know', 'question', 'exercise', 'objectives', 'intro', 'caption', 'figure']
 const sgvTypes = ['objectives', 'guide', 'activity', 'reference']
+// Teacher's books (SGV) hold answers for the textbook exercises and their publication rights are not confirmed:
+// the API serves them only when TEACHER_GUIDES_API=1, until teachers sign in on the server.
+const teacherGuidesOpen = (options) => options.teacherGuides ?? /^(1|true|yes)$/i.test(process.env.TEACHER_GUIDES_API || '')
 
 class HttpError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code }
@@ -87,6 +90,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : voiceSession ? 'Use POST to start a voice conversation.' : 'This dataset endpoint is read-only.')
     }
     if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys', 'events', 'teacher-guides'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    if (parts[0] === 'teacher-guides' && !teacherGuidesOpen(options)) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     if (speech) {
       const body = await readJsonBody(req, 32000)
       const audio = await (options.speech || synthesizeSpeech)({ characterId: parts[1], text: body.text, visitor: clientKey(req) })
@@ -176,7 +180,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       result = pagination(url.searchParams, searchChunks(data, query, grade).map(({ chunk, score }) => chunkResponse(chunk, score)))
     } else if (parts[0] === 'chunks' && parts.length === 2) {
       const chunk = data.chunksById.get(parts[1])
-      if (!chunk) throw new HttpError(404, 'CHUNK_NOT_FOUND', 'Chunk not found.')
+      if (!chunk || (chunk.book_type === 'sgv' && !teacherGuidesOpen(options))) throw new HttpError(404, 'CHUNK_NOT_FOUND', 'Chunk not found.')
       result = chunkResponse(chunk)
     }
     if (!result) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
