@@ -47,7 +47,7 @@
 .dashboard-primary, .dashboard-rail { display: grid; min-width: 0; gap: 15px; }
 .dashboard-hero { position: relative; isolation: isolate; min-height: 242px; overflow: hidden; border-radius: 15px; background: #173559; box-shadow: 0 8px 22px #1e47671a; color: white; }
 /* The painting is busy: soften and mute it, then fade it behind the text so the eye has somewhere calm to rest. */
-.dashboard-hero::before { content: ''; position: absolute; inset: -6px; z-index: -2; background: url('/images/dashboard/hero.webp') center 52% / cover no-repeat; filter: blur(1.6px) saturate(.68) contrast(.88) brightness(.96); }
+.dashboard-hero::before { content: ''; position: absolute; inset: -6px; z-index: -2; background: url('/images/dashboard/trong-dong-hoang-ha-ngang.webp') center 35% / cover no-repeat; filter: saturate(.85) brightness(.9); }
 .dashboard-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #132c4df2 0%, #132c4dd6 34%, #132c4d70 62%, #132c4d38 100%); }
 .dashboard-hero-copy { position: relative; z-index: 1; padding: 27px 28px 22px; }.dashboard-hero-copy > span { color: #f5dfaa; font-size: 11px; font-weight: 800; letter-spacing: .08em; }.dashboard-hero-copy h1 { margin: 8px 0 7px; font-size: clamp(23px, 2.3vw, 34px); line-height: 1.25; font-weight: 800; letter-spacing: -.045em; }.dashboard-hero-copy p { margin: 0; font-size: 12px; line-height: 1.7; }.dashboard-hero-copy button { min-height: 42px; margin-top: 12px; padding: 0 26px; }
 .dashboard-hero-quote { position: absolute; top: 24px; right: 22px; padding: 12px 14px; border-radius: 10px; background: #fffdf1d9; color: #3e4b68; font-size: 12px; line-height: 1.6; }

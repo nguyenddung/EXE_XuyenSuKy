@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { after, before, test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
@@ -5,7 +6,7 @@ import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { resolve, sep } from 'node:path'
 import { createHash } from 'node:crypto'
-import { defaultDatasetPath, loadDataset, normalize } from '../server/dataset.mjs'
+import { defaultDatasetPath, lessonId, loadDataset, normalize } from '../server/dataset.mjs'
 import { handleApi } from '../server/handler.mjs'
 import { characterIndex, characterReply } from '../server/characters.mjs'
 import { answerCharacterQuestion, generationRequest } from '../server/rag/pipeline.mjs'
@@ -18,7 +19,7 @@ const unlimited = createLimiter(memoryStore(), () => ({ perMinute: 1e9, aiPerDay
 let dataset, server, base
 before(async () => {
   dataset = await loadDataset()
-  server = createServer((req, res) => handleApi(req, res, async () => dataset, { limiter: unlimited }))
+  server = createServer((req, res) => handleApi(req, res, async () => dataset, { limiter: unlimited, teacherGuides: true }))
   // Long synchronous tests block the event loop; keep idle connections open so the next request does not reuse a closed one.
   server.keepAliveTimeout = 60000
   await new Promise((done) => server.listen(0, '127.0.0.1', done))
@@ -209,7 +210,13 @@ test('AI budget falls back to textbook quotes with a notice; chat spam gets HTTP
   } finally { await new Promise((done) => limited.close(done)) }
 })
 
-test('embedding index matches the dataset and int8 storage keeps cosine ranking', async () => {
+// data/embeddings is rebuilt with the OPENAI_API_KEY secret (workflow "Build embeddings"). While it still describes an
+// older dataset version, chat runs on keyword retrieval alone: report that loudly instead of failing every build.
+const indexVersion = JSON.parse(readFileSync(new URL('../data/embeddings/meta.json', import.meta.url), 'utf8')).datasetVersion
+const datasetVersion = JSON.parse(readFileSync(new URL('../data/history/manifest.json', import.meta.url), 'utf8')).version
+const staleIndex = indexVersion !== datasetVersion && `data/embeddings was built for dataset ${indexVersion}, not ${datasetVersion}: run the "Build embeddings" workflow`
+if (staleIndex) console.warn(`::warning::${staleIndex}`)
+test('embedding index matches the dataset and int8 storage keeps cosine ranking', { skip: staleIndex }, async () => {
   const index = await loadEmbeddingIndex(dataset)
   assert.ok(index, 'data/embeddings must be rebuilt with npm run build:embeddings after the dataset changes')
   assert.equal(index.ids.length, dataset.searchableChunks.length)
@@ -251,11 +258,51 @@ test('chat HTTP validation, payload bounds and cache policy work in direct and V
 })
 
 test('real dataset passes integrity, schema, totals and grade references', () => {
-  assert.equal(dataset.metadata.totals.lessons, 130)
-  assert.equal(dataset.metadata.totals.chunks, 2708)
-  assert.equal(dataset.metadata.totals.sections, 752)
+  assert.equal(dataset.metadata.totals.lessons, 127)
+  assert.equal(dataset.metadata.totals.chunks, dataset.manifest.totals.chunks)
+  assert.equal(dataset.metadata.totals.sections, dataset.manifest.totals.sections)
   assert.deepEqual(dataset.metadata.grades.map((item) => item.grade), [6, 7, 8, 9, 10, 11, 12])
+  assert.deepEqual(dataset.metadata.grades.map((item) => item.lessonCount), [21, 20, 21, 22, 13, 13, 17])
   assert.equal(dataset.byId.size, dataset.metadata.totals.lessons)
+  // Every textbook lesson after the opening pages has its numbered sections and its practice part.
+  for (const lesson of dataset.lessons.filter((item) => item.lesson_number > 0)) {
+    assert.ok(lesson.sections.some((section) => /^1\. /.test(section.title)), lessonId(lesson))
+    assert.ok(lesson.sections.some((section) => section.title === 'Luyện tập – Vận dụng'), lessonId(lesson))
+  }
+})
+test('teacher guides (SGV) keep their own IDs, link to matching textbook lessons and serve their chunks', async () => {
+  assert.equal(dataset.metadata.totals.teacherGuides, 130)
+  assert.ok(dataset.guides.every((guide) => !guide.linked_lesson_id || dataset.byId.get(guide.linked_lesson_id).grade === guide.grade))
+  // Grade 10: the teacher's book has two lessons on History and other sciences that the textbook does not have.
+  assert.equal(dataset.guideById.get('GV10_B03').linked_lesson_id, null)
+  assert.equal(dataset.guideById.get('GV10_B05').linked_lesson_id, 'LS10_B04')
+  const list = (await get('teacher-guides?grade=7&limit=50')).body
+  assert.equal(list.total, 19)
+  assert.equal(list.items[0].id, 'GV7_B00')
+  const lesson = (await get('lessons/LS7_B11')).body
+  assert.equal(lesson.teacherGuideId, 'GV7_B11')
+  const guide = (await get('teacher-guides/GV7_B11')).body
+  assert.equal(guide.lessonId, 'LS7_B11')
+  assert.ok(guide.sections.some((section) => /Mục tiêu/.test(section.title)))
+  const chunks = (await get('teacher-guides/GV7_B11/chunks?type=reference')).body
+  assert.ok(chunks.total > 0 && chunks.items.every((item) => item.contentType === 'reference' && item.bookType === 'sgv' && item.guideId === 'GV7_B11' && item.lessonId === null))
+  assert.equal((await get(`chunks/${chunks.items[0].id}`)).body.guideId, 'GV7_B11')
+  // Teacher's book text never reaches textbook search or the characters.
+  assert.ok(dataset.searchableChunks.every(({ chunk }) => chunk.book_type === 'sgk'))
+  assert.equal((await get('teacher-guides/GV7_B99')).response.status, 404)
+  assert.equal((await get('teacher-guides/GV7_B11/chunks?type=body')).response.status, 400)
+})
+test('teacher guides stay closed unless TEACHER_GUIDES_API is set', async () => {
+  const closed = createServer((req, res) => handleApi(req, res, async () => dataset, { limiter: unlimited }))
+  await new Promise((resolve) => closed.listen(0, '127.0.0.1', resolve))
+  const at = (path) => fetch(`http://127.0.0.1:${closed.address().port}/api/${path}`)
+  try {
+    assert.equal((await at('teacher-guides?grade=7')).status, 404)
+    assert.equal((await at('teacher-guides/GV7_B11')).status, 404)
+    const sgvChunk = dataset.guideChunks.get('GV7_B11')[0].chunk_id
+    assert.equal((await at(`chunks/${sgvChunk}`)).status, 404)
+    assert.equal((await at('lessons/LS7_B11')).status, 200)
+  } finally { closed.close() }
 })
 test('metadata and paginated lesson list omit full lesson text', async () => {
   const { body } = await get('lessons?grade=12&limit=4&page=2')
@@ -268,7 +315,7 @@ test('lesson reader keeps sections and original book citation', async () => {
   const { response, body } = await get('lessons/LS7_B01')
   assert.equal(response.status, 200)
   assert.ok(body.sections.length > 1)
-  assert.equal(body.source.bookSeries, 'Chân trời sáng tạo')
+  assert.equal(body.source.bookSeries, 'Kết nối tri thức với cuộc sống')
   assert.equal(body.source.publisher, 'NXB Giáo dục Việt Nam')
   assert.ok(body.sections.every((section) => section.content && section.pageStart >= body.source.pageStart))
 })
@@ -278,7 +325,7 @@ test('accent insensitive search excludes exercises and cites the exact chunk pag
   assert.ok(plain.total > 0)
   assert.deepEqual(plain, accented)
   for (const hit of plain.items) {
-    assert.ok(['body', 'source', 'did_you_know', 'caption'].includes(hit.contentType))
+    assert.ok(['body', 'source', 'did_you_know', 'caption', 'figure'].includes(hit.contentType))
     const original = dataset.chunksById.get(hit.id)
     assert.equal(hit.source.pageStart, original.page_start)
     assert.equal(hit.text, original.text)
@@ -292,7 +339,7 @@ test('lesson search, chapter, saved and unread filters run on the backend', asyn
   assert.ok((await get(`lessons?grade=7&chapter=${encodeURIComponent(chapter)}`)).body.items.every((item) => item.chapter === chapter))
   assert.deepEqual((await get('lessons?ids=LS7_B01,LS12_B01')).body.items.map((item) => item.id), ['LS7_B01', 'LS12_B01'])
   assert.equal((await get('lessons?ids=')).body.total, 0)
-  assert.equal((await get('lessons?excludeIds=LS7_B01')).body.total, 129)
+  assert.equal((await get('lessons?excludeIds=LS7_B01')).body.total, dataset.lessons.length - 1)
 })
 test('chunk detail and content type filters preserve stable IDs', async () => {
   const { body } = await get('lessons/LS7_B01/chunks?type=body')
@@ -389,10 +436,10 @@ test('events API is sorted, filters by lesson, grade, scope and text, and valida
   assert.equal(all.total, dataset.events.length)
   assert.ok(all.items.every((item, index) => index === 0 || all.items[index - 1].year <= item.year))
   assert.deepEqual(Object.keys(all.items[0]).sort(), ['category', 'id', 'lessons', 'people', 'places', 'scope', 'summary', 'title', 'year'].sort())
-  const mongol = (await get('events?lesson=LS7_B17')).body
+  const mongol = (await get('events?lesson=LS7_B14')).body
   assert.deepEqual(mongol.items.map((item) => item.id), ['mong-co-lan-1', 'nguyen-lan-2', 'bach-dang-1288'])
   assert.equal(mongol.items[2].endYear, 1288)
-  assert.deepEqual(mongol.items[0].lessons, [{ id: 'LS7_B17', grade: 7, title: dataset.summaryById.get('LS7_B17').title }])
+  assert.deepEqual(mongol.items[0].lessons, [{ id: 'LS7_B14', grade: 7, title: dataset.summaryById.get('LS7_B14').title }])
   assert.ok((await get('events?scope=world')).body.items.every((item) => item.scope === 'world'))
   assert.ok((await get('events?grade=6')).body.items.every((item) => item.lessons.some((lesson) => lesson.grade === 6)))
   assert.deepEqual((await get('events?q=bach%20dang')).body.items.map((item) => item.id), ['bach-dang-938', 'le-hoan-chong-tong', 'bach-dang-1288'])

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, ChevronDown, LayoutDashboard, LogOut, Menu, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { BrandLogo } from './BrandLogo'
 import { roleHome, type DemoSession } from '../hooks/useDemoSession'
 
 // Landing-page sections only; the learning app is reached through the account actions on the right.
@@ -40,8 +41,7 @@ export function Navbar({ session, onLogout }: Props) {
     <header className="site-header sticky top-0 z-40 border-b backdrop-blur-md">
       <nav className="page-shell flex h-[70px] items-center justify-between gap-4" aria-label="Điều hướng chính">
         <a href="#top" className="brand flex shrink-0 items-center gap-2.5" onClick={() => { close(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label="Xuyên Sử Ký, về đầu trang">
-          <span className="brand-mark" aria-hidden="true">史</span>
-          <span className="brand-text">Xuyên Sử Ký</span>
+          <BrandLogo />
         </a>
         <div className="hidden items-center gap-7 lg:flex">
           {links.map((link) => <a key={link.href} className="nav-link" href={link.href}>{link.label}</a>)}

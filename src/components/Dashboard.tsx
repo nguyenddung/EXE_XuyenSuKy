@@ -21,6 +21,7 @@ import { useSchool } from '../hooks/useSchool'
 import { classesOfStudent, findUserByEmail } from '../lib/school'
 import { dayKey } from '../hooks/useLearningJournal'
 import { formatDate } from './StaffLayout'
+import { BrandLogo } from './BrandLogo'
 
 const navigation = [
   { label: 'Trang chủ', view: 'dashboard', icon: Home },
@@ -179,7 +180,7 @@ export function Dashboard({ learning, onCollection, sections, footer, session, r
   return <div className="dashboard-app" id="top"><a className="skip-learning-link" href={view === 'dashboard' ? '#dashboard' : '#learning-view'}>Đi đến nội dung học</a>
     {menuOpen && <button className="dashboard-scrim" type="button" aria-label="Đóng menu" onClick={() => setMenuOpen(false)} />}
     <aside className={`dashboard-sidebar ${menuOpen ? 'is-open' : ''}`} aria-label="Điều hướng học tập">
-      <a href="#dashboard" className="dashboard-brand" onClick={() => choose('dashboard')}><span className="dashboard-brand-mark">史</span><strong>Xuyên Sử Ký</strong></a>
+      <a href="#dashboard" className="dashboard-brand" onClick={() => choose('dashboard')}><BrandLogo /></a>
       <nav className="dashboard-nav" aria-label="Các khu vực"><span className="dashboard-nav-caption">KHÁM PHÁ</span>{navigation.map(({ label, view: target, icon: Icon }) => <a key={target} href={`#${target}`} className={view === target ? 'is-active' : ''} aria-current={view === target ? 'page' : undefined} onClick={() => choose(target)}><Icon size={20} strokeWidth={2} /><span>{label}</span></a>)}</nav>
       <div className="dashboard-sidebar-promo"><div className="dashboard-sidebar-art" /><div className="dashboard-sidebar-promo-copy"><span>HÀNH TRÌNH CỦA BẠN</span><strong>Mỗi ngày một trang sử mới</strong><p>Học · Khám phá · Trải nghiệm cùng các nhân vật lịch sử</p><a href="#library" onClick={() => choose('library')}>Bắt đầu học <ArrowRight size={17} /></a></div></div>
     </aside>

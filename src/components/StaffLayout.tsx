@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { ChevronDown, Menu, type LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { BrandLogo } from './BrandLogo'
 
 export interface StaffNavItem { id: string; label: string; icon: LucideIcon }
 
@@ -35,7 +36,7 @@ export function StaffLayout({ area, title, subtitle, name, roleLabel, nav, areas
     <a className="skip-learning-link" href="#staff-main">Đi đến nội dung</a>
     {menuOpen && <button className="dashboard-scrim" type="button" aria-label="Đóng menu" onClick={() => setMenuOpen(false)} />}
     <aside className={`dashboard-sidebar ${menuOpen ? 'is-open' : ''}`} aria-label={`Điều hướng ${area.toLowerCase()}`}>
-      <Link to="/" className="dashboard-brand"><span className="dashboard-brand-mark">史</span><strong>Xuyên Sử Ký</strong></Link>
+      <Link to="/" className="dashboard-brand"><BrandLogo /></Link>
       <nav className="dashboard-nav" aria-label="Các mục">
         <span className="dashboard-nav-caption">{area.toUpperCase()}</span>
         {nav.map(({ id, label, icon: Icon }) => <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}><Icon size={20} strokeWidth={2} /><span>{label}</span></a>)}

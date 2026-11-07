@@ -38,10 +38,10 @@ test('a signed-in student sees every character, those of their grade first, and 
   await page.goto('/home#characters')
   await expect(page.locator('.character-card')).toHaveCount(12)
   await expect(page.getByRole('combobox', { name: 'Lọc lớp có nhân vật' })).toHaveCount(0)
-  await expect(page.locator('#characters .heading-decoration')).toHaveText('12 NHÂN VẬT · 9 TRONG SGK LỚP 7')
-  await expect(page.locator('.character-group-title')).toHaveText(['Trong SGK lớp 7 9', 'Ở các lớp khác 3'])
+  await expect(page.locator('#characters .heading-decoration')).toHaveText('12 NHÂN VẬT · 8 TRONG SGK LỚP 7')
+  await expect(page.locator('.character-group-title')).toHaveText(['Trong SGK lớp 7 8', 'Ở các lớp khác 4'])
   await expect(page.locator('.character-card').first()).not.toContainText('Võ Nguyên Giáp')
-  await expect(page.locator('.character-card').last()).toContainText('Võ Nguyên Giáp')
+  await expect(page.locator('.character-card').last()).toContainText('Bà Triệu')
 
   // The Bạch Đằng 938 passage is in the grade 6 textbook: cited and quoted, but its lesson does not open for grade 7.
   await page.locator('.character-card').filter({ has: page.getByRole('heading', { name: 'Ngô Quyền', exact: true }) }).getByRole('button', { name: 'Nhắn tin', exact: true }).click()
@@ -62,7 +62,7 @@ test('suggestions, contextual follow-ups and citations open the real lesson', as
   await expect(page.locator('.chat-answer').last()).toContainText('rồng cuộn hổ ngồi')
   await page.locator('.chat-sources button').last().click()
   await expect(page.locator('.chat-modal')).toHaveCount(0)
-  await expect(page.locator('#dataset-reader-title')).toContainText('thời Lý')
+  await expect(page.locator('#dataset-reader-title')).toContainText('Nhà Lý')
   await expect(page.locator('#dataset-reader-title')).toBeFocused()
 })
 

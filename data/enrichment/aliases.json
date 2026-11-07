@@ -25,7 +25,7 @@
   { "id": "ang-ghen", "type": "person", "terms": ["Ăng-ghen", "Engels", "Friedrich Engels"] },
   { "id": "columbus", "type": "person", "terms": ["Cô-lôm-bô", "Columbus", "Colombo", "Christopher Columbus"] },
   { "id": "magellan", "type": "person", "terms": ["Ma-gien-lăng", "Magellan", "Magalhães"] },
-  { "id": "vasco-da-gama", "type": "person", "terms": ["Va-xcô đơ Ga-ma", "Vasco da Gama"] },
+  { "id": "vasco-da-gama", "type": "person", "terms": ["Va-xcô đơ Ga-ma", "V. Ga-ma", "Vasco da Gama"] },
   { "id": "napoleon", "type": "person", "terms": ["Na-pô-lê-ông", "Napoleon"] },
   { "id": "washington", "type": "person", "terms": ["Oa-sinh-tơn", "Washington", "George Washington"] },
   { "id": "hitler", "type": "person", "terms": ["Hít-le", "Hitler", "Adolf Hitler"] },

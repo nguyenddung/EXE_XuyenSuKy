@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, BookOpen, MessageCircle, Trophy } from 'lucide-r
 import { Link, Navigate, useLocation, useNavigate, type Location } from 'react-router-dom'
 import { GradeOnboarding } from '../components/GradeOnboarding'
 import { LoginForm } from '../components/LoginForm'
+import { BrandLogo } from '../components/BrandLogo'
 import { hasAppAccess, isLearner, roleHome, useDemoSession } from '../hooks/useDemoSession'
 
 const perks = [
@@ -26,7 +27,7 @@ export function LoginPage() {
   return <div className="auth-page">
     <aside className="auth-art" aria-hidden="true">
       <div className="auth-art-copy">
-        <span className="auth-brand"><span className="brand-mark">史</span><strong>Xuyên Sử Ký</strong></span>
+        <span className="auth-brand"><BrandLogo onDark /></span>
         <h2>Mỗi ngày một trang sử mới</h2>
         <ul>{perks.map(({ icon: Icon, text }) => <li key={text}><span><Icon size={17} /></span>{text}</li>)}</ul>
         <p>“Lịch sử không chỉ để nhớ, mà để sống cùng.”</p>

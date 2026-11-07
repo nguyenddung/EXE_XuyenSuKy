@@ -6,7 +6,7 @@
   "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
   "mascot": {
     "id": "linh_vat",
-    "name": "Linh vật (chưa đặt tên)"
+    "name": "Kim Quy"
   },
   "intro": {
     "speaker": "linh_vat",
@@ -265,7 +265,7 @@
                 "sources": [
                   {
                     "quote": "Tuy còn sơ khai, chưa có pháp luật thành văn và chữ viết",
-                    "chunk_id": "LS6_B14_C004",
+                    "chunk_id": "LS6_B14_C005",
                     "lesson_number": 14,
                     "pages": [
                       62,
@@ -275,7 +275,7 @@
                   },
                   {
                     "quote": "sự ra đời của Nhà nước Văn Lang đã mở ra thời kì dựng nước đầu tiên trong lịch sử dân tộc",
-                    "chunk_id": "LS6_B14_C004",
+                    "chunk_id": "LS6_B14_C005",
                     "lesson_number": 14,
                     "pages": [
                       62,
@@ -342,7 +342,7 @@
               "sources": [
                 {
                   "quote": "Tuy còn sơ khai, chưa có pháp luật thành văn và chữ viết",
-                  "chunk_id": "LS6_B14_C004",
+                  "chunk_id": "LS6_B14_C005",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -352,7 +352,7 @@
                 },
                 {
                   "quote": "sự ra đời của Nhà nước Văn Lang đã mở ra thời kì dựng nước đầu tiên trong lịch sử dân tộc.",
-                  "chunk_id": "LS6_B14_C004",
+                  "chunk_id": "LS6_B14_C005",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -494,7 +494,7 @@
                 },
                 {
                   "quote": "chưa có pháp luật thành văn và chữ viết",
-                  "chunk_id": "LS6_B14_C004",
+                  "chunk_id": "LS6_B14_C005",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -646,8 +646,8 @@
               "text": "Sơ đồ tổ chức Nhà nước Văn Lang có ba cấp: trung ương (Hùng Vương, Lạc hầu), bộ (Lạc tướng) và chiềng, chạ (Bồ chính).",
               "sources": [
                 {
-                  "quote": "Trung ương (Hùng Vương Lạc hầu) Bộ (Lạc tướng) Chiềng, chạ (Bồ chính)",
-                  "chunk_id": "LS6_B14_C003",
+                  "quote": "Trung ương (Hùng Vương Lạc hầu) Bộ (Lạc tướng) Bộ (Lạc tướng) Chiềng, chạ (Bồ chính)",
+                  "chunk_id": "LS6_B14_C004",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -673,7 +673,7 @@
               "sources": [
                 {
                   "quote": "Tuy còn sơ khai, chưa có pháp luật thành văn và chữ viết",
-                  "chunk_id": "LS6_B14_C004",
+                  "chunk_id": "LS6_B14_C005",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -693,8 +693,8 @@
               "clue": "Ba cấp: trung ương có Hùng Vương và Lạc hầu, mỗi bộ do Lạc tướng đứng đầu, chiềng chạ do Bồ chính đứng đầu.",
               "sources": [
                 {
-                  "quote": "Trung ương (Hùng Vương Lạc hầu) Bộ (Lạc tướng) Chiềng, chạ (Bồ chính)",
-                  "chunk_id": "LS6_B14_C003",
+                  "quote": "Trung ương (Hùng Vương Lạc hầu) Bộ (Lạc tướng) Bộ (Lạc tướng) Chiềng, chạ (Bồ chính)",
+                  "chunk_id": "LS6_B14_C004",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -742,8 +742,8 @@
               "explanation": "Trung ương: Hùng Vương (cùng Lạc hầu); bộ: Lạc tướng; chiềng, chạ: Bồ chính.",
               "sources": [
                 {
-                  "quote": "Trung ương (Hùng Vương Lạc hầu) Bộ (Lạc tướng) Chiềng, chạ (Bồ chính)",
-                  "chunk_id": "LS6_B14_C003",
+                  "quote": "Trung ương (Hùng Vương Lạc hầu) Bộ (Lạc tướng) Bộ (Lạc tướng) Chiềng, chạ (Bồ chính)",
+                  "chunk_id": "LS6_B14_C004",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -855,7 +855,7 @@
               "sources": [
                 {
                   "quote": "Tuy còn sơ khai, chưa có pháp luật thành văn và chữ viết",
-                  "chunk_id": "LS6_B14_C004",
+                  "chunk_id": "LS6_B14_C005",
                   "lesson_number": 14,
                   "pages": [
                     62,
@@ -1030,11 +1030,11 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Sơ đồ thành Cổ Loa - được xây dựng theo hình xoáy trôn ốc, có ba vòng khép kín",
-                  "chunk_id": "LS6_B14_C008",
+                  "quote": "Sơ đồ thành Cổ Loa – được xây dựng theo hình xoáy tròn ốc, có ba vòng khép kín",
+                  "chunk_id": "LS6_B14_C009",
                   "lesson_number": 14,
                   "pages": [
-                    62,
+                    63,
                     63
                   ],
                   "content_type": "body"
@@ -1061,21 +1061,21 @@
               "clue": "Âu Lạc có thành Cổ Loa ba vòng kiên cố, vững chắc cùng vũ khí tốt như nỏ và mũi tên đồng.",
               "sources": [
                 {
-                  "quote": "Sơ đồ thành Cổ Loa - được xây dựng theo hình xoáy trôn ốc, có ba vòng khép kín với tổng chiều dài là 16 000m",
-                  "chunk_id": "LS6_B14_C008",
+                  "quote": "Sơ đồ thành Cổ Loa – được xây dựng theo hình xoáy tròn ốc, có ba vòng khép kín với tổng chiều dài là 16 000m",
+                  "chunk_id": "LS6_B14_C009",
                   "lesson_number": 14,
                   "pages": [
-                    62,
+                    63,
                     63
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Hình 4. Lẫy nỏ và mũi tên đồng được tìm thấy ở Cổ Loa",
-                  "chunk_id": "LS6_B14_C008",
+                  "chunk_id": "LS6_B14_C009",
                   "lesson_number": 14,
                   "pages": [
-                    62,
+                    63,
                     63
                   ],
                   "content_type": "body"
@@ -1245,11 +1245,11 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Sơ đồ thành Cổ Loa - được xây dựng theo hình xoáy trôn ốc, có ba vòng khép kín",
-                  "chunk_id": "LS6_B14_C008",
+                  "quote": "Sơ đồ thành Cổ Loa – được xây dựng theo hình xoáy tròn ốc, có ba vòng khép kín",
+                  "chunk_id": "LS6_B14_C009",
                   "lesson_number": 14,
                   "pages": [
-                    62,
+                    63,
                     63
                   ],
                   "content_type": "body"
@@ -1385,8 +1385,8 @@
               "text": "Cư dân Việt cổ biết đến nền \"nông nghiệp dùng cày\", lấy nghề nông trồng lúa nước làm nghề chính; ngoài ra còn trồng hoa màu, trồng dâu, nuôi tằm.",
               "sources": [
                 {
-                  "quote": "Cư dân Việt cổ đã biết đến nền \"nông nghiệp dùng cày\" và sớm lấy nghề nông trồng lúa nước làm nghề chính.",
-                  "chunk_id": "LS6_B14_C010",
+                  "quote": "Cư dân Việt cổ đã biết đến nền “nông nghiệp dùng cây” và sớm lấy nghề nông trồng lúa nước làm nghề chính.",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1396,7 +1396,7 @@
                 },
                 {
                   "quote": "Ngoài ra, họ còn trồng các loại cây hoa màu và trồng dâu, nuôi tằm.",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1412,7 +1412,7 @@
               "sources": [
                 {
                   "quote": "Kĩ thuật đúc đồng phát triển với những hiện vật tiêu biểu là trống đồng Ngọc Lũ, thạp đồng Đào Thịnh.",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1422,7 +1422,7 @@
                 },
                 {
                   "quote": "Bên cạnh đó, họ đã bước đầu biết rèn sắt.",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1438,7 +1438,7 @@
               "sources": [
                 {
                   "quote": "Cư dân chủ yếu ở nhà sàn được làm bằng tre, nứa, lá, gỗ",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1448,7 +1448,7 @@
                 },
                 {
                   "quote": "Thức ăn chính là gạo nếp, gạo tẻ, muối, mắm cá",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1457,8 +1457,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Nam đóng khố, cởi trần, đi chân đất, nữ mặc váy, mặc yếm.",
-                  "chunk_id": "LS6_B14_C010",
+                  "quote": "Nam đồng khổ, cởi trần, đi chân đất, nữ mặc váy, mặc yếm.",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1474,7 +1474,7 @@
               "sources": [
                 {
                   "quote": "cư dân Văn Lang - Âu Lạc có tục thờ cúng tổ tiên và thờ các vị thần trong tự nhiên như thần Sông, thần Núi, thần Mặt Trời",
-                  "chunk_id": "LS6_B14_C013",
+                  "chunk_id": "LS6_B14_C015",
                   "lesson_number": 14,
                   "pages": [
                     65,
@@ -1484,7 +1484,7 @@
                 },
                 {
                   "quote": "Người Việt cổ có tục xăm mình, nhuộm răng đen, ăn trầu, làm bánh chưng, bánh giầy.",
-                  "chunk_id": "LS6_B14_C013",
+                  "chunk_id": "LS6_B14_C015",
                   "lesson_number": 14,
                   "pages": [
                     65,
@@ -1494,7 +1494,7 @@
                 },
                 {
                   "quote": "Các lễ hội gắn với nền nông nghiệp trồng lúa nước cũng được tổ chức thường xuyên.",
-                  "chunk_id": "LS6_B14_C013",
+                  "chunk_id": "LS6_B14_C015",
                   "lesson_number": 14,
                   "pages": [
                     65,
@@ -1510,7 +1510,7 @@
               "sources": [
                 {
                   "quote": "đã tạo nên nền văn minh đầu tiên trong lịch sử Việt Nam, góp phần tạo dựng nền tảng cốt lõi của bản sắc văn hoá dân tộc.",
-                  "chunk_id": "LS6_B14_C013",
+                  "chunk_id": "LS6_B14_C015",
                   "lesson_number": 14,
                   "pages": [
                     65,
@@ -1531,30 +1531,30 @@
               "sources": [
                 {
                   "quote": "Hoạ tiết trên trống đồng Ngọc Lũ - loại trống đẹp nhất của trống đồng Đông Sơn",
-                  "chunk_id": "LS6_B14_C011",
+                  "chunk_id": "LS6_B14_C012",
                   "lesson_number": 14,
                   "pages": [
                     64,
-                    65
+                    64
                   ],
                   "content_type": "body"
                 },
                 {
-                  "quote": "hoạ tiết mái nhà cong b. hoạ tiết hình thuyền c. Hoạ tiết người giã gạo",
-                  "chunk_id": "LS6_B14_C011",
+                  "quote": "Hoạ tiết mái nhà cong b. Hoạ tiết hình thuyền c. Hoạ tiết người già gạo",
+                  "chunk_id": "LS6_B14_C012",
                   "lesson_number": 14,
                   "pages": [
                     64,
-                    65
+                    64
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Hình 8. Hình người múa hát được miêu tả trên trống đồng",
-                  "chunk_id": "LS6_B14_C011",
+                  "chunk_id": "LS6_B14_C013",
                   "lesson_number": 14,
                   "pages": [
-                    64,
+                    65,
                     65
                   ],
                   "content_type": "body"
@@ -1588,7 +1588,7 @@
               "sources": [
                 {
                   "quote": "sớm lấy nghề nông trồng lúa nước làm nghề chính",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1598,7 +1598,7 @@
                 },
                 {
                   "quote": "Cư dân chủ yếu ở nhà sàn",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1608,7 +1608,7 @@
                 },
                 {
                   "quote": "có tục thờ cúng tổ tiên và thờ các vị thần trong tự nhiên như thần Sông, thần Núi",
-                  "chunk_id": "LS6_B14_C013",
+                  "chunk_id": "LS6_B14_C015",
                   "lesson_number": 14,
                   "pages": [
                     65,
@@ -1618,7 +1618,7 @@
                 },
                 {
                   "quote": "Các lễ hội gắn với nền nông nghiệp trồng lúa nước cũng được tổ chức thường xuyên.",
-                  "chunk_id": "LS6_B14_C013",
+                  "chunk_id": "LS6_B14_C015",
                   "lesson_number": 14,
                   "pages": [
                     65,
@@ -1647,8 +1647,8 @@
               "explanation": "Cư dân Việt cổ sớm lấy nghề nông trồng lúa nước làm nghề chính.",
               "sources": [
                 {
-                  "quote": "Cư dân Việt cổ đã biết đến nền \"nông nghiệp dùng cày\" và sớm lấy nghề nông trồng lúa nước làm nghề chính.",
-                  "chunk_id": "LS6_B14_C010",
+                  "quote": "Cư dân Việt cổ đã biết đến nền “nông nghiệp dùng cây” và sớm lấy nghề nông trồng lúa nước làm nghề chính.",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1678,7 +1678,7 @@
               "sources": [
                 {
                   "quote": "Kĩ thuật đúc đồng phát triển với những hiện vật tiêu biểu là trống đồng Ngọc Lũ, thạp đồng Đào Thịnh.",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1708,7 +1708,7 @@
               "sources": [
                 {
                   "quote": "Người Việt cổ có tục xăm mình, nhuộm răng đen, ăn trầu, làm bánh chưng, bánh giầy.",
-                  "chunk_id": "LS6_B14_C013",
+                  "chunk_id": "LS6_B14_C015",
                   "lesson_number": 14,
                   "pages": [
                     65,
@@ -1718,7 +1718,7 @@
                 },
                 {
                   "quote": "họ đã bước đầu biết rèn sắt",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1728,7 +1728,7 @@
                 },
                 {
                   "quote": "trồng dâu, nuôi tằm",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1738,7 +1738,7 @@
                 },
                 {
                   "quote": "thạp đồng Đào Thịnh",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1768,7 +1768,7 @@
               "sources": [
                 {
                   "quote": "Cư dân chủ yếu ở nhà sàn được làm bằng tre, nứa, lá, gỗ",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1778,7 +1778,7 @@
                 },
                 {
                   "quote": "Thức ăn chính là gạo nếp, gạo tẻ, muối, mắm cá",
-                  "chunk_id": "LS6_B14_C010",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1787,8 +1787,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Nam đóng khố, cởi trần, đi chân đất, nữ mặc váy, mặc yếm.",
-                  "chunk_id": "LS6_B14_C010",
+                  "quote": "Nam đồng khổ, cởi trần, đi chân đất, nữ mặc váy, mặc yếm.",
+                  "chunk_id": "LS6_B14_C011",
                   "lesson_number": 14,
                   "pages": [
                     64,
@@ -1900,7 +1900,7 @@
               },
               {
                 "quote": "Bộ (Lạc tướng) Chiềng, chạ (Bồ chính)",
-                "chunk_id": "LS6_B14_C003",
+                "chunk_id": "LS6_B14_C004",
                 "lesson_number": 14,
                 "pages": [
                   62,
@@ -1946,7 +1946,7 @@
               },
               {
                 "quote": "đã mở ra thời kì dựng nước đầu tiên trong lịch sử dân tộc",
-                "chunk_id": "LS6_B14_C004",
+                "chunk_id": "LS6_B14_C005",
                 "lesson_number": 14,
                 "pages": [
                   62,
@@ -1956,7 +1956,7 @@
               },
               {
                 "quote": "đã tạo nên nền văn minh đầu tiên trong lịch sử Việt Nam, góp phần tạo dựng nền tảng cốt lõi của bản sắc văn hoá dân tộc",
-                "chunk_id": "LS6_B14_C013",
+                "chunk_id": "LS6_B14_C015",
                 "lesson_number": 14,
                 "pages": [
                   65,
@@ -2079,10 +2079,10 @@
               "sources": [
                 {
                   "quote": "Khởi nghĩa thắng lợi, Trưng Trắc được suy tôn làm vua, đóng đô ở Mê Linh.",
-                  "chunk_id": "LS6_B16_C007",
+                  "chunk_id": "LS6_B16_C006",
                   "lesson_number": 16,
                   "pages": [
-                    73,
+                    72,
                     73
                   ],
                   "content_type": "body"
@@ -2095,20 +2095,20 @@
               "sources": [
                 {
                   "quote": "Năm 43, trước sự tấn công của quân Hán do Mã viện chỉ huy, cuộc khởi nghĩa Hai Bà Trưng bị đàn áp.",
-                  "chunk_id": "LS6_B16_C007",
+                  "chunk_id": "LS6_B16_C006",
                   "lesson_number": 16,
                   "pages": [
-                    73,
+                    72,
                     73
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Nhân dân ghi nhớ công ơn và lập đền thờ Hai Bà để đời đời thờ cúng.",
-                  "chunk_id": "LS6_B16_C007",
+                  "chunk_id": "LS6_B16_C006",
                   "lesson_number": 16,
                   "pages": [
-                    73,
+                    72,
                     73
                   ],
                   "content_type": "body"
@@ -2141,8 +2141,8 @@
               "clue": "Nghĩa quân tiến nhanh, mạnh \"như có gió cuốn\"; viên quan đô hộ Tô Định phải bỏ chạy.",
               "sources": [
                 {
-                  "quote": "bèn cùng em gái là Trưng Nhị khởi binh, đánh hãm trị sở của châu",
-                  "chunk_id": "LS6_B16_C004",
+                  "quote": "bên cùng em gái là Trưng Nhị khởi binh, đánh hãm trị sở của châu.",
+                  "chunk_id": "LS6_B16_C005",
                   "lesson_number": 16,
                   "pages": [
                     72,
@@ -2152,7 +2152,7 @@
                 },
                 {
                   "quote": "Tô Định bỏ chạy về, Trưng Trắc thực là hùng dũng, đến đâu đều như có gió cuốn",
-                  "chunk_id": "LS6_B16_C004",
+                  "chunk_id": "LS6_B16_C005",
                   "lesson_number": 16,
                   "pages": [
                     72,
@@ -2217,10 +2217,10 @@
                 },
                 {
                   "quote": "Mùa thu năm 930, quân Nam Hán đánh sang nước ta",
-                  "chunk_id": "LS6_B18_C008",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
-                    82,
+                    83,
                     83
                   ],
                   "content_type": "body"
@@ -2251,10 +2251,10 @@
               "sources": [
                 {
                   "quote": "Khởi nghĩa thắng lợi, Trưng Trắc được suy tôn làm vua, đóng đô ở Mê Linh.",
-                  "chunk_id": "LS6_B16_C007",
+                  "chunk_id": "LS6_B16_C006",
                   "lesson_number": 16,
                   "pages": [
-                    73,
+                    72,
                     73
                   ],
                   "content_type": "body"
@@ -2280,10 +2280,10 @@
               "sources": [
                 {
                   "quote": "Năm 43, trước sự tấn công của quân Hán do Mã viện chỉ huy, cuộc khởi nghĩa Hai Bà Trưng bị đàn áp.",
-                  "chunk_id": "LS6_B16_C007",
+                  "chunk_id": "LS6_B16_C006",
                   "lesson_number": 16,
                   "pages": [
-                    73,
+                    72,
                     73
                   ],
                   "content_type": "body"
@@ -2324,7 +2324,7 @@
                 },
                 {
                   "quote": "Chiến thắng Bạch Đằng năm 938 đã chấm dứt vĩnh viễn thời kì Bắc thuộc",
-                  "chunk_id": "LS6_B18_C016",
+                  "chunk_id": "LS6_B18_C020",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -2364,20 +2364,20 @@
               "sources": [
                 {
                   "quote": "Năm 43, trước sự tấn công của quân Hán do Mã viện chỉ huy, cuộc khởi nghĩa Hai Bà Trưng bị đàn áp.",
-                  "chunk_id": "LS6_B16_C007",
+                  "chunk_id": "LS6_B16_C006",
                   "lesson_number": 16,
                   "pages": [
-                    73,
+                    72,
                     73
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Nhân dân ghi nhớ công ơn và lập đền thờ Hai Bà để đời đời thờ cúng.",
-                  "chunk_id": "LS6_B16_C007",
+                  "chunk_id": "LS6_B16_C006",
                   "lesson_number": 16,
                   "pages": [
-                    73,
+                    72,
                     73
                   ],
                   "content_type": "body"
@@ -2412,7 +2412,7 @@
               "sources": [
                 {
                   "quote": "Đầu thế kỉ III, do chính sách cai trị hà khắc của chính quyền đô hộ nhà Ngô, phong trào đấu tranh của người Việt tiếp tục bùng nổ, tiêu biểu nhất là cuộc khởi nghĩa Bà Triệu.",
-                  "chunk_id": "LS6_B16_C011",
+                  "chunk_id": "LS6_B16_C009",
                   "lesson_number": 16,
                   "pages": [
                     74,
@@ -2428,7 +2428,7 @@
               "sources": [
                 {
                   "quote": "Bà Triệu (còn gọi là Triệu Thị Trinh)",
-                  "chunk_id": "LS6_B16_C012",
+                  "chunk_id": "LS6_B16_C010",
                   "lesson_number": 16,
                   "pages": [
                     74,
@@ -2438,21 +2438,21 @@
                 },
                 {
                   "quote": "quê ở huyện Yên Định, tỉnh Thanh Hoá ngày nay, năm 23 tuổi, bà lãnh đạo nhân dân khởi nghĩa",
-                  "chunk_id": "LS6_B16_C013",
+                  "chunk_id": "LS6_B16_C010",
                   "lesson_number": 16,
                   "pages": [
                     74,
-                    75
+                    74
                   ],
                   "content_type": "body"
                 },
                 {
-                  "quote": "Khi ra trận, bà thường cưỡi voi, khí thế rất oai phong, lẫm liệt.",
-                  "chunk_id": "LS6_B16_C013",
+                  "quote": "Khi ra trận, bà thường cưỡi voi, khi thế rất oai phong, lẫm liệt.",
+                  "chunk_id": "LS6_B16_C010",
                   "lesson_number": 16,
                   "pages": [
                     74,
-                    75
+                    74
                   ],
                   "content_type": "body"
                 }
@@ -2464,27 +2464,27 @@
               "sources": [
                 {
                   "quote": "Năm 248, từ căn cứ ở núi Nưa (Triệu Sơn, Thanh Hoá), khởi nghĩa bùng nổ.",
-                  "chunk_id": "LS6_B16_C013",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
-                    74,
+                    75,
                     75
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Lực lượng nghĩa quân đã đánh hạ nhiều huyện lị, thành ấp ở Cửu Chân, Cửu Đức, Nhật Nam.",
-                  "chunk_id": "LS6_B16_C013",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
-                    74,
+                    75,
                     75
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Cuộc khởi nghĩa khiến cho toàn thể Giao Châu đều chấn động.",
-                  "chunk_id": "LS6_B16_C014",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2500,7 +2500,7 @@
               "sources": [
                 {
                   "quote": "nhà Ngô đã cử 8 000 quân sang đàn áp",
-                  "chunk_id": "LS6_B16_C014",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2510,7 +2510,7 @@
                 },
                 {
                   "quote": "Bà Triệu anh dũng hi sinh tại khu vực núi Tùng (Thanh Hoá)",
-                  "chunk_id": "LS6_B16_C014",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2519,8 +2519,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "góp phần thức tỉnh ý thức dân tộc, tạo đà cho cuộc khởi nghĩa của Lý Bí sau này",
-                  "chunk_id": "LS6_B16_C014",
+                  "quote": "góp phần thúc tỉnh ý thức dân tộc, tạo đà cho cuộc khởi nghĩa của Lý Bí sau này.",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2540,12 +2540,12 @@
               "clue": "Mục đích: lấy lại giang sơn, dựng nền độc lập, cởi ách nô lệ.",
               "sources": [
                 {
-                  "quote": "Tôi muốn cưỡi cơn gió mạnh, đạp luồng sóng dữ, chém cá trường kình ở Biển Đông, lấy lại giang sơn, dựng nền độc lập, cởi ách nô lệ, chứ không chịu khom lưng làm tì thiếp cho người.",
-                  "chunk_id": "LS6_B16_C013",
+                  "quote": "“Tôi muốn cưỡi cơn gió mạnh, đạp luống sóng dữ, chém cả trường kinh ở Biển Đông, lấy lại giang sơn, dựng nền độc lập, cởi ách nô lệ, chứ không chịu khom lưng làm tì thiếp cho người!”",
+                  "chunk_id": "LS6_B16_C011",
                   "lesson_number": 16,
                   "pages": [
                     74,
-                    75
+                    74
                   ],
                   "content_type": "body"
                 }
@@ -2559,12 +2559,12 @@
               "clue": "Quân giặc thấy đánh hổ còn dễ hơn đối đầu với Bà Triệu: họ rất khiếp sợ bà.",
               "sources": [
                 {
-                  "quote": "Vung tay đánh cọp xem còn dễ Đối diện Bà Vương mới khó sao.",
-                  "chunk_id": "LS6_B16_C013",
+                  "quote": "Vùng tay đánh cọp xem còn dễ Đối diện Bà Vương mới khó sao.",
+                  "chunk_id": "LS6_B16_C010",
                   "lesson_number": 16,
                   "pages": [
                     74,
-                    75
+                    74
                   ],
                   "content_type": "body"
                 }
@@ -2595,7 +2595,7 @@
               "sources": [
                 {
                   "quote": "Đầu thế kỉ III, do chính sách cai trị hà khắc của chính quyền đô hộ nhà Ngô",
-                  "chunk_id": "LS6_B16_C011",
+                  "chunk_id": "LS6_B16_C009",
                   "lesson_number": 16,
                   "pages": [
                     74,
@@ -2625,11 +2625,11 @@
               "sources": [
                 {
                   "quote": "lấy lại giang sơn, dựng nền độc lập, cởi ách nô lệ, chứ không chịu khom lưng làm tì thiếp cho người",
-                  "chunk_id": "LS6_B16_C013",
+                  "chunk_id": "LS6_B16_C011",
                   "lesson_number": 16,
                   "pages": [
                     74,
-                    75
+                    74
                   ],
                   "content_type": "body"
                 }
@@ -2654,17 +2654,17 @@
               "sources": [
                 {
                   "quote": "Năm 248, từ căn cứ ở núi Nưa (Triệu Sơn, Thanh Hoá), khởi nghĩa bùng nổ.",
-                  "chunk_id": "LS6_B16_C013",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
-                    74,
+                    75,
                     75
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "nhà Ngô đã cử 8 000 quân sang đàn áp",
-                  "chunk_id": "LS6_B16_C014",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2696,8 +2696,8 @@
               "explanation": "Khởi nghĩa Bà Triệu làm rung chuyển chính quyền đô hộ, thức tỉnh ý thức dân tộc và tạo đà cho khởi nghĩa Lý Bí.",
               "sources": [
                 {
-                  "quote": "Cuộc khởi nghĩa Bà Triệu không chỉ làm rung chuyển chính quyền đô hộ mà còn góp phần thức tỉnh ý thức dân tộc",
-                  "chunk_id": "LS6_B16_C014",
+                  "quote": "Cuộc khởi nghĩa Bà Triệu không chỉ làm rung chuyển chính quyền đô hộ mà còn góp phần thúc tỉnh ý thức dân tộc,",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2727,7 +2727,7 @@
               "sources": [
                 {
                   "quote": "nhà Ngô đã cử 8 000 quân sang đàn áp",
-                  "chunk_id": "LS6_B16_C014",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2737,7 +2737,7 @@
                 },
                 {
                   "quote": "Bà Triệu anh dũng hi sinh tại khu vực núi Tùng (Thanh Hoá)",
-                  "chunk_id": "LS6_B16_C014",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2746,8 +2746,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "góp phần thức tỉnh ý thức dân tộc, tạo đà cho cuộc khởi nghĩa của Lý Bí sau này",
-                  "chunk_id": "LS6_B16_C014",
+                  "quote": "góp phần thúc tỉnh ý thức dân tộc, tạo đà cho cuộc khởi nghĩa của Lý Bí sau này.",
+                  "chunk_id": "LS6_B16_C012",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2785,7 +2785,7 @@
               "sources": [
                 {
                   "quote": "Vào nửa đầu thế kỉ VI, Lý Bí - một hào trưởng địa phương (quê ở Phổ Yên, Thái Nguyên) đã lãnh đạo cuộc khởi nghĩa nhằm chống lại chế độ cai trị khắc nghiệt của nhà Lương.",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C014",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2795,7 +2795,7 @@
                 },
                 {
                   "quote": "Đầu năm 542, khởi nghĩa bùng nổ, lật đổ chính quyền đô hộ; làm chủ Giao Châu.",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2811,7 +2811,7 @@
               "sources": [
                 {
                   "quote": "Đầu năm 544, Lý Bí tự xưng là Lý Nam Đế, lập nước Vạn Xuân, đóng đô ở vùng cửa sông Tô Lịch (Hà Nội), thành lập triều đình, dựng điện Vạn Thọ và chùa Khai Quốc.",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2827,7 +2827,7 @@
               "sources": [
                 {
                   "quote": "Năm 545, quân Lương xâm lược nước Vạn Xuân, Triệu Quang Phục thay Lý Bí tiếp tục lãnh đạo cuộc kháng chiến, xây dựng căn cứ tại đầm Dạ Trạch (Hưng Yên).",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2837,7 +2837,7 @@
                 },
                 {
                   "quote": "Kháng chiến thắng lợi, Triệu Quang Phục lên làm vua",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2847,7 +2847,7 @@
                 },
                 {
                   "quote": "Triệu Việt Vương",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2863,7 +2863,7 @@
               "sources": [
                 {
                   "quote": "Năm 602, nhà Tuỳ đưa quân xâm lược, nước Vạn Xuân chấm dứt.",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2887,7 +2887,7 @@
                   "chunk_id": "LS6_B16_C017",
                   "lesson_number": 16,
                   "pages": [
-                    75,
+                    76,
                     76
                   ],
                   "content_type": "body"
@@ -2928,7 +2928,7 @@
               "sources": [
                 {
                   "quote": "chống lại chế độ cai trị khắc nghiệt của nhà Lương",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C014",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2938,7 +2938,7 @@
                 },
                 {
                   "quote": "Năm 545, quân Lương xâm lược nước Vạn Xuân",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2948,7 +2948,7 @@
                 },
                 {
                   "quote": "Năm 602, nhà Tuỳ đưa quân xâm lược, nước Vạn Xuân chấm dứt.",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -2981,7 +2981,7 @@
               "sources": [
                 {
                   "quote": "Đầu năm 544, Lý Bí tự xưng là Lý Nam Đế, lập nước Vạn Xuân",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3010,7 +3010,7 @@
               "sources": [
                 {
                   "quote": "Đầu năm 542, khởi nghĩa bùng nổ",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3020,7 +3020,7 @@
                 },
                 {
                   "quote": "Đầu năm 544, Lý Bí tự xưng là Lý Nam Đế",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3030,7 +3030,7 @@
                 },
                 {
                   "quote": "Năm 545, quân Lương xâm lược nước Vạn Xuân",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3040,7 +3040,7 @@
                 },
                 {
                   "quote": "Năm 602, nhà Tuỳ đưa quân xâm lược",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3081,7 +3081,7 @@
               "sources": [
                 {
                   "quote": "Triệu Quang Phục thay Lý Bí tiếp tục lãnh đạo cuộc kháng chiến, xây dựng căn cứ tại đầm Dạ Trạch (Hưng Yên).",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3111,7 +3111,7 @@
               "sources": [
                 {
                   "quote": "Năm 545, quân Lương xâm lược nước Vạn Xuân, Triệu Quang Phục thay Lý Bí tiếp tục lãnh đạo cuộc kháng chiến, xây dựng căn cứ tại đầm Dạ Trạch (Hưng Yên).",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3121,7 +3121,7 @@
                 },
                 {
                   "quote": "Kháng chiến thắng lợi, Triệu Quang Phục lên làm vua",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3131,7 +3131,7 @@
                 },
                 {
                   "quote": "Triệu Việt Vương",
-                  "chunk_id": "LS6_B16_C016",
+                  "chunk_id": "LS6_B16_C015",
                   "lesson_number": 16,
                   "pages": [
                     75,
@@ -3194,8 +3194,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Mai Thúc Loan xưng đế, xây thành Vạn An (Nghệ An) làm quốc đô.",
-                  "chunk_id": "LS6_B16_C020",
+                  "quote": "Mai Thúc Loan xưng đế, xây thành Vạn An (Nghệ An) làm quốc đồ.",
+                  "chunk_id": "LS6_B16_C021",
                   "lesson_number": 16,
                   "pages": [
                     77,
@@ -3247,7 +3247,7 @@
                 },
                 {
                   "quote": "Nhà Đường sai Dương Tư Húc dẫn đại quân sang đàn áp. Cuộc khởi nghĩa bị dập tắt.",
-                  "chunk_id": "LS6_B16_C020",
+                  "chunk_id": "LS6_B16_C021",
                   "lesson_number": 16,
                   "pages": [
                     77,
@@ -3296,10 +3296,10 @@
                   "sources": [
                     {
                       "quote": "Năm 248, từ căn cứ ở núi Nưa",
-                      "chunk_id": "LS6_B16_C013",
+                      "chunk_id": "LS6_B16_C012",
                       "lesson_number": 16,
                       "pages": [
-                        74,
+                        75,
                         75
                       ],
                       "content_type": "body"
@@ -3312,7 +3312,7 @@
                   "sources": [
                     {
                       "quote": "Đầu năm 542, khởi nghĩa bùng nổ",
-                      "chunk_id": "LS6_B16_C016",
+                      "chunk_id": "LS6_B16_C015",
                       "lesson_number": 16,
                       "pages": [
                         75,
@@ -3375,7 +3375,7 @@
                 },
                 {
                   "quote": "Từ cuối thế kỉ IX, nhà Đường suy yếu",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -3407,8 +3407,8 @@
               "explanation": "Mai Thúc Loan xưng đế, xây thành Vạn An (Nghệ An) làm quốc đô; sau đó nghĩa quân mới tiến ra Bắc chiếm Tống Bình.",
               "sources": [
                 {
-                  "quote": "Mai Thúc Loan xưng đế, xây thành Vạn An (Nghệ An) làm quốc đô.",
-                  "chunk_id": "LS6_B16_C020",
+                  "quote": "Mai Thúc Loan xưng đế, xây thành Vạn An (Nghệ An) làm quốc đồ.",
+                  "chunk_id": "LS6_B16_C021",
                   "lesson_number": 16,
                   "pages": [
                     77,
@@ -3487,7 +3487,7 @@
                 },
                 {
                   "quote": "Nhà Đường sai Dương Tư Húc dẫn đại quân sang đàn áp.",
-                  "chunk_id": "LS6_B16_C020",
+                  "chunk_id": "LS6_B16_C021",
                   "lesson_number": 16,
                   "pages": [
                     77,
@@ -3527,7 +3527,7 @@
                 },
                 {
                   "quote": "Nhà Đường sai Dương Tư Húc dẫn đại quân sang đàn áp. Cuộc khởi nghĩa bị dập tắt.",
-                  "chunk_id": "LS6_B16_C020",
+                  "chunk_id": "LS6_B16_C021",
                   "lesson_number": 16,
                   "pages": [
                     77,
@@ -3646,7 +3646,7 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "tiếp tục kéo xuống bao vây và chiếm thành Tống Binh, tự sắp đặt việc cai trị trong vòng 9 năm thì bị quân Đường đàn áp và chiếm lại.",
+                  "quote": "tiếp tục kéo xuống bao vây và chiếm thành Tống Bình; tự sắp đặt việc cai trị trong vòng 9 năm thì bị quân Đường đàn áp và chiếm lại.",
                   "chunk_id": "LS6_B16_C023",
                   "lesson_number": 16,
                   "pages": [
@@ -3663,7 +3663,7 @@
               "sources": [
                 {
                   "quote": "Về sau, Phùng Hưng được nhân dân suy tôn làm \"Bố Cái đại vương\".",
-                  "chunk_id": "LS6_B16_C025",
+                  "chunk_id": "LS6_B16_C026",
                   "lesson_number": 16,
                   "pages": [
                     78,
@@ -3694,7 +3694,7 @@
               "sources": [
                 {
                   "quote": "Về sau, Phùng Hưng được nhân dân suy tôn làm \"Bố Cái đại vương\".",
-                  "chunk_id": "LS6_B16_C025",
+                  "chunk_id": "LS6_B16_C026",
                   "lesson_number": 16,
                   "pages": [
                     78,
@@ -3761,7 +3761,7 @@
               "sources": [
                 {
                   "quote": "Phùng Hưng được nhân dân suy tôn làm \"Bố Cái đại vương\"",
-                  "chunk_id": "LS6_B16_C025",
+                  "chunk_id": "LS6_B16_C026",
                   "lesson_number": 16,
                   "pages": [
                     78,
@@ -3771,11 +3771,11 @@
                 },
                 {
                   "quote": "Quân Ngô từng gọi bà là \"Lệ Hải Bà Vương\"",
-                  "chunk_id": "LS6_B16_C013",
+                  "chunk_id": "LS6_B16_C010",
                   "lesson_number": 16,
                   "pages": [
                     74,
-                    75
+                    74
                   ],
                   "content_type": "body"
                 }
@@ -3840,7 +3840,7 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "sau đó tiếp tục kéo xuống bao vây và chiếm thành Tống Binh",
+                  "quote": "sau đó tiếp tục kéo xuống bao vây và chiếm thành Tống Bình;",
                   "chunk_id": "LS6_B16_C023",
                   "lesson_number": 16,
                   "pages": [
@@ -3943,17 +3943,17 @@
               },
               {
                 "quote": "Năm 248, từ căn cứ ở núi Nưa",
-                "chunk_id": "LS6_B16_C013",
+                "chunk_id": "LS6_B16_C012",
                 "lesson_number": 16,
                 "pages": [
-                  74,
+                  75,
                   75
                 ],
                 "content_type": "body"
               },
               {
                 "quote": "Đầu năm 542, khởi nghĩa bùng nổ",
-                "chunk_id": "LS6_B16_C016",
+                "chunk_id": "LS6_B16_C015",
                 "lesson_number": 16,
                 "pages": [
                   75,
@@ -4014,7 +4014,7 @@
             "sources": [
               {
                 "quote": "chính quyền đô hộ nhà Hán",
-                "chunk_id": "LS6_B16_C003",
+                "chunk_id": "LS6_B16_C002",
                 "lesson_number": 16,
                 "pages": [
                   71,
@@ -4024,7 +4024,7 @@
               },
               {
                 "quote": "chính quyền đô hộ nhà Ngô",
-                "chunk_id": "LS6_B16_C011",
+                "chunk_id": "LS6_B16_C009",
                 "lesson_number": 16,
                 "pages": [
                   74,
@@ -4034,7 +4034,7 @@
               },
               {
                 "quote": "chế độ cai trị khắc nghiệt của nhà Lương",
-                "chunk_id": "LS6_B16_C016",
+                "chunk_id": "LS6_B16_C014",
                 "lesson_number": 16,
                 "pages": [
                   75,
@@ -4079,17 +4079,17 @@
             "sources": [
               {
                 "quote": "đóng đô ở Mê Linh",
-                "chunk_id": "LS6_B16_C007",
+                "chunk_id": "LS6_B16_C006",
                 "lesson_number": 16,
                 "pages": [
-                  73,
+                  72,
                   73
                 ],
                 "content_type": "body"
               },
               {
                 "quote": "dựng điện Vạn Thọ và chùa Khai Quốc",
-                "chunk_id": "LS6_B16_C016",
+                "chunk_id": "LS6_B16_C015",
                 "lesson_number": 16,
                 "pages": [
                   75,
@@ -4125,7 +4125,7 @@
               },
               {
                 "quote": "tạo đà cho cuộc khởi nghĩa của Lý Bí sau này",
-                "chunk_id": "LS6_B16_C014",
+                "chunk_id": "LS6_B16_C012",
                 "lesson_number": 16,
                 "pages": [
                   75,
@@ -4243,7 +4243,7 @@
               "sources": [
                 {
                   "quote": "Từ cuối thế kỉ IX, nhà Đường suy yếu nên khó kiểm soát được tình hình ở An Nam.",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4253,7 +4253,7 @@
                 },
                 {
                   "quote": "giữa năm 905, một hào trưởng địa phương Ở Hải Dương là Khúc Thừa Dụ đã nổi dậy đánh chiếm thành Đại La, lật đổ chính quyền đô hộ rồi tự xưng là tiết độ sứ, xây dựng chính quyền tự chủ của người Việt.",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4269,7 +4269,7 @@
               "sources": [
                 {
                   "quote": "Năm 907, con của Khúc Thừa Dụ là Khúc Hạo đã lên thay cha nắm quyền tiết độ sứ và tiến hành cải cách.",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4279,7 +4279,7 @@
                 },
                 {
                   "quote": "Định lại mức thuế cho công bằng",
-                  "chunk_id": "LS6_B18_C006",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4289,7 +4289,7 @@
                 },
                 {
                   "quote": "Tha bỏ lực dịch cho dân bớt khổ",
-                  "chunk_id": "LS6_B18_C006",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4299,7 +4299,7 @@
                 },
                 {
                   "quote": "Lập sổ hộ khẩu, khai rõ quê quán để quản lí cho thống nhất",
-                  "chunk_id": "LS6_B18_C006",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4315,7 +4315,7 @@
               "sources": [
                 {
                   "quote": "Chính sự cốt chuộng khoan dung, giản dị, nhân dân đều được yên vui",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4336,7 +4336,7 @@
               "sources": [
                 {
                   "quote": "Chính sự cốt chuộng khoan dung, giản dị, nhân dân đều được yên vui",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4368,7 +4368,7 @@
               "sources": [
                 {
                   "quote": "Khúc Thừa Dụ đã nổi dậy đánh chiếm thành Đại La, lật đổ chính quyền đô hộ rồi tự xưng là tiết độ sứ",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4402,7 +4402,7 @@
               "sources": [
                 {
                   "quote": "đánh chiếm thành Đại La, lật đổ chính quyền đô hộ",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4412,7 +4412,7 @@
                 },
                 {
                   "quote": "Định lại mức thuế cho công bằng",
-                  "chunk_id": "LS6_B18_C006",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4442,7 +4442,7 @@
               "sources": [
                 {
                   "quote": "Tha bỏ lực dịch cho dân bớt khổ",
-                  "chunk_id": "LS6_B18_C006",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4452,7 +4452,7 @@
                 },
                 {
                   "quote": "Lập sổ hộ khẩu, khai rõ quê quán",
-                  "chunk_id": "LS6_B18_C006",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4492,7 +4492,7 @@
               "sources": [
                 {
                   "quote": "Từ cuối thế kỉ IX, nhà Đường suy yếu nên khó kiểm soát được tình hình ở An Nam.",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4502,7 +4502,7 @@
                 },
                 {
                   "quote": "Viên tiết độ sứ được nhà Đường giao nhiệm vụ cai trị nước ta bị giáng chức.",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C003",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4532,7 +4532,7 @@
               "sources": [
                 {
                   "quote": "Chính sự cốt chuộng khoan dung, giản dị, nhân dân đều được yên vui",
-                  "chunk_id": "LS6_B18_C004",
+                  "chunk_id": "LS6_B18_C005",
                   "lesson_number": 18,
                   "pages": [
                     82,
@@ -4570,20 +4570,20 @@
               "sources": [
                 {
                   "quote": "Nam Hán là một nước nhỏ ở Trung Quốc, cai trị vùng đất sát biên giới nước ta",
-                  "chunk_id": "LS6_B18_C008",
+                  "chunk_id": "LS6_B18_C009",
                   "lesson_number": 18,
                   "pages": [
-                    82,
+                    83,
                     83
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Mùa thu năm 930, quân Nam Hán đánh sang nước ta, lập lại quyền cai trị.",
-                  "chunk_id": "LS6_B18_C008",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
-                    82,
+                    83,
                     83
                   ],
                   "content_type": "body"
@@ -4596,17 +4596,17 @@
               "sources": [
                 {
                   "quote": "Năm 931, thuộc tướng cũ của họ Khúc là Dương Đình Nghệ kéo quân từ Thanh Hoá ra Bắc đánh đuổi quân Nam Hán.",
-                  "chunk_id": "LS6_B18_C008",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
-                    82,
+                    83,
                     83
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "hào kiệt khắp nơi kéo về làng Giàng (Thanh Hoá) tụ nghĩa",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4616,7 +4616,7 @@
                 },
                 {
                   "quote": "Từ làng Giàng, Dương Đình Nghệ kéo quân vây chiếm thành Đại La.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4626,7 +4626,7 @@
                 },
                 {
                   "quote": "Quân của Dương Đình Nghệ chặn đánh quân tiếp viện.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4642,7 +4642,7 @@
               "sources": [
                 {
                   "quote": "Quân Nam Hán phải rút chạy.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4652,7 +4652,7 @@
                 },
                 {
                   "quote": "Dương Đình Nghệ tự xưng là Tiết độ sứ, tiếp tục xây dựng nền tự chủ nước nhà.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4675,7 +4675,7 @@
                   "sources": [
                     {
                       "quote": "giữa năm 905, một hào trưởng địa phương",
-                      "chunk_id": "LS6_B18_C004",
+                      "chunk_id": "LS6_B18_C003",
                       "lesson_number": 18,
                       "pages": [
                         82,
@@ -4691,7 +4691,7 @@
                   "sources": [
                     {
                       "quote": "Năm 907, con của Khúc Thừa Dụ là Khúc Hạo",
-                      "chunk_id": "LS6_B18_C004",
+                      "chunk_id": "LS6_B18_C003",
                       "lesson_number": 18,
                       "pages": [
                         82,
@@ -4707,10 +4707,10 @@
                   "sources": [
                     {
                       "quote": "Mùa thu năm 930, quân Nam Hán đánh sang nước ta",
-                      "chunk_id": "LS6_B18_C008",
+                      "chunk_id": "LS6_B18_C010",
                       "lesson_number": 18,
                       "pages": [
-                        82,
+                        83,
                         83
                       ],
                       "content_type": "body"
@@ -4723,10 +4723,10 @@
                   "sources": [
                     {
                       "quote": "Năm 931, thuộc tướng cũ của họ Khúc là Dương Đình Nghệ",
-                      "chunk_id": "LS6_B18_C008",
+                      "chunk_id": "LS6_B18_C010",
                       "lesson_number": 18,
                       "pages": [
-                        82,
+                        83,
                         83
                       ],
                       "content_type": "body"
@@ -4738,8 +4738,8 @@
                   "label": "Quân Nam Hán lại theo đường biển sang xâm lược",
                   "sources": [
                     {
-                      "quote": "Năm 938, quân Nam Hán do Hoằng Tháo làm chủ tướng",
-                      "chunk_id": "LS6_B18_C011",
+                      "quote": "Năm 938, quân Nam Hán do Hoàng Thảo làm chủ tướng",
+                      "chunk_id": "LS6_B18_C012",
                       "lesson_number": 18,
                       "pages": [
                         84,
@@ -4772,7 +4772,7 @@
               "sources": [
                 {
                   "quote": "Dưới sự tập hợp của Dương Đình Nghệ, hào kiệt khắp nơi kéo về làng Giàng (Thanh Hoá) tụ nghĩa.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4782,7 +4782,7 @@
                 },
                 {
                   "quote": "Quân Nam Hán cử quân tiếp viện sang đánh chiếm lại thành Đại La.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4815,7 +4815,7 @@
               "sources": [
                 {
                   "quote": "hào kiệt khắp nơi kéo về làng Giàng (Thanh Hoá) tụ nghĩa",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4848,7 +4848,7 @@
               "sources": [
                 {
                   "quote": "Cuộc kháng chiến thắng lợi, Dương Đình Nghệ tự xưng là Tiết độ sứ",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4858,7 +4858,7 @@
                 },
                 {
                   "quote": "Chiến thắng Bạch Đằng năm 938 đã chấm dứt vĩnh viễn thời kì Bắc thuộc",
-                  "chunk_id": "LS6_B18_C016",
+                  "chunk_id": "LS6_B18_C020",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -4888,17 +4888,17 @@
               "sources": [
                 {
                   "quote": "Năm 931, thuộc tướng cũ của họ Khúc là Dương Đình Nghệ kéo quân từ Thanh Hoá ra Bắc đánh đuổi quân Nam Hán.",
-                  "chunk_id": "LS6_B18_C008",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
-                    82,
+                    83,
                     83
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "hào kiệt khắp nơi kéo về làng Giàng (Thanh Hoá) tụ nghĩa",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4908,7 +4908,7 @@
                 },
                 {
                   "quote": "Từ làng Giàng, Dương Đình Nghệ kéo quân vây chiếm thành Đại La.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4918,7 +4918,7 @@
                 },
                 {
                   "quote": "Quân của Dương Đình Nghệ chặn đánh quân tiếp viện.",
-                  "chunk_id": "LS6_B18_C009",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
                     83,
@@ -4948,20 +4948,20 @@
               "sources": [
                 {
                   "quote": "Nam Hán là một nước nhỏ ở Trung Quốc, cai trị vùng đất sát biên giới nước ta",
-                  "chunk_id": "LS6_B18_C008",
+                  "chunk_id": "LS6_B18_C009",
                   "lesson_number": 18,
                   "pages": [
-                    82,
+                    83,
                     83
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Mùa thu năm 930, quân Nam Hán đánh sang nước ta, lập lại quyền cai trị.",
-                  "chunk_id": "LS6_B18_C008",
+                  "chunk_id": "LS6_B18_C010",
                   "lesson_number": 18,
                   "pages": [
-                    82,
+                    83,
                     83
                   ],
                   "content_type": "body"
@@ -4995,8 +4995,8 @@
               "text": "Năm 938, quân Nam Hán do Hoằng Tháo chỉ huy theo đường biển ồ ạt sang xâm lược. Ngô Quyền, quê Đường Lâm, là tướng tài và con rể của Dương Đình Nghệ, gấp rút chuẩn bị kế hoạch đánh giặc.",
               "sources": [
                 {
-                  "quote": "Năm 938, quân Nam Hán do Hoằng Tháo làm chủ tướng từ Quảng Đông theo đường biển ồ ạt tiến sang xâm lược nước ta.",
-                  "chunk_id": "LS6_B18_C011",
+                  "quote": "Năm 938, quân Nam Hán do Hoàng Thảo làm chủ tướng từ Quảng Đông theo đường biển ồ ạt tiến sang xâm lược nước ta.",
+                  "chunk_id": "LS6_B18_C012",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5006,7 +5006,7 @@
                 },
                 {
                   "quote": "Ngô Quyền quê ở Đường Lâm",
-                  "chunk_id": "LS6_B18_C012",
+                  "chunk_id": "LS6_B18_C014",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5016,7 +5016,7 @@
                 },
                 {
                   "quote": "thuộc tướng tài năng và cũng là con rể của Dương Đình Nghệ",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C014",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5026,7 +5026,7 @@
                 },
                 {
                   "quote": "Trước vận nước lâm nguy, Ngô Quyền đã gấp rút chuẩn bị kế hoạch đối phó với quân nam hán.",
-                  "chunk_id": "LS6_B18_C011",
+                  "chunk_id": "LS6_B18_C012",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5042,7 +5042,7 @@
               "sources": [
                 {
                   "quote": "Đây là con đường thuỷ tốt nhất để đi vào nước ta.",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5052,7 +5052,7 @@
                 },
                 {
                   "quote": "Mực nước vùng cửa sông lúc thuỷ triều cao nhất và thấp nhất chênh nhau tới 2 - 3m.",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5062,7 +5062,7 @@
                 },
                 {
                   "quote": "Địa hình xung quanh có nhiều cồn gò, bãi, đầm lầy,... giúp bố trí lực lượng quân thuỷ.",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5140,7 +5140,7 @@
               "sources": [
                 {
                   "quote": "Đây là con đường thuỷ tốt nhất để đi vào nước ta.",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5150,7 +5150,7 @@
                 },
                 {
                   "quote": "theo đường biển ồ ạt tiến sang xâm lược nước ta",
-                  "chunk_id": "LS6_B18_C011",
+                  "chunk_id": "LS6_B18_C012",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5221,7 +5221,7 @@
               "sources": [
                 {
                   "quote": "Khi nước triều lên, Quyền sai người đem thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo.",
-                  "chunk_id": "LS6_B18_C015",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5231,7 +5231,7 @@
                 },
                 {
                   "quote": "nước triều rút, cọc nhô lên",
-                  "chunk_id": "LS6_B18_C015",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5241,7 +5241,7 @@
                 },
                 {
                   "quote": "giúp bố trí lực lượng quân thuỷ",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5301,7 +5301,7 @@
               "sources": [
                 {
                   "quote": "Đây là con đường thuỷ tốt nhất để đi vào nước ta.",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5311,7 +5311,7 @@
                 },
                 {
                   "quote": "Mực nước vùng cửa sông lúc thuỷ triều cao nhất và thấp nhất chênh nhau tới 2 - 3m.",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5321,7 +5321,7 @@
                 },
                 {
                   "quote": "Địa hình xung quanh có nhiều cồn gò, bãi, đầm lầy,... giúp bố trí lực lượng quân thuỷ.",
-                  "chunk_id": "LS6_B18_C013",
+                  "chunk_id": "LS6_B18_C016",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5358,8 +5358,8 @@
               "text": "Khi nước triều lên, Ngô Quyền cho thuyền nhẹ ra khiêu chiến rồi giả thua chạy để dụ giặc đuổi theo. Hoằng Tháo quả nhiên tiến quân vào.",
               "sources": [
                 {
-                  "quote": "Khi nước triều lên, Quyền sai người đem thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo. Hoằng Tháo quả nhiên tiến quân vào.",
-                  "chunk_id": "LS6_B18_C015",
+                  "quote": "“Khi nước triều lên, Quyền sai người đem thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo. Hoàng Tháo quả nhiên tiến quân vào.",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5375,7 +5375,7 @@
               "sources": [
                 {
                   "quote": "Khi binh thuyền đã vào trong vùng cắm cọc, nước triều rút, cọc nhô lên, Quyền bèn tiến quân ra đánh",
-                  "chunk_id": "LS6_B18_C015",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5384,8 +5384,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "thuyền đều mắc vào cọc mà lật úp, rối loạn tan vỡ, quân lính chết đuối quá nửa",
-                  "chunk_id": "LS6_B18_C015",
+                  "quote": "thuyền đều mắc vào cọc mà lật úp, rồi loạn tan vỡ, quân lính chết đuổi quá nửa.",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5394,8 +5394,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "bắt được Hoằng Tháo giết đi",
-                  "chunk_id": "LS6_B18_C015",
+                  "quote": "bắt được Hoàng Tháo giết đi...",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5411,7 +5411,7 @@
               "sources": [
                 {
                   "quote": "Chiến thắng Bạch Đằng năm 938 đã chấm dứt vĩnh viễn thời kì Bắc thuộc và mở ra kỉ nguyên độc lập tự chủ lâu dài cho dân tộc.",
-                  "chunk_id": "LS6_B18_C016",
+                  "chunk_id": "LS6_B18_C020",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5432,27 +5432,27 @@
               "sources": [
                 {
                   "quote": "Trận thắng trên sông Bạch Đằng là cơ sở sau này cho việc khôi phục quốc thống.",
-                  "chunk_id": "LS6_B18_C016",
+                  "chunk_id": "LS6_B18_C021",
                   "lesson_number": 18,
                   "pages": [
-                    85,
+                    86,
                     86
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Những chiến công đời Đinh, Lê, Lý, Trần vẫn còn nhờ vào uy thanh lẫm liệt để lại ấy.",
-                  "chunk_id": "LS6_B18_C016",
+                  "chunk_id": "LS6_B18_C021",
                   "lesson_number": 18,
                   "pages": [
-                    85,
+                    86,
                     86
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Trận Bạch Đằng này là vũ công cao cả, vang dội đến nghìn thu",
-                  "chunk_id": "LS6_B18_C017",
+                  "chunk_id": "LS6_B18_C021",
                   "lesson_number": 18,
                   "pages": [
                     86,
@@ -5483,7 +5483,7 @@
               "sources": [
                 {
                   "quote": "giả thua chạy để dụ địch đuổi theo",
-                  "chunk_id": "LS6_B18_C015",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5493,7 +5493,7 @@
                 },
                 {
                   "quote": "nước triều rút, cọc nhô lên, Quyền bèn tiến quân ra đánh",
-                  "chunk_id": "LS6_B18_C015",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5526,7 +5526,7 @@
               "sources": [
                 {
                   "quote": "Chiến thắng Bạch Đằng năm 938 đã chấm dứt vĩnh viễn thời kì Bắc thuộc",
-                  "chunk_id": "LS6_B18_C016",
+                  "chunk_id": "LS6_B18_C020",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5569,7 +5569,7 @@
               "sources": [
                 {
                   "quote": "nước triều rút, cọc nhô lên, Quyền bèn tiến quân ra đánh",
-                  "chunk_id": "LS6_B18_C015",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5603,8 +5603,8 @@
               "explanation": "Hoằng Tháo chỉ huy quân Nam Hán và bị Ngô Quyền bắt giết trong trận Bạch Đằng.",
               "sources": [
                 {
-                  "quote": "bắt được Hoằng Tháo giết đi",
-                  "chunk_id": "LS6_B18_C015",
+                  "quote": "bắt được Hoàng Tháo giết đi...",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5613,8 +5613,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "quân Nam Hán do Hoằng Tháo làm chủ tướng",
-                  "chunk_id": "LS6_B18_C011",
+                  "quote": "quân Nam Hán do Hoàng Thảo làm chủ tướng",
+                  "chunk_id": "LS6_B18_C012",
                   "lesson_number": 18,
                   "pages": [
                     84,
@@ -5643,8 +5643,8 @@
               "explanation": "Khi nước triều lên, Ngô Quyền cho thuyền nhẹ ra khiêu chiến rồi giả thua chạy để dụ giặc đuổi theo.",
               "sources": [
                 {
-                  "quote": "Khi nước triều lên, Quyền sai người đem thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo. Hoằng Tháo quả nhiên tiến quân vào.",
-                  "chunk_id": "LS6_B18_C015",
+                  "quote": "“Khi nước triều lên, Quyền sai người đem thuyền nhẹ ra khiêu chiến, giả thua chạy để dụ địch đuổi theo. Hoàng Tháo quả nhiên tiến quân vào.",
+                  "chunk_id": "LS6_B18_C018",
                   "lesson_number": 18,
                   "pages": [
                     85,
@@ -5685,7 +5685,7 @@
             "sources": [
               {
                 "quote": "giữa năm 905",
-                "chunk_id": "LS6_B18_C004",
+                "chunk_id": "LS6_B18_C003",
                 "lesson_number": 18,
                 "pages": [
                   82,
@@ -5695,7 +5695,7 @@
               },
               {
                 "quote": "Năm 907, con của Khúc Thừa Dụ",
-                "chunk_id": "LS6_B18_C004",
+                "chunk_id": "LS6_B18_C003",
                 "lesson_number": 18,
                 "pages": [
                   82,
@@ -5705,10 +5705,10 @@
               },
               {
                 "quote": "Năm 931, thuộc tướng cũ của họ Khúc",
-                "chunk_id": "LS6_B18_C008",
+                "chunk_id": "LS6_B18_C010",
                 "lesson_number": 18,
                 "pages": [
-                  82,
+                  83,
                   83
                 ],
                 "content_type": "body"
@@ -5756,7 +5756,7 @@
             "sources": [
               {
                 "quote": "lật đổ chính quyền đô hộ rồi tự xưng là tiết độ sứ",
-                "chunk_id": "LS6_B18_C004",
+                "chunk_id": "LS6_B18_C003",
                 "lesson_number": 18,
                 "pages": [
                   82,
@@ -5766,7 +5766,7 @@
               },
               {
                 "quote": "Định lại mức thuế cho công bằng",
-                "chunk_id": "LS6_B18_C006",
+                "chunk_id": "LS6_B18_C005",
                 "lesson_number": 18,
                 "pages": [
                   82,
@@ -5776,17 +5776,17 @@
               },
               {
                 "quote": "Dương Đình Nghệ kéo quân từ Thanh Hoá ra Bắc đánh đuổi quân Nam Hán",
-                "chunk_id": "LS6_B18_C008",
+                "chunk_id": "LS6_B18_C010",
                 "lesson_number": 18,
                 "pages": [
-                  82,
+                  83,
                   83
                 ],
                 "content_type": "body"
               },
               {
                 "quote": "đã chấm dứt vĩnh viễn thời kì Bắc thuộc",
-                "chunk_id": "LS6_B18_C016",
+                "chunk_id": "LS6_B18_C020",
                 "lesson_number": 18,
                 "pages": [
                   85,
@@ -5811,7 +5811,7 @@
             "sources": [
               {
                 "quote": "Đây là con đường thuỷ tốt nhất để đi vào nước ta.",
-                "chunk_id": "LS6_B18_C013",
+                "chunk_id": "LS6_B18_C016",
                 "lesson_number": 18,
                 "pages": [
                   84,
@@ -5821,7 +5821,7 @@
               },
               {
                 "quote": "chênh nhau tới 2 - 3m",
-                "chunk_id": "LS6_B18_C013",
+                "chunk_id": "LS6_B18_C016",
                 "lesson_number": 18,
                 "pages": [
                   84,
@@ -5831,7 +5831,7 @@
               },
               {
                 "quote": "Địa hình xung quanh có nhiều cồn gò, bãi, đầm lầy",
-                "chunk_id": "LS6_B18_C013",
+                "chunk_id": "LS6_B18_C016",
                 "lesson_number": 18,
                 "pages": [
                   84,
@@ -5882,7 +5882,7 @@
   ],
   "build": {
     "date": "2026-10-28",
-    "dataset_version": "1.0.0",
+    "dataset_version": "2.0.0",
     "warnings": [
       "b16_m1.q1: câu trích lấy từ Bài 18: «Mùa thu năm 930, quân Nam Hán đánh sang nước ta»",
       "b16_m1.q4: câu trích lấy từ Bài 18: «Chiến thắng Bạch Đằng năm 938 đã chấm dứt vĩnh viễ»",

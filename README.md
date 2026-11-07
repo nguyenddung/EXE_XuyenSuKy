@@ -27,7 +27,7 @@ Nền tảng học Lịch sử Việt Nam và thế giới cho học sinh lớp 
 
 ### Học sinh (`/home`)
 
-- **Thư viện SGK**: 7 sách, 130 bài, 752 mục, 2.708 đoạn tư liệu. Mọi trích dẫn ghi rõ sách, bộ sách, NXB và trang. Màn đọc lưu mục đang xem, có chữ lớn, chế độ tập trung, đánh dấu đã đọc, lưu bài, ghi chú và tải sổ tay TXT.
+- **Thư viện SGK**: 7 sách (bộ Kết nối tri thức), 127 bài, 716 mục, 2.604 đoạn tư liệu, gồm cả chữ trong sơ đồ, trục thời gian. Mọi trích dẫn ghi rõ sách, bộ sách, NXB và trang. Màn đọc lưu mục đang xem, có chữ lớn, chế độ tập trung, đánh dấu đã đọc, lưu bài, ghi chú và tải sổ tay TXT.
 - **Tìm kiếm** không dấu, hiểu tên gọi khác và viết tắt (`CMT8`, `Bác Hồ`, `Columbus`, `Hưng Đạo Vương`), phím tắt Ctrl/Cmd + K.
 - **Dashboard**: kế hoạch học hôm nay (mục tiêu 1/3/5 hoạt động), chuỗi ngày học, bài đề xuất theo lớp, tiến độ, bảng xếp hạng.
 - **Hành trình game hoá** theo chương, có video nhiệm vụ, gợi ý ba bậc, mảnh Sử Ký và huy hiệu. Chi tiết: [docs/journeys.md](docs/journeys.md).
@@ -97,6 +97,7 @@ Sao chép `.env.example` thành `.env.local` (đã được Git bỏ qua) rồi 
 | `OPENAI_MODEL` | `gpt-5-mini,gpt-5` | Các model sinh câu trả lời theo thứ tự ưu tiên, cách nhau bằng dấu phẩy; model nào key không dùng được (OpenAI trả 404) thì chuyển sang model sau |
 | `OPENAI_FALLBACK_MODEL` | `gpt-4.1-mini` | Model cuối cùng khi không model nào ở trên dùng được. Không xếp `gpt-5-nano` trước model này: thử trên câu hỏi thật, nano trả lời kém hơn |
 | `AI_DISABLED` | — | `1` để tắt AI ngay mà không xoá khoá |
+| `TEACHER_GUIDES_API` | — | `1` để mở API sách giáo viên (`/api/teacher-guides`). Mặc định đóng: SGV có đáp án bài tập và chưa xác nhận quyền công bố |
 | `CHAT_RATE_PER_MINUTE` | `12` | Số câu hỏi mỗi phút mỗi IP (vượt → HTTP 429) |
 | `AI_ANSWERS_PER_DAY` / `AI_GLOBAL_ANSWERS_PER_DAY` | `40` / `500` | Hạn mức câu trả lời AI mỗi IP / toàn hệ thống |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | — | Dùng chung bộ đếm giới hạn giữa các instance |
@@ -121,6 +122,8 @@ Chi tiết từng dịch vụ giọng nói và pipeline RAG: [docs/characters.md
 | `npm run test:backend` | Kiểm thử API, RAG, giọng nói, lịch sử chat, hành trình |
 | `npm run test:games` | Toàn bộ kiểm thử Playwright |
 | `npm run check:dataset` | Xác minh checksum, schema, số lượng và hành trình |
+| `npm run build:dataset -- <thư mục OCR>` | Dựng dataset SGK + SGV từ Markdown của Mistral OCR |
+| `npm run remap:journeys` | Trỏ lại trích dẫn của hành trình sau khi dựng dataset |
 | `npm run import:dataset -- <thư mục>` | Nhập snapshot dataset SGK mới |
 | `npm run import:journey -- <file.json>` | Nhập hành trình từ `course_builder` |
 | `npm run build:embeddings` | Tạo lại chỉ mục embedding (cần `OPENAI_API_KEY`) |
@@ -160,21 +163,24 @@ Chi tiết từng dịch vụ giọng nói và pipeline RAG: [docs/characters.md
 
 | Nguồn | Nội dung | Tài liệu |
 |---|---|---|
-| `data/history` | Văn bản phần Lịch sử của 7 SGK lớp 6–12, tách theo chương, bài, mục, chia chunk; phiên bản 1.0.0 | [data/history/README.md](data/history/README.md) |
+| `data/history` | Văn bản phần Lịch sử của 7 SGK và 7 sách giáo viên lớp 6–12 (OCR bằng Mistral), tách theo chương, bài, mục, chia chunk; phiên bản 2.0.0 | [data/history/README.md](data/history/README.md) |
 | `data/enrichment` | 80 mốc sự kiện gắn với bài và 77 nhóm tên gọi khác, nhóm tự viết, không chép SGK | [data/enrichment/README.md](data/enrichment/README.md) |
 | `data/embeddings` | `text-embedding-3-small`, 512 chiều, int8 | [docs/characters.md](docs/characters.md) |
 | `data/journeys` | 5 hành trình lớp 6 | [docs/journeys.md](docs/journeys.md) |
 
 Backend nạp dataset một lần mỗi tiến trình và kiểm tra checksum, JSON Schema, số lượng, ID duy nhất và mọi tham chiếu giữa chunk, bài, sự kiện. Dữ liệu lỗi thì API trả `503 DATASET_UNAVAILABLE` và giao diện cho phép thử lại hoặc dùng **Bài học thử**. API không bao giờ sửa dataset.
 
-Cập nhật snapshot dataset:
+Dựng lại dataset từ bản OCR (thư mục `output` của `ocr_lich_su.py`, mặc định `D:/Ocr/output`):
 
 ```bash
-npm run import:dataset -- "<thư mục dataset>"
+npm run build:dataset -- "<thư mục output OCR>"
+npm run remap:journeys     # trỏ trích dẫn của hành trình vào chunk mới
 npm run check:dataset
-npm run test:backend
 npm run build:embeddings   # khi nội dung chunk thay đổi
+npm run test:backend
 ```
+
+Hoặc nhập một snapshot dataset có sẵn: `npm run import:dataset -- "<thư mục dataset>"`.
 
 Dataset không có đáp án trắc nghiệm, vì vậy bài SGK dùng đánh dấu đã đọc, tự đánh giá và ghi chú thay vì chấm điểm tự động.
 
@@ -191,7 +197,9 @@ Mọi endpoint nằm dưới `/api`, trả JSON, lỗi có dạng `{ "error": { 
 | `GET /lessons/{id}/chunks?type=body` | Chunk của bài theo loại nội dung |
 | `GET /search?q=CMT8&grade=9` | Đoạn tư liệu phù hợp kèm trang; mở rộng theo tên gọi khác |
 | `GET /chunks/{id}` | Một chunk theo ID |
-| `GET /events?lesson=LS7_B17&grade=&scope=vn\|world&q=` | Mốc sự kiện gắn với bài, sắp theo năm |
+| `GET /teacher-guides?grade=7`, `GET /teacher-guides/{id}` | Phần hướng dẫn của sách giáo viên (ví dụ `GV7_B11`, `GV7_B00` = hướng dẫn chung); bài SGK có `teacherGuideId` |
+| `GET /teacher-guides/{id}/chunks?type=reference` | Chunk sách giáo viên: `objectives`, `guide`, `activity`, `reference` |
+| `GET /events?lesson=LS7_B14&grade=&scope=vn\|world&q=` | Mốc sự kiện gắn với bài, sắp theo năm |
 | `GET /characters?grade=7&q=` | Danh mục nhân vật đối chiếu với dataset |
 | `GET /characters/{id}` | Hồ sơ nhân vật và bài liên quan |
 | `POST /characters/{id}/chat` | `{ "message": "...", "history": [] }` → câu trả lời, nguồn, bài học |
@@ -199,7 +207,7 @@ Mọi endpoint nằm dưới `/api`, trả JSON, lỗi có dạng `{ "error": { 
 | `POST /characters/{id}/voice-session` | Mở phiên trò chuyện giọng nói trực tiếp |
 | `GET /journeys?grade=6`, `GET /journeys/{id}` | Hành trình game hoá |
 
-Ràng buộc chung: `page ≥ 1`, `limit` 1–50, `grade` 6–12, `q` tối đa 200 ký tự (tìm kiếm cần ít nhất 2 ký tự). Tìm kiếm chỉ trả các loại `body`, `source`, `did_you_know`, `caption`, không coi câu hỏi hay bài tập là câu trả lời.
+Ràng buộc chung: `page ≥ 1`, `limit` 1–50, `grade` 6–12, `q` tối đa 200 ký tự (tìm kiếm cần ít nhất 2 ký tự). Tìm kiếm chỉ trả chunk SGK loại `body`, `source`, `did_you_know`, `caption`, `figure`, không coi câu hỏi, bài tập hay sách giáo viên là câu trả lời.
 
 ## Lưu trữ trên trình duyệt
 

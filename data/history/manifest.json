@@ -1,10 +1,15 @@
 {
   "name": "XuyenSuKi - Lịch sử Việt Nam lớp 6-12",
-  "version": "1.0.0",
-  "created": "2026-10-03",
-  "license_note": "Nội dung SGK thuộc bản quyền NXB Giáo dục Việt Nam; chỉ dùng nội bộ cho học tập / nghiên cứu.",
+  "version": "2.0.0",
+  "created": "2026-11-06",
+  "license_note": "Nội dung SGK, SGV thuộc bản quyền NXB Giáo dục Việt Nam; chỉ dùng nội bộ cho học tập / nghiên cứu.",
   "language": "vi",
   "subject": "history",
+  "pipeline": {
+    "ocr": "Mistral OCR (mistral-ocr-latest) qua ocr_lich_su.py, sửa lỗi theo sua_loi_ocr.json",
+    "figures": "chữ trong hình SGK: Mistral OCR từng ảnh qua ocr_chu_trong_hinh.py",
+    "builder": "scripts/build-dataset-from-ocr.mjs"
+  },
   "chunking": {
     "chunk_size": 800,
     "chunk_overlap": 150,
@@ -12,158 +17,202 @@
   },
   "totals": {
     "books": 7,
-    "lessons": 130,
-    "sections": 752,
-    "chunks": 2708,
-    "chunk_chars_avg": 431,
-    "chunk_chars_max": 867
+    "lessons": 127,
+    "sections": 716,
+    "chunks": 2611,
+    "chunk_chars_avg": 445,
+    "chunk_chars_max": 800,
+    "teacher_books": 7,
+    "teacher_guides": 130,
+    "teacher_chunks": 5422
   },
   "by_grade": {
     "6": {
       "chapters": 6,
       "lessons": 21,
-      "chunks": 288
+      "chunks": 294,
+      "teacher_guides": 21,
+      "teacher_chunks": 639
     },
     "7": {
-      "chapters": 6,
-      "lessons": 23,
-      "chunks": 383
+      "chapters": 8,
+      "lessons": 20,
+      "chunks": 390,
+      "teacher_guides": 19,
+      "teacher_chunks": 697
     },
     "8": {
       "chapters": 8,
       "lessons": 21,
-      "chunks": 411
+      "chunks": 430,
+      "teacher_guides": 20,
+      "teacher_chunks": 702
     },
     "9": {
       "chapters": 7,
       "lessons": 22,
-      "chunks": 505
+      "chunks": 516,
+      "teacher_guides": 23,
+      "teacher_chunks": 905
     },
     "10": {
       "chapters": 7,
       "lessons": 13,
-      "chunks": 358
+      "chunks": 335,
+      "teacher_guides": 15,
+      "teacher_chunks": 829
     },
     "11": {
       "chapters": 6,
       "lessons": 13,
-      "chunks": 324
+      "chunks": 282,
+      "teacher_guides": 14,
+      "teacher_chunks": 696
     },
     "12": {
       "chapters": 6,
       "lessons": 17,
-      "chunks": 439
+      "chunks": 364,
+      "teacher_guides": 18,
+      "teacher_chunks": 954
     }
   },
   "sources": [
     {
+      "kind": "sgk",
       "source_pdf": "lich-su-va-dia-li-6.pdf",
       "grade": 6,
       "book": "Lịch sử và Địa lí 6 (Phần Lịch sử)",
-      "book_series": "Kết nối tri thức với cuộc sống"
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
     },
     {
+      "kind": "sgk",
       "source_pdf": "lich-su-va-dia-li-7.pdf",
       "grade": 7,
       "book": "Lịch sử và Địa lí 7 (Phần Lịch sử)",
-      "book_series": "Chân trời sáng tạo"
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
     },
     {
+      "kind": "sgk",
       "source_pdf": "lich-su-va-dia-li-8.pdf",
       "grade": 8,
       "book": "Lịch sử và Địa lí 8 (Phần Lịch sử)",
-      "book_series": "Kết nối tri thức với cuộc sống"
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
     },
     {
+      "kind": "sgk",
       "source_pdf": "lich-su-va-dia-li-9.pdf",
       "grade": 9,
       "book": "Lịch sử và Địa lí 9 (Phần Lịch sử)",
-      "book_series": "Kết nối tri thức với cuộc sống"
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
     },
     {
+      "kind": "sgk",
       "source_pdf": "lich-su-10.pdf",
       "grade": 10,
       "book": "Lịch sử 10",
-      "book_series": "Kết nối tri thức với cuộc sống"
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
     },
     {
+      "kind": "sgk",
       "source_pdf": "lich-su-11.pdf",
       "grade": 11,
       "book": "Lịch sử 11",
-      "book_series": "Kết nối tri thức với cuộc sống"
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
     },
     {
+      "kind": "sgk",
       "source_pdf": "lich-su-12.pdf",
       "grade": 12,
       "book": "Lịch sử 12",
-      "book_series": "Kết nối tri thức với cuộc sống"
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-6.pdf",
+      "grade": 6,
+      "book": "Lịch sử và Địa lí 6 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-7.pdf",
+      "grade": 7,
+      "book": "Lịch sử và Địa lí 7 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-8.pdf",
+      "grade": 8,
+      "book": "Lịch sử và Địa lí 8 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-9.pdf",
+      "grade": 9,
+      "book": "Lịch sử và Địa lí 9 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-10.pdf",
+      "grade": 10,
+      "book": "Lịch sử 10 – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-11.pdf",
+      "grade": 11,
+      "book": "Lịch sử 11 – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-12.pdf",
+      "grade": 12,
+      "book": "Lịch sử 12 – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
     }
   ],
-  "verification_status": "PASSED",
   "content_types": {
-    "body": 1572,
-    "question": 452,
-    "objectives": 133,
-    "intro": 117,
-    "did_you_know": 169,
-    "exercise": 132,
-    "source": 108,
-    "caption": 25
-  },
-  "text_quality": {
-    "lich-su-10": {
-      "qa_checked": true,
-      "flagged_lines": 667,
-      "auto_fixed_lines": 0,
-      "needs_review": 384,
-      "human_reviewed": 384,
-      "open_flags": 0
+    "sgk": {
+      "body": "lời giảng",
+      "source": "tư liệu trích dẫn",
+      "did_you_know": "\"Em có biết?\", \"Kết nối với...\"",
+      "question": "câu hỏi / yêu cầu trong bài",
+      "exercise": "Luyện tập – Vận dụng",
+      "objectives": "mục tiêu bài học",
+      "intro": "mở đầu bài, giới thiệu chương",
+      "caption": "chú thích hình",
+      "figure": "chữ trong hình (sơ đồ, trục thời gian, bảng dạng ảnh)"
     },
-    "lich-su-11": {
-      "qa_checked": true,
-      "flagged_lines": 821,
-      "auto_fixed_lines": 0,
-      "needs_review": 426,
-      "human_reviewed": 426,
-      "open_flags": 0
-    },
-    "lich-su-12": {
-      "qa_checked": true,
-      "flagged_lines": 866,
-      "auto_fixed_lines": 0,
-      "needs_review": 371,
-      "human_reviewed": 371,
-      "open_flags": 0
-    },
-    "lich-su-va-dia-li-6": {
-      "qa_checked": true,
-      "flagged_lines": 857,
-      "auto_fixed_lines": 0,
-      "needs_review": 451,
-      "human_reviewed": 451,
-      "open_flags": 0
-    },
-    "lich-su-va-dia-li-7": {
-      "qa_checked": true,
-      "flagged_lines": 964,
-      "auto_fixed_lines": 0,
-      "needs_review": 589,
-      "human_reviewed": 589,
-      "open_flags": 0
-    },
-    "lich-su-va-dia-li-8": {
-      "qa_checked": true,
-      "flagged_lines": 917,
-      "auto_fixed_lines": 0,
-      "needs_review": 592,
-      "human_reviewed": 592,
-      "open_flags": 0
+    "sgv": {
+      "objectives": "mục tiêu",
+      "guide": "chuẩn bị, lưu ý nội dung và phương pháp, hướng dẫn chung",
+      "activity": "gợi ý tổ chức hoạt động dạy học",
+      "reference": "tài liệu tham khảo"
     }
   },
-  "qa": {
-    "all_flagged_lines_reviewed": true,
-    "needs_review_total": 2813,
-    "human_reviewed_total": 2813,
-    "integrity_passed": true
-  }
+  "warnings": [
+    "SGV lớp 10 bài 3 \"SỬ HỌC VỚI CÁC LĨNH VỰC KHOA HỌC\" không có bài SGK tương ứng",
+    "SGV lớp 10 bài 4 \"SỬ HỌC VỚI MỘT SỐ LĨNH VỰC, NGÀNH NGHỀ HIỆN ĐẠI\" không có bài SGK tương ứng",
+    "SGV lớp 10 bài 9 \"CƠ SỞ HÌNH THÀNH VĂN MINH ĐÔNG NAM Á THỜI KÌ CỔ – TRUNG ĐẠI\" không có bài SGK tương ứng"
+  ]
 }

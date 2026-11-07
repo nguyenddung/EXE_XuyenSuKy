@@ -11,7 +11,9 @@
 .journey-chip.is-due { border-color: #f0b23b; background: #fff4d6; color: #6a4708; }
 .journey-chip.is-video { border-color: #e6c27a; color: #7a5208; }
 .journey-say { display: flex; align-items: flex-start; gap: 14px; margin: 0 0 18px; }
-.journey-guide { display: grid; flex: none; place-items: center; width: 46px; height: 46px; border: 2px solid #cf4c34; border-radius: 50%; background: #fff; color: #a53c2d; font-size: 22px; box-shadow: 0 0 0 3px #fff4df inset; }
+.journey-guide { display: grid; flex: none; place-items: center; width: 46px; height: 46px; overflow: hidden; border: 2px solid #bd4d31; border-radius: 50%; background: #f9f6f1; }
+/* Kim Quy, the turtle mascot (xuyen-su-ky-mascot-brand-avatar.svg), is the guide's face. */
+.journey-guide img { display: block; width: 100%; height: 100%; }
 .journey-say p { margin: 0; padding: 14px 18px; border-radius: 4px 16px 16px 16px; background: var(--sky-blue-soft); color: var(--sky-ink); font-size: 14px; line-height: 1.75; }
 .journey-say strong { display: block; margin-bottom: 4px; color: var(--sky-blue-strong); font-size: 12px; }
 .journey-say small { margin-left: 6px; color: var(--sky-muted); font-weight: 500; }

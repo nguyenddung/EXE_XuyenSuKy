@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "XuyenSuKi chunk (1 dòng của chunks/*.jsonl)",
+  "title": "XuyenSuKi chunk (1 dòng của chunks/*.jsonl; SGK: chunks_all.jsonl, SGV: teacher_chunks.jsonl)",
   "type": "object",
   "required": [
     "chunk_id",
@@ -21,12 +21,13 @@
     "source_pdf",
     "text_source",
     "open_flags",
-    "text"
+    "text",
+    "book_type"
   ],
   "properties": {
     "chunk_id": {
       "type": "string",
-      "pattern": "^LS\\d{1,2}_B\\d{2}_C\\d{3}$"
+      "pattern": "^(LS|GV)\\d{1,2}_B\\d{2}_C\\d{3}$"
     },
     "grade": {
       "type": "integer",
@@ -62,7 +63,11 @@
         "exercise",
         "objectives",
         "intro",
-        "caption"
+        "caption",
+        "figure",
+        "guide",
+        "activity",
+        "reference"
       ]
     },
     "content_types": {
@@ -76,7 +81,11 @@
           "exercise",
           "objectives",
           "intro",
-          "caption"
+          "caption",
+          "figure",
+          "guide",
+          "activity",
+          "reference"
         ]
       },
       "minItems": 1
@@ -114,6 +123,12 @@
     "text": {
       "type": "string",
       "minLength": 1
+    },
+    "book_type": {
+      "enum": [
+        "sgk",
+        "sgv"
+      ]
     }
   }
 }
