@@ -14,8 +14,8 @@ test('a journey stage opens its SGK lesson, which plays the section video in pla
   await expect(reader.locator('#dataset-reader-title')).toHaveText('Nguồn gốc loài người')
   await expect(reader.locator('.reader-meta')).toContainText('2 video minh hoạ')
   await expect(reader.locator('.reader-meta')).toContainText('2 nhiệm vụ luyện tập')
-  // Both videos of Bài 4 quote section 2, so they open that section, not the top of the lesson.
-  const section = reader.locator('#dataset-section-2')
+  // Both videos of Bài 4 quote its section "2. Những dấu tích..." (index 3), so they open there, not the top of the lesson.
+  const section = reader.locator('#dataset-section-3')
   const videos = section.locator('.lesson-video')
   await expect(videos).toHaveCount(2)
   await expect(reader.locator('.lesson-video')).toHaveCount(2)

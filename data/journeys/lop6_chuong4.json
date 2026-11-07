@@ -178,7 +178,7 @@
               "sources": [
                 {
                   "quote": "Giữa hai trung tâm văn minh này là khu vực Đông Nam Á, với vị trí rất quan trọng.",
-                  "chunk_id": "LS6_B11_C001",
+                  "chunk_id": "LS6_B11_C002",
                   "lesson_number": 11,
                   "pages": [
                     52,
@@ -267,7 +267,7 @@
                   "lesson_number": 8,
                   "pages": [
                     36,
-                    37
+                    36
                   ],
                   "content_type": "body"
                 }
@@ -391,21 +391,21 @@
               "sources": [
                 {
                   "quote": "cư dân Đông Nam Á đã phát triển nông nghiệp trồng lúa nước và một số nghề thủ công truyền thống như đúc đồng, rèn sắt, dệt, làm gốm. Đây chính là cơ sở cho sự ra đời của những quốc gia sơ kì trong khu vực.",
-                  "chunk_id": "LS6_B11_C005",
+                  "chunk_id": "LS6_B11_C004",
                   "lesson_number": 11,
                   "pages": [
                     52,
-                    53
+                    52
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "Sự ra đời của các quốc gia này còn gắn liền với các hoạt động giao lưu kinh tế, văn hoá với Trung Quốc, Ấn Độ",
-                  "chunk_id": "LS6_B11_C005",
+                  "chunk_id": "LS6_B11_C004",
                   "lesson_number": 11,
                   "pages": [
                     52,
-                    53
+                    52
                   ],
                   "content_type": "body"
                 }
@@ -433,7 +433,7 @@
               "sources": [
                 {
                   "quote": "Do vị trí thuận lợi, buôn bán bằng đường biển ở một số quốc gia ngày càng phát đạt.",
-                  "chunk_id": "LS6_B11_C007",
+                  "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
                     53,
@@ -443,7 +443,7 @@
                 },
                 {
                   "quote": "Một số thành thị đồng thời là những hải cảng sầm uất đã xuất hiện như Óc Eo (Việt Nam), Ta-cô-la (bán đảo Mã Lai, nay thuộc Thái Lan).",
-                  "chunk_id": "LS6_B11_C007",
+                  "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
                     53,
@@ -463,28 +463,28 @@
               "clue": "Các quốc gia sơ kì Đông Nam Á đã giao lưu, buôn bán với Ấn Độ, Trung Quốc và cả La Mã từ những thế kỉ đầu Công nguyên.",
               "sources": [
                 {
-                  "quote": "Phía đông đảo Boóc-nê-ô (Ma-lai-xi-a) đã phát hiện được bảy chiếc cột đá có khắc chữ San-xkrít (chữ Phạn)",
+                  "quote": "Phía đông đảo Boóc-nê-ô (Ma-lai-xi-a) đã phát hiện được bảy chiếc cột đá có khắc chữ San-xkrit (chữ Phạn)... Hiện vật",
                   "chunk_id": "LS6_B11_C005",
                   "lesson_number": 11,
                   "pages": [
-                    52,
+                    53,
                     53
                   ],
                   "content_type": "body"
                 },
                 {
-                  "quote": "Hiện vật gốm (Hán) trong những mộ táng ở Boóc-nê-ô cho thấy mối quan hệ buôn bán với Trung Quốc từ thời nhà Hán.",
+                  "quote": "Hiện vật gồm (Hán) trong những mộ táng ở Boóc-nê-ô cho thấy mối quan hệ buôn bán với Trung Quốc từ thời nhà Hán.",
                   "chunk_id": "LS6_B11_C005",
                   "lesson_number": 11,
                   "pages": [
-                    52,
+                    53,
                     53
                   ],
                   "content_type": "body"
                 },
                 {
                   "quote": "tại di chỉ khảo cổ Pông-túc (thế kỉ III - IV) đã phát hiện được một số mảnh gốm, một số pho tượng Phật nhỏ bằng đồng, một đèn đồng kiểu La Mã",
-                  "chunk_id": "LS6_B11_C006",
+                  "chunk_id": "LS6_B11_C005",
                   "lesson_number": 11,
                   "pages": [
                     53,
@@ -497,17 +497,17 @@
                   "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
-                    54,
+                    53,
                     54
                   ],
                   "content_type": "body"
                 },
                 {
-                  "quote": "Nhẫn vàng khắc chữ Phạn của Ấn Độ - một hiện vật thuộc văn hoá Óc Eo",
+                  "quote": "Nhãn vàng khắc chữ Phạn của Ấn Độ – một hiện vật thuộc văn hoá Óc Eo",
                   "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
-                    54,
+                    53,
                     54
                   ],
                   "content_type": "body"
@@ -536,11 +536,11 @@
               "sources": [
                 {
                   "quote": "cư dân Đông Nam Á đã phát triển nông nghiệp trồng lúa nước và một số nghề thủ công truyền thống như đúc đồng, rèn sắt, dệt, làm gốm. Đây chính là cơ sở cho sự ra đời của những quốc gia sơ kì trong khu vực.",
-                  "chunk_id": "LS6_B11_C005",
+                  "chunk_id": "LS6_B11_C004",
                   "lesson_number": 11,
                   "pages": [
                     52,
-                    53
+                    52
                   ],
                   "content_type": "body"
                 }
@@ -596,7 +596,7 @@
               "sources": [
                 {
                   "quote": "Một số thành thị đồng thời là những hải cảng sầm uất đã xuất hiện như Óc Eo (Việt Nam)",
-                  "chunk_id": "LS6_B11_C007",
+                  "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
                     53,
@@ -609,7 +609,7 @@
                   "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
-                    54,
+                    53,
                     54
                   ],
                   "content_type": "body"
@@ -666,7 +666,7 @@
               "sources": [
                 {
                   "quote": "Do vị trí thuận lợi, buôn bán bằng đường biển ở một số quốc gia ngày càng phát đạt.",
-                  "chunk_id": "LS6_B11_C007",
+                  "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
                     53,
@@ -676,7 +676,7 @@
                 },
                 {
                   "quote": "Một số thành thị đồng thời là những hải cảng sầm uất đã xuất hiện như Óc Eo (Việt Nam), Ta-cô-la (bán đảo Mã Lai, nay thuộc Thái Lan).",
-                  "chunk_id": "LS6_B11_C007",
+                  "chunk_id": "LS6_B11_C008",
                   "lesson_number": 11,
                   "pages": [
                     53,
@@ -728,24 +728,24 @@
                 "chunk_id": "LS6_B11_C008",
                 "lesson_number": 11,
                 "pages": [
-                  54,
+                  53,
                   54
                 ],
                 "content_type": "body"
               },
               {
-                "quote": "bảy chiếc cột đá có khắc chữ San-xkrít (chữ Phạn)",
+                "quote": "bảy chiếc cột đá có khắc chữ San-xkrit (chữ Phạn)...",
                 "chunk_id": "LS6_B11_C005",
                 "lesson_number": 11,
                 "pages": [
-                  52,
+                  53,
                   53
                 ],
                 "content_type": "body"
               },
               {
                 "quote": "một đèn đồng kiểu La Mã",
-                "chunk_id": "LS6_B11_C006",
+                "chunk_id": "LS6_B11_C005",
                 "lesson_number": 11,
                 "pages": [
                   53,
@@ -790,7 +790,7 @@
               },
               {
                 "quote": "Do vị trí thuận lợi, buôn bán bằng đường biển ở một số quốc gia ngày càng phát đạt.",
-                "chunk_id": "LS6_B11_C007",
+                "chunk_id": "LS6_B11_C008",
                 "lesson_number": 11,
                 "pages": [
                   53,
@@ -862,7 +862,7 @@
               "text": "Từ thế kỉ VII đến thế kỉ X, ở Đông Nam Á hình thành một số quốc gia lấy một bộ tộc đông và phát triển nhất làm nòng cốt, như Đại Cồ Việt của người Việt ở Bắc Việt Nam.",
               "sources": [
                 {
-                  "quote": "Từ thế kỉ VII đến thế kỉ X, ở khu vực Đông Nam Á đã hình thành một số quốc gia, lấy một bộ tộc đông và phát triển nhất làm nòng cốt như: quốc gia Đại Cồ Việt của người Việt (ở Bắc Việt Nam)",
+                  "quote": "Từ thế kỉ VII đến thế kỉ X, ở khu vực Đông Nam Á đã hình thành một số quốc gia, lấy một bộ tộc đông và phát triển nhất làm nông cốt như: quốc gia Đại Cồ Việt của người Việt (ở Bắc Việt Nam),",
                   "chunk_id": "LS6_B12_C003",
                   "lesson_number": 12,
                   "pages": [
@@ -898,7 +898,7 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Vương quốc Chân Lạp của người Khơ-me (ở vùng trung lưu sông Mê Công)",
+                  "quote": "Vương quốc Chân Lạp của người Kho-me (ở vùng trung lưu sông Mê Công);",
                   "chunk_id": "LS6_B12_C003",
                   "lesson_number": 12,
                   "pages": [
@@ -934,8 +934,8 @@
               "text": "Sri Vi-giay-a nằm trên vùng eo biển Sun-đa, đảo Xu-ma-tra (\"đảo vàng\", nhiều vàng, bạc, gia vị), về sau thành quốc gia hùng mạnh, trung tâm kinh tế, văn hoá quan trọng của khu vực.",
               "sources": [
                 {
-                  "quote": "Sri Vi-giay-a là một vương quốc nằm trên vùng eo biển Sun-đa, thuộc đảo Xu-ma-tra (nổi tiếng có nhiều vàng, bạc và đồ gia vị, nên còn được gọi là đảo vàng).",
-                  "chunk_id": "LS6_B12_C004",
+                  "quote": "Sri Vi-giay-a là một vương quốc nằm trên vùng eo biển Sun-đa, thuộc đảo Xu-ma-tra (nổi tiếng có nhiều vàng, bạc và đỏ gia vị, nên còn được gọi là đảo Vàng). Sau",
+                  "chunk_id": "LS6_B12_C005",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -945,7 +945,7 @@
                 },
                 {
                   "quote": "Sau này, Sri Vi-giay-a trở thành một quốc gia hùng mạnh, trung tâm kinh tế, văn hoá quan trọng ở khu vực Đông Nam Á",
-                  "chunk_id": "LS6_B12_C004",
+                  "chunk_id": "LS6_B12_C005",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -966,7 +966,7 @@
               "sources": [
                 {
                   "quote": "Nhà vua có nhiều loại dầu thơm và cây thuốc mà không một ông vua nào có được.",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C007",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -976,7 +976,7 @@
                 },
                 {
                   "quote": "Đất đai sản sinh ra long não, trầm hương, đinh hương, đàn hương, đậu khấu, sa nhân",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C007",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -986,7 +986,7 @@
                 },
                 {
                   "quote": "Nhận xét của một nhà địa lí Ả Rập về Vương quốc Sri Vi-giay-a",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C007",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1038,7 +1038,7 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Vương quốc Chân Lạp của người Khơ-me",
+                  "quote": "Vương quốc Chân Lạp của người Kho-me",
                   "chunk_id": "LS6_B12_C003",
                   "lesson_number": 12,
                   "pages": [
@@ -1088,7 +1088,7 @@
               "explanation": "Các quốc gia lấy một bộ tộc đông và phát triển nhất làm nòng cốt.",
               "sources": [
                 {
-                  "quote": "lấy một bộ tộc đông và phát triển nhất làm nòng cốt",
+                  "quote": "lấy một bộ tộc đông và phát triển nhất làm nông cốt",
                   "chunk_id": "LS6_B12_C003",
                   "lesson_number": 12,
                   "pages": [
@@ -1118,8 +1118,8 @@
               "explanation": "Xu-ma-tra nổi tiếng có nhiều vàng, bạc và đồ gia vị nên được gọi là đảo vàng.",
               "sources": [
                 {
-                  "quote": "thuộc đảo Xu-ma-tra (nổi tiếng có nhiều vàng, bạc và đồ gia vị, nên còn được gọi là đảo vàng)",
-                  "chunk_id": "LS6_B12_C004",
+                  "quote": "thuộc đảo Xu-ma-tra (nổi tiếng có nhiều vàng, bạc và đỏ gia vị, nên còn được gọi là đảo Vàng).",
+                  "chunk_id": "LS6_B12_C005",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1148,7 +1148,7 @@
               "explanation": "Từ thế kỉ VII đến thế kỉ X hình thành nhiều quốc gia, như Đại Cồ Việt của người Việt ở Bắc Việt Nam.",
               "sources": [
                 {
-                  "quote": "Từ thế kỉ VII đến thế kỉ X, ở khu vực Đông Nam Á đã hình thành một số quốc gia, lấy một bộ tộc đông và phát triển nhất làm nòng cốt như: quốc gia Đại Cồ Việt của người Việt (ở Bắc Việt Nam)",
+                  "quote": "Từ thế kỉ VII đến thế kỉ X, ở khu vực Đông Nam Á đã hình thành một số quốc gia, lấy một bộ tộc đông và phát triển nhất làm nông cốt như: quốc gia Đại Cồ Việt của người Việt (ở Bắc Việt Nam),",
                   "chunk_id": "LS6_B12_C003",
                   "lesson_number": 12,
                   "pages": [
@@ -1178,8 +1178,8 @@
               "explanation": "Sri Vi-giay-a nằm trên vùng eo biển Sun-đa, đảo Xu-ma-tra.",
               "sources": [
                 {
-                  "quote": "Sri Vi-giay-a là một vương quốc nằm trên vùng eo biển Sun-đa, thuộc đảo Xu-ma-tra (nổi tiếng có nhiều vàng, bạc và đồ gia vị, nên còn được gọi là đảo vàng).",
-                  "chunk_id": "LS6_B12_C004",
+                  "quote": "Sri Vi-giay-a là một vương quốc nằm trên vùng eo biển Sun-đa, thuộc đảo Xu-ma-tra (nổi tiếng có nhiều vàng, bạc và đỏ gia vị, nên còn được gọi là đảo Vàng). Sau",
+                  "chunk_id": "LS6_B12_C005",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1189,7 +1189,7 @@
                 },
                 {
                   "quote": "Sau này, Sri Vi-giay-a trở thành một quốc gia hùng mạnh, trung tâm kinh tế, văn hoá quan trọng ở khu vực Đông Nam Á",
-                  "chunk_id": "LS6_B12_C004",
+                  "chunk_id": "LS6_B12_C005",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1227,7 +1227,7 @@
               "sources": [
                 {
                   "quote": "Các vương quốc lấy nông nghiệp làm ngành kinh tế chính, chủ yếu nằm ở vùng lục địa (như Chăm-pa, Chân Lạp)",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1237,7 +1237,7 @@
                 },
                 {
                   "quote": "Một số quốc gia chủ yếu dựa vào hoạt động thương mại biển như Sri Vi-giay-a, Ka-lin-ga, Ma-ta-ram",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1253,7 +1253,7 @@
               "sources": [
                 {
                   "quote": "Với nguồn sản vật phong phú, đặc biệt là gia vị, các vương quốc này góp nhiều mặt hàng chủ lực trên những tuyến buôn bán đường biển kết nối Á - Âu, mà sau này gọi là Con đường Gia vị.",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1263,7 +1263,7 @@
                 },
                 {
                   "quote": "Hạt tiêu Hoa hồi Nhục đậu khấu Quế",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1279,7 +1279,7 @@
               "sources": [
                 {
                   "quote": "Quá trình giao lưu thương mại với nước ngoài đã thúc đẩy sự phát triển của các vương quốc trong khu vực.",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1289,7 +1289,7 @@
                 },
                 {
                   "quote": "xuất hiện một số thương cảng sầm uất như Đại Chiêm (Chăm-pa), Pa-lem-bang (Sri Vi-giay-a)",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1299,7 +1299,7 @@
                 },
                 {
                   "quote": "Những thương cảng này đã trở thành điểm kết nối kinh tế, văn hoá giữa các châu lục.",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1320,7 +1320,7 @@
               "sources": [
                 {
                   "quote": "Vào thế kỉ X. 1 pao nghệ tây (khoảng 4 lạng) có giá ngang với 1 con ngựa, 1 pao gừng có giá ngang 1 con bò.",
-                  "chunk_id": "LS6_B12_C009",
+                  "chunk_id": "LS6_B12_C010",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1355,7 +1355,7 @@
               "sources": [
                 {
                   "quote": "đặc biệt là gia vị, các vương quốc này góp nhiều mặt hàng chủ lực trên những tuyến buôn bán đường biển kết nối Á - Âu, mà sau này gọi là Con đường Gia vị",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1365,7 +1365,7 @@
                 },
                 {
                   "quote": "Hạt tiêu Hoa hồi Nhục đậu khấu Quế",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1399,7 +1399,7 @@
               "sources": [
                 {
                   "quote": "chủ yếu nằm ở vùng lục địa (như Chăm-pa, Chân Lạp)",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1409,7 +1409,7 @@
                 },
                 {
                   "quote": "Một số quốc gia chủ yếu dựa vào hoạt động thương mại biển như Sri Vi-giay-a, Ka-lin-ga, Ma-ta-ram",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1439,7 +1439,7 @@
               "sources": [
                 {
                   "quote": "Quá trình giao lưu thương mại với nước ngoài đã thúc đẩy sự phát triển của các vương quốc trong khu vực.",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1449,7 +1449,7 @@
                 },
                 {
                   "quote": "Những thương cảng này đã trở thành điểm kết nối kinh tế, văn hoá giữa các châu lục.",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1479,7 +1479,7 @@
               "sources": [
                 {
                   "quote": "Các vương quốc lấy nông nghiệp làm ngành kinh tế chính, chủ yếu nằm ở vùng lục địa (như Chăm-pa, Chân Lạp)",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1489,7 +1489,7 @@
                 },
                 {
                   "quote": "Một số quốc gia chủ yếu dựa vào hoạt động thương mại biển như Sri Vi-giay-a, Ka-lin-ga, Ma-ta-ram",
-                  "chunk_id": "LS6_B12_C005",
+                  "chunk_id": "LS6_B12_C006",
                   "lesson_number": 12,
                   "pages": [
                     55,
@@ -1519,7 +1519,7 @@
               "sources": [
                 {
                   "quote": "Quá trình giao lưu thương mại với nước ngoài đã thúc đẩy sự phát triển của các vương quốc trong khu vực.",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1529,7 +1529,7 @@
                 },
                 {
                   "quote": "xuất hiện một số thương cảng sầm uất như Đại Chiêm (Chăm-pa), Pa-lem-bang (Sri Vi-giay-a)",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1539,7 +1539,7 @@
                 },
                 {
                   "quote": "Những thương cảng này đã trở thành điểm kết nối kinh tế, văn hoá giữa các châu lục.",
-                  "chunk_id": "LS6_B12_C006",
+                  "chunk_id": "LS6_B12_C008",
                   "lesson_number": 12,
                   "pages": [
                     56,
@@ -1588,7 +1588,7 @@
             "sources": [
               {
                 "quote": "Đại Chiêm (Chăm-pa), Pa-lem-bang (Sri Vi-giay-a)",
-                "chunk_id": "LS6_B12_C006",
+                "chunk_id": "LS6_B12_C008",
                 "lesson_number": 12,
                 "pages": [
                   56,
@@ -1598,7 +1598,7 @@
               },
               {
                 "quote": "Óc Eo (Việt Nam)",
-                "chunk_id": "LS6_B11_C007",
+                "chunk_id": "LS6_B11_C008",
                 "lesson_number": 11,
                 "pages": [
                   53,
@@ -1633,7 +1633,7 @@
             "sources": [
               {
                 "quote": "Hạt tiêu Hoa hồi Nhục đậu khấu Quế",
-                "chunk_id": "LS6_B12_C005",
+                "chunk_id": "LS6_B12_C006",
                 "lesson_number": 12,
                 "pages": [
                   55,
@@ -1643,7 +1643,7 @@
               },
               {
                 "quote": "1 pao gừng có giá ngang 1 con bò",
-                "chunk_id": "LS6_B12_C009",
+                "chunk_id": "LS6_B12_C010",
                 "lesson_number": 12,
                 "pages": [
                   56,
@@ -1653,7 +1653,7 @@
               },
               {
                 "quote": "mà sau này gọi là Con đường Gia vị",
-                "chunk_id": "LS6_B12_C005",
+                "chunk_id": "LS6_B12_C006",
                 "lesson_number": 12,
                 "pages": [
                   55,
@@ -1695,7 +1695,7 @@
         "sources": [
           {
             "quote": "Trong hơn mười thế kỉ hình thành và phát triển, ở Đông Nam Á đã diễn ra quá trình giao lưu văn hoá với Trung Quốc và Ấn Độ.",
-            "chunk_id": "LS6_B13_C002",
+            "chunk_id": "LS6_B13_C001",
             "lesson_number": 13,
             "pages": [
               57,
@@ -1726,7 +1726,7 @@
               "sources": [
                 {
                   "quote": "cư dân Đông Nam Á có nhiều tín ngưỡng dân gian như: tín ngưỡng phồn thực, tục thờ cúng tổ tiên, tục cầu mưa",
-                  "chunk_id": "LS6_B13_C003",
+                  "chunk_id": "LS6_B13_C002",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1736,7 +1736,7 @@
                 },
                 {
                   "quote": "Tín ngưỡng phồn thực của người Chăm xưa nhằm cầu mong vạn vật sinh sôi, nảy nở, sung túc.",
-                  "chunk_id": "LS6_B13_C004",
+                  "chunk_id": "LS6_B13_C003",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1751,8 +1751,8 @@
               "text": "Tín ngưỡng bản địa dung hợp với Ấn Độ giáo (từ Ấn Độ) và Phật giáo (từ Ấn Độ và Trung Quốc).",
               "sources": [
                 {
-                  "quote": "Các tín ngưỡng bản địa đã dung hợp với Ấn Độ giáo (từ Án Độ), Phật giáo (từ Ấn Độ và Trung Quốc)",
-                  "chunk_id": "LS6_B13_C005",
+                  "quote": "Các tín ngưỡng bản địa đã dung hợp với Ấn Độ giáo (từ Ấn Độ), Phật giáo (từ Ấn Độ và Trung Quốc).",
+                  "chunk_id": "LS6_B13_C004",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1768,7 +1768,7 @@
               "sources": [
                 {
                   "quote": "các quốc gia chịu ảnh hưởng của văn hoá Ấn Độ đều có tín ngưỡng Thần - Vua (Chăm-pa, Chân Lạp,...)",
-                  "chunk_id": "LS6_B13_C005",
+                  "chunk_id": "LS6_B13_C004",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1778,7 +1778,7 @@
                 },
                 {
                   "quote": "lin-ga (linh vật tượng trưng cho tín ngưỡng phồn thực) trở thành biểu tượng quyền lực cho nhà vua người được đồng nhất với một vị thần, gọi là Thần Vua",
-                  "chunk_id": "LS6_B13_C005",
+                  "chunk_id": "LS6_B13_C003",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1799,7 +1799,7 @@
               "sources": [
                 {
                   "quote": "Nghi lễ trong tết Té nước Song-kran (ở Thái Lan) - một lễ hội liên quan đến tục cầu mưa của cư dân Đông Nam Á",
-                  "chunk_id": "LS6_B13_C005",
+                  "chunk_id": "LS6_B13_C004",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1831,7 +1831,7 @@
               "sources": [
                 {
                   "quote": "tín ngưỡng phồn thực, tục thờ cúng tổ tiên, tục cầu mưa",
-                  "chunk_id": "LS6_B13_C003",
+                  "chunk_id": "LS6_B13_C002",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1861,7 +1861,7 @@
               "sources": [
                 {
                   "quote": "các quốc gia chịu ảnh hưởng của văn hoá Ấn Độ đều có tín ngưỡng Thần - Vua (Chăm-pa, Chân Lạp,...)",
-                  "chunk_id": "LS6_B13_C005",
+                  "chunk_id": "LS6_B13_C004",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1890,8 +1890,8 @@
               "explanation": "Các tín ngưỡng bản địa đã dung hợp với Ấn Độ giáo và Phật giáo.",
               "sources": [
                 {
-                  "quote": "Các tín ngưỡng bản địa đã dung hợp với Ấn Độ giáo (từ Án Độ), Phật giáo (từ Ấn Độ và Trung Quốc)",
-                  "chunk_id": "LS6_B13_C005",
+                  "quote": "Các tín ngưỡng bản địa đã dung hợp với Ấn Độ giáo (từ Ấn Độ), Phật giáo (từ Ấn Độ và Trung Quốc).",
+                  "chunk_id": "LS6_B13_C004",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1921,7 +1921,7 @@
               "sources": [
                 {
                   "quote": "các quốc gia chịu ảnh hưởng của văn hoá Ấn Độ đều có tín ngưỡng Thần - Vua (Chăm-pa, Chân Lạp,...)",
-                  "chunk_id": "LS6_B13_C005",
+                  "chunk_id": "LS6_B13_C004",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1931,7 +1931,7 @@
                 },
                 {
                   "quote": "lin-ga (linh vật tượng trưng cho tín ngưỡng phồn thực) trở thành biểu tượng quyền lực cho nhà vua người được đồng nhất với một vị thần, gọi là Thần Vua",
-                  "chunk_id": "LS6_B13_C005",
+                  "chunk_id": "LS6_B13_C003",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1961,7 +1961,7 @@
               "sources": [
                 {
                   "quote": "cư dân Đông Nam Á có nhiều tín ngưỡng dân gian như: tín ngưỡng phồn thực, tục thờ cúng tổ tiên, tục cầu mưa",
-                  "chunk_id": "LS6_B13_C003",
+                  "chunk_id": "LS6_B13_C002",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -1971,7 +1971,7 @@
                 },
                 {
                   "quote": "Tín ngưỡng phồn thực của người Chăm xưa nhằm cầu mong vạn vật sinh sôi, nảy nở, sung túc.",
-                  "chunk_id": "LS6_B13_C004",
+                  "chunk_id": "LS6_B13_C003",
                   "lesson_number": 13,
                   "pages": [
                     57,
@@ -2009,7 +2009,7 @@
               "sources": [
                 {
                   "quote": "Nhiều nhóm cư dân Đông Nam Á đã tạo ra chữ viết riêng dựa trên hệ thống chữ cổ của người Ấn Độ.",
-                  "chunk_id": "LS6_B13_C006",
+                  "chunk_id": "LS6_B13_C005",
                   "lesson_number": 13,
                   "pages": [
                     58,
@@ -2019,7 +2019,7 @@
                 },
                 {
                   "quote": "người Môn (người Mi-an-ma) đã sáng tạo ra chữ Môn cổ",
-                  "chunk_id": "LS6_B13_C006",
+                  "chunk_id": "LS6_B13_C005",
                   "lesson_number": 13,
                   "pages": [
                     58,
@@ -2070,7 +2070,7 @@
               "text": "Bên cạnh văn học dân gian (ca dao, tục ngữ, hò vè...), người Đông Nam Á tiếp thu sử thi Ấn Độ để sáng tạo sử thi riêng: Phạ lắc - Phạ Lam (Lào), Ra-ma-kien (Thái Lan), Riêm Kê (Cam-pu-chia)...",
               "sources": [
                 {
-                  "quote": "Bên cạnh kho tàng văn học dân gian (ca dao, tục ngữ, hò vè,...), người Đông Nam Á cũng tiếp thu văn học của người Án Độ",
+                  "quote": "Bên cạnh kho tàng văn học dân gian (ca dao, tục ngữ, hò vè,...), người Đông Nam Á cũng tiếp thu văn học của người Ấn Độ,",
                   "chunk_id": "LS6_B13_C007",
                   "lesson_number": 13,
                   "pages": [
@@ -2101,7 +2101,7 @@
               "clue": "Người Đông Nam Á tiếp thu sử thi Ra-ma-y-a-na của Ấn Độ và sáng tạo lại thành tác phẩm của mình, như Riêm Kê của Cam-pu-chia.",
               "sources": [
                 {
-                  "quote": "Bức phù điêu của người Khơ-me cổ đại ở đền Ăng-co Vát (Cam-pu-chia) mô tả cảnh trong sử thi Ra-ma-y-a-na",
+                  "quote": "Nam Á\nHình 3. Bức phù điêu của người Kho-me cổ đại ở đền Ăng-co Vát (Cam-pu-chia) mô tả cảnh trong sử thi Ra-ma-y-a-na",
                   "chunk_id": "LS6_B13_C007",
                   "lesson_number": 13,
                   "pages": [
@@ -2157,7 +2157,7 @@
                 },
                 {
                   "quote": "Nhiều nhóm cư dân Đông Nam Á đã tạo ra chữ viết riêng dựa trên hệ thống chữ cổ của người Ấn Độ.",
-                  "chunk_id": "LS6_B13_C006",
+                  "chunk_id": "LS6_B13_C005",
                   "lesson_number": 13,
                   "pages": [
                     58,
@@ -2236,8 +2236,8 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Tấm bia đầu tiên của người Kho-me bằng chữ Phạn và chữ Khơ-me cổ là bia Ăng-co Bo-rây (Cam-pu-chia).",
-                  "chunk_id": "LS6_B13_C006",
+                  "quote": "Ấn Độ.\nTấm bia đầu tiên của người Kho-me bằng chữ Phạn và chữ Kho-me cổ là bia Ăng-co Bo-rây (Cam-pu-chia).",
+                  "chunk_id": "LS6_B13_C005",
                   "lesson_number": 13,
                   "pages": [
                     58,
@@ -2267,7 +2267,7 @@
               "sources": [
                 {
                   "quote": "Nhiều nhóm cư dân Đông Nam Á đã tạo ra chữ viết riêng dựa trên hệ thống chữ cổ của người Ấn Độ.",
-                  "chunk_id": "LS6_B13_C006",
+                  "chunk_id": "LS6_B13_C005",
                   "lesson_number": 13,
                   "pages": [
                     58,
@@ -2277,7 +2277,7 @@
                 },
                 {
                   "quote": "người Môn (người Mi-an-ma) đã sáng tạo ra chữ Môn cổ",
-                  "chunk_id": "LS6_B13_C006",
+                  "chunk_id": "LS6_B13_C005",
                   "lesson_number": 13,
                   "pages": [
                     58,
@@ -2364,7 +2364,7 @@
               "text": "Kiến trúc và điêu khắc Đông Nam Á chịu ảnh hưởng đậm nét của Ấn Độ giáo, Phật giáo. Kiến trúc tiêu biểu là kiểu đền - núi: đền Bô-rô-bu-đua, La-ra Giong-grang (In-đô-nê-xi-a), khu di tích Mỹ Sơn (Việt Nam).",
               "sources": [
                 {
-                  "quote": "Nghệ thuật kiến trúc và điêu khắc Đông Nam Á đều chịu ảnh hưởng đậm nét của các tôn giáo như Án Độ giáo, Phật giáo",
+                  "quote": "Nghệ thuật kiến trúc và điêu khắc Đông Nam Á đều chịu ảnh hưởng đậm nét của các tôn giáo như Ấn Độ giáo, Phật giáo.",
                   "chunk_id": "LS6_B13_C009",
                   "lesson_number": 13,
                   "pages": [
@@ -2374,7 +2374,7 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Kiểu kiến trúc Án Độ giáo tiêu biểu ở Đông Nam Á là kiến trúc đền - núi, như đền Bô-rô-bu-đua, La-ra Giong-grang (In-đô-nê-xi-a), khu di tích Mỹ Sơn (Việt Nam)",
+                  "quote": "Độ giáo, Phật giáo.\nKiểu kiến trúc Ấn Độ giáo tiêu biểu ở Đông Nam Á là kiến trúc đền – núi, như đền Bô-rô-bu-đua, La-ra Giong-grang (In-đô-nê-xi-a), khu di tích Mỹ Sơn (Việt Nam),...",
                   "chunk_id": "LS6_B13_C009",
                   "lesson_number": 13,
                   "pages": [
@@ -2472,7 +2472,7 @@
               "explanation": "Kiến trúc Ấn Độ giáo tiêu biểu ở Đông Nam Á là kiến trúc đền - núi như Bô-rô-bu-đua, Mỹ Sơn.",
               "sources": [
                 {
-                  "quote": "Kiểu kiến trúc Án Độ giáo tiêu biểu ở Đông Nam Á là kiến trúc đền - núi",
+                  "quote": "Kiểu kiến trúc Ấn Độ giáo tiêu biểu ở Đông Nam Á là kiến trúc đền – núi,",
                   "chunk_id": "LS6_B13_C009",
                   "lesson_number": 13,
                   "pages": [
@@ -2483,7 +2483,7 @@
                 },
                 {
                   "quote": "tiêu biểu nhất là các kim tự tháp và tượng nhân sư ở Ai Cập.",
-                  "chunk_id": "LS6_B07_C015",
+                  "chunk_id": "LS6_B07_C014",
                   "lesson_number": 7,
                   "pages": [
                     33,
@@ -2619,7 +2619,7 @@
               "explanation": "Kiến trúc đền - núi tiêu biểu có đền Bô-rô-bu-đua, La-ra Giong-grang và khu di tích Mỹ Sơn (Việt Nam).",
               "sources": [
                 {
-                  "quote": "Nghệ thuật kiến trúc và điêu khắc Đông Nam Á đều chịu ảnh hưởng đậm nét của các tôn giáo như Án Độ giáo, Phật giáo",
+                  "quote": "Nghệ thuật kiến trúc và điêu khắc Đông Nam Á đều chịu ảnh hưởng đậm nét của các tôn giáo như Ấn Độ giáo, Phật giáo.",
                   "chunk_id": "LS6_B13_C009",
                   "lesson_number": 13,
                   "pages": [
@@ -2629,7 +2629,7 @@
                   "content_type": "body"
                 },
                 {
-                  "quote": "Kiểu kiến trúc Án Độ giáo tiêu biểu ở Đông Nam Á là kiến trúc đền - núi, như đền Bô-rô-bu-đua, La-ra Giong-grang (In-đô-nê-xi-a), khu di tích Mỹ Sơn (Việt Nam)",
+                  "quote": "Độ giáo, Phật giáo.\nKiểu kiến trúc Ấn Độ giáo tiêu biểu ở Đông Nam Á là kiến trúc đền – núi, như đền Bô-rô-bu-đua, La-ra Giong-grang (In-đô-nê-xi-a), khu di tích Mỹ Sơn (Việt Nam),...",
                   "chunk_id": "LS6_B13_C009",
                   "lesson_number": 13,
                   "pages": [
@@ -2674,8 +2674,8 @@
             "explanation": "Ấn Độ giáo, chữ viết dựa trên chữ cổ Ấn Độ, sử thi Ra-ma-y-a-na đến từ Ấn Độ; người Việt kế thừa chữ Hán từ Trung Quốc.",
             "sources": [
               {
-                "quote": "Ấn Độ giáo (từ Án Độ)",
-                "chunk_id": "LS6_B13_C005",
+                "quote": "Ấn Độ giáo (từ Ấn Độ),",
+                "chunk_id": "LS6_B13_C004",
                 "lesson_number": 13,
                 "pages": [
                   57,
@@ -2685,7 +2685,7 @@
               },
               {
                 "quote": "dựa trên hệ thống chữ cổ của người Ấn Độ",
-                "chunk_id": "LS6_B13_C006",
+                "chunk_id": "LS6_B13_C005",
                 "lesson_number": 13,
                 "pages": [
                   58,
@@ -2730,7 +2730,7 @@
             "sources": [
               {
                 "quote": "Các tín ngưỡng bản địa đã dung hợp với Ấn Độ giáo",
-                "chunk_id": "LS6_B13_C005",
+                "chunk_id": "LS6_B13_C004",
                 "lesson_number": 13,
                 "pages": [
                   57,
@@ -2740,7 +2740,7 @@
               },
               {
                 "quote": "Nhiều nhóm cư dân Đông Nam Á đã tạo ra chữ viết riêng dựa trên hệ thống chữ cổ của người Ấn Độ.",
-                "chunk_id": "LS6_B13_C006",
+                "chunk_id": "LS6_B13_C005",
                 "lesson_number": 13,
                 "pages": [
                   58,
@@ -2785,7 +2785,7 @@
   ],
   "build": {
     "date": "2026-10-28",
-    "dataset_version": "1.0.0",
+    "dataset_version": "2.0.0",
     "warnings": [
       "b11_m1.q2: câu trích lấy từ Bài 8: «Lưu vực sông Ấn chịu tác động của sa mạc nên rất í»",
       "b12.check.x1: câu trích lấy từ Bài 11: «Óc Eo (Việt Nam)»",

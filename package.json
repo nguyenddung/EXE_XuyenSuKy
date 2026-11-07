@@ -11,6 +11,8 @@
     "dev:backend": "node --env-file-if-exists=.env.local server/index.mjs",
     "check:dataset": "node --env-file-if-exists=.env.local scripts/check-dataset.mjs",
     "import:dataset": "node --env-file-if-exists=.env.local scripts/import-dataset.mjs",
+    "build:dataset": "node scripts/build-dataset-from-ocr.mjs",
+    "remap:journeys": "node --env-file-if-exists=.env.local scripts/remap-journey-sources.mjs",
     "import:journey": "node --env-file-if-exists=.env.local scripts/import-journey.mjs",
     "build:narration": "node --env-file-if-exists=.env.local scripts/build-narration.mjs",
     "build:embeddings": "node --env-file-if-exists=.env.local scripts/build-embeddings.mjs",

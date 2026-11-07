@@ -5,7 +5,7 @@ import { anachronismAnswer, findAnachronism, redirectFor } from './time-horizon.
 
 const cache = new WeakMap()
 const tokens = (text) => normalize(text).match(/[a-z0-9]+/g) || []
-const stopwords = new Set('a ai anh ay ba bac ban bao bi cac cai can cho co con cua cung da de den dieu do duoc gi hay hoi khi la lai lam nao nay nhu nhung no noi o ong ra rang sao se su ta tai tat the thi toi trong tu ve vi voi va xin chao mot nhieu the nao nhu the nao toi muon biet tim hieu nam minh chung'.split(' '))
+const stopwords = new Set('a ai anh ay ba bac ban bang bao bi cac cai can cho co con cua cung da de den dieu do duoc gi hay hoi khi la lai lam nao nay nhu nhung no noi o ong ra rang sao se su ta tai tat the thi toi trong tu ve vi voi va xin chao mot nhieu the nao nhu the nao toi muon biet tim hieu nam minh chung may'.split(' '))
 const includesName = (text, alias) => (` ${text.replace(/[^a-z0-9]+/g, ' ')} `).includes(` ${normalize(alias)} `)
 const publicProfile = (profile) => { const { focus, persona, ...publicFields } = profile; return publicFields }
 const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1)
@@ -39,7 +39,8 @@ function queryTerms(text, profile) {
   for (const alias of profile.aliases) q = q.replaceAll(normalize(alias), ' ')
   q = q.replace(/\b(vai tro|dien ra|bat dau|y nghia|nam nao|khi nao|o dau|vi sao|tai sao|nhu the nao|the nao)\b/g, ' ')
   if (q.includes('coc')) q = q.replace(/\b(bo tri|tran dia)\b/g, ' ')
-  return [...new Set(tokens(q).filter((term) => !stopwords.has(term)))]
+  // A lone small number ("2 + 2") says nothing about history; years have three or four digits.
+  return [...new Set(tokens(q).filter((term) => !stopwords.has(term) && !/^\d{1,2}$/.test(term)))]
 }
 const instruction = /^(?:[-–\d. "“]+)?(?:hay |em |trinh bay |khai thac |giai thich |doc them |doc tu lieu |dua vao |neu |lua chon |tom tat |danh gia |cho biet |thao luan )/
 const topicPhrases = ['bach dang', 'lam son', 'dien bien phu', 'nhu nguyet', 'ngoc hoi', 'dong da', 'truc lam', 'thang long', 'dai la', 'tuyen ngon doc lap', 'tim duong cuu nuoc', 'tuyen truyen giai phong quan', 'quan tong', 'quan thanh']

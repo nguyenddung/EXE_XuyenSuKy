@@ -39,7 +39,7 @@ test('an era chosen while signed out opens its lesson after signing in', async (
   await page.getByRole('button', { name: /Học thử không cần tài khoản/ }).click()
   await page.locator('.grade-onboarding .button-primary').click()
   await expect(page).toHaveURL(/\/home#library$/)
-  await expect(page.locator('#dataset-reader-title')).toContainText('thời Lý')
+  await expect(page.locator('#dataset-reader-title')).toContainText('Nhà Lý')
 })
 
 test('a sign-in kept forever by an older build opens the landing page as a visitor, with progress intact', async ({ page }) => {

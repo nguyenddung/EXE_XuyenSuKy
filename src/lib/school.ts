@@ -41,18 +41,18 @@ export const normalizeEmail = (email: string) => email.trim().toLowerCase()
 
 const sampleStudents: [string, string, number, string[], number, number][] = [
   // id, name, grade, lessons read, XP, quizzes
-  ['an', 'Nguyễn Văn An', 7, ['LS7_B14', 'LS7_B15', 'LS7_B16', 'LS7_B17'], 420, 6],
-  ['binh', 'Trần Thị Bình', 7, ['LS7_B14', 'LS7_B15', 'LS7_B17'], 360, 5],
-  ['chi', 'Lê Minh Chi', 7, ['LS7_B14', 'LS7_B15'], 210, 3],
-  ['dung', 'Phạm Quốc Dũng', 7, ['LS7_B14'], 120, 1],
-  ['giang', 'Đỗ Hương Giang', 7, ['LS7_B14', 'LS7_B15', 'LS7_B16', 'LS7_B17', 'LS7_B18'], 530, 8],
+  ['an', 'Nguyễn Văn An', 7, ['LS7_B10', 'LS7_B11', 'LS7_B13', 'LS7_B14'], 420, 6],
+  ['binh', 'Trần Thị Bình', 7, ['LS7_B10', 'LS7_B11', 'LS7_B14'], 360, 5],
+  ['chi', 'Lê Minh Chi', 7, ['LS7_B10', 'LS7_B11'], 210, 3],
+  ['dung', 'Phạm Quốc Dũng', 7, ['LS7_B10'], 120, 1],
+  ['giang', 'Đỗ Hương Giang', 7, ['LS7_B10', 'LS7_B11', 'LS7_B13', 'LS7_B14', 'LS7_B15'], 530, 8],
   ['ha', 'Vũ Thu Hà', 7, [], 30, 0],
-  ['khoa', 'Hoàng Anh Khoa', 7, ['LS7_B15', 'LS7_B17'], 260, 4],
-  ['linh', 'Bùi Khánh Linh', 7, ['LS7_B14', 'LS7_B15', 'LS7_B16'], 310, 4],
+  ['khoa', 'Hoàng Anh Khoa', 7, ['LS7_B11', 'LS7_B14'], 260, 4],
+  ['linh', 'Bùi Khánh Linh', 7, ['LS7_B10', 'LS7_B11', 'LS7_B13'], 310, 4],
   ['my', 'Ngô Trà My', 8, ['LS8_B08', 'LS8_B16'], 240, 3],
   ['phuc', 'Đặng Hồng Phúc', 8, ['LS8_B08'], 150, 2],
   ['quan', 'Lý Minh Quân', 8, ['LS8_B05', 'LS8_B08', 'LS8_B16', 'LS8_B17'], 470, 7],
-  ['son', 'Mai Thanh Sơn', 7, ['LS7_B19'], 90, 1],
+  ['son', 'Mai Thanh Sơn', 7, ['LS7_B16'], 90, 1],
 ]
 
 export function seedSchool(now = Date.now()): SchoolStore {
@@ -73,8 +73,8 @@ export function seedSchool(now = Date.now()): SchoolStore {
     { id: 'c-7a3', name: '7A3', grade: 7, teacherId: 'u-hung', joinCode: 'HUNG73', schoolYear: '2026–2027', studentIds: ['u-son'], archived: false, createdAt: created },
   ]
   const assignments: Assignment[] = [
-    { id: 'a-1', classId: 'c-7a1', lessonId: 'LS7_B15', lessonTitle: 'Công cuộc xây dựng và bảo vệ đất nước thời Lý (1009 - 1225)', dueAt: iso(-3, now), createdAt: iso(-10, now) },
-    { id: 'a-2', classId: 'c-7a1', lessonId: 'LS7_B17', lessonTitle: 'Ba lần kháng chiến chống quân xâm lược mông - Nguyên', dueAt: iso(5, now), createdAt: iso(-2, now) },
+    { id: 'a-1', classId: 'c-7a1', lessonId: 'LS7_B11', lessonTitle: 'Nhà Lý xây dựng và phát triển đất nước (1009 – 1225)', dueAt: iso(-3, now), createdAt: iso(-10, now) },
+    { id: 'a-2', classId: 'c-7a1', lessonId: 'LS7_B14', lessonTitle: 'Ba lần kháng chiến chống quân xâm lược Mông – Nguyên', dueAt: iso(5, now), createdAt: iso(-2, now) },
     { id: 'a-3', classId: 'c-8a2', lessonId: 'LS8_B08', lessonTitle: 'Phong trào Tây Sơn', dueAt: iso(4, now), createdAt: iso(-1, now) },
   ]
   const audit: AuditEntry[] = [{ id: 'log-1', at: iso(-1, now), actorId: 'u-nam', action: 'Đăng ký giáo viên', detail: 'Thầy Lê Hoài Nam (nam.gv@xuyensuki.vn) gửi yêu cầu tài khoản giáo viên.' }]

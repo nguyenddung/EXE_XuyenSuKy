@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "XuyenSuKi lesson",
+  "title": "XuyenSuKi lesson (SGK: lessons_all.json) hoặc phần hướng dẫn của SGV (teacher_guides.json)",
   "type": "object",
   "required": [
     "grade",
@@ -12,7 +12,8 @@
     "page_start",
     "page_end",
     "source_pdf",
-    "sections"
+    "sections",
+    "book_type"
   ],
   "properties": {
     "grade": {
@@ -52,7 +53,8 @@
       "enum": [
         "toc",
         "toc_by_number",
-        "page"
+        "page",
+        "heading"
       ]
     },
     "sections": {
@@ -97,6 +99,19 @@
           }
         }
       }
+    },
+    "book_type": {
+      "enum": [
+        "sgk",
+        "sgv"
+      ]
+    },
+    "linked_lesson_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^LS\\d{1,2}_B\\d{2}$"
     }
   }
 }

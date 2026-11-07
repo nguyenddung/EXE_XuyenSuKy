@@ -39,7 +39,7 @@ test('the sample teacher manages classes, assigns a textbook lesson and exports 
   await expect(page.locator('#students')).toContainText('Chưa có học sinh')
   const lesson = page.getByLabel(/Bài học SGK lớp 7/)
   await expect(lesson.locator('option')).not.toHaveCount(1)
-  await lesson.selectOption('LS7_B17')
+  await lesson.selectOption('LS7_B14')
   await page.getByRole('button', { name: 'Giao bài' }).click()
   await expect(page.locator('.staff-assignments')).toContainText('Ba lần kháng chiến')
 

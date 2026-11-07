@@ -9,7 +9,7 @@ test('dashboard cards open real lessons, search and quiz', async ({ page }, test
   await expect(page.locator('.dashboard-era')).toHaveCount(6)
   await page.screenshot({ path: testInfo.outputPath('dashboard-desktop.png') })
   await page.getByRole('button', { name: 'Thời Lý', exact: true }).click()
-  await expect(page.locator('#dataset-reader-title')).toContainText('thời Lý')
+  await expect(page.locator('#dataset-reader-title')).toContainText('Nhà Lý')
   await page.getByRole('button', { name: 'Đóng bài đọc' }).click()
   await page.getByRole('searchbox', { name: 'Tìm sự kiện, nhân vật, thời kỳ' }).fill('Bạch Đằng')
   await page.getByRole('searchbox', { name: 'Tìm sự kiện, nhân vật, thời kỳ' }).press('Enter')
@@ -27,7 +27,7 @@ test('landing shares the dashboard look and its era cards open the lesson on /ho
   await expect(page.locator('.landing-hero .dashboard-era')).toHaveCount(6)
   await page.locator('.landing-hero .dashboard-era').filter({ hasText: 'Thời Lý' }).click()
   await expect(page).toHaveURL(/\/home#library$/)
-  await expect(page.locator('#dataset-reader-title')).toContainText('thời Lý')
+  await expect(page.locator('#dataset-reader-title')).toContainText('Nhà Lý')
 })
 
 test('landing fits mobile without horizontal overflow', async ({ page }) => {

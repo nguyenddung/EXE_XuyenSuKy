@@ -4,7 +4,7 @@ const openMenu = (page: Page, name: string) => page.getByRole('navigation', { na
 
 test('dataset backend drives library, grade filters, chapter filters and pagination', async ({ page }) => {
   await page.goto('/home#library')
-  await expect(page.locator('.dataset-stats')).toContainText('130')
+  await expect(page.locator('.dataset-stats')).toContainText('127')
   await expect(page.locator('.dataset-card')).toHaveCount(6)
   await page.getByRole('combobox', { name: 'Lọc lớp sách giáo khoa' }).selectOption('12')
   await expect(page.locator('.library-result-count')).toContainText('17 bài học')
@@ -20,10 +20,10 @@ test('dataset backend drives library, grade filters, chapter filters and paginat
 test('real dataset reader keeps sources, notes, read progress and bookmarks after reload', async ({ page }) => {
   await page.goto('/home#library')
   await page.getByRole('combobox', { name: 'Lọc lớp sách giáo khoa' }).selectOption('7')
-  await expect(page.locator('.library-result-count')).toContainText('23 bài học')
+  await expect(page.locator('.library-result-count')).toContainText('20 bài học')
   await page.locator('.library-open').first().click()
   await expect(page.locator('#dataset-reader-title')).toBeFocused()
-  await expect(page.locator('.dataset-reader header .dataset-citation')).toContainText('Chân trời sáng tạo')
+  await expect(page.locator('.dataset-reader header .dataset-citation')).toContainText('Kết nối tri thức')
   await expect(page.locator('.dataset-section')).not.toHaveCount(0)
   await page.getByRole('button', { name: 'Lưu bài', exact: true }).click()
   await page.getByLabel('Sổ tay của bạn').fill('Câu hỏi của mình về Tây Âu.')
@@ -31,7 +31,7 @@ test('real dataset reader keeps sources, notes, read progress and bookmarks afte
   await page.getByRole('dialog').getByRole('button', { name: 'Cần đọc lại', exact: true }).click()
   await page.keyboard.press('Escape')
   await openMenu(page, 'Trang chủ')
-  await expect(page.getByRole('progressbar', { name: 'Tỉ lệ bài đã đọc của lớp hiện tại' })).toContainText('4%')
+  await expect(page.getByRole('progressbar', { name: 'Tỉ lệ bài đã đọc của lớp hiện tại' })).toContainText('5%')
   await openMenu(page, 'Học tập')
   await page.reload()
   await page.getByRole('button', { name: 'Đã lưu', exact: true }).click()
@@ -74,5 +74,5 @@ test('grade 12 selection survives reload; reader is usable on mobile and backend
   await expect(page.locator('.dataset-status')).toContainText('Chưa đọc được dataset')
   await page.unroute('**/api/metadata')
   await page.getByRole('button', { name: 'Kết nối lại' }).click()
-  await expect(page.locator('.dataset-stats')).toContainText('130')
+  await expect(page.locator('.dataset-stats')).toContainText('127')
 })

@@ -9,7 +9,7 @@ if (!source) {
 } else {
   try {
     const dataset = await loadDataset(source)
-    const files = ['manifest.json', 'SHA256SUMS.txt', 'README.md', 'lessons/lessons_all.json', 'chunks/chunks_all.jsonl', 'schema/lesson.schema.json', 'schema/chunk.schema.json']
+    const files = ['manifest.json', 'SHA256SUMS.txt', 'README.md', 'lessons/lessons_all.json', 'chunks/chunks_all.jsonl', 'lessons/teacher_guides.json', 'chunks/teacher_chunks.jsonl', 'schema/lesson.schema.json', 'schema/chunk.schema.json']
     if (resolve(source) !== resolve(defaultDatasetPath)) {
       for (const file of files) {
         const destination = resolve(defaultDatasetPath, file)

@@ -1,0 +1,940 @@
+{
+  "_note": "Mục lục nguồn cho scripts/build-dataset-from-ocr.mjs. Trang là số trang trong file PDF (không phải số in trên trang). SGV tự tách bài theo tiêu đề \"BÀI N.\" section_fixes: tiêu đề mục mà OCR làm mất số thứ tự (at = nguyên văn đoạn tiêu đề). titles (SGV): tên bài SGV không có bài SGK tương ứng.",
+  "books": [
+    {
+      "kind": "sgk",
+      "grade": 6,
+      "file": "sach-giao-khoa/lich-su-va-dia-li-6.md",
+      "source_pdf": "lich-su-va-dia-li-6.pdf",
+      "book": "Lịch sử và Địa lí 6 (Phần Lịch sử)",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "lessons": [
+        {
+          "number": 0,
+          "title": "Mở đầu phần Lịch sử",
+          "chapter": "Mở đầu",
+          "pages": [8, 9]
+        },
+        {
+          "number": 1,
+          "title": "Lịch sử và cuộc sống",
+          "chapter": "Chương 1: VÌ SAO PHẢI HỌC LỊCH SỬ",
+          "pages": [10, 11]
+        },
+        {
+          "number": 2,
+          "title": "Dựa vào đâu để biết và phục dựng lại lịch sử?",
+          "chapter": "Chương 1: VÌ SAO PHẢI HỌC LỊCH SỬ",
+          "pages": [12, 14]
+        },
+        {
+          "number": 3,
+          "title": "Thời gian trong lịch sử",
+          "chapter": "Chương 1: VÌ SAO PHẢI HỌC LỊCH SỬ",
+          "pages": [15, 17]
+        },
+        {
+          "number": 4,
+          "title": "Nguồn gốc loài người",
+          "chapter": "Chương 2: XÃ HỘI NGUYÊN THUỶ",
+          "pages": [18, 20]
+        },
+        {
+          "number": 5,
+          "title": "Xã hội nguyên thuỷ",
+          "chapter": "Chương 2: XÃ HỘI NGUYÊN THUỶ",
+          "pages": [21, 24]
+        },
+        {
+          "number": 6,
+          "title": "Sự chuyển biến và phân hoá của xã hội nguyên thuỷ",
+          "chapter": "Chương 2: XÃ HỘI NGUYÊN THUỶ",
+          "pages": [25, 29]
+        },
+        {
+          "number": 7,
+          "title": "Ai Cập và Lưỡng Hà cổ đại",
+          "chapter": "Chương 3: XÃ HỘI CỔ ĐẠI",
+          "pages": [30, 34]
+        },
+        {
+          "number": 8,
+          "title": "Ấn Độ cổ đại",
+          "chapter": "Chương 3: XÃ HỘI CỔ ĐẠI",
+          "pages": [35, 39]
+        },
+        {
+          "number": 9,
+          "title": "Trung Quốc từ thời cổ đại đến thế kỉ VII",
+          "chapter": "Chương 3: XÃ HỘI CỔ ĐẠI",
+          "pages": [40, 44]
+        },
+        {
+          "number": 10,
+          "title": "Hy Lạp và La Mã cổ đại",
+          "chapter": "Chương 3: XÃ HỘI CỔ ĐẠI",
+          "pages": [45, 51]
+        },
+        {
+          "number": 11,
+          "title": "Các quốc gia sơ kì ở Đông Nam Á",
+          "chapter": "Chương 4: ĐÔNG NAM Á TỪ NHỮNG THẾ KỈ TIẾP GIÁP ĐẦU CÔNG NGUYÊN ĐẾN THẾ KỈ X",
+          "pages": [52, 54]
+        },
+        {
+          "number": 12,
+          "title": "Sự hình thành và bước đầu phát triển của các vương quốc phong kiến ở Đông Nam Á (từ thế kỉ VII đến thế kỉ X)",
+          "chapter": "Chương 4: ĐÔNG NAM Á TỪ NHỮNG THẾ KỈ TIẾP GIÁP ĐẦU CÔNG NGUYÊN ĐẾN THẾ KỈ X",
+          "pages": [55, 56]
+        },
+        {
+          "number": 13,
+          "title": "Giao lưu văn hoá ở Đông Nam Á từ đầu Công nguyên đến thế kỉ X",
+          "chapter": "Chương 4: ĐÔNG NAM Á TỪ NHỮNG THẾ KỈ TIẾP GIÁP ĐẦU CÔNG NGUYÊN ĐẾN THẾ KỈ X",
+          "pages": [57, 60]
+        },
+        {
+          "number": 14,
+          "title": "Nhà nước Văn Lang - Âu Lạc",
+          "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
+          "pages": [61, 65]
+        },
+        {
+          "number": 15,
+          "title": "Chính sách cai trị của các triều đại phong kiến phương Bắc và sự chuyển biến của xã hội Âu Lạc",
+          "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
+          "pages": [66, 70]
+        },
+        {
+          "number": 16,
+          "title": "Các cuộc khởi nghĩa tiêu biểu giành độc lập trước thế kỉ X",
+          "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
+          "pages": [71, 78]
+        },
+        {
+          "number": 17,
+          "title": "Cuộc đấu tranh bảo tồn và phát triển văn hoá dân tộc của người Việt",
+          "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
+          "pages": [79, 80]
+        },
+        {
+          "number": 18,
+          "title": "Bước ngoặt lịch sử đầu thế kỉ X",
+          "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
+          "pages": [81, 86]
+        },
+        {
+          "number": 19,
+          "title": "Vương quốc Chăm-pa từ thế kỉ II đến thế kỉ X",
+          "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
+          "pages": [87, 91]
+        },
+        {
+          "number": 20,
+          "title": "Vương quốc Phù Nam",
+          "chapter": "Chương 5: VIỆT NAM TỪ KHOẢNG THẾ KỈ VII TRƯỚC CÔNG NGUYÊN ĐẾN ĐẦU THẾ KỈ X",
+          "pages": [92, 95]
+        }
+      ]
+    },
+    {
+      "kind": "sgk",
+      "grade": 7,
+      "file": "sach-giao-khoa/lich-su-va-dia-li-7.md",
+      "source_pdf": "lich-su-va-dia-li-7.pdf",
+      "book": "Lịch sử và Địa lí 7 (Phần Lịch sử)",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Quá trình hình thành và phát triển của chế độ phong kiến ở Tây Âu",
+          "chapter": "Chương 1: TÂY ÂU TỪ THẾ KỈ V ĐẾN NỬA ĐẦU THẾ KỈ XVI",
+          "pages": [10, 14]
+        },
+        {
+          "number": 2,
+          "title": "Các cuộc phát kiến địa lí và sự hình thành quan hệ sản xuất tư bản chủ nghĩa ở Tây Âu",
+          "chapter": "Chương 1: TÂY ÂU TỪ THẾ KỈ V ĐẾN NỬA ĐẦU THẾ KỈ XVI",
+          "pages": [15, 18]
+        },
+        {
+          "number": 3,
+          "title": "Phong trào Văn hoá Phục hưng và Cải cách tôn giáo",
+          "chapter": "Chương 1: TÂY ÂU TỪ THẾ KỈ V ĐẾN NỬA ĐẦU THẾ KỈ XVI",
+          "pages": [19, 24]
+        },
+        {
+          "number": 4,
+          "title": "Trung Quốc từ thế kỉ VII đến giữa thế kỉ XIX",
+          "chapter": "Chương 2: TRUNG QUỐC VÀ ẤN ĐỘ THỜI TRUNG ĐẠI",
+          "pages": [25, 29]
+        },
+        {
+          "number": 5,
+          "title": "Ấn Độ từ thế kỉ IV đến giữa thế kỉ XIX",
+          "chapter": "Chương 2: TRUNG QUỐC VÀ ẤN ĐỘ THỜI TRUNG ĐẠI",
+          "pages": [30, 35]
+        },
+        {
+          "number": 6,
+          "title": "Các vương quốc phong kiến Đông Nam Á từ nửa sau thế kỉ X đến nửa đầu thế kỉ XVI",
+          "chapter": "Chương 3: ĐÔNG NAM Á TỪ NỬA SAU THẾ KỈ X ĐẾN NỬA ĐẦU THẾ KỈ XVI",
+          "pages": [36, 39]
+        },
+        {
+          "number": 7,
+          "title": "Vương quốc Lào",
+          "chapter": "Chương 3: ĐÔNG NAM Á TỪ NỬA SAU THẾ KỈ X ĐẾN NỬA ĐẦU THẾ KỈ XVI",
+          "pages": [40, 42]
+        },
+        {
+          "number": 8,
+          "title": "Vương quốc Cam-pu-chia",
+          "chapter": "Chương 3: ĐÔNG NAM Á TỪ NỬA SAU THẾ KỈ X ĐẾN NỬA ĐẦU THẾ KỈ XVI",
+          "pages": [43, 45]
+        },
+        {
+          "number": 9,
+          "title": "Đất nước buổi đầu độc lập (939 – 967)",
+          "chapter": "Chương 4: ĐẤT NƯỚC DƯỚI THỜI CÁC VƯƠNG TRIỀU NGÔ – ĐINH – TIỀN LÊ (939 – 1009)",
+          "pages": [46, 48]
+        },
+        {
+          "number": 10,
+          "title": "Đại Cồ Việt thời Đinh và Tiền Lê (968 – 1009)",
+          "chapter": "Chương 4: ĐẤT NƯỚC DƯỚI THỜI CÁC VƯƠNG TRIỀU NGÔ – ĐINH – TIỀN LÊ (939 – 1009)",
+          "pages": [49, 52]
+        },
+        {
+          "number": 11,
+          "title": "Nhà Lý xây dựng và phát triển đất nước (1009 – 1225)",
+          "chapter": "Chương 5: ĐẠI VIỆT THỜI LÝ – TRẦN – HỒ (1009 – 1407)",
+          "pages": [53, 58]
+        },
+        {
+          "number": 12,
+          "title": "Cuộc kháng chiến chống quân xâm lược Tống (1075 – 1077)",
+          "chapter": "Chương 5: ĐẠI VIỆT THỜI LÝ – TRẦN – HỒ (1009 – 1407)",
+          "pages": [59, 62]
+        },
+        {
+          "number": 13,
+          "title": "Đại Việt thời Trần (1226 – 1400)",
+          "chapter": "Chương 5: ĐẠI VIỆT THỜI LÝ – TRẦN – HỒ (1009 – 1407)",
+          "pages": [63, 68]
+        },
+        {
+          "number": 14,
+          "title": "Ba lần kháng chiến chống quân xâm lược Mông – Nguyên",
+          "chapter": "Chương 5: ĐẠI VIỆT THỜI LÝ – TRẦN – HỒ (1009 – 1407)",
+          "pages": [69, 74]
+        },
+        {
+          "number": 15,
+          "title": "Nước Đại Ngu thời Hồ (1400 – 1407)",
+          "chapter": "Chương 5: ĐẠI VIỆT THỜI LÝ – TRẦN – HỒ (1009 – 1407)",
+          "pages": [75, 78],
+          "section_fixes": [
+            {
+              "number": 1,
+              "at": "Sự thành lập nhà Hồ"
+            },
+            {
+              "number": 2,
+              "at": "Một số nội dung và tác động của những cải cách của Hồ Quý Ly"
+            }
+          ]
+        },
+        {
+          "number": 16,
+          "title": "Khởi nghĩa Lam Sơn (1418 – 1427)",
+          "chapter": "Chương 6: KHỞI NGHĨA LAM SƠN VÀ ĐẠI VIỆT THỜI LÊ SƠ (1418 – 1527)",
+          "pages": [79, 83]
+        },
+        {
+          "number": 17,
+          "title": "Đại Việt thời Lê sơ (1428 – 1527)",
+          "chapter": "Chương 6: KHỞI NGHĨA LAM SƠN VÀ ĐẠI VIỆT THỜI LÊ SƠ (1418 – 1527)",
+          "pages": [84, 90]
+        },
+        {
+          "number": 18,
+          "title": "Vương quốc Chăm-pa và vùng đất Nam Bộ từ đầu thế kỉ X đến đầu thế kỉ XVI",
+          "chapter": "Chương 7: VÙNG ĐẤT PHÍA NAM VIỆT NAM TỪ ĐẦU THẾ KỈ X ĐẾN ĐẦU THẾ KỈ XVI",
+          "pages": [91, 95]
+        },
+        {
+          "number": 19,
+          "title": "Chủ đề chung 1: Các cuộc đại phát kiến địa lí",
+          "chapter": "Chủ đề chung",
+          "pages": [167, 170]
+        },
+        {
+          "number": 20,
+          "title": "Chủ đề chung 2: Đô thị: Lịch sử và hiện tại",
+          "chapter": "Chủ đề chung",
+          "pages": [171, 175]
+        }
+      ]
+    },
+    {
+      "kind": "sgk",
+      "grade": 8,
+      "file": "sach-giao-khoa/lich-su-va-dia-li-8.md",
+      "source_pdf": "lich-su-va-dia-li-8.pdf",
+      "book": "Lịch sử và Địa lí 8 (Phần Lịch sử)",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Cách mạng tư sản Anh và Chiến tranh giành độc lập của 13 thuộc địa Anh Ở Bắc Mỹ",
+          "chapter": "Chương 1: CHÂU ÂU VÀ BẮC MỸ TỪ NỬA SAU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [10, 13]
+        },
+        {
+          "number": 2,
+          "title": "Cách mạng tư sản Pháp cuối thế kỉ XVIII",
+          "chapter": "Chương 1: CHÂU ÂU VÀ BẮC MỸ TỪ NỬA SAU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [14, 16]
+        },
+        {
+          "number": 3,
+          "title": "Cách mạng công nghiệp (nửa sau thế kỉ XVIII - giữa thế kỉ XIX)",
+          "chapter": "Chương 1: CHÂU ÂU VÀ BẮC MỸ TỪ NỬA SAU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [17, 20]
+        },
+        {
+          "number": 4,
+          "title": "Đông Nam Á từ nửa sau thế kỉ XVI đến giữa thế kỉ XIX",
+          "chapter": "Chương 2: ĐÔNG NAM Á TỪ NỬA SAU THẾ KỈ XVI ĐẾN GIỮA THẾ KỈ XIX",
+          "pages": [21, 24]
+        },
+        {
+          "number": 5,
+          "title": "Cuộc xung đột Nam - Bắc triều và Trịnh - Nguyễn",
+          "chapter": "Chương 3: VIỆT NAM TỪ ĐẦU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [25, 29]
+        },
+        {
+          "number": 6,
+          "title": "Công cuộc khai phá vùng đất phía Nam từ thế kỉ XVI đến thế kỉ XVIII",
+          "chapter": "Chương 3: VIỆT NAM TỪ ĐẦU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [30, 32]
+        },
+        {
+          "number": 7,
+          "title": "Khởi nghĩa nông dân ở Đàng Ngoài thế kỉ XVIII",
+          "chapter": "Chương 3: VIỆT NAM TỪ ĐẦU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [33, 36]
+        },
+        {
+          "number": 8,
+          "title": "Phong trào Tây Sơn",
+          "chapter": "Chương 3: VIỆT NAM TỪ ĐẦU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [37, 43]
+        },
+        {
+          "number": 9,
+          "title": "Tình hình kinh tế, văn hoá, tôn giáo trong các thế kỉ XVI - XVIII",
+          "chapter": "Chương 3: VIỆT NAM TỪ ĐẦU THẾ KỈ XVI ĐẾN THẾ KỈ XVIII",
+          "pages": [44, 47]
+        },
+        {
+          "number": 10,
+          "title": "Sự hình thành chủ nghĩa đế quốc ở các nước Âu - Mỹ (cuối thế kỉ XIX - đầu thế kỉ XX)",
+          "chapter": "Chương 4: CHÂU ÂU VÀ NƯỚC MỸ TỪ CUỐI THẾ KỈ XVIII ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [48, 51]
+        },
+        {
+          "number": 11,
+          "title": "Phong trào công nhân từ cuối thế kỉ XVIII đến đầu thế kỉ XX và sự ra đời của chủ nghĩa xã hội khoa học",
+          "chapter": "Chương 4: CHÂU ÂU VÀ NƯỚC MỸ TỪ CUỐI THẾ KỈ XVIII ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [52, 55]
+        },
+        {
+          "number": 12,
+          "title": "Chiến tranh thế giới thứ nhất (1914 - 1918) và Cách mạng tháng Mười Nga năm 1917",
+          "chapter": "Chương 4: CHÂU ÂU VÀ NƯỚC MỸ TỪ CUỐI THẾ KỈ XVIII ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [56, 59]
+        },
+        {
+          "number": 13,
+          "title": "Sự phát triển của khoa học, kĩ thuật, văn học, nghệ thuật trong các thế kỉ XVIII - XIX",
+          "chapter": "Chương 5: SỰ PHÁT TRIỂN CỦA KHOA HỌC, KĨ THUẬT, VĂN HỌC, NGHỆ THUẬT",
+          "pages": [60, 63]
+        },
+        {
+          "number": 14,
+          "title": "Trung Quốc và Nhật Bản từ nửa sau thế kỉ XIX đến đầu thế kỉ XX",
+          "chapter": "Chương 6: CHÂU Á TỪ NỬA SAU THẾ KỈ XIX ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [64, 68]
+        },
+        {
+          "number": 15,
+          "title": "Ấn Độ và Đông Nam Á từ nửa sau thế kỉ XIX đến đầu thế kỉ XX",
+          "chapter": "Chương 6: CHÂU Á TỪ NỬA SAU THẾ KỈ XIX ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [69, 72]
+        },
+        {
+          "number": 16,
+          "title": "Việt Nam dưới thời Nguyễn (nửa đầu thế kỉ XIX)",
+          "chapter": "Chương 7: VIỆT NAM TỪ THẾ KỈ XIX ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [73, 78],
+          "section_fixes": [
+            {
+              "number": 2,
+              "at": "Tình hình kinh tế, xã hội Việt Nam nửa đầu thế kỉ XIX"
+            }
+          ]
+        },
+        {
+          "number": 17,
+          "title": "Cuộc kháng chiến chống thực dân Pháp xâm lược từ năm 1858 đến năm 1884",
+          "chapter": "Chương 7: VIỆT NAM TỪ THẾ KỈ XIX ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [79, 85]
+        },
+        {
+          "number": 18,
+          "title": "Phong trào chống Pháp trong những năm 1885 - 1896",
+          "chapter": "Chương 7: VIỆT NAM TỪ THẾ KỈ XIX ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [86, 89]
+        },
+        {
+          "number": 19,
+          "title": "Phong trào yêu nước chống Pháp ở Việt Nam từ đầu thế kỉ XX đến năm 1917",
+          "chapter": "Chương 7: VIỆT NAM TỪ THẾ KỈ XIX ĐẾN ĐẦU THẾ KỈ XX",
+          "pages": [90, 94]
+        },
+        {
+          "number": 20,
+          "title": "Chủ đề chung 1: Văn minh châu thổ sông Hồng và sông Cửu Long",
+          "chapter": "Chủ đề chung",
+          "pages": [157, 163]
+        },
+        {
+          "number": 21,
+          "title": "Chủ đề chung 2: Bảo vệ chủ quyền, các quyền và lợi ích hợp pháp của Việt Nam ở Biển Đông",
+          "chapter": "Chủ đề chung",
+          "pages": [164, 173]
+        }
+      ]
+    },
+    {
+      "kind": "sgk",
+      "grade": 9,
+      "file": "sach-giao-khoa/lich-su-va-dia-li-9.md",
+      "source_pdf": "lich-su-va-dia-li-9.pdf",
+      "book": "Lịch sử và Địa lí 9 (Phần Lịch sử)",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Nước Nga và Liên Xô từ năm 1918 đến năm 1945",
+          "chapter": "Chương 1: THẾ GIỚI TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [7, 9]
+        },
+        {
+          "number": 2,
+          "title": "Châu Âu và nước Mỹ từ năm 1918 đến năm 1945",
+          "chapter": "Chương 1: THẾ GIỚI TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [10, 13]
+        },
+        {
+          "number": 3,
+          "title": "Châu Á từ năm 1918 đến năm 1945",
+          "chapter": "Chương 1: THẾ GIỚI TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [14, 17]
+        },
+        {
+          "number": 4,
+          "title": "Chiến tranh thế giới thứ hai (1939 – 1945)",
+          "chapter": "Chương 1: THẾ GIỚI TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [18, 21]
+        },
+        {
+          "number": 5,
+          "title": "Phong trào dân tộc dân chủ trong những năm 1918 – 1930",
+          "chapter": "Chương 2: VIỆT NAM TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [22, 25]
+        },
+        {
+          "number": 6,
+          "title": "Hoạt động của Nguyễn Ái Quốc và sự thành lập Đảng Cộng sản Việt Nam",
+          "chapter": "Chương 2: VIỆT NAM TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [26, 29]
+        },
+        {
+          "number": 7,
+          "title": "Phong trào cách mạng Việt Nam thời kì 1930 – 1939",
+          "chapter": "Chương 2: VIỆT NAM TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [30, 33]
+        },
+        {
+          "number": 8,
+          "title": "Cách mạng tháng Tám năm 1945",
+          "chapter": "Chương 2: VIỆT NAM TỪ NĂM 1918 ĐẾN NĂM 1945",
+          "pages": [34, 40]
+        },
+        {
+          "number": 9,
+          "title": "Chiến tranh lạnh (1947 – 1989)",
+          "chapter": "Chương 3: THẾ GIỚI TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [41, 43]
+        },
+        {
+          "number": 10,
+          "title": "Liên Xô và Đông Âu từ năm 1945 đến năm 1991",
+          "chapter": "Chương 3: THẾ GIỚI TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [44, 48]
+        },
+        {
+          "number": 11,
+          "title": "Nước Mỹ và Tây Âu từ năm 1945 đến năm 1991",
+          "chapter": "Chương 3: THẾ GIỚI TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [49, 51]
+        },
+        {
+          "number": 12,
+          "title": "Khu vực Mỹ La-tinh và châu Á từ năm 1945 đến năm 1991",
+          "chapter": "Chương 3: THẾ GIỚI TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [52, 60]
+        },
+        {
+          "number": 13,
+          "title": "Việt Nam trong năm đầu sau Cách mạng tháng Tám năm 1945",
+          "chapter": "Chương 4: VIỆT NAM TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [61, 66]
+        },
+        {
+          "number": 14,
+          "title": "Việt Nam kháng chiến chống thực dân Pháp xâm lược giai đoạn 1946 – 1950",
+          "chapter": "Chương 4: VIỆT NAM TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [67, 72]
+        },
+        {
+          "number": 15,
+          "title": "Việt Nam kháng chiến chống thực dân Pháp xâm lược giai đoạn 1951 – 1954",
+          "chapter": "Chương 4: VIỆT NAM TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [73, 78]
+        },
+        {
+          "number": 16,
+          "title": "Việt Nam kháng chiến chống Mỹ, cứu nước, thống nhất đất nước giai đoạn 1954 – 1965",
+          "chapter": "Chương 4: VIỆT NAM TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [79, 83]
+        },
+        {
+          "number": 17,
+          "title": "Việt Nam kháng chiến chống Mỹ, cứu nước, thống nhất đất nước giai đoạn 1965 – 1975",
+          "chapter": "Chương 4: VIỆT NAM TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [84, 90]
+        },
+        {
+          "number": 18,
+          "title": "Việt Nam từ năm 1976 đến năm 1991",
+          "chapter": "Chương 4: VIỆT NAM TỪ NĂM 1945 ĐẾN NĂM 1991",
+          "pages": [91, 96]
+        },
+        {
+          "number": 19,
+          "title": "Trật tự thế giới mới từ năm 1991 đến nay. Liên bang Nga và nước Mỹ từ năm 1991 đến nay",
+          "chapter": "Chương 5: THẾ GIỚI TỪ NĂM 1991 ĐẾN NAY",
+          "pages": [97, 99]
+        },
+        {
+          "number": 20,
+          "title": "Châu Á từ năm 1991 đến nay",
+          "chapter": "Chương 5: THẾ GIỚI TỪ NĂM 1991 ĐẾN NAY",
+          "pages": [100, 104]
+        },
+        {
+          "number": 21,
+          "title": "Việt Nam từ năm 1991 đến nay",
+          "chapter": "Chương 6: VIỆT NAM TỪ NĂM 1991 ĐẾN NAY",
+          "pages": [105, 109]
+        },
+        {
+          "number": 22,
+          "title": "Cách mạng khoa học – kĩ thuật và xu thế toàn cầu hoá",
+          "chapter": "Chương 7: CÁCH MẠNG KHOA HỌC – KĨ THUẬT VÀ XU THẾ TOÀN CẦU HOÁ",
+          "pages": [110, 114]
+        }
+      ]
+    },
+    {
+      "kind": "sgk",
+      "grade": 10,
+      "file": "sach-giao-khoa/lich-su-10.md",
+      "source_pdf": "lich-su-10.pdf",
+      "book": "Lịch sử 10",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Hiện thực lịch sử và lịch sử được con người nhận thức",
+          "chapter": "Chủ đề 1: LỊCH SỬ VÀ SỬ HỌC",
+          "pages": [8, 12]
+        },
+        {
+          "number": 2,
+          "title": "Tri thức lịch sử và cuộc sống",
+          "chapter": "Chủ đề 1: LỊCH SỬ VÀ SỬ HỌC",
+          "pages": [13, 17]
+        },
+        {
+          "number": 3,
+          "title": "Vai trò của Sử học",
+          "chapter": "Chủ đề 2: VAI TRÒ CỦA SỬ HỌC",
+          "pages": [18, 22]
+        },
+        {
+          "number": 4,
+          "title": "Khái niệm văn minh. Một số nền văn minh phương Đông thời cổ - trung đại",
+          "chapter": "Chủ đề 3: MỘT SỐ NỀN VĂN MINH THẾ GIỚI THỜI CỔ - TRUNG ĐẠI",
+          "pages": [23, 32]
+        },
+        {
+          "number": 5,
+          "title": "Một số nền văn minh phương Tây thời cổ - trung đại",
+          "chapter": "Chủ đề 3: MỘT SỐ NỀN VĂN MINH THẾ GIỚI THỜI CỔ - TRUNG ĐẠI",
+          "pages": [33, 39]
+        },
+        {
+          "number": 6,
+          "title": "Các cuộc cách mạng công nghiệp thời cận đại",
+          "chapter": "Chủ đề 4: CÁC CUỘC CÁCH MẠNG CÔNG NGHIỆP TRONG LỊCH SỬ THẾ GIỚI",
+          "pages": [40, 46]
+        },
+        {
+          "number": 7,
+          "title": "Các cuộc cách mạng công nghiệp thời hiện đại",
+          "chapter": "Chủ đề 4: CÁC CUỘC CÁCH MẠNG CÔNG NGHIỆP TRONG LỊCH SỬ THẾ GIỚI",
+          "pages": [47, 52]
+        },
+        {
+          "number": 8,
+          "title": "Hành trình phát triển và thành tựu của văn minh Đông Nam Á thời cổ - trung đại",
+          "chapter": "Chủ đề 5: VĂN MINH ĐÔNG NAM Á THỜI CỔ - TRUNG ĐẠI",
+          "pages": [53, 60]
+        },
+        {
+          "number": 9,
+          "title": "Một số nền văn minh cổ trên đất nước Việt Nam",
+          "chapter": "Chủ đề 6: MỘT SỐ NỀN VĂN MINH TRÊN ĐẤT NƯỚC VIỆT NAM (TRƯỚC NĂM 1858)",
+          "pages": [61, 74]
+        },
+        {
+          "number": 10,
+          "title": "Văn minh Đại Việt",
+          "chapter": "Chủ đề 6: MỘT SỐ NỀN VĂN MINH TRÊN ĐẤT NƯỚC VIỆT NAM (TRƯỚC NĂM 1858)",
+          "pages": [75, 87]
+        },
+        {
+          "number": 11,
+          "title": "Các dân tộc trên đất nước Việt Nam",
+          "chapter": "Chủ đề 7: CỘNG ĐỒNG CÁC DÂN TỘC VIỆT NAM",
+          "pages": [88, 91]
+        },
+        {
+          "number": 12,
+          "title": "Khái quát về đời sống vật chất và tinh thần của cộng đồng các dân tộc Việt Nam",
+          "chapter": "Chủ đề 7: CỘNG ĐỒNG CÁC DÂN TỘC VIỆT NAM",
+          "pages": [92, 101]
+        },
+        {
+          "number": 13,
+          "title": "Khối đại đoàn kết dân tộc trong lịch sử Việt Nam",
+          "chapter": "Chủ đề 7: CỘNG ĐỒNG CÁC DÂN TỘC VIỆT NAM",
+          "pages": [102, 108]
+        }
+      ]
+    },
+    {
+      "kind": "sgk",
+      "grade": 11,
+      "file": "sach-giao-khoa/lich-su-11.md",
+      "source_pdf": "lich-su-11.pdf",
+      "book": "Lịch sử 11",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Một số vấn đề chung về cách mạng tư sản",
+          "chapter": "Chủ đề 1: CÁCH MẠNG TƯ SẢN VÀ SỰ PHÁT TRIỂN CỦA CHỦ NGHĨA TƯ BẢN",
+          "pages": [7, 12]
+        },
+        {
+          "number": 2,
+          "title": "Sự xác lập và phát triển của chủ nghĩa tư bản",
+          "chapter": "Chủ đề 1: CÁCH MẠNG TƯ SẢN VÀ SỰ PHÁT TRIỂN CỦA CHỦ NGHĨA TƯ BẢN",
+          "pages": [13, 19]
+        },
+        {
+          "number": 3,
+          "title": "Sự hình thành Liên bang Cộng hoà xã hội chủ nghĩa Xô viết",
+          "chapter": "Chủ đề 2: CHỦ NGHĨA XÃ HỘI TỪ NĂM 1917 ĐẾN NAY",
+          "pages": [20, 22]
+        },
+        {
+          "number": 4,
+          "title": "Sự phát triển của chủ nghĩa xã hội từ sau Chiến tranh thế giới thứ hai đến nay",
+          "chapter": "Chủ đề 2: CHỦ NGHĨA XÃ HỘI TỪ NĂM 1917 ĐẾN NAY",
+          "pages": [23, 29]
+        },
+        {
+          "number": 5,
+          "title": "Quá trình xâm lược và cai trị của chủ nghĩa thực dân ở Đông Nam Á",
+          "chapter": "Chủ đề 3: QUÁ TRÌNH GIÀNH ĐỘC LẬP DÂN TỘC CỦA CÁC QUỐC GIA ĐÔNG NAM Á",
+          "pages": [30, 37]
+        },
+        {
+          "number": 6,
+          "title": "Hành trình đi đến độc lập dân tộc ở Đông Nam Á",
+          "chapter": "Chủ đề 3: QUÁ TRÌNH GIÀNH ĐỘC LẬP DÂN TỘC CỦA CÁC QUỐC GIA ĐÔNG NAM Á",
+          "pages": [38, 43]
+        },
+        {
+          "number": 7,
+          "title": "Khái quát về chiến tranh bảo vệ Tổ quốc trong lịch sử Việt Nam",
+          "chapter": "Chủ đề 4: CHIẾN TRANH BẢO VỆ TỔ QUỐC VÀ CHIẾN TRANH GIẢI PHÓNG DÂN TỘC TRONG LỊCH SỬ VIỆT NAM (TRƯỚC CÁCH MẠNG THÁNG TÁM NĂM 1945)",
+          "pages": [44, 50]
+        },
+        {
+          "number": 8,
+          "title": "Một số cuộc khởi nghĩa và chiến tranh giải phóng trong lịch sử Việt Nam (từ thế kỉ III trước Công nguyên đến cuối thế kỉ XIX)",
+          "chapter": "Chủ đề 4: CHIẾN TRANH BẢO VỆ TỔ QUỐC VÀ CHIẾN TRANH GIẢI PHÓNG DÂN TỘC TRONG LỊCH SỬ VIỆT NAM (TRƯỚC CÁCH MẠNG THÁNG TÁM NĂM 1945)",
+          "pages": [51, 60]
+        },
+        {
+          "number": 9,
+          "title": "Cuộc cải cách của Hồ Quý Ly và Triều Hồ",
+          "chapter": "Chủ đề 5: MỘT SỐ CUỘC CẢI CÁCH LỚN TRONG LỊCH SỬ VIỆT NAM (TRƯỚC NĂM 1858)",
+          "pages": [61, 64]
+        },
+        {
+          "number": 10,
+          "title": "Cuộc cải cách của Lê Thánh Tông (thế kỉ XV)",
+          "chapter": "Chủ đề 5: MỘT SỐ CUỘC CẢI CÁCH LỚN TRONG LỊCH SỬ VIỆT NAM (TRƯỚC NĂM 1858)",
+          "pages": [65, 69]
+        },
+        {
+          "number": 11,
+          "title": "Cuộc cải cách của Minh Mạng (nửa đầu thế kỉ XIX)",
+          "chapter": "Chủ đề 5: MỘT SỐ CUỘC CẢI CÁCH LỚN TRONG LỊCH SỬ VIỆT NAM (TRƯỚC NĂM 1858)",
+          "pages": [70, 73]
+        },
+        {
+          "number": 12,
+          "title": "Vị trí và tầm quan trọng của Biển Đông",
+          "chapter": "Chủ đề 6: LỊCH SỬ BẢO VỆ CHỦ QUYỀN, CÁC QUYỀN VÀ LỢI ÍCH HỢP PHÁP CỦA VIỆT NAM Ở BIỂN ĐÔNG",
+          "pages": [74, 80]
+        },
+        {
+          "number": 13,
+          "title": "Việt Nam và Biển Đông",
+          "chapter": "Chủ đề 6: LỊCH SỬ BẢO VỆ CHỦ QUYỀN, CÁC QUYỀN VÀ LỢI ÍCH HỢP PHÁP CỦA VIỆT NAM Ở BIỂN ĐÔNG",
+          "pages": [81, 91]
+        }
+      ]
+    },
+    {
+      "kind": "sgk",
+      "grade": 12,
+      "file": "sach-giao-khoa/lich-su-12.md",
+      "source_pdf": "lich-su-12.pdf",
+      "book": "Lịch sử 12",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "lessons": [
+        {
+          "number": 1,
+          "title": "Liên hợp quốc",
+          "chapter": "Chủ đề 1: THẾ GIỚI TRONG VÀ SAU CHIẾN TRANH LẠNH",
+          "pages": [7, 13]
+        },
+        {
+          "number": 2,
+          "title": "Trật tự thế giới trong Chiến tranh lạnh",
+          "chapter": "Chủ đề 1: THẾ GIỚI TRONG VÀ SAU CHIẾN TRANH LẠNH",
+          "pages": [14, 18]
+        },
+        {
+          "number": 3,
+          "title": "Trật tự thế giới sau Chiến tranh lạnh",
+          "chapter": "Chủ đề 1: THẾ GIỚI TRONG VÀ SAU CHIẾN TRANH LẠNH",
+          "pages": [19, 21]
+        },
+        {
+          "number": 4,
+          "title": "Sự ra đời và phát triển của Hiệp hội các quốc gia Đông Nam Á (ASEAN)",
+          "chapter": "Chủ đề 2: ASEAN: NHỮNG CHẶNG ĐƯỜNG LỊCH SỬ",
+          "pages": [22, 25]
+        },
+        {
+          "number": 5,
+          "title": "Cộng đồng ASEAN: Từ ý tưởng đến hiện thực",
+          "chapter": "Chủ đề 2: ASEAN: NHỮNG CHẶNG ĐƯỜNG LỊCH SỬ",
+          "pages": [26, 31],
+          "section_fixes": [
+            {
+              "number": 2,
+              "at": "Ba trụ cột của Cộng đồng ASEAN"
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "title": "Cách mạng tháng Tám năm 1945",
+          "chapter": "Chủ đề 3: CÁCH MẠNG THÁNG TÁM NĂM 1945, CHIẾN TRANH GIẢI PHÓNG DÂN TỘC VÀ CHIẾN TRANH BẢO VỆ TỔ QUỐC TRONG LỊCH SỬ VIỆT NAM",
+          "pages": [32, 37]
+        },
+        {
+          "number": 7,
+          "title": "Cuộc kháng chiến chống thực dân Pháp (1945 - 1954)",
+          "chapter": "Chủ đề 3: CÁCH MẠNG THÁNG TÁM NĂM 1945, CHIẾN TRANH GIẢI PHÓNG DÂN TỘC VÀ CHIẾN TRANH BẢO VỆ TỔ QUỐC TRONG LỊCH SỬ VIỆT NAM",
+          "pages": [38, 45]
+        },
+        {
+          "number": 8,
+          "title": "Cuộc kháng chiến chống Mỹ, cứu nước (1954 - 1975)",
+          "chapter": "Chủ đề 3: CÁCH MẠNG THÁNG TÁM NĂM 1945, CHIẾN TRANH GIẢI PHÓNG DÂN TỘC VÀ CHIẾN TRANH BẢO VỆ TỔ QUỐC TRONG LỊCH SỬ VIỆT NAM",
+          "pages": [46, 54]
+        },
+        {
+          "number": 9,
+          "title": "Cuộc đấu tranh bảo vệ Tổ quốc từ sau tháng 4 - 1975 đến nay. Một số bài học lịch sử của các cuộc kháng chiến bảo vệ Tổ quốc từ năm 1945 đến nay",
+          "chapter": "Chủ đề 3: CÁCH MẠNG THÁNG TÁM NĂM 1945, CHIẾN TRANH GIẢI PHÓNG DÂN TỘC VÀ CHIẾN TRANH BẢO VỆ TỔ QUỐC TRONG LỊCH SỬ VIỆT NAM",
+          "pages": [55, 61]
+        },
+        {
+          "number": 10,
+          "title": "Khái quát về công cuộc Đổi mới từ năm 1986 đến nay",
+          "chapter": "Chủ đề 4: CÔNG CUỘC ĐỐI MỚI Ở VIỆT NAM TỪ NĂM 1986 ĐẾN NAY",
+          "pages": [62, 65]
+        },
+        {
+          "number": 11,
+          "title": "Thành tựu cơ bản và bài học của công cuộc Đổi mới ở Việt Nam từ năm 1986 đến nay",
+          "chapter": "Chủ đề 4: CÔNG CUỘC ĐỐI MỚI Ở VIỆT NAM TỪ NĂM 1986 ĐẾN NAY",
+          "pages": [66, 73]
+        },
+        {
+          "number": 12,
+          "title": "Hoạt động đối ngoại của Việt Nam trong đấu tranh giành độc lập dân tộc (từ đầu thế kỉ XX đến Cách mạng tháng Tám năm 1945)",
+          "chapter": "Chủ đề 5: LỊCH SỬ ĐỐI NGOẠI CỦA VIỆT NAM THỜI CẬN - HIỆN ĐẠI",
+          "pages": [74, 77]
+        },
+        {
+          "number": 13,
+          "title": "Hoạt động đối ngoại của Việt Nam trong kháng chiến chống Pháp (1945 - 1954) và kháng chiến chống Mỹ (1954 - 1975)",
+          "chapter": "Chủ đề 5: LỊCH SỬ ĐỐI NGOẠI CỦA VIỆT NAM THỜI CẬN - HIỆN ĐẠI",
+          "pages": [78, 82],
+          "section_fixes": [
+            {
+              "number": 1,
+              "at": "Hoạt động đối ngoại của Việt Nam trong kháng chiến chống Pháp (1945 – 1954)"
+            }
+          ]
+        },
+        {
+          "number": 14,
+          "title": "Hoạt động đối ngoại của Việt Nam từ năm 1975 đến nay",
+          "chapter": "Chủ đề 5: LỊCH SỬ ĐỐI NGOẠI CỦA VIỆT NAM THỜI CẬN - HIỆN ĐẠI",
+          "pages": [83, 88]
+        },
+        {
+          "number": 15,
+          "title": "Khái quát cuộc đời và sự nghiệp của Hồ Chí Minh",
+          "chapter": "Chủ đề 6: HỒ CHÍ MINH TRONG LỊCH SỬ VIỆT NAM",
+          "pages": [89, 94]
+        },
+        {
+          "number": 16,
+          "title": "Hồ Chí Minh - Anh hùng giải phóng dân tộc",
+          "chapter": "Chủ đề 6: HỒ CHÍ MINH TRONG LỊCH SỬ VIỆT NAM",
+          "pages": [95, 105]
+        },
+        {
+          "number": 17,
+          "title": "Dấu ấn Hồ Chí Minh trong lòng nhân dân thế giới và Việt Nam",
+          "chapter": "Chủ đề 6: HỒ CHÍ MINH TRONG LỊCH SỬ VIỆT NAM",
+          "pages": [106, 110]
+        }
+      ]
+    },
+    {
+      "kind": "sgv",
+      "grade": 6,
+      "file": "sach-giao-vien/SGV-Lich-Su-Va-Dia-Li-6.md",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-6.pdf",
+      "book": "Lịch sử và Địa lí 6 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "grade": 7,
+      "file": "sach-giao-vien/SGV-Lich-Su-Va-Dia-Li-7.md",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-7.pdf",
+      "book": "Lịch sử và Địa lí 7 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "grade": 8,
+      "file": "sach-giao-vien/SGV-Lich-Su-Va-Dia-Li-8.md",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-8.pdf",
+      "book": "Lịch sử và Địa lí 8 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "grade": 9,
+      "file": "sach-giao-vien/SGV-Lich-Su-Va-Dia-Li-9.md",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-9.pdf",
+      "book": "Lịch sử và Địa lí 9 (Phần Lịch sử) – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "grade": 10,
+      "file": "sach-giao-vien/SGV-Lich-Su-Va-Dia-Li-10.md",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-10.pdf",
+      "book": "Lịch sử 10 – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam",
+      "titles": {
+        "3": "Sử học với các lĩnh vực khoa học",
+        "4": "Sử học với một số lĩnh vực, ngành nghề hiện đại",
+        "9": "Cơ sở hình thành văn minh Đông Nam Á thời kì cổ – trung đại"
+      }
+    },
+    {
+      "kind": "sgv",
+      "grade": 11,
+      "file": "sach-giao-vien/SGV-Lich-Su-Va-Dia-Li-11.md",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-11.pdf",
+      "book": "Lịch sử 11 – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    },
+    {
+      "kind": "sgv",
+      "grade": 12,
+      "file": "sach-giao-vien/SGV-Lich-Su-Va-Dia-Li-12.md",
+      "source_pdf": "SGV-Lich-Su-Va-Dia-Li-12.pdf",
+      "book": "Lịch sử 12 – Sách giáo viên",
+      "book_series": "Kết nối tri thức với cuộc sống",
+      "publisher": "NXB Giáo dục Việt Nam"
+    }
+  ]
+}

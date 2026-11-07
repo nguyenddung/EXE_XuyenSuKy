@@ -8,6 +8,8 @@ import { eventResponse } from './enrichment.mjs'
 import { createVoiceSession, liveVoiceAvailable } from './voice-agents.mjs'
 
 const defaultLimiter = createLimiter()
+const sgkTypes = ['body', 'source', 'did_you_know', 'question', 'exercise', 'objectives', 'intro', 'caption', 'figure']
+const sgvTypes = ['objectives', 'guide', 'activity', 'reference']
 
 class HttpError extends Error {
   constructor(status, code, message) { super(message); this.status = status; this.code = code }
@@ -84,7 +86,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       res.setHeader('Allow', chat || speech || voiceSession ? 'POST' : 'GET, HEAD')
       throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : voiceSession ? 'Use POST to start a voice conversation.' : 'This dataset endpoint is read-only.')
     }
-    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys', 'events'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys', 'events', 'teacher-guides'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     if (speech) {
       const body = await readJsonBody(req, 32000)
       const audio = await (options.speech || synthesizeSpeech)({ characterId: parts[1], text: body.text, visitor: clientKey(req) })
@@ -154,8 +156,20 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       if (parts.length === 2) result = { ...data.summaries.find((item) => item.id === lessonId(lesson)), sections: lesson.sections.map((section) => ({ title: section.title, content: section.content, pageStart: section.page_start, pageEnd: section.page_end })) }
       else if (parts[2] === 'chunks') {
         const type = url.searchParams.get('type')
-        if (type && !['body', 'source', 'did_you_know', 'question', 'exercise', 'objectives', 'intro', 'caption'].includes(type)) badRequest('Unknown chunk content type.')
+        if (type && !sgkTypes.includes(type)) badRequest('Unknown chunk content type.')
         result = pagination(url.searchParams, data.lessonChunks.get(parts[1]).filter((chunk) => !type || chunk.content_type === type).map((chunk) => chunkResponse(chunk)))
+      }
+    } else if (route === 'teacher-guides') {
+      // Teacher's book (SGV) parts: one per lesson of the teacher's book plus its general guidance (lesson 0).
+      result = pagination(url.searchParams, data.guideSummaries.filter((guide) => !grade || guide.grade === grade))
+    } else if (parts[0] === 'teacher-guides' && /^GV\d{1,2}_B\d{2}$/.test(parts[1] || '')) {
+      const guide = data.guideById.get(parts[1])
+      if (!guide) throw new HttpError(404, 'GUIDE_NOT_FOUND', 'Teacher guide not found.')
+      if (parts.length === 2) result = { ...data.guideSummaries.find((item) => item.id === parts[1]), sections: guide.sections.map((section) => ({ title: section.title, content: section.content, pageStart: section.page_start, pageEnd: section.page_end })) }
+      else if (parts[2] === 'chunks') {
+        const type = url.searchParams.get('type')
+        if (type && !sgvTypes.includes(type)) badRequest('Unknown chunk content type.')
+        result = pagination(url.searchParams, data.guideChunks.get(parts[1]).filter((chunk) => !type || chunk.content_type === type).map((chunk) => chunkResponse(chunk)))
       }
     } else if (route === 'search') {
       if (normalize(query).length < 2) badRequest('Enter a query of at least two characters.')
