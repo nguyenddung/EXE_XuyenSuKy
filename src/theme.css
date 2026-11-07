@@ -12,6 +12,11 @@
 /* Brand, header and footer */
 .brand-mark { width: 39px; height: 39px; border: 2px solid #cf4c34; border-radius: 50%; background: #fff; color: #a53c2d; font-size: 24px; box-shadow: 0 0 0 3px #fff4df inset; }
 .brand-text { color: var(--sky-ink); font-size: 17px; letter-spacing: -.06em; }
+/* Logo files keep their own colours and proportions (README of xuyen-su-ky-logo-turtle-files): only the height changes. */
+.brand-logo { display: block; width: auto; height: 36px; }
+.dashboard-brand .brand-logo { height: 34px; }
+.site-footer .brand-logo { height: 40px; }
+@media (max-width: 479px) { .brand-logo { height: 30px; } }
 .site-header { border-color: var(--sky-line); background: #f9fbfef2; }
 .nav-link { color: #33496c; font-size: 13px; font-weight: 600; }
 .nav-link:hover { color: var(--sky-blue-strong); }

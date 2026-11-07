@@ -23,7 +23,7 @@ test('landing shares the dashboard look and its era cards open the lesson on /ho
   await page.setViewportSize({ width: 1366, height: 820 })
   await page.goto('/')
   await expect(page.getByRole('heading', { name: /Chạm vào quá khứ/ })).toBeVisible()
-  await expect(page.locator('.site-header .brand-text')).toHaveText('Xuyên Sử Ký')
+  await expect(page.locator('.site-header .brand-logo')).toHaveAttribute('alt', 'Xuyên Sử Ký')
   await expect(page.locator('.landing-hero .dashboard-era')).toHaveCount(6)
   await page.locator('.landing-hero .dashboard-era').filter({ hasText: 'Thời Lý' }).click()
   await expect(page).toHaveURL(/\/home#library$/)
