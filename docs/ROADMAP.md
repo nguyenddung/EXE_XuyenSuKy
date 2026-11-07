@@ -18,7 +18,7 @@ Ba điều Xuyên Sử Ký giữ trong mọi quyết định:
 
 | Đã có | Còn giới hạn |
 |---|---|
-| Thư viện SGK lớp 6–12: 130 bài, 2.708 đoạn tư liệu có trích nguồn; tìm kiếm không dấu, hiểu tên gọi khác | Văn bản SGK thuộc bản quyền NXB Giáo dục Việt Nam, chỉ dùng cho học tập và nghiên cứu, chưa được dùng thương mại |
+| Thư viện SGK lớp 6–12: 127 bài, 2.604 đoạn tư liệu có trích nguồn, kèm 7 sách giáo viên; tìm kiếm không dấu, hiểu tên gọi khác | Văn bản SGK thuộc bản quyền NXB Giáo dục Việt Nam, chỉ dùng cho học tập và nghiên cứu, chưa được dùng thương mại |
 | 12 nhân vật AI: nhắn tin, đọc câu trả lời, trò chuyện giọng nói trực tiếp; mỗi người một giọng; không nói chuyện sau thời mình | Giọng mặc định chưa có giọng vùng miền; agent giọng nói trực tiếp cần đồng bộ lại |
 | Hành trình game hoá lớp 6 (5 chương), video nhiệm vụ có thuyết minh | Hành trình mới có lớp 6; Chương 5 còn thiếu Bài 15, 17, 19, 20; video mới có Chương 2 và 1 nhiệm vụ Chương 5 |
 | 3 vai trò: học sinh, giáo viên (lớp, mã lớp, giao bài, CSV), quản trị (duyệt giáo viên, khoá tài khoản) | Tài khoản, lớp học, tiến độ chỉ lưu trên trình duyệt; phân quyền mới ở giao diện |
