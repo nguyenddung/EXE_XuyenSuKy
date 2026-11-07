@@ -1,0 +1,39 @@
+name: Build embeddings
+
+# Manual: rebuild data/embeddings for a branch after its dataset changed, and hand the files back as an
+# artifact to commit. Needs the repository secret OPENAI_API_KEY; spends a few cents of embedding calls.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch whose dataset needs new embeddings
+        required: true
+        default: main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Build the embedding index
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: npm run build:embeddings
+      - name: Check the index against the dataset
+        run: node --test --test-name-pattern "embedding index" tests/backend.test.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: embeddings
+          path: data/embeddings/
+          retention-days: 3
