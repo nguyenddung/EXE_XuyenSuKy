@@ -1,6 +1,7 @@
 import { chunkResponse, getDataset, lessonId, normalize, searchChunks } from './dataset.mjs'
 import { characterIndex, listCharacters } from './characters.mjs'
 import { answerCharacterQuestion } from './rag/pipeline.mjs'
+import { answerCompanionQuestion } from './companion.mjs'
 import { clientKey, createLimiter } from './rag/limits.mjs'
 import { SpeechError, synthesizeSpeech } from './speech.mjs'
 import { getJourneys } from './journeys.mjs'
@@ -67,11 +68,23 @@ async function readJsonBody(req, maxBytes = 16000) {
   return body
 }
 async function readChatBody(req) {
-  const body = await readJsonBody(req)
+  return validateChat(await readJsonBody(req))
+}
+function validateChat(body) {
   if (typeof body.message !== 'string' || !body.message.trim() || body.message.length > 1000) throw new HttpError(400, 'INVALID_BODY', 'message must contain 1–1000 characters.')
   const history = body.history ?? []
   if (!Array.isArray(history) || history.length > 8 || history.some((turn) => !turn || !['user', 'assistant'].includes(turn.role) || typeof turn.content !== 'string' || turn.content.length > 2000)) throw new HttpError(400, 'INVALID_BODY', 'Invalid conversation history.')
   return { message: body.message.trim(), history }
+}
+
+// The companion also gets its name, the student's grade and the lesson they read last (all optional and checked).
+async function readCompanionBody(req) {
+  const body = await readJsonBody(req)
+  const { message, history } = validateChat(body)
+  if (body.name !== undefined && (typeof body.name !== 'string' || body.name.length > 40)) throw new HttpError(400, 'INVALID_BODY', 'name must have at most 40 characters.')
+  if (body.grade !== undefined && body.grade !== null && (!Number.isInteger(body.grade) || body.grade < 6 || body.grade > 12)) throw new HttpError(400, 'INVALID_BODY', 'grade must be an integer from 6 to 12.')
+  if (body.lessonId !== undefined && body.lessonId !== null && (typeof body.lessonId !== 'string' || !/^LS\d{1,2}_B\d{2}$/.test(body.lessonId))) throw new HttpError(400, 'INVALID_BODY', 'lessonId is not a lesson id.')
+  return { message, history, name: body.name, grade: body.grade ?? undefined, lessonId: body.lessonId ?? undefined }
 }
 
 // options.limiter and options.rag let tests replace the rate limiter and the OpenAI-facing dependencies.
@@ -85,11 +98,14 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
     const chat = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'chat'
     const speech = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'speech'
     const voiceSession = parts[0] === 'characters' && parts.length === 3 && parts[2] === 'voice-session'
-    if (chat || speech || voiceSession ? req.method !== 'POST' : !['GET', 'HEAD'].includes(req.method)) {
-      res.setHeader('Allow', chat || speech || voiceSession ? 'POST' : 'GET, HEAD')
-      throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : voiceSession ? 'Use POST to start a voice conversation.' : 'This dataset endpoint is read-only.')
+    const companion = route === 'companion/chat'
+    const post = chat || speech || voiceSession || companion
+    if (post ? req.method !== 'POST' : !['GET', 'HEAD'].includes(req.method)) {
+      res.setHeader('Allow', post ? 'POST' : 'GET, HEAD')
+      throw new HttpError(405, 'METHOD_NOT_ALLOWED', speech ? 'Use POST for character speech.' : chat ? 'Use POST for character chat.' : voiceSession ? 'Use POST to start a voice conversation.' : companion ? 'Use POST for companion chat.' : 'This dataset endpoint is read-only.')
     }
-    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys', 'events', 'teacher-guides'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    if (parts[0] === 'companion' && !companion) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
+    if (!['health', 'metadata', 'lessons', 'search', 'chunks', 'characters', 'journeys', 'events', 'teacher-guides', 'companion'].includes(parts[0]) || parts.length > 3) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     if (parts[0] === 'teacher-guides' && !teacherGuidesOpen(options)) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
     if (speech) {
       const body = await readJsonBody(req, 32000)
@@ -120,6 +136,13 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       if (!characterIndex(data).some((entry) => entry.profile.id === parts[1])) throw new HttpError(404, 'CHARACTER_NOT_FOUND', 'Character not found in this dataset.')
       const body = await readChatBody(req)
       result = await answerCharacterQuestion({ dataset: data, characterId: parts[1], message: body.message, history: body.history, visitor, deps: { limiter, ...options.rag } })
+    }
+    else if (companion) {
+      const visitor = clientKey(req)
+      const rate = await limiter.allowRequest(visitor)
+      if (!rate.allowed) { req.resume(); throw new RateLimitError(rate.retryAfter) }
+      const body = await readCompanionBody(req)
+      result = await (options.companion || answerCompanionQuestion)({ dataset: data, ...body, visitor, deps: { limiter, ...options.rag } })
     }
     else if (route === 'characters') { const items = listCharacters(data, grade, query); result = { items: items.map((item) => ({ ...item, liveVoice: liveVoiceAvailable(item.id) })), total: items.length, datasetVersion: data.metadata.version, mode: 'textbook' } }
     else if (parts[0] === 'characters' && parts.length === 2) {
@@ -184,7 +207,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
       result = chunkResponse(chunk)
     }
     if (!result) throw new HttpError(404, 'NOT_FOUND', 'API endpoint not found.')
-    send(res, 200, result, head, !chat)
+    send(res, 200, result, head, !chat && !companion)
   } catch (error) {
     if (error instanceof SpeechError) {
       if (error.retryAfter) res.setHeader('Retry-After', String(error.retryAfter))

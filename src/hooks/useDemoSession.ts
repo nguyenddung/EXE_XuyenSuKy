@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { verifyLocal } from '../lib/localAccount'
 import { demoAccount } from '../data/demo'
+import { markSignedIn } from '../lib/companion'
 import { accessProblem, chooseOwnGrade, demoStaff, ensureStudent, findUserByEmail, normalizeEmail, readSchool, roleLabels, writeSchool, type Role } from '../lib/school'
 
 export interface DemoSession {
@@ -127,6 +128,8 @@ export function useDemoSession() {
     // The directory's grade wins; a student without one keeps the grade already chosen in this browser (e.g. as a guest), else picks it next.
     const studentGrade = actual === 'student' ? { grade: member?.grade ?? latest.current.grade, gradeSelected: member?.grade !== undefined || latest.current.gradeSelected } : {}
     update((previous) => ({ ...previous, loggedIn: true, guest: false, userId: normalized, name, role: actual, expiresAt, ...studentGrade }))
+    // The study companion opens once, ready to chat, the next time the learning app shows.
+    markSignedIn()
     return true
   }
 

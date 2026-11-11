@@ -100,6 +100,7 @@ Sao chép `.env.example` thành `.env.local` (đã được Git bỏ qua) rồi 
 | `TEACHER_GUIDES_API` | — | `1` để mở API sách giáo viên (`/api/teacher-guides`). Mặc định đóng: SGV có đáp án bài tập và chưa xác nhận quyền công bố |
 | `CHAT_RATE_PER_MINUTE` | `12` | Số câu hỏi mỗi phút mỗi IP (vượt → HTTP 429) |
 | `AI_ANSWERS_PER_DAY` / `AI_GLOBAL_ANSWERS_PER_DAY` | `40` / `500` | Hạn mức câu trả lời AI mỗi IP / toàn hệ thống |
+| `COMPANION_AI_PER_DAY` | `30` | Hạn mức câu trả lời AI của bạn đồng hành mỗi IP, tính riêng với nhân vật; vẫn chung hạn mức toàn hệ thống |
 | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | — | Dùng chung bộ đếm giới hạn giữa các instance |
 | `SPEECH_PROVIDER` | — | `elevenlabs` hoặc `azure` |
 | `ELEVENLABS_API_KEY`, `ELEVENLABS_MODEL` | — | Giọng đọc, trò chuyện trực tiếp và thuyết minh video; mỗi nhân vật một giọng riêng trong `shared/character-voices.json` |
@@ -205,6 +206,7 @@ Mọi endpoint nằm dưới `/api`, trả JSON, lỗi có dạng `{ "error": { 
 | `POST /characters/{id}/chat` | `{ "message": "...", "history": [] }` → câu trả lời, nguồn, bài học |
 | `POST /characters/{id}/speech` | `{ "text": "..." }` → MP3 |
 | `POST /characters/{id}/voice-session` | Mở phiên trò chuyện giọng nói trực tiếp |
+| `POST /companion/chat` | `{ "message": "...", "history": [], "name": "Bông", "grade": 6, "lessonId": "LS6_B04" }` → câu trả lời của bạn đồng hành (cách dùng web từ `shared/companion-guide.json`, kiến thức từ SGK có nguồn, mẹo học), nút mở mục liên quan |
 | `GET /journeys?grade=6`, `GET /journeys/{id}` | Hành trình game hoá |
 
 Ràng buộc chung: `page ≥ 1`, `limit` 1–50, `grade` 6–12, `q` tối đa 200 ký tự (tìm kiếm cần ít nhất 2 ký tự). Tìm kiếm chỉ trả chunk SGK loại `body`, `source`, `did_you_know`, `caption`, `figure`, không coi câu hỏi, bài tập hay sách giáo viên là câu trả lời.
