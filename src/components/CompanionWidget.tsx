@@ -1,15 +1,24 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type FormEvent, type KeyboardEvent, type PointerEvent } from 'react'
-import { ArrowDownLeft, ArrowDownRight, ArrowUpLeft, ArrowUpRight, MessageCircle, PencilLine, X } from 'lucide-react'
-import { clampPoint, cleanCompanionName, floatingPlacement, fromRatio, greetingFor, nameProblemMessage, readCompanion, readCompanionPosition, speciesOf, studyStatus, toRatio, writeCompanion, writeCompanionPosition, type CompanionState, type Point, type Size } from '../lib/companion'
+import { ArrowDownLeft, ArrowDownRight, ArrowLeft, ArrowUpLeft, ArrowUpRight, MessageCircle, PencilLine, Settings2, Trash2, X } from 'lucide-react'
+import { clampPoint, cleanCompanionName, clearSignedIn, floatingPlacement, fromRatio, greetingFor, nameProblemMessage, readCompanion, readCompanionPosition, signedInPending, speciesOf, studyStatus, toRatio, writeCompanion, writeCompanionPosition, writeConversation, type CompanionAction, type CompanionState, type Point, type Size, type StudyStats } from '../lib/companion'
 import { dayKey, type Journal } from '../hooks/useLearningJournal'
 import { showSection } from '../lib/sections'
 import { mascotFor, type MascotMood } from './CompanionMascot'
+import { CompanionChat } from './CompanionChat'
 
 interface Props {
   /** storageOwner(session): account id, 'guest', or null when unknown (the name then lasts until the page closes). */
   owner: string | null
   journal: Journal
   learningStreak: number
+  /** A signed-in member can chat; a guest names the companion and is invited to sign in. */
+  loggedIn: boolean
+  grade?: number
+  /** Lessons read and XP, for questions about the student's own progress. */
+  readCount: number
+  xp: number
+  onSignIn: () => void
+  onOpenLesson: (lessonId: string) => void
 }
 
 // "Để sau" on the naming invitation hides it for this tab only; it comes back on the next visit until a name is chosen.
@@ -31,20 +40,26 @@ const corners: { corner: Corner; label: string; icon: typeof ArrowUpLeft }[] = [
 ]
 
 /**
- * The study companion of the learning app (step 1: naming and greetings, no AI yet). It can be dragged anywhere
- * on screen, moved with the arrow keys, or sent to a corner from its panel; the bubble and panel open on the side
- * with more room.
+ * The study companion of the learning app: named by the student, it chats about the app, the lessons and how to
+ * study (signed-in members only). Right after signing in it opens once, ready to chat. It can be dragged anywhere
+ * on screen, moved with the arrow keys, or sent to a corner from its settings; the bubble and panel open on the
+ * side with more room.
  */
-export function CompanionWidget({ owner, journal, learningStreak }: Props) {
+export function CompanionWidget({ owner, journal, learningStreak, loggedIn, grade, readCount, xp, onSignIn, onOpenLesson }: Props) {
   const [initial] = useState(() => {
     const stored = readCompanion(owner)
-    const bubble: Bubble = stored ? (stored.lastGreetDay === dayKey() ? null : 'greeting') : laterThisTab() ? null : 'intro'
-    return { stored, bubble }
+    // Just signed in: open the panel straight away (without moving the focus) instead of showing a bubble.
+    const autoOpen = loggedIn && signedInPending()
+    const bubble: Bubble = autoOpen ? null : stored ? (stored.lastGreetDay === dayKey() ? null : 'greeting') : laterThisTab() ? null : 'intro'
+    return { stored, bubble, autoOpen }
   })
   const [companion, setCompanion] = useState<CompanionState | null>(initial.stored)
   const [bubble, setBubble] = useState<Bubble>(initial.bubble)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(initial.autoOpen)
   const [renaming, setRenaming] = useState(false)
+  const [settings, setSettings] = useState(false)
+  // An opening the student asked for moves the focus into the panel; the one after signing in does not.
+  const focusOnOpen = useRef(!initial.autoOpen)
   const [justNamed, setJustNamed] = useState(false)
   const [saved, setSaved] = useState(true)
   // null: the default corner from the stylesheet; otherwise the launcher's top-left corner on screen.
@@ -61,7 +76,11 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
   const species = speciesOf(companion?.species)
   const Mascot = mascotFor(species.id)
   const today = dayKey()
-  const status = studyStatus({ done: journal.events.filter((event) => event.day === today).length, goal: journal.goal, streak: learningStreak })
+  const done = journal.events.filter((event) => event.day === today).length
+  const status = studyStatus({ done, goal: journal.goal, streak: learningStreak })
+  // The lesson opened last: the companion's textbook context, and the one to resume if it is not finished.
+  const [lastLessonId, lastLesson] = Object.entries(journal.reading).sort((a, b) => b[1].openedAt.localeCompare(a[1].openedAt))[0] ?? []
+  const stats: StudyStats = { done, goal: journal.goal, streak: learningStreak, readCount, xp, ...(lastLessonId && lastLesson && !journal.read.includes(lastLessonId) ? { resume: { lessonId: lastLessonId, title: lastLesson.title } } : {}) }
   const mood: MascotMood = motion ?? (bubble && !open ? 'wave' : 'idle')
 
   const sizeOf = (): Size => ({ width: launcher.current?.offsetWidth ?? 76, height: launcher.current?.offsetHeight ?? 84 })
@@ -106,10 +125,11 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
     return () => window.clearTimeout(timer)
   }, [bubble])
 
-  useEffect(() => { if (open && companion && !renaming) title.current?.focus() }, [open, renaming])
+  useEffect(() => { if (initial.autoOpen) clearSignedIn() }, [])
+  useEffect(() => { if (open && companion && !renaming && focusOnOpen.current) title.current?.focus() }, [open, renaming, settings])
 
-  function openPanel() { setBubble(null); setOpen(true); play('happy', 900) }
-  function closePanel() { setOpen(false); setRenaming(false); setJustNamed(false); launcher.current?.focus() }
+  function openPanel() { focusOnOpen.current = true; setBubble(null); setOpen(true); play('happy', 900) }
+  function closePanel() { setOpen(false); setRenaming(false); setSettings(false); setJustNamed(false); launcher.current?.focus() }
   function later() {
     try { sessionStorage.setItem(laterKey, '1') } catch { /* It then comes back on the next page load. */ }
     setBubble(null)
@@ -118,9 +138,21 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
     const first = !companion
     save({ species: species.id, name, namedAt: new Date().toISOString(), lastGreetDay: today })
     setRenaming(false)
+    setSettings(false)
     setJustNamed(first)
     play('happy', 1200)
+    focusOnOpen.current = true
     window.setTimeout(() => title.current?.focus(), 0)
+  }
+  function act(action: CompanionAction) {
+    closePanel()
+    if (action.lessonId) onOpenLesson(action.lessonId)
+    else if (action.view) showSection(action.view)
+  }
+  function clearConversation() {
+    if (!window.confirm('Xoá toàn bộ cuộc trò chuyện với bạn đồng hành trên trình duyệt này?')) return
+    writeConversation(owner, [])
+    setSettings(false)
   }
   function onPanelKey(event: KeyboardEvent) {
     if (event.key === 'Escape') { event.stopPropagation(); closePanel() }
@@ -206,34 +238,38 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
         </>}
     </div>}
 
-    {open && anchor && <section id="companion-panel" className="companion-panel" role="dialog" aria-labelledby="companion-title" onKeyDown={onPanelKey} style={floating(panelWidth, 520)}>
+    {open && anchor && <section id="companion-panel" className="companion-panel" role="dialog" aria-labelledby="companion-title" onKeyDown={onPanelKey} style={floating(panelWidth, 560)}>
       <header className="companion-header">
         <span className="companion-header-figure"><Mascot size={40} /></span>
         <div>
           <span>Bạn đồng hành</span>
           <h2 id="companion-title" ref={title} tabIndex={-1}>{companion?.name ?? `Bạn ${species.label} mới`}</h2>
         </div>
+        {companion && <button type="button" aria-label={settings ? 'Quay lại trò chuyện' : 'Tuỳ chỉnh bạn đồng hành'} aria-pressed={settings} title="Tuỳ chỉnh" onClick={() => { setSettings(!settings); setRenaming(false) }}>{settings ? <ArrowLeft size={18} /> : <Settings2 size={18} />}</button>}
         <button type="button" aria-label="Đóng bạn đồng hành" onClick={closePanel}><X size={18} /></button>
       </header>
-      <div className="companion-body">
-        {!companion || renaming
-          ? <NameForm key={renaming ? 'rename' : 'first'} initial={companion?.name} suggestions={species.suggestions} speciesLabel={species.label} onSave={chooseName} onCancel={renaming ? () => { setRenaming(false); window.setTimeout(() => title.current?.focus(), 0) } : undefined} />
-          : <>
-            <p className="companion-message">{justNamed ? `Từ giờ mình là ${companion.name}! Mình sẽ ở cạnh, học cùng bạn mỗi ngày.` : greetingFor(companion.name)} {status}</p>
-            {!saved && <p className="companion-hint">Trình duyệt chưa cho lưu dữ liệu, nên tên này chỉ giữ đến khi tải lại trang.</p>}
-            <div className="companion-actions">
-              <button type="button" className="companion-primary" onClick={() => { closePanel(); showSection('characters') }}><MessageCircle size={16} /> Nghe nhân vật lịch sử kể chuyện</button>
-              <button type="button" className="companion-quiet" onClick={() => setRenaming(true)}><PencilLine size={16} /> Đổi tên</button>
-            </div>
-            <p className="companion-hint">Sắp tới, bạn có thể hỏi {companion.name} về bài đang học, cách lập kế hoạch học và mẹo ghi nhớ.</p>
-          </>}
-        <div className="companion-seat">
-          <p id="companion-seat-label">Kéo {companion?.name ?? 'mình'} đi bất kỳ đâu trên màn hình, hoặc chọn một góc:</p>
-          <div role="group" aria-labelledby="companion-seat-label">
-            {corners.map(({ corner, label: name, icon: Icon }) => <button type="button" key={corner} aria-label={name} title={name} onClick={() => moveToCorner(corner)}><Icon size={16} /></button>)}
-          </div>
+      {!companion || renaming
+        ? <div className="companion-body">
+          <NameForm key={renaming ? 'rename' : 'first'} initial={companion?.name} suggestions={species.suggestions} speciesLabel={species.label} autoFocus={focusOnOpen.current} onSave={chooseName} onCancel={renaming ? () => { setRenaming(false); window.setTimeout(() => title.current?.focus(), 0) } : undefined} />
         </div>
-      </div>
+        : settings
+          ? <div className="companion-body">
+            {!saved && <p className="companion-hint">Trình duyệt chưa cho lưu dữ liệu, nên tên này chỉ giữ đến khi tải lại trang.</p>}
+            <div className="companion-actions companion-settings">
+              <button type="button" className="companion-quiet" onClick={() => setRenaming(true)}><PencilLine size={16} /> Đổi tên</button>
+              <button type="button" className="companion-quiet" onClick={() => act({ label: '', view: 'characters' })}><MessageCircle size={16} /> Nghe nhân vật lịch sử kể chuyện</button>
+              {loggedIn && <button type="button" className="companion-quiet" onClick={clearConversation}><Trash2 size={16} /> Xoá cuộc trò chuyện</button>}
+            </div>
+            <div className="companion-seat">
+              <p id="companion-seat-label">Kéo {companion.name} đi bất kỳ đâu trên màn hình, hoặc chọn một góc:</p>
+              <div role="group" aria-labelledby="companion-seat-label">
+                {corners.map(({ corner, label: name, icon: Icon }) => <button type="button" key={corner} aria-label={name} title={name} onClick={() => moveToCorner(corner)}><Icon size={16} /></button>)}
+              </div>
+            </div>
+          </div>
+          : <CompanionChat key={owner ?? ''} owner={owner} name={companion.name} loggedIn={loggedIn} grade={grade} lessonId={lastLessonId} stats={stats}
+            greeting={`${justNamed ? `Từ giờ mình là ${companion.name}!` : greetingFor(companion.name)} ${status}${loggedIn ? ' Bạn muốn hỏi gì nào?' : ''}`}
+            onSignIn={() => { closePanel(); onSignIn() }} onAction={act} onReply={() => play('happy', 900)} />}
     </section>}
 
     <button ref={launcher} type="button" className="companion-launcher" aria-label={label} aria-describedby="companion-move-hint" aria-expanded={open} aria-controls={open ? 'companion-panel' : undefined}
@@ -245,11 +281,11 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
   </div>
 }
 
-function NameForm({ initial = '', suggestions, speciesLabel, onSave, onCancel }: { initial?: string; suggestions: readonly string[]; speciesLabel: string; onSave: (name: string) => void; onCancel?: () => void }) {
+function NameForm({ initial = '', suggestions, speciesLabel, autoFocus = true, onSave, onCancel }: { initial?: string; suggestions: readonly string[]; speciesLabel: string; autoFocus?: boolean; onSave: (name: string) => void; onCancel?: () => void }) {
   const [value, setValue] = useState(initial)
   const [error, setError] = useState('')
   const input = useRef<HTMLInputElement>(null)
-  useEffect(() => { input.current?.focus() }, [])
+  useEffect(() => { if (autoFocus) input.current?.focus() }, [])
 
   function submit(event: FormEvent) {
     event.preventDefault()

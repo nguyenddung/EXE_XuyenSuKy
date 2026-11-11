@@ -232,7 +232,7 @@ export function HomePage({ landing = false }: { landing?: boolean }) {
         onGame={setActiveGame}
         onChat={openCharacter}
       />}
-      {!landing && <CompanionWidget key={chatOwner ?? ''} owner={chatOwner} journal={learning.journal} learningStreak={streak(learning.journal.events)} />}
+      {!landing && <CompanionWidget key={chatOwner ?? ''} owner={chatOwner} journal={learning.journal} learningStreak={streak(learning.journal.events)} loggedIn={session.loggedIn} grade={session.grade} readCount={learning.journal.read.length} xp={progressSession.earnedXp} onSignIn={() => { setPendingActivity(null); setPendingCharacter(null); setLoginOpen(true) }} onOpenLesson={readLesson} />}
       {notice && <div className="toast" role="status">✦ {notice}</div>}
       {activeGame && <MiniGameModal key={activeGame} gameId={activeGame} completed={session.completedActivities.includes(`minigame-${activeGame}`)} bestStars={session.gameRecords[activeGame] || 0} onRecord={recordGame} onComplete={completeLearning} onClose={() => setActiveGame(null)} />}
       {activeCharacter && session.loggedIn && <CharacterChatModal key={`${chatOwner ?? ''}:${activeCharacter.id}`} historyOwner={chatOwner} grade={gradeLocked(session) ? session.grade : undefined} onSwitchCharacter={switchCharacter} character={activeCharacter} initialMode={characterMode} onClose={() => setActiveCharacter(null)} onOpenLesson={(id) => { setActiveCharacter(null); if (landing) { openLessonFromLanding(id); return } setLibrarySource('dataset'); setRequestedLessonId(id); showSection('library') }} />}

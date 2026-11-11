@@ -1,11 +1,12 @@
 import { expect, test, type Page } from '@playwright/test'
-import { memberSession, signInAsMember } from './member'
+import { memberInGrade, memberSession, signInAsMember } from './member'
 
 // Specs start in guest mode (playwright.config.ts): the companion record of a guest is stored under the owner 'guest'.
 const guestKey = 'xuyen-su-ky-companion-v1:guest'
 const memberKey = `xuyen-su-ky-companion-v1:${encodeURIComponent(memberSession.userId)}`
 const launcher = (page: Page) => page.getByRole('button', { name: /^Bạn đồng hành/ })
 const panel = (page: Page) => page.locator('#companion-panel')
+const settings = (page: Page) => panel(page).getByRole('button', { name: 'Tuỳ chỉnh bạn đồng hành' })
 const bubble = (page: Page) => page.locator('.companion-bubble')
 const stored = (page: Page, key: string) => page.evaluate((name) => JSON.parse(localStorage.getItem(name) || 'null'), key)
 const vietnamDay = (offset = 0) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(Date.now() + offset * 86_400_000))
@@ -60,6 +61,7 @@ test('renaming keeps the old name until a valid new one is saved', async ({ page
   await page.addInitScript(([key, day]) => localStorage.setItem(key, JSON.stringify({ species: 'turtle', name: 'Bông', namedAt: '2026-11-01T08:00:00.000Z', lastGreetDay: day })), [guestKey, vietnamDay()] as const)
   await page.goto('/home')
   await launcher(page).click()
+  await settings(page).click()
   await panel(page).getByRole('button', { name: 'Đổi tên' }).click()
   const input = panel(page).getByLabel('Tên mới cho bạn đồng hành')
   await expect(input).toHaveValue('Bông')
@@ -206,6 +208,7 @@ test('the companion moves with the arrow keys and the corner buttons', async ({ 
   expect(await page.evaluate(() => window.scrollY)).toBe(0)
 
   await launcher(page).click()
+  await settings(page).click()
   await panel(page).getByRole('button', { name: 'Góc trên bên trái' }).click()
   const corner = await box(page)
   expect(corner.x).toBeLessThan(40)
@@ -229,4 +232,90 @@ test('the turtle waves while it calls, and is happy when named', async ({ page }
   await page.keyboard.press('Enter')
   await expect(mascot(page)).toHaveAttribute('data-mood', 'happy')
   await expect(mascot(page)).toHaveAttribute('data-mood', 'idle')
+})
+
+// Chat. The test server runs with AI_DISABLED=1: answers come from the app guide, the textbook or the browser's data.
+const chatInput = (page: Page) => panel(page).getByRole('textbox', { name: /^Câu hỏi cho/ })
+const answers = (page: Page) => panel(page).locator('.companion-answer')
+const namedMember = (page: Page) => page.addInitScript(([key, day]) => localStorage.setItem(key, JSON.stringify({ species: 'turtle', name: 'Bông', namedAt: '2026-11-01T08:00:00.000Z', lastGreetDay: day })), [memberKey, vietnamDay()] as const)
+
+test('a guest names the companion but is invited to sign in to chat', async ({ page }) => {
+  await named(page)
+  await page.goto('/home')
+  await launcher(page).click()
+  await expect(chatInput(page)).toHaveCount(0)
+  await panel(page).getByRole('button', { name: 'Đăng nhập để trò chuyện' }).click()
+  await expect(panel(page)).toHaveCount(0)
+  await expect(page.getByRole('dialog')).toContainText('Đăng nhập')
+})
+
+test.describe('signing in', () => {
+  test.use({ storageState: { cookies: [], origins: [] } })
+
+  test('right after signing in the companion opens once, ready to chat, without taking the focus', async ({ page }) => {
+    await namedMember(page)
+    await page.goto('/dang-nhap')
+    await page.getByRole('button', { name: 'Điền tài khoản mẫu' }).click()
+    await page.locator('.login-form button[type=submit]').click()
+    await page.locator('.grade-onboarding .button-primary').click()
+    await expect(page).toHaveURL(/\/home$/)
+    await expect(panel(page)).toBeVisible()
+    await expect(panel(page).getByRole('group', { name: 'Câu hỏi gợi ý' })).toBeVisible()
+    await expect(chatInput(page)).toBeVisible()
+    await expect(chatInput(page)).not.toBeFocused()
+    expect(await page.evaluate(() => document.activeElement?.closest('#companion-panel') ?? null)).toBeNull()
+    // Once per sign-in: a reload in the same session keeps it closed.
+    await page.reload()
+    await expect(launcher(page)).toBeVisible()
+    await expect(panel(page)).toHaveCount(0)
+  })
+})
+
+test('a member chats about the app, their progress and the textbook; the talk is kept and can be cleared', async ({ page }) => {
+  await memberInGrade(page, 6)
+  await namedMember(page)
+  await page.goto('/home')
+  await launcher(page).click()
+
+  // A suggested question about the app, answered from the guide with a button to the section.
+  await panel(page).getByRole('group', { name: 'Câu hỏi gợi ý' }).getByRole('button', { name: 'Hành trình là gì?' }).click()
+  await expect(answers(page)).toHaveCount(1)
+  await expect(answers(page).first()).toContainText('mỗi chặng là một bài')
+  await expect(panel(page).getByRole('group', { name: 'Câu hỏi gợi ý' })).toHaveCount(0)
+
+  // Progress comes from this browser, without a request.
+  let requests = 0
+  page.on('request', (request) => { if (request.url().includes('/api/companion/chat')) requests++ })
+  await chatInput(page).fill('Mình đã học được bao nhiêu bài rồi?')
+  await page.keyboard.press('Enter')
+  await expect(answers(page)).toHaveCount(2)
+  await expect(answers(page).nth(1)).toContainText('đã đọc xong 0 bài')
+  expect(requests).toBe(0)
+
+  // A history question: a cited textbook passage of the student's grade.
+  await chatInput(page).fill('Trận Bạch Đằng năm 938 do ai chỉ huy?')
+  await panel(page).getByRole('button', { name: 'Gửi' }).click()
+  await expect(answers(page)).toHaveCount(3)
+  await expect(answers(page).nth(2).getByRole('list', { name: 'Nguồn' })).toContainText('trang')
+  expect(requests).toBe(1)
+
+  // Kept after a reload.
+  await page.reload()
+  await launcher(page).click()
+  await expect(answers(page)).toHaveCount(3)
+  await expect(panel(page).locator('.companion-ask')).toHaveCount(3)
+
+  // The answer's button opens its section and closes the panel.
+  await answers(page).first().getByRole('button', { name: 'Mở Hành trình' }).click()
+  await expect(panel(page)).toHaveCount(0)
+  await expect(page).toHaveURL(/#journey$/)
+
+  // Cleared from the settings.
+  await launcher(page).click()
+  await settings(page).click()
+  page.once('dialog', (dialog) => dialog.accept())
+  await panel(page).getByRole('button', { name: 'Xoá cuộc trò chuyện' }).click()
+  await expect(answers(page)).toHaveCount(0)
+  await expect(panel(page).getByRole('group', { name: 'Câu hỏi gợi ý' })).toBeVisible()
+  expect(await page.evaluate((key) => localStorage.getItem(key), `xuyen-su-ky-companion-chat-v1:${encodeURIComponent(memberSession.userId)}`)).toBeNull()
 })

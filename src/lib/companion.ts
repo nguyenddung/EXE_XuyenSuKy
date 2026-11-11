@@ -140,3 +140,105 @@ export function floatingPlacement(anchor: Point & Size, view: Size, width: numbe
     ? { side: 'above' as const, left, bottom: Math.round(view.height - anchor.top + gap), maxHeight: Math.max(0, Math.round(roomAbove)) }
     : { side: 'below' as const, left, top: Math.round(anchor.top + anchor.height + gap), maxHeight: Math.max(0, Math.round(roomBelow)) }
 }
+
+/* Signing in opens the companion once, ready to chat: login() leaves a mark for this tab and the companion takes
+   it away the first time it appears. A remembered sign-in or a reload therefore does not open it again. */
+const signedInKey = 'xuyen-su-ky-companion-signed-in'
+export function markSignedIn() { try { sessionStorage.setItem(signedInKey, '1') } catch { /* The companion then stays closed. */ } }
+/** Read without side effects (React may run state initialisers twice); clearSignedIn() takes the mark away. */
+export function signedInPending() { try { return sessionStorage.getItem(signedInKey) === '1' } catch { return false } }
+export function clearSignedIn() { try { sessionStorage.removeItem(signedInKey) } catch { /* Nothing to clear. */ } }
+
+/* The conversation, one record per owner like the name. Only text, sources and buttons are kept, never audio,
+   errors or loading state. */
+export interface CompanionAction { label: string; view?: string; lessonId?: string }
+export interface CompanionSource { lessonId: string | null; lessonTitle: string; grade: number; book: string; pageStart: number; pageEnd: number }
+export interface CompanionMessage {
+  id: string
+  role: 'user' | 'companion'
+  text: string
+  /** Epoch milliseconds. */
+  at: number
+  sources?: CompanionSource[]
+  action?: CompanionAction
+  notice?: string
+}
+export const MAX_COMPANION_MESSAGES = 40
+export const companionViews = ['dashboard', 'library', 'journey', 'timeline', 'characters', 'challenges', 'progress']
+const chatPrefix = 'xuyen-su-ky-companion-chat-v1'
+export const conversationKey = (owner: string) => `${chatPrefix}:${encodeURIComponent(owner)}`
+const lessonPattern = /^LS\d{1,2}_B\d{2}$/
+const text = (value: unknown, max: number) => typeof value === 'string' ? value.slice(0, max) : null
+
+function cleanAction(value: unknown): CompanionAction | undefined {
+  if (!value || typeof value !== 'object') return undefined
+  const { label, view, lessonId } = value as Record<string, unknown>
+  const name = text(label, 60)
+  if (!name) return undefined
+  if (typeof view === 'string' && companionViews.includes(view)) return { label: name, view }
+  if (typeof lessonId === 'string' && lessonPattern.test(lessonId)) return { label: name, lessonId }
+  return undefined
+}
+function cleanSource(value: unknown): CompanionSource | null {
+  if (!value || typeof value !== 'object') return null
+  const item = value as Record<string, unknown>
+  const lessonTitle = text(item.lessonTitle, 300), book = text(item.book, 300)
+  if (!lessonTitle || !book || !Number.isInteger(item.grade) || !Number.isFinite(item.pageStart) || !Number.isFinite(item.pageEnd)) return null
+  return { lessonId: typeof item.lessonId === 'string' && lessonPattern.test(item.lessonId) ? item.lessonId : null, lessonTitle, grade: item.grade as number, book, pageStart: item.pageStart as number, pageEnd: item.pageEnd as number }
+}
+function cleanMessage(value: unknown): CompanionMessage | null {
+  if (!value || typeof value !== 'object') return null
+  const item = value as Record<string, unknown>
+  const body = text(item.text, 4000), id = text(item.id, 80)
+  if (!body || !id || (item.role !== 'user' && item.role !== 'companion') || typeof item.at !== 'number' || !Number.isFinite(item.at)) return null
+  const sources = Array.isArray(item.sources) ? item.sources.map(cleanSource).filter((source): source is CompanionSource => source !== null).slice(0, 5) : []
+  const action = cleanAction(item.action)
+  const notice = text(item.notice, 300)
+  return { id, role: item.role, text: body, at: item.at, ...(sources.length ? { sources } : {}), ...(action ? { action } : {}), ...(notice ? { notice } : {}) }
+}
+
+export function readConversation(owner: string | null, storage = browserStorage()): CompanionMessage[] {
+  if (!owner || !storage) return []
+  try {
+    const value = JSON.parse(storage.getItem(conversationKey(owner)) || '[]')
+    return Array.isArray(value) ? value.map(cleanMessage).filter((message): message is CompanionMessage => message !== null).slice(-MAX_COMPANION_MESSAGES) : []
+  } catch { return [] }
+}
+export function writeConversation(owner: string | null, messages: CompanionMessage[], storage = browserStorage()): boolean {
+  if (!owner || !storage) return false
+  try {
+    if (messages.length) storage.setItem(conversationKey(owner), JSON.stringify(messages.slice(-MAX_COMPANION_MESSAGES)))
+    else storage.removeItem(conversationKey(owner))
+    return true
+  } catch { return false }
+}
+
+/** What the student has done so far, from this browser only; it never leaves the page. */
+export interface StudyStats {
+  done: number
+  goal: number
+  streak: number
+  readCount: number
+  xp: number
+  /** The lesson left half-read, if any. */
+  resume?: { lessonId: string; title: string }
+}
+
+/**
+ * Questions about the student's own progress are answered here, from the browser's data: no request, no model,
+ * and nothing personal sent anywhere.
+ */
+export function localAnswer(question: string, stats: StudyStats): { text: string; action?: CompanionAction } | null {
+  const q = question.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase()
+  if (/\b(hom nay|bay gio|tiep theo)\b.*\b(hoc gi|nen hoc|lam gi)\b|\b(hoc gi tiep|nen hoc gi|bat dau tu dau hom nay)\b/.test(q)) {
+    const goal = stats.done >= stats.goal ? `Bạn đã đạt mục tiêu ${stats.goal} hoạt động hôm nay rồi, học thêm là để vui thôi!` : `Hôm nay bạn đã làm ${stats.done}/${stats.goal} hoạt động.`
+    if (stats.resume) return { text: `${goal} Bạn đang đọc dở bài "${stats.resume.title}", đọc tiếp từ chỗ cũ nhé.`, action: { label: 'Đọc tiếp bài này', lessonId: stats.resume.lessonId } }
+    return { text: `${goal} Mình gợi ý làm một nhiệm vụ trong Hành trình: vừa học vừa nhận XP.`, action: { label: 'Mở Hành trình', view: 'journey' } }
+  }
+  if (/\b(tien do|da hoc (duoc )?(bao nhieu|may)|bao nhieu bai|may bai|xp cua (minh|toi|em|to)|bao nhieu xp|chuoi (ngay )?hoc cua|minh hoc duoc)\b/.test(q)) {
+    return { text: `Trên trình duyệt này, bạn đã đọc xong ${stats.readCount} bài, có ${stats.xp} XP và đang giữ chuỗi ${stats.streak} ngày học. Hôm nay bạn đã làm ${stats.done}/${stats.goal} hoạt động.`, action: { label: 'Xem Bảng xếp hạng', view: 'progress' } }
+  }
+  return null
+}
+
+export const companionSuggestions = ['Xuyên Sử Ký có những gì?', 'Hôm nay mình nên học gì?', 'Mẹo nhớ mốc năm lịch sử', 'Hành trình là gì?']
