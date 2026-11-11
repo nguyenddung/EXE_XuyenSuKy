@@ -16,16 +16,21 @@ const maxPassages = 3
 const blockedCategories = ['sexual', 'sexual/minors', 'self-harm', 'self-harm/intent', 'self-harm/instructions', 'hate/threatening', 'harassment/threatening', 'illicit/violent']
 
 let indexPromise
+// Shared with the study companion (server/companion.mjs).
+// AI_DISABLED=1 is a kill switch: chat keeps answering with textbook quotes without removing the key.
+export const openaiClient = () => process.env.OPENAI_API_KEY?.trim() && !/^(1|true|yes)$/i.test(process.env.AI_DISABLED || '') ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 12000, maxRetries: 0 }) : null
+export const sharedIndex = (dataset) => (indexPromise ??= loadEmbeddingIndex(dataset))
+// Answer models in order of preference. OPENAI_MODEL may list several, comma-separated. A model the key's
+// OpenAI project cannot use answers 404 and the next one is tried; OPENAI_FALLBACK_MODEL is the last resort.
+export const answerModels = () => [...new Set([...(process.env.OPENAI_MODEL || 'gpt-5-mini,gpt-5').split(','), process.env.OPENAI_FALLBACK_MODEL || 'gpt-4.1-mini'].map((name) => name.trim()).filter(Boolean))]
+export const missingModels = new Set()
 const defaultDeps = {
-  // AI_DISABLED=1 is a kill switch: chat keeps answering with textbook quotes without removing the key.
-  openai: () => process.env.OPENAI_API_KEY?.trim() && !/^(1|true|yes)$/i.test(process.env.AI_DISABLED || '') ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 12000, maxRetries: 0 }) : null,
-  index: (dataset) => (indexPromise ??= loadEmbeddingIndex(dataset)),
+  openai: openaiClient,
+  index: sharedIndex,
   limiter: createLimiter(),
   cache: createAnswerCache(),
-  // Answer models in order of preference. OPENAI_MODEL may list several, comma-separated. A model the key's
-  // OpenAI project cannot use answers 404 and the next one is tried; OPENAI_FALLBACK_MODEL is the last resort.
-  models: () => [...new Set([...(process.env.OPENAI_MODEL || 'gpt-5-mini,gpt-5').split(','), process.env.OPENAI_FALLBACK_MODEL || 'gpt-4.1-mini'].map((name) => name.trim()).filter(Boolean))],
-  missingModels: new Set(),
+  models: answerModels,
+  missingModels,
 }
 
 /**
@@ -74,7 +79,7 @@ export async function answerCharacterQuestion({ dataset, characterId, message, h
     if (!passages.length) return fellBack(textbook, 'no_passages')
 
     step = 'answer'
-    const { response, model } = await createAnswer(openai, deps, entry.profile, retrieval.previousQuestion, question, passages)
+    const { response, model } = await createAnswer(openai, deps, (name) => generationRequest(name, entry.profile, retrieval.previousQuestion, question, passages))
     const usage = response.usage
     // One line per AI answer so token spend can be followed in the Vercel logs.
     if (usage) console.info('[character-rag] tokens', JSON.stringify({ character: characterId, input: usage.input_tokens, output: usage.output_tokens, reasoning: usage.output_tokens_details?.reasoning_tokens ?? 0, status: response.status }))
@@ -123,13 +128,13 @@ export function selectPassages(dataset, retrieval, index, queryVector) {
 }
 
 // A key whose OpenAI project cannot use a model gets 404: move on to the next model in the list and remember
-// that for the rest of this process, so later questions skip the failing call.
-async function createAnswer(openai, deps, ...args) {
+// that for the rest of this process, so later questions skip the failing call. `build` makes the request for a model.
+export async function createAnswer(openai, deps, build) {
   const missing = deps.missingModels || new Set()
   const models = deps.models()
   const usable = models.filter((model) => !missing.has(model))
   for (const [position, model] of (usable.length ? usable : models).entries()) {
-    try { return { response: await openai.responses.create(generationRequest(model, ...args)), model } } catch (error) {
+    try { return { response: await openai.responses.create(build(model)), model } } catch (error) {
       if (error?.status !== 404 || position === usable.length - 1) throw error
       missing.add(model)
       console.warn(`[character-rag] Model ${model} is not available to this key; trying the next one`)
