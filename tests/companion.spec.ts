@@ -137,9 +137,89 @@ test('on a phone the companion sits above the bottom navigation', async ({ page 
   expect(box!.x).toBeGreaterThanOrEqual(0)
   expect(box!.x + box!.width).toBeLessThanOrEqual(390)
   expect(box!.y).toBeGreaterThanOrEqual(0)
+
+  // The phone menu drawer covers the screen: the companion steps aside while it is open.
+  await page.keyboard.press('Escape')
+  await page.getByRole('button', { name: 'Mở menu' }).click()
+  await expect(launcher(page)).toBeHidden()
 })
 
 const mascot = (page: Page) => page.locator('.companion-launcher svg.cm')
+const box = async (page: Page) => (await launcher(page).boundingBox())!
+const named = (page: Page) => page.addInitScript(([key, day]) => localStorage.setItem(key, JSON.stringify({ species: 'turtle', name: 'Bông', namedAt: '2026-11-01T08:00:00.000Z', lastGreetDay: day })), [guestKey, vietnamDay()] as const)
+
+test('the companion can be dragged anywhere, stays on screen and keeps its place after a reload', async ({ page }) => {
+  await named(page)
+  await page.goto('/home')
+  const start = await box(page)
+  await page.mouse.move(start.x + start.width / 2, start.y + start.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(start.x - 300, start.y - 250, { steps: 8 })
+  // Carried: the turtle hangs from its shell, feet dangling.
+  await expect(mascot(page)).toHaveAttribute('data-mood', 'lifted')
+  await page.mouse.move(start.x - 500, start.y - 400, { steps: 8 })
+  await page.mouse.up()
+  // Dropping it is not a click: the panel stays closed.
+  await expect(panel(page)).toHaveCount(0)
+  const moved = await box(page)
+  // Held by its middle: the companion's corner ends half its size up and left of the pointer.
+  expect(Math.abs(moved.x - (start.x - 500 - start.width / 2))).toBeLessThan(3)
+  expect(Math.abs(moved.y - (start.y - 400 - start.height / 2))).toBeLessThan(3)
+  await expect(mascot(page)).toHaveAttribute('data-mood', 'idle')
+
+  // Same place after a reload.
+  await page.reload()
+  const restored = await box(page)
+  expect(Math.abs(restored.x - moved.x)).toBeLessThan(3)
+  expect(Math.abs(restored.y - moved.y)).toBeLessThan(3)
+
+  // Dragged past the edge, it stops at the screen border.
+  await page.mouse.move(restored.x + 20, restored.y + 20)
+  await page.mouse.down()
+  await page.mouse.move(-400, -400, { steps: 6 })
+  await page.mouse.up()
+  const edge = await box(page)
+  expect(edge.x).toBeGreaterThanOrEqual(0)
+  expect(edge.y).toBeGreaterThanOrEqual(0)
+  expect(edge.x).toBeLessThan(20)
+  expect(edge.y).toBeLessThan(20)
+
+  // A plain click still opens the panel, which opens below the companion near the top and stays on screen.
+  await launcher(page).click()
+  const open = (await panel(page).boundingBox())!
+  expect(open.y).toBeGreaterThan(edge.y + edge.height)
+  expect(open.x).toBeGreaterThanOrEqual(0)
+  expect(open.y + open.height).toBeLessThanOrEqual(900)
+})
+
+test('the companion moves with the arrow keys and the corner buttons', async ({ page }) => {
+  await named(page)
+  await page.goto('/home')
+  const start = await box(page)
+  await launcher(page).focus()
+  await page.keyboard.press('ArrowLeft')
+  await page.keyboard.press('Shift+ArrowUp')
+  const moved = await box(page)
+  expect(Math.round(start.x - moved.x)).toBe(16)
+  expect(Math.round(start.y - moved.y)).toBe(64)
+  // Arrow keys move the companion, not the page.
+  expect(await page.evaluate(() => window.scrollY)).toBe(0)
+
+  await launcher(page).click()
+  await panel(page).getByRole('button', { name: 'Góc trên bên trái' }).click()
+  const corner = await box(page)
+  expect(corner.x).toBeLessThan(40)
+  expect(corner.y).toBeLessThan(120)
+  // The panel follows the companion and opens below it.
+  expect((await panel(page).boundingBox())!.y).toBeGreaterThan(corner.y)
+
+  // Bottom right is the default corner again, and nothing is stored for it.
+  await panel(page).getByRole('button', { name: 'Góc dưới bên phải' }).click()
+  const home = await box(page)
+  expect(Math.abs(home.x - start.x)).toBeLessThan(2)
+  expect(Math.abs(home.y - start.y)).toBeLessThan(2)
+  expect(await page.evaluate(() => localStorage.getItem('xuyen-su-ky-companion-position-v1'))).toBeNull()
+})
 
 test('the turtle waves while it calls, and is happy when named', async ({ page }) => {
   await page.goto('/home')
