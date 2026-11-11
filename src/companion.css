@@ -1,0 +1,64 @@
+/* Study companion: a mascot in the bottom-right corner of the learning app.
+   z-index 41: above the mobile bottom navigation (40), under the mobile menu scrim (42) and every modal (60+). */
+.companion { --companion-bottom: 20px; position: fixed; z-index: 41; right: 20px; bottom: var(--companion-bottom); display: flex; flex-direction: column; align-items: flex-end; gap: 10px; pointer-events: none; }
+.companion > * { pointer-events: auto; }
+
+.companion-launcher { position: relative; display: grid; place-items: center; width: 64px; height: 64px; padding: 0; border: 3px solid #fff; border-radius: 50%; background: #f9f6f1; box-shadow: 0 10px 26px #103b6930; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+.companion-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 30px #103b6940; }
+.companion-launcher img { display: block; width: 58px; height: 58px; border-radius: 50%; }
+.companion-launcher.is-calling { animation: companionBob 1.6s ease-in-out 3; } /* A few hops, then still: no endless motion. */
+.companion-name-tag { position: absolute; bottom: -8px; left: 50%; max-width: 96px; overflow: hidden; padding: 2px 8px; border-radius: 999px; background: var(--sky-ink, #101f40); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.5; text-overflow: ellipsis; white-space: nowrap; transform: translateX(-50%); }
+@keyframes companionBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+.companion-bubble { position: relative; width: min(290px, calc(100vw - 40px)); padding: 14px 16px; border: 1px solid #e6edf5; border-radius: 16px 16px 4px 16px; background: #fff; color: var(--sky-ink, #101f40); box-shadow: 0 14px 34px #103b6926; font-size: 13px; line-height: 1.6; animation: companionIn .2s ease-out; }
+.companion-bubble p { margin: 0; padding-right: 14px; }
+.companion-bubble strong { display: block; }
+.companion-bubble-actions { display: flex; gap: 8px; margin-top: 10px; }
+.companion-bubble-close { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; color: #5d6f8f; }
+.companion-bubble-close:hover { background: #eef3fa; }
+
+.companion-panel { display: flex; flex-direction: column; width: min(360px, calc(100vw - 40px)); max-height: min(520px, calc(100vh - 130px)); overflow: hidden; border: 1px solid #e6edf5; border-radius: 18px; background: #fff; box-shadow: 0 22px 60px #103b6935; animation: companionIn .2s ease-out; }
+.companion-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #e6edf5; background: #f5f8fd; }
+.companion-header img { flex: 0 0 44px; border-radius: 50%; }
+.companion-header div { flex: 1; min-width: 0; }
+.companion-header span { color: #2b78c5; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.companion-header h2 { margin: 2px 0 0; overflow: hidden; color: var(--sky-ink, #101f40); font-size: 17px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.companion-header h2:focus { outline: none; }
+.companion-header button { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 8px; color: #5d6f8f; }
+.companion-header button:hover { background: #e6edf5; }
+.companion-body { overflow-y: auto; padding: 16px; color: #33496c; font-size: 13px; line-height: 1.65; }
+.companion-message { margin: 0 0 14px; padding: 12px 14px; border-radius: 14px 14px 14px 4px; background: #eaf4ff; color: var(--sky-ink, #101f40); }
+.companion-hint { margin: 8px 0 0; color: #5d6f8f; font-size: 12px; }
+.companion-error { margin: 8px 0 0; color: #b42318; font-size: 12px; font-weight: 700; }
+
+.companion-name-form label { display: block; margin-bottom: 8px; color: var(--sky-ink, #101f40); font-weight: 800; }
+.companion-name-form input { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #cfdcec; border-radius: 10px; background: #fff; color: var(--sky-ink, #101f40); font-size: 14px; }
+.companion-name-form input:focus { border-color: #2b78c5; outline: none; box-shadow: 0 0 0 3px #2b78c533; }
+.companion-name-form input[aria-invalid] { border-color: #d92d20; }
+.companion-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.companion-suggestions button { padding: 5px 11px; border: 1px solid #cfdcec; border-radius: 999px; background: #f5f8fd; color: #1264bd; font-size: 12px; font-weight: 700; }
+.companion-suggestions button:hover { border-color: #2b78c5; background: #eaf4ff; }
+
+.companion-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.companion-primary, .companion-quiet { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 14px; border-radius: 10px; font-size: 13px; font-weight: 800; }
+.companion-primary { background: var(--sky-gold, #ffc044); color: var(--sky-gold-ink, #33240c); }
+.companion-quiet { border: 1px solid #cfdcec; background: #fff; color: #33496c; }
+.companion-quiet:hover { background: #f5f8fd; }
+
+@keyframes companionIn { from { opacity: 0; transform: translateY(8px); } }
+
+/* The learning app's toast shares the corner: keep it beside the companion. */
+.learning-page .toast { right: 100px; }
+
+@media (max-width: 680px) {
+  /* Above the bottom navigation bar of the learning app. */
+  .companion { --companion-bottom: calc(80px + env(safe-area-inset-bottom)); right: 14px; }
+  .companion-launcher { width: 56px; height: 56px; }
+  .companion-launcher img { width: 50px; height: 50px; }
+  .companion-panel { width: calc(100vw - 28px); max-height: calc(100vh - 190px); }
+  .learning-page .toast { right: 20px; bottom: calc(160px + env(safe-area-inset-bottom)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .companion-launcher, .companion-launcher.is-calling, .companion-bubble, .companion-panel { animation: none; transition: none; }
+}
