@@ -37,8 +37,11 @@ jobs:
           npm run check:dataset
           npm run test:backend
 
+      # The runner image already has Chromium's libraries; --with-deps only adds extra fonts through apt. When the
+      # runner cannot reach the Ubuntu mirror, install the browser alone instead of failing (the tests check text and
+      # roles, not pixels).
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium || { echo "::warning::apt dependencies unavailable; installing Chromium without them"; npx playwright install chromium; }
 
       - name: Run browser tests
         run: npm run test:games
