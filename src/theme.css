@@ -234,9 +234,11 @@
 
 /* Sign-in page: illustrated panel beside the form, the same pairing as the dashboard sidebar */
 .auth-page { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 100vh; background: var(--sky-canvas); }
-.auth-art { position: relative; display: flex; align-items: end; overflow: hidden; background: #173559 url('/images/dashboard/hero.webp') center / cover no-repeat; color: #fff; }
-.auth-art::before { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, #0f2747f2 0%, #0f274799 45%, #0f274722 100%); }
-.auth-art-copy { position: relative; max-width: 480px; padding: 48px; }
+/* Dusk river illustration made for this panel: its left side is kept dark and calm for the copy, while the drum sun and citadel gate sit on the right. */
+.auth-art { position: relative; display: flex; align-items: start; overflow: hidden; background: #0b1d3a url('/images/auth/login-art.svg') center top / cover no-repeat; color: #fff; }
+.auth-art::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #071833b3 0%, #07183366 40%, #07183300 65%); }
+/* The top padding lines the closing quote up with the card's "Ghi nhớ đăng nhập" checkbox on the right. */
+.auth-art-copy { position: relative; max-width: 480px; padding: 261px 48px 48px; }
 .auth-brand { display: inline-flex; align-items: center; gap: 11px; }
 .auth-brand strong { font-size: 18px; font-weight: 800; letter-spacing: -.06em; }
 .auth-art h2 { margin: 26px 0 18px; font-size: clamp(28px, 3vw, 40px); font-weight: 800; line-height: 1.2; letter-spacing: -.045em; }
@@ -262,7 +264,9 @@
 .auth-card > small { display: block; margin-top: 14px; color: var(--sky-muted); font-size: 12px; line-height: 1.6; }
 @media (max-width: 900px) {
   .auth-page { grid-template-columns: 1fr; }
-  .auth-art { min-height: 230px; }
+  .auth-art { min-height: 230px; background-position: center 15%; }
+  /* The banner is short, so the headline crosses the drum sun; shade the whole strip to keep it readable. */
+  .auth-art::before { background: linear-gradient(90deg, #071833cc 0%, #071833a6 60%, #07183359 100%); }
   .auth-art-copy { padding: 28px 20px; }
   .auth-art h2 { margin: 16px 0 0; font-size: 26px; }
   .auth-art ul, .auth-art-copy > p { display: none; }
