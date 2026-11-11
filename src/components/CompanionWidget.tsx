@@ -3,6 +3,7 @@ import { MessageCircle, PencilLine, X } from 'lucide-react'
 import { cleanCompanionName, greetingFor, nameProblemMessage, readCompanion, speciesOf, studyStatus, writeCompanion, type CompanionState } from '../lib/companion'
 import { dayKey, type Journal } from '../hooks/useLearningJournal'
 import { showSection } from '../lib/sections'
+import { mascotFor, type MascotMood } from './CompanionMascot'
 
 interface Props {
   /** storageOwner(session): account id, 'guest', or null when unknown (the name then lasts until the page closes). */
@@ -18,7 +19,7 @@ const greetingSeconds = 12
 
 type Bubble = 'intro' | 'greeting' | null
 
-/** The study companion floating in the corner of the learning app (step 1: naming and greetings, no AI yet). */
+/** The study companion in the corner of the learning app (naming and greetings, no AI yet). */
 export function CompanionWidget({ owner, journal, learningStreak }: Props) {
   const [initial] = useState(() => {
     const stored = readCompanion(owner)
@@ -31,11 +32,16 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
   const [renaming, setRenaming] = useState(false)
   const [justNamed, setJustNamed] = useState(false)
   const [saved, setSaved] = useState(true)
+  const [happy, setHappy] = useState(false)
+  const happyTimer = useRef(0)
   const launcher = useRef<HTMLButtonElement>(null)
   const title = useRef<HTMLHeadingElement>(null)
   const species = speciesOf(companion?.species)
+  const Mascot = mascotFor(species.id)
   const today = dayKey()
   const status = studyStatus({ done: journal.events.filter((event) => event.day === today).length, goal: journal.goal, streak: learningStreak })
+
+  const mood: MascotMood = happy ? 'happy' : bubble && !open ? 'wave' : 'idle'
 
   function save(next: CompanionState) {
     setCompanion(next)
@@ -51,8 +57,16 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
   }, [bubble])
 
   useEffect(() => { if (open && companion && !renaming) title.current?.focus() }, [open, renaming])
+  useEffect(() => () => window.clearTimeout(happyTimer.current), [])
 
-  function openPanel() { setBubble(null); setOpen(true) }
+  // A happy hop with sparkles, for a moment.
+  function cheer(ms: number) {
+    window.clearTimeout(happyTimer.current)
+    setHappy(true)
+    happyTimer.current = window.setTimeout(() => setHappy(false), ms)
+  }
+
+  function openPanel() { setBubble(null); setOpen(true); cheer(900) }
   function closePanel() { setOpen(false); setRenaming(false); setJustNamed(false); launcher.current?.focus() }
   function later() {
     try { sessionStorage.setItem(laterKey, '1') } catch { /* It then comes back on the next page load. */ }
@@ -63,6 +77,7 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
     save({ species: species.id, name, namedAt: new Date().toISOString(), lastGreetDay: today })
     setRenaming(false)
     setJustNamed(first)
+    cheer(1200)
     window.setTimeout(() => title.current?.focus(), 0)
   }
   function onPanelKey(event: KeyboardEvent) {
@@ -89,7 +104,7 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
 
     {open && <section id="companion-panel" className="companion-panel" role="dialog" aria-labelledby="companion-title" onKeyDown={onPanelKey}>
       <header className="companion-header">
-        <img src={species.image} alt="" width={44} height={44} />
+        <span className="companion-header-figure"><Mascot size={40} /></span>
         <div>
           <span>Bạn đồng hành</span>
           <h2 id="companion-title" ref={title} tabIndex={-1}>{companion?.name ?? `Bạn ${species.label} mới`}</h2>
@@ -111,8 +126,8 @@ export function CompanionWidget({ owner, journal, learningStreak }: Props) {
       </div>
     </section>}
 
-    <button ref={launcher} type="button" className={'companion-launcher' + (bubble ? ' is-calling' : '')} aria-label={label} aria-expanded={open} aria-controls={open ? 'companion-panel' : undefined} onClick={() => open ? closePanel() : openPanel()}>
-      <img src={species.image} alt="" width={60} height={60} />
+    <button ref={launcher} type="button" className="companion-launcher" aria-label={label} aria-expanded={open} aria-controls={open ? 'companion-panel' : undefined} onClick={() => open ? closePanel() : openPanel()}>
+      <span className="companion-figure"><Mascot mood={mood} track lively /></span>
       {companion && <span className="companion-name-tag" aria-hidden="true">{companion.name}</span>}
     </button>
   </div>

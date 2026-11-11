@@ -10,13 +10,13 @@ export interface CompanionSpecies {
   id: string
   /** Shown in sentences: "bạn rùa". */
   label: string
-  image: string
   suggestions: readonly string[]
 }
 
-// More animals are added here. A stored record whose animal no longer exists falls back to the first one.
+// More animals are added here, each with its drawing in components/CompanionMascot.tsx. A stored record whose
+// animal no longer exists falls back to the first one.
 export const companionSpecies: readonly CompanionSpecies[] = [
-  { id: 'turtle', label: 'rùa', image: '/images/brand/xuyen-su-ky-mascot-brand-avatar.svg', suggestions: ['Rùa Vàng', 'Kim Quy', 'Sử Sử', 'Bông'] },
+  { id: 'turtle', label: 'rùa', suggestions: ['Rùa Vàng', 'Kim Quy', 'Sử Sử', 'Bông'] },
 ]
 export const speciesOf = (id?: string) => companionSpecies.find((item) => item.id === id) ?? companionSpecies[0]
 

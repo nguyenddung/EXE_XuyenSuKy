@@ -1,14 +1,12 @@
-/* Study companion: a mascot in the bottom-right corner of the learning app.
+/* Study companion: a turtle in the bottom-right corner of the learning app.
    z-index 41: above the mobile bottom navigation (40), under the mobile menu scrim (42) and every modal (60+). */
 .companion { --companion-bottom: 20px; position: fixed; z-index: 41; right: 20px; bottom: var(--companion-bottom); display: flex; flex-direction: column; align-items: flex-end; gap: 10px; pointer-events: none; }
 .companion > * { pointer-events: auto; }
 
-.companion-launcher { position: relative; display: grid; place-items: center; width: 64px; height: 64px; padding: 0; border: 3px solid #fff; border-radius: 50%; background: #f9f6f1; box-shadow: 0 10px 26px #103b6930; cursor: pointer; transition: transform .2s, box-shadow .2s; }
-.companion-launcher:hover { transform: translateY(-2px); box-shadow: 0 14px 30px #103b6940; }
-.companion-launcher img { display: block; width: 58px; height: 58px; border-radius: 50%; }
-.companion-launcher.is-calling { animation: companionBob 1.6s ease-in-out 3; } /* A few hops, then still: no endless motion. */
-.companion-name-tag { position: absolute; bottom: -8px; left: 50%; max-width: 96px; overflow: hidden; padding: 2px 8px; border-radius: 999px; background: var(--sky-ink, #101f40); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.5; text-overflow: ellipsis; white-space: nowrap; transform: translateX(-50%); }
-@keyframes companionBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.companion-launcher { position: relative; display: flex; flex-direction: column; align-items: center; width: 76px; padding: 0; border: 0; border-radius: 18px; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.companion-figure { display: block; width: 100%; filter: drop-shadow(0 6px 10px #103b6930); }
+.companion-figure .cm { width: 100%; height: auto; }
+.companion-name-tag { position: relative; z-index: 1; max-width: 96px; margin-top: -6px; overflow: hidden; padding: 2px 8px; border-radius: 999px; background: var(--sky-ink, #101f40); color: #fff; font-size: 11px; font-weight: 700; line-height: 1.5; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; }
 
 .companion-bubble { position: relative; width: min(290px, calc(100vw - 40px)); padding: 14px 16px; border: 1px solid #e6edf5; border-radius: 16px 16px 4px 16px; background: #fff; color: var(--sky-ink, #101f40); box-shadow: 0 14px 34px #103b6926; font-size: 13px; line-height: 1.6; animation: companionIn .2s ease-out; }
 .companion-bubble p { margin: 0; padding-right: 14px; }
@@ -19,9 +17,9 @@
 
 .companion-panel { display: flex; flex-direction: column; width: min(360px, calc(100vw - 40px)); max-height: min(520px, calc(100vh - 130px)); overflow: hidden; border: 1px solid #e6edf5; border-radius: 18px; background: #fff; box-shadow: 0 22px 60px #103b6935; animation: companionIn .2s ease-out; }
 .companion-header { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #e6edf5; background: #f5f8fd; }
-.companion-header img { flex: 0 0 44px; border-radius: 50%; }
+.companion-header-figure { display: grid; flex: 0 0 46px; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2px #e6edf5; }
 .companion-header div { flex: 1; min-width: 0; }
-.companion-header span { color: #2b78c5; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.companion-header div > span { color: #2b78c5; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .companion-header h2 { margin: 2px 0 0; overflow: hidden; color: var(--sky-ink, #101f40); font-size: 17px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
 .companion-header h2:focus { outline: none; }
 .companion-header button { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 8px; color: #5d6f8f; }
@@ -47,18 +45,54 @@
 
 @keyframes companionIn { from { opacity: 0; transform: translateY(8px); } }
 
+
+/* The mascot drawing (CompanionMascot.tsx). Origins are in the drawing's own units (viewBox 0 0 120 132). */
+.cm { display: block; overflow: visible; }
+.cm-shadow, .cm-figure, .cm-breath, .cm-head, .cm-arm, .cm-feet, .cm-page, .cm-scarf-tail { transform-box: view-box; }
+.cm-shadow { fill: #103b69; opacity: .16; transform-origin: 60px 125px; transition: transform .2s, opacity .2s; }
+.cm-figure { transform-origin: 60px 122px; transition: transform .18s ease-out; }
+.cm-breath { transform-origin: 60px 122px; animation: cmBreathe 3.8s ease-in-out infinite; }
+.cm-head { transform-origin: 60px 62px; transition: transform .3s ease-out; }
+.cm-eyes { transform-box: fill-box; transform-origin: center; animation: cmBlink 5.2s infinite; }
+.cm-pupils { transform: translate(var(--cm-px, 0px), var(--cm-py, 0px)); transition: transform .12s ease-out; }
+.cm-arm--wave { transform-origin: 83px 64px; transition: transform .25s ease-out; }
+.cm-feet { transform-origin: 60px 104px; }
+.cm-page { transform-origin: 53px 89px; }
+.cm-scarf-tail { transform-origin: 63px 71px; }
+.cm-sparkles { opacity: 0; }
+.cm-star { transform-box: fill-box; transform-origin: center; }
+.companion-launcher:hover .cm[data-mood="idle"] .cm-head { transform: rotate(-7deg); }
+
+.cm[data-mood="wave"] .cm-arm--wave { animation: cmWave 1.3s ease-in-out 3; }
+.cm[data-mood="happy"] .cm-figure, .cm[data-action="hop"] .cm-figure { animation: cmHop .8s ease-out; }
+.cm[data-mood="happy"] .cm-sparkles { opacity: 1; }
+.cm[data-mood="happy"] .cm-star { animation: cmSparkle .9s ease-out both; }
+.cm[data-mood="happy"] .cm-sparkles g:nth-child(2) .cm-star { animation-delay: .12s; }
+.cm[data-mood="happy"] .cm-sparkles g:nth-child(3) .cm-star { animation-delay: .24s; }
+.cm[data-action="tilt"] .cm-head { animation: cmTilt 1.6s ease-in-out; }
+.cm[data-action="page"] .cm-page { animation: cmPage 1.3s ease-in-out; }
+.cm[data-action="look"] .cm-pupils { animation: cmLook 1.6s ease-in-out; }
+
+@keyframes cmBreathe { 50% { transform: scale(1.015, .985); } }
+@keyframes cmBlink { 0%, 93%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes cmWave { 0%, 100% { transform: rotate(0); } 18% { transform: rotate(-125deg); } 34% { transform: rotate(-102deg); } 50% { transform: rotate(-128deg); } 66% { transform: rotate(-102deg); } 82% { transform: rotate(-122deg); } }
+@keyframes cmHop { 0%, 100% { transform: translateY(0); } 15% { transform: scale(1.06, .92); } 45% { transform: translateY(-12px) scale(.96, 1.05); } 75% { transform: translateY(0) scale(1.05, .95); } }
+@keyframes cmSparkle { 0% { opacity: 0; transform: scale(.3); } 35% { opacity: 1; transform: scale(1.15); } 100% { opacity: 0; transform: scale(.8) rotate(45deg); } }
+@keyframes cmTilt { 0%, 100% { transform: rotate(0); } 30%, 65% { transform: rotate(-11deg); } }
+@keyframes cmPage { 0% { transform: scaleX(1); } 50% { transform: scaleX(0); } 100% { transform: scaleX(-1); } }
+@keyframes cmLook { 0%, 100% { transform: translate(0, 0); } 25%, 45% { transform: translate(-2.4px, .5px); } 65%, 85% { transform: translate(2.4px, .5px); } }
+
 /* The learning app's toast shares the corner: keep it beside the companion. */
 .learning-page .toast { right: 100px; }
 
 @media (max-width: 680px) {
   /* Above the bottom navigation bar of the learning app. */
   .companion { --companion-bottom: calc(80px + env(safe-area-inset-bottom)); right: 14px; }
-  .companion-launcher { width: 56px; height: 56px; }
-  .companion-launcher img { width: 50px; height: 50px; }
+  .companion-launcher { width: 64px; }
   .companion-panel { width: calc(100vw - 28px); max-height: calc(100vh - 190px); }
   .learning-page .toast { right: 20px; bottom: calc(160px + env(safe-area-inset-bottom)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .companion-launcher, .companion-launcher.is-calling, .companion-bubble, .companion-panel { animation: none; transition: none; }
+  .companion-bubble, .companion-panel, .cm, .cm * { animation: none !important; transition: none !important; }
 }

@@ -138,3 +138,15 @@ test('on a phone the companion sits above the bottom navigation', async ({ page 
   expect(box!.x + box!.width).toBeLessThanOrEqual(390)
   expect(box!.y).toBeGreaterThanOrEqual(0)
 })
+
+const mascot = (page: Page) => page.locator('.companion-launcher svg.cm')
+
+test('the turtle waves while it calls, and is happy when named', async ({ page }) => {
+  await page.goto('/home')
+  await expect(mascot(page)).toHaveAttribute('data-mood', 'wave')
+  await bubble(page).getByRole('button', { name: 'Đặt tên', exact: true }).click()
+  await panel(page).getByLabel('Đặt tên cho bạn rùa').fill('Bông')
+  await page.keyboard.press('Enter')
+  await expect(mascot(page)).toHaveAttribute('data-mood', 'happy')
+  await expect(mascot(page)).toHaveAttribute('data-mood', 'idle')
+})
