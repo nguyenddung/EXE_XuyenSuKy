@@ -1,0 +1,360 @@
+{
+  "version": 1,
+  "note": "What the study companion knows about the Xuyên Sử Ký app. Keep every answer true to the app as it is; the companion never describes a feature that is not here. keywords are accent-free lowercase phrases; view is a section of /home (dashboard, library, journey, timeline, characters, challenges, progress).",
+  "entries": [
+    {
+      "id": "about",
+      "title": "Xuyên Sử Ký là gì",
+      "keywords": [
+        "xuyen su ky la gi",
+        "web nay la gi",
+        "trang web nay",
+        "ung dung nay",
+        "app nay",
+        "web nay lam gi",
+        "gioi thieu web"
+      ],
+      "answer": "Xuyên Sử Ký là nơi học Lịch sử lớp 6–12 theo sách giáo khoa (bộ Kết nối tri thức). Bạn có thể đọc bài có trích trang sách, đi Hành trình theo từng chương, chơi minigame, và trò chuyện với 12 nhân vật lịch sử. Mình là bạn đồng hành, ở cạnh bạn trong lúc học."
+    },
+    {
+      "id": "companion",
+      "title": "Bạn đồng hành là ai",
+      "keywords": [
+        "ban la ai",
+        "ban dong hanh",
+        "con rua",
+        "ban rua",
+        "doi ten",
+        "dat ten",
+        "di chuyen rua",
+        "keo rua",
+        "an rua"
+      ],
+      "answer": "Mình là bạn đồng hành của bạn trong Xuyên Sử Ký. Bạn có thể hỏi mình về cách dùng web, về bài Sử đang học, hay mẹo học và ghi nhớ. Muốn đổi tên mình thì bấm \"Đổi tên\" trong khung này. Muốn mình ngồi chỗ khác thì kéo mình đi, hoặc chọn một góc ở cuối khung."
+    },
+    {
+      "id": "library",
+      "title": "Thư viện sách giáo khoa",
+      "keywords": [
+        "thu vien",
+        "doc bai o dau",
+        "mo bai",
+        "muc luc",
+        "tim bai",
+        "danh dau da doc",
+        "che do tap trung"
+      ],
+      "answer": "Vào mục Học tập, kéo xuống Thư viện SGK là thấy các bài theo lớp của bạn. Mỗi đoạn đều ghi rõ sách và trang. Màn đọc tự nhớ chỗ bạn đang đọc, có chữ lớn, chế độ tập trung, nút \"Đánh dấu đã đọc\", lưu bài và ghi chú.",
+      "action": {
+        "label": "Mở Thư viện SGK",
+        "view": "library"
+      }
+    },
+    {
+      "id": "search",
+      "title": "Tìm kiếm",
+      "keywords": [
+        "tim kiem",
+        "tra cuu",
+        "ctrl k",
+        "tim tu",
+        "tim nhanh"
+      ],
+      "answer": "Ô tìm kiếm ở thanh trên cùng tìm trong sách giáo khoa, gõ không dấu cũng được, và hiểu cả tên gọi khác như \"Bác Hồ\" hay \"CMT8\". Mở nhanh bằng Ctrl + K (trên Mac là Cmd + K)."
+    },
+    {
+      "id": "notes",
+      "title": "Ghi chú, lưu bài và sổ tay",
+      "keywords": [
+        "ghi chu",
+        "so tay",
+        "luu bai",
+        "danh dau",
+        "bookmark",
+        "tai so tay",
+        "tu sach"
+      ],
+      "answer": "Trong màn đọc, bạn bấm biểu tượng đánh dấu để lưu bài, và viết ghi chú ở phần \"Sổ tay của bạn\", ghi chú tự lưu trên trình duyệt. Ở Kế hoạch học hôm nay có nút \"Tải sổ tay\" để tải mọi ghi chú về máy thành file chữ.",
+      "action": {
+        "label": "Mở Thư viện SGK",
+        "view": "library"
+      }
+    },
+    {
+      "id": "review",
+      "title": "Ôn lại bài",
+      "keywords": [
+        "on lai bai",
+        "on tap the nao",
+        "can doc lai",
+        "can on them",
+        "lat the"
+      ],
+      "answer": "Đọc xong một bài, bạn chọn \"Cần đọc lại\" nếu chưa chắc. Những bài đó gom ở mục Ôn lại để nhớ lâu trong Kế hoạch học hôm nay. Trong Hành trình, các nhiệm vụ đã làm cũng được hẹn ôn lại sau 1, 3, 7 và 14 ngày.",
+      "action": {
+        "label": "Mở Học tập",
+        "view": "library"
+      }
+    },
+    {
+      "id": "goal",
+      "title": "Mục tiêu mỗi ngày và chuỗi ngày học",
+      "keywords": [
+        "muc tieu",
+        "ke hoach hoc hom nay",
+        "chuoi ngay",
+        "streak",
+        "hoat dong moi ngay",
+        "doi muc tieu"
+      ],
+      "answer": "Ở Trang chủ có Kế hoạch học hôm nay. Bạn chọn mục tiêu 1, 3 hoặc 5 hoạt động mỗi ngày. Đọc xong bài, làm quiz, chơi minigame hay ôn lại đều tính là hoạt động (đọc lại cùng bài trong một ngày không tính hai lần). Ngày nào có hoạt động thì chuỗi ngày học tăng thêm một.",
+      "action": {
+        "label": "Mở Trang chủ",
+        "view": "dashboard"
+      }
+    },
+    {
+      "id": "journey",
+      "title": "Hành trình",
+      "keywords": [
+        "hanh trinh la gi",
+        "hanh trinh game",
+        "muc hanh trinh",
+        "nhiem vu",
+        "ban do hanh trinh",
+        "chang tiep theo",
+        "kiem tra cuoi chang",
+        "kiem tra chuong"
+      ],
+      "answer": "Hành trình biến từng chương thành một chuyến đi: mỗi chặng là một bài, mỗi nhiệm vụ có 5 bước (nhận nhiệm vụ, kiến thức, khám phá, thử thách, kết quả). Qua kiểm tra cuối chặng thì chặng sau mở ra. Hiện có Hành trình lớp 6, chương 1 đến chương 5; học sinh lớp khác vẫn đi thử được.",
+      "action": {
+        "label": "Mở Hành trình",
+        "view": "journey"
+      }
+    },
+    {
+      "id": "journey-hints",
+      "title": "Trả lời sai trong Hành trình",
+      "keywords": [
+        "tra loi sai",
+        "lam sai",
+        "het luot",
+        "mat luot",
+        "lam lai de moi",
+        "goi y 3 bac",
+        "sai thi sao"
+      ],
+      "answer": "Trong Hành trình, sai không mất lượt đâu. Gợi ý mở dần qua 3 bậc, sai lần hai thì bạn được một câu tương đương cùng mục tiêu. Kiểm tra cuối chặng cần đúng 80%; chưa đủ thì làm lại ngay, mỗi lần là đề mới.",
+      "action": {
+        "label": "Mở Hành trình",
+        "view": "journey"
+      }
+    },
+    {
+      "id": "manh-su-ky",
+      "title": "Mảnh Sử Ký, huy hiệu và nắm vững",
+      "keywords": [
+        "manh su ky",
+        "huy hieu",
+        "nam vung",
+        "bo suu tap"
+      ],
+      "answer": "Mảnh Sử Ký và huy hiệu chỉ trao khi bạn nắm vững một mục tiêu: trả lời đúng ngay lần đầu ở 2 câu khác nhau, vào 2 ngày khác nhau. Vì vậy hôm sau quay lại ôn là cách nhanh nhất để gom đủ bộ sưu tập.",
+      "action": {
+        "label": "Mở Hành trình",
+        "view": "journey"
+      }
+    },
+    {
+      "id": "xp",
+      "title": "XP và bảng xếp hạng",
+      "keywords": [
+        "xp",
+        "diem kinh nghiem",
+        "bang xep hang",
+        "xep hang",
+        "vinh danh",
+        "len hang"
+      ],
+      "answer": "XP thưởng cho công sức: mỗi câu trả lời trong Hành trình, mỗi quiz và mỗi minigame (XP minigame chỉ nhận một lần mỗi trò). Tổng XP hiện ở mục Bảng xếp hạng cùng các huy hiệu. Bảng xếp hạng hiện tại là bản minh hoạ.",
+      "action": {
+        "label": "Mở Bảng xếp hạng",
+        "view": "progress"
+      }
+    },
+    {
+      "id": "minigames",
+      "title": "Minigame",
+      "keywords": [
+        "minigame",
+        "tro choi",
+        "choi game",
+        "thu thach",
+        "xep dong su",
+        "lat the ky uc",
+        "tham tu nhan vat",
+        "mat lenh bach dang"
+      ],
+      "answer": "Mục Thử thách có 4 minigame: Xếp dòng sử, Lật thẻ ký ức, Thám tử nhân vật và Mật lệnh Bạch Đằng. Mỗi ván vài phút, không giới hạn lượt chơi. XP chỉ nhận một lần mỗi trò, còn sao (1 đến 3) ghi lại kỷ lục của bạn.",
+      "action": {
+        "label": "Mở Thử thách",
+        "view": "challenges"
+      }
+    },
+    {
+      "id": "characters",
+      "title": "Nhân vật AI",
+      "keywords": [
+        "nhan vat ai",
+        "tro chuyen voi nhan vat",
+        "hoi nhan vat",
+        "noi chuyen voi nhan vat",
+        "giong noi",
+        "nhan tin voi nhan vat",
+        "12 nhan vat"
+      ],
+      "answer": "Mục Nhân vật AI có 12 nhân vật lịch sử. Bạn chọn \"Nhắn tin\" để hỏi bằng chữ, hoặc \"Nói chuyện\" để hỏi bằng giọng nói. Nhân vật trả lời dựa trên sách giáo khoa và ghi nguồn bên dưới. Mỗi người chỉ kể chuyện thời mình; hỏi chuyện đời sau thì họ chỉ bạn sang người sống ở thời đó.",
+      "action": {
+        "label": "Mở Nhân vật AI",
+        "view": "characters"
+      }
+    },
+    {
+      "id": "ai-limit",
+      "title": "Giới hạn trả lời bằng AI",
+      "keywords": [
+        "het luot ai",
+        "gioi han",
+        "luot tra loi",
+        "trich sach",
+        "tra loi bang ai"
+      ],
+      "answer": "Mỗi ngày có một số lượt trả lời bằng AI. Hết lượt thì câu trả lời được trích thẳng từ sách giáo khoa, kèm trang sách, nên bạn vẫn học tiếp được. Hỏi nhanh quá thì hệ thống nhờ bạn chờ một chút rồi hỏi lại."
+    },
+    {
+      "id": "timeline",
+      "title": "Khám phá dòng thời gian",
+      "keywords": [
+        "muc kham pha",
+        "dong thoi gian",
+        "timeline"
+      ],
+      "answer": "Mục Khám phá có dòng thời gian các thời kỳ lịch sử Việt Nam, giúp bạn thấy mỗi bài nằm ở đâu trên trục thời gian.",
+      "action": {
+        "label": "Mở Khám phá",
+        "view": "timeline"
+      }
+    },
+    {
+      "id": "class",
+      "title": "Lớp học và bài được giao",
+      "keywords": [
+        "vao lop",
+        "ma lop",
+        "tham gia lop",
+        "lop cua em",
+        "bai duoc giao",
+        "giao vien giao",
+        "han nop",
+        "thay co"
+      ],
+      "answer": "Ở Trang chủ có khung \"Lớp của em\". Bạn nhập mã lớp thầy cô gửi rồi bấm \"Tham gia lớp\". Bài được giao hiện ở đó kèm hạn hoàn thành, và cả trong chuông thông báo. Đọc xong bài được giao là thầy cô thấy tiến độ của bạn.",
+      "action": {
+        "label": "Mở Trang chủ",
+        "view": "dashboard"
+      }
+    },
+    {
+      "id": "grade",
+      "title": "Chọn hoặc đổi lớp",
+      "keywords": [
+        "doi lop",
+        "chon lop",
+        "hoc lop khac",
+        "chuyen lop",
+        "sai lop"
+      ],
+      "answer": "Tài khoản học sinh học đúng lớp đã chọn lúc đăng ký, nên bài học, hành trình và nhân vật đều theo lớp đó. Muốn đổi lớp thì nhờ quản trị viên. Ở chế độ học thử, bạn chọn lớp tự do."
+    },
+    {
+      "id": "account",
+      "title": "Tài khoản, đăng nhập và tiến độ",
+      "keywords": [
+        "dang nhap",
+        "dang ky",
+        "tai khoan",
+        "dang xuat",
+        "mat khau",
+        "ghi nho dang nhap",
+        "luu tien do",
+        "mat tien do",
+        "may khac",
+        "dat lai"
+      ],
+      "answer": "Học thử thì không cần tài khoản; muốn làm quiz, trò chuyện với nhân vật và với mình thì cần đăng nhập. \"Ghi nhớ đăng nhập\" giữ bạn đăng nhập 30 ngày. Lưu ý: bản demo lưu tiến độ ngay trên trình duyệt này, nên sang máy khác sẽ không thấy. Nút \"Đặt lại dữ liệu demo\" ở Bảng xếp hạng xoá tiến độ trên trình duyệt.",
+      "action": {
+        "label": "Mở Bảng xếp hạng",
+        "view": "progress"
+      }
+    },
+    {
+      "id": "sources",
+      "title": "Nguồn và độ tin cậy",
+      "keywords": [
+        "trich dan",
+        "trang sach",
+        "tin duoc khong",
+        "kiem chung",
+        "co nguon khong",
+        "nguon o dau"
+      ],
+      "answer": "Câu trả lời về lịch sử luôn kèm nguồn: tên sách, bộ sách, nhà xuất bản và trang, để bạn mở sách đối chiếu. Không tìm được đoạn sách phù hợp thì mình nói thật là chưa chắc, chứ không đoán."
+    },
+    {
+      "id": "teacher",
+      "title": "Dành cho thầy cô",
+      "keywords": [
+        "giao vien",
+        "tao lop",
+        "xuat csv",
+        "khu giao vien",
+        "quan tri"
+      ],
+      "answer": "Thầy cô có khu Giáo viên riêng: tạo lớp có mã 6 ký tự, giao bài sách giáo khoa kèm hạn, xem tiến độ từng học sinh và xuất file CSV. Tài khoản giáo viên mới cần quản trị viên duyệt."
+    },
+    {
+      "id": "study-plan",
+      "title": "Lập kế hoạch học",
+      "keywords": [
+        "lap ke hoach",
+        "ke hoach hoc",
+        "on thi",
+        "thoi gian bieu",
+        "hoc the nao",
+        "bat dau tu dau"
+      ],
+      "answer": "Một kế hoạch dễ giữ: mỗi ngày đặt mục tiêu 3 hoạt động, ví dụ đọc một mục, làm một nhiệm vụ Hành trình, rồi ôn một bài \"Cần đọc lại\". Học 25 phút thì nghỉ 5 phút. Trước kiểm tra một tuần, mỗi ngày ôn lại một chương thay vì dồn vào hôm cuối.",
+      "action": {
+        "label": "Mở Kế hoạch học",
+        "view": "dashboard"
+      }
+    },
+    {
+      "id": "memory-tips",
+      "title": "Mẹo ghi nhớ",
+      "keywords": [
+        "meo ghi nho",
+        "meo nho",
+        "cach nho",
+        "nho moc",
+        "nho nam",
+        "hay quen",
+        "ghi nho",
+        "hoc thuoc",
+        "nho lau",
+        "meo hoc"
+      ],
+      "answer": "Vài mẹo nhớ Sử lâu: kể lại bài bằng lời của mình vào sổ tay; nối sự kiện thành chuỗi nguyên nhân – diễn biến – kết quả; đặt mốc năm lên dòng thời gian; tự hỏi rồi tự trả lời trước khi xem lại; và ôn lại sau 1, 3, 7 ngày thay vì đọc một lần thật lâu."
+    }
+  ]
+}

@@ -11,6 +11,9 @@ export const chatLimits = () => ({
   perMinute: envNumber('CHAT_RATE_PER_MINUTE', 12),
   aiPerDay: envNumber('AI_ANSWERS_PER_DAY', 40),
   aiGlobalPerDay: envNumber('AI_GLOBAL_ANSWERS_PER_DAY', 500),
+  // The study companion has its own daily answers per visitor, so a long talk with a character does not silence it
+  // (and the other way round). Both count towards the one global limit.
+  companionPerDay: envNumber('COMPANION_AI_PER_DAY', 30),
 })
 
 /** Vercel sets x-vercel-forwarded-for itself; the plain x-forwarded-for header can be supplied by the client. */
@@ -69,9 +72,13 @@ export function createLimiter(store = defaultStore(), limits = chatLimits) {
       const { count, resetAt } = await store.increment(`chat:min:${key}`, minute)
       return { allowed: count <= limits().perMinute, retryAfter: Math.max(1, Math.ceil((resetAt - Date.now()) / 1000)) }
     },
-    /** Soft limit on AI answers per visitor and overall: over it chat still answers with the textbook quote. */
-    async allowAiAnswer(key) {
-      const { aiPerDay, aiGlobalPerDay } = limits()
+    /**
+     * Soft limit on AI answers per visitor and overall: over it chat still answers without a model.
+     * `perDay` overrides the visitor limit for a separate counter (the companion uses its own key).
+     */
+    async allowAiAnswer(key, perDay) {
+      const { aiPerDay: characterPerDay, aiGlobalPerDay } = limits()
+      const aiPerDay = perDay ?? characterPerDay
       const today = dayKey()
       const used = (await store.increment(`ai:day:${today}:${key}`, day)).count
       if (used > aiPerDay) return { allowed: false, reason: 'visitor' }
