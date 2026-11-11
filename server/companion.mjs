@@ -76,8 +76,9 @@ const wordsOf = ({ chunk, text, title }) => {
 
 /**
  * Keyword ranking over the grade: most of the question's topic words must appear in a passage and every year must,
- * neighbouring words found together count extra, the lesson the student read last comes first, and figure captions
- * come after the body text they illustrate.
+ * neighbouring words found together count extra, the lesson the student read last
+ * comes first, and the lesson text comes before figure captions and quoted historical sources, which answer the
+ * question less directly.
  */
 export function keywordPassages(dataset, { question, scope, lessonId: openLesson }) {
   const terms = queryTerms(question)
@@ -92,7 +93,8 @@ export function keywordPassages(dataset, { question, scope, lessonId: openLesson
     const coverage = terms.filter((term) => words.has(term)).length / terms.length
     if (coverage < 0.6) return null
     const together = pairs.filter((pair) => item.text.includes(pair) || item.title.includes(pair)).length
-    return { chunk: item.chunk, score: coverage * 10 + together * 4 + (openLesson && lessonId(item.chunk) === openLesson ? 4 : 0) + (item.chunk.content_type === 'body' ? 1 : 0) - (['caption', 'figure'].includes(item.chunk.content_type) || /^hinh \d/.test(item.text) ? 4 : 0) }
+    const type = item.chunk.content_type
+    return { chunk: item.chunk, score: coverage * 10 + together * 4 + (openLesson && lessonId(item.chunk) === openLesson ? 4 : 0) + (type === 'body' ? 1 : 0) - (['caption', 'figure'].includes(type) ? 4 : 0) - (type === 'source' ? 6 : 0) }
   }).filter(Boolean).sort((a, b) => b.score - a.score || a.chunk.chunk_id.localeCompare(b.chunk.chunk_id))
 }
 
