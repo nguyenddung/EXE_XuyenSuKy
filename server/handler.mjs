@@ -188,7 +188,7 @@ export async function handleApi(req, res, datasetProvider = getDataset, options 
   } catch (error) {
     if (error instanceof SpeechError) {
       if (error.retryAfter) res.setHeader('Retry-After', String(error.retryAfter))
-      send(res, error.status, { error: { code: error.code, message: error.message } }, head)
+      send(res, error.status, { error: { code: error.code, message: error.message, ...(error.upstream ? { upstream: error.upstream } : {}) } }, head)
       return
     }
     if (error instanceof RateLimitError) res.setHeader('Retry-After', String(error.retryAfter))

@@ -8,6 +8,13 @@ export class SpeechError extends Error {
   }
 }
 
+/** A provider failure, tagged with the provider's HTTP status and reason code (never its message or our key). */
+function upstream(providerStatus, reason, ...args) {
+  const error = new SpeechError(502, ...args)
+  error.upstream = `${providerStatus}${reason ? ` ${reason}` : ''}`
+  return error
+}
+
 const numberEnv = (name, fallback) => {
   const value = Number(process.env[name])
   return Number.isFinite(value) && value > 0 ? value : fallback
@@ -73,10 +80,11 @@ export function createSpeechService({ config = configuration, fetchAudio = fetch
     try {
       const response = await fetchAudio(url, { method: 'POST', signal: AbortSignal.timeout(15000), headers, body })
       if (!response.ok) {
-        await response.body?.cancel()
-        if (provider === 'elevenlabs' && [400, 401, 403].includes(response.status)) throw new SpeechError(502, 'SPEECH_UPSTREAM_ERROR', 'Chưa tạo được giọng ElevenLabs. Hãy kiểm tra Secret API Key, quyền tạo giọng và Voice ID trong cấu hình máy chủ.')
+        // ElevenLabs names the cause in detail.status (quota_exceeded, invalid_api_key, voice_not_found…): keep only that code.
+        const reason = provider === 'elevenlabs' ? await response.json().then((data) => String(data?.detail?.status || data?.detail?.code || '').slice(0, 60), () => '') : (await response.body?.cancel(), '')
+        if (provider === 'elevenlabs' && [400, 401, 403].includes(response.status)) throw upstream(response.status, reason, 'SPEECH_UPSTREAM_ERROR', 'Chưa tạo được giọng ElevenLabs. Hãy kiểm tra Secret API Key, quyền tạo giọng và Voice ID trong cấu hình máy chủ.')
         if (response.status === 429) throw new SpeechError(429, 'SPEECH_PROVIDER_LIMITED', 'Dịch vụ giọng nói đang giới hạn lượt đọc. Hãy thử lại sau.', 60)
-        throw new SpeechError(502, 'SPEECH_UPSTREAM_ERROR', 'Dịch vụ giọng nói đang bận hoặc cấu hình chưa đúng. Hãy thử lại sau.')
+        throw upstream(response.status, reason, 'SPEECH_UPSTREAM_ERROR', 'Dịch vụ giọng nói đang bận hoặc cấu hình chưa đúng. Hãy thử lại sau.')
       }
       if (!response.headers.get('Content-Type')?.startsWith('audio/')) { await response.body?.cancel(); throw new SpeechError(502, 'SPEECH_INVALID_AUDIO', 'Chưa nhận được âm thanh phù hợp.') }
       const audio = Buffer.from(await response.arrayBuffer())
