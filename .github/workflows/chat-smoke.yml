@@ -44,5 +44,16 @@ jobs:
             console.log(body.answer ?? JSON.stringify(body))
             for (const source of body.sources ?? []) console.log(`  - Lớp ${source.grade}: ${source.lessonTitle} (${source.source?.book}, tr. ${source.source?.pageStart})`)
           }
+          // Voice: text-to-speech for "Nghe câu trả lời" and the live voice session. Prints status and error code only.
+          const characters = await (await fetch(`${process.env.SITE}/api/characters`)).json().catch(() => ({}))
+          console.log(`\n=== Voice · liveVoice on: ${(characters.items ?? []).filter((item) => item.liveVoice).map((item) => item.id).join(', ') || 'none'}`)
+          for (const id of ['ngo-quyen', 'hai-ba-trung']) {
+            const speech = await fetch(`${process.env.SITE}/api/characters/${id}/speech`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: 'Chào con.' }) })
+            const speechBody = speech.headers.get('content-type')?.includes('audio') ? `${(await speech.arrayBuffer()).byteLength} bytes audio` : await speech.text()
+            console.log(`speech ${id}: HTTP ${speech.status} · ${speechBody.slice(0, 300)}`)
+            const session = await fetch(`${process.env.SITE}/api/characters/${id}/voice-session`, { method: 'POST' })
+            const sessionBody = await session.json().catch(() => ({}))
+            console.log(`voice-session ${id}: HTTP ${session.status} · ${sessionBody.signedUrl ? 'signed URL ok' : JSON.stringify(sessionBody).slice(0, 300)}`)
+          }
           process.exit(failed ? 1 : 0)
           JS
