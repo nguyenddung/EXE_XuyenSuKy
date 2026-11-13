@@ -102,7 +102,9 @@ export function useCharacterSpeech(characterId: string) {
       if (!response.ok) {
         const body = await response.json().catch((failure) => { if (controller.signal.aborted) throw failure; return null }) as { error?: { code?: string; message?: string } } | null
         if (!current()) return
-        if (response.status === 503 && body?.error?.code === 'SPEECH_NOT_CONFIGURED') {
+        // The voice provider is off, out of credits or failing: read with the browser's voice for the rest of this chat
+        // instead of leaving the student with no sound. The app's own daily quota (SPEECH_QUOTA_EXCEEDED) stays an error.
+        if ((response.status >= 500 || body?.error?.code === 'SPEECH_PROVIDER_LIMITED') && 'speechSynthesis' in window) {
           browserOnly.current = true
           clearTimeout(timeout)
           await playBrowser(); return

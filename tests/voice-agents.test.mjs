@@ -56,3 +56,13 @@ test('every character agent speaks Vietnamese in persona, requires signed URLs a
     assert.ok(config.conversation.max_duration_seconds <= 300)
   }
 })
+
+test('a voice call is refused with a clear message when the ElevenLabs credits are used up', async () => {
+  const key = process.env.ELEVENLABS_API_KEY
+  process.env.ELEVENLABS_API_KEY = 'test-key'
+  const fake = (count) => ({ user: { subscription: { get: async () => ({ characterCount: count, characterLimit: 10000 }) } }, conversationalAi: { conversations: { getSignedUrl: async () => ({ signedUrl: 'wss://example.test/signed' }) } } })
+  try {
+    await assert.rejects(createVoiceSession('ngo-quyen', { client: fake(10000) }), (error) => error.status === 503 && error.code === 'LIVE_VOICE_QUOTA_EXCEEDED')
+    assert.deepEqual(await createVoiceSession('ngo-quyen', { client: fake(1200) }), { signedUrl: 'wss://example.test/signed' })
+  } finally { if (key) process.env.ELEVENLABS_API_KEY = key; else delete process.env.ELEVENLABS_API_KEY }
+})

@@ -78,11 +78,27 @@ export function agentDefinition(profile) {
 }
 
 let client
+let credits = { checkedAt: 0, exhausted: false }
+// An agent on an account without credits still connects, then stays silent. Check the monthly credits first
+// (at most once a minute) so the student gets a clear message instead of a silent call.
+async function creditsExhausted(fresh) {
+  if (!fresh && Date.now() - credits.checkedAt < 60_000) return credits.exhausted
+  try {
+    const subscription = await client.user.subscription.get()
+    credits = { checkedAt: Date.now(), exhausted: subscription.characterLimit > 0 && subscription.characterCount >= subscription.characterLimit }
+  } catch (error) {
+    // A key without the user_read permission cannot read its subscription: let the call go ahead.
+    credits = { checkedAt: Date.now(), exhausted: false }
+  }
+  return credits.exhausted
+}
+
 /** Returns a one-time signed URL that lets the browser open a conversation with the character's agent. */
-export async function createVoiceSession(characterId) {
+export async function createVoiceSession(characterId, deps = {}) {
   if (!profiles.some((profile) => profile.id === characterId)) throw new SpeechError(404, 'CHARACTER_NOT_FOUND', 'Không tìm thấy nhân vật.')
   if (!liveVoiceAvailable(characterId)) throw new SpeechError(503, 'LIVE_VOICE_UNAVAILABLE', 'Trò chuyện trực tiếp bằng giọng nói chưa được bật cho nhân vật này.')
-  client ||= new ElevenLabsClient()
+  client = deps.client || client || new ElevenLabsClient()
+  if (await creditsExhausted(Boolean(deps.client))) throw new SpeechError(503, 'LIVE_VOICE_QUOTA_EXCEEDED', 'Giọng nói đã hết lượt dùng trong tháng này. Em vẫn nhắn tin với nhân vật được nhé.')
   try {
     const { signedUrl } = await client.conversationalAi.conversations.getSignedUrl({ agentId: agents[characterId] })
     return { signedUrl }

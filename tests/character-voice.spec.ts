@@ -299,6 +299,15 @@ test('mic transcribes into editable input, waits for send and reports denied per
   expect((await stats(page)).micAborted).toBeGreaterThan(0)
 })
 
+test('a voice provider out of credits falls back to the browser voice', async ({ page }) => {
+  await installVoiceMocks(page)
+  await page.route('**/api/characters/*/speech', (route) => route.fulfill({ status: 502, contentType: 'application/json', body: JSON.stringify({ error: { code: 'SPEECH_UPSTREAM_ERROR', message: 'Chưa tạo được giọng ElevenLabs.', upstream: '401 quota_exceeded' } }) }))
+  await openCharacter(page)
+  await question(page)
+  await expect.poll(async () => (await stats(page)).utterances.length).toBeGreaterThan(0)
+  await expect(page.getByText('Chưa tạo được giọng ElevenLabs.')).toHaveCount(0)
+})
+
 test('Azure quota errors leave citations and text visible without a browser fallback', async ({ page }) => {
   await installVoiceMocks(page)
   await page.route('**/api/characters/*/speech', (route) => route.fulfill({ status: 429, contentType: 'application/json', body: JSON.stringify({ error: { code: 'SPEECH_QUOTA_EXCEEDED', message: 'Đã hết lượt đọc Azure hôm nay.' } }) }))
