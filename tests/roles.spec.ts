@@ -107,6 +107,10 @@ test('a teacher registers, waits for approval, then the student joins the class 
   await page.locator('#join-code').fill(code.toLowerCase())
   await page.getByRole('button', { name: 'Tham gia lớp', exact: true }).click()
   await expect(page.locator('.student-class-panel')).toContainText('Lớp 6A1 · Cô Phạm Thu Hoa')
+  // The bell sees the class just joined without a reload.
+  await page.getByRole('button', { name: /^Thông báo/ }).click()
+  await expect(page.getByRole('region', { name: 'Thông báo' })).toContainText('Bài được giao: Nhà nước Văn Lang')
+  await page.keyboard.press('Escape')
   await page.getByRole('button', { name: /Mở bài được giao: Nhà nước Văn Lang/ }).click()
   await expect(page).toHaveURL(/#library$/)
   await expect(page.locator('#dataset-reader-title')).toContainText('Văn Lang')
