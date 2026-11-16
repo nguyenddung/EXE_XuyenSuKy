@@ -1,13 +1,45 @@
 name: Demo video
+
+# Films the product demo against the live site with Vietnamese narration and pushes the MP4 to a
+# demo-video-output-<sha> branch. Runs on pushes to the demo-video branch only.
 on:
   push:
     branches: [demo-video]
+
 permissions:
-  contents: read
+  contents: write
+
 jobs:
-  probe:
+  film:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SITE: https://xuyen-su-ky.vercel.app
+      OUT: demo-out
     steps:
-      - run: echo hello > probe.txt; pip install edge-tts >/dev/null && edge-tts --list-voices | grep vi-VN
-      - uses: actions/upload-artifact@v4
-        with: { name: probe, path: probe.txt, retention-days: 1 }
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core >/dev/null
+      - run: pip install -q edge-tts
+      - name: Narration
+        run: python3 scripts/demo-video/tts.py "$OUT"
+      - name: Film the live site
+        run: node scripts/demo-video/record.mjs
+      - name: Assemble
+        run: python3 scripts/demo-video/assemble.py "$OUT"
+      - name: Contact sheet
+        run: |
+          for t in 5 25 45 65 85 105 125 145 165 185 205 225; do ffmpeg -v error -y -ss $t -i "$OUT/xuyen-su-ky-demo.mp4" -frames:v 1 -vf scale=640:-1 "$OUT/c_$t.jpg" || true; done
+          ls "$OUT"/c_*.jpg | head -12 | sed 's/^/-i /' | xargs ffmpeg -v error -y -filter_complex "xstack=inputs=$(ls $OUT/c_*.jpg | head -12 | wc -l):layout=0_0|w0_0|0_h0|w0_h0|0_h0+h1|w0_h0+h1|0_h0+h1+h2|w0_h0+h1+h2|0_h0+h1+h2+h3|w0_h0+h1+h2+h3|0_h0+h1+h2+h3+h4|w0_h0+h1+h2+h3+h4" "$OUT/contact.jpg" || true
+      - name: Push the video to demo-video-output
+        run: |
+          mkdir -p /tmp/publish && cp "$OUT/xuyen-su-ky-demo.mp4" "$OUT/marks.json" "$OUT/durations.json" /tmp/publish/
+          cp "$OUT/contact.jpg" /tmp/publish/ 2>/dev/null || true
+          cd /tmp/publish && git init -q -b "demo-video-output-${GITHUB_SHA::7}" && git add -A
+          git -c user.name=nguyenddung -c user.email=infor.nguyenddung@gmail.com commit -q -m "chore: demo video ${GITHUB_SHA::7}"
+          git push -q "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" "demo-video-output-${GITHUB_SHA::7}"
