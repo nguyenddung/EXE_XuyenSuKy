@@ -176,8 +176,25 @@ await scene('s3', async () => {
   await click(page.getByRole('button', { name: /^Thông báo/ })); await wait(2500)
 })
 
+await scene('s3b', async () => {
+  await page.keyboard.press('Escape'); await wait(400)
+  const plan = page.locator('#study-plan-title')
+  if (await plan.isVisible().catch(() => false)) { await moveTo(plan); await wait(1500) } else console.log('[s3b] plan hidden')
+  const lessons = page.locator('.dashboard-lesson-grid > *:visible')
+  const count = await lessons.count()
+  console.log('[s3b] lessons', count)
+  for (let index = 0; index < Math.min(3, count); index++) { await moveTo(lessons.nth(index)); await wait(900) }
+  await smoothScroll(0, 900)
+  await type(page.locator('.dashboard-search input'), 'van lang')
+  await page.keyboard.press('Enter')
+  await page.getByRole('region', { name: 'Kết quả tìm kiếm' }).waitFor(); await wait(1200)
+  await moveTo(page.getByRole('region', { name: 'Kết quả tìm kiếm' })); await wait(2500)
+})
+
 await scene('s4', async () => {
   await page.keyboard.press('Escape'); await wait(300)
+  const close = page.getByRole('button', { name: 'Đóng kết quả tìm kiếm' })
+  if (await close.isVisible().catch(() => false)) { await close.click(); await wait(300) }
   await click(page.getByRole('button', { name: /Mở bài được giao: Nhà nước Văn Lang/ }))
   await page.locator('#dataset-reader-title').waitFor(); await wait(1500)
   await scrollBy(500, 10, 80); await wait(1200)
@@ -261,9 +278,9 @@ await scene('s7', async () => {
   await page.locator('.chat-answer').last().waitFor()
   await page.waitForFunction(() => !document.querySelector('.chat-loading, .chat-typing, [aria-busy="true"]'), null, { timeout: 45000 }).catch(() => {})
   await wait(1500)
+  await moveTo(page.locator('.chat-answer').last()); await wait(2500)
   const sources = page.locator('.chat-sources').last()
-  if (await sources.count()) { await moveTo(sources); await wait(2000) }
-  await moveTo(page.locator('.chat-answer').last()); await wait(1500)
+  if (await sources.count()) { await moveTo(sources); await wait(2500) }
 })
 
 await scene('s8', async () => {
