@@ -31,20 +31,6 @@ test('voice mode opens a hands-free conversation instead of the ask-by-mic flow'
   await expect(page.locator('.voice-mic')).toBeFocused()
 })
 
-test('out of ElevenLabs credits, the call switches to asking by mic with the Google voice', async ({ page }) => {
-  let speechRequests = 0
-  await page.route('**/api/characters/*/speech', (route) => { speechRequests++; return route.fulfill({ status: 200, contentType: 'audio/mpeg', body: Buffer.from('mock-mp3') }) })
-  await enableLiveVoice(page, { status: 503, body: { error: { code: 'LIVE_VOICE_QUOTA_EXCEEDED', message: 'Giọng nói đã hết lượt dùng trong tháng này.' } } })
-  await openVoice(page)
-  await page.getByRole('button', { name: 'Bắt đầu trò chuyện' }).click()
-  await expect(page.locator('.voice-mic')).toHaveAttribute('aria-label', 'Nói câu hỏi')
-  await expect(page.getByRole('status').filter({ hasText: 'giọng Google' })).toBeVisible()
-  await expect(page.getByRole('alert')).toHaveCount(0)
-  // Answers are still read by the server, which switches to the Google voice.
-  await page.getByRole('button', { name: 'Nghe lời chào' }).click()
-  await expect.poll(() => speechRequests).toBe(1)
-})
-
 test('a busy session endpoint tells the student when to call again', async ({ page }) => {
   await enableLiveVoice(page, { status: 429, body: { error: { code: 'RATE_LIMITED' } } })
   await openVoice(page)

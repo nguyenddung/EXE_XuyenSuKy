@@ -9,20 +9,16 @@ import '../live-voice.css'
 // Live, hands-free conversation with the character's ElevenLabs voice agent: the student talks, the character answers
 // out loud, turn after turn, until one of them ends the call. The server hands out a one-time signed URL per call.
 
-/** `onFallback(true)` means the voice provider is out of credits or failing, so the ask-by-mic flow answers with the Google voice. */
-interface Props { character: Character; onFallback: (providerDown?: boolean) => void; onShowText: () => void }
+interface Props { character: Character; onFallback: () => void; onShowText: () => void }
 interface Line { id: number; role: 'user' | 'agent'; text: string }
 type SearchHit = { lessonTitle: string; sectionTitle: string; grade: number; text: string }
 
-class SessionError extends Error { constructor(message: string, readonly providerDown = false) { super(message) } }
+class SessionError extends Error {}
 async function requestSignedUrl(characterId: string) {
   const response = await fetch(`/api/characters/${characterId}/voice-session`, { method: 'POST', headers: { Accept: 'application/json' } })
   if (response.status === 429) throw new SessionError(`Em đang gọi hơi nhiều. Hãy thử lại sau ${Number(response.headers.get('Retry-After')) || 60} giây.`)
-  const body = await response.json().catch(() => null) as { signedUrl?: string; error?: { code?: string; message?: string } } | null
-  // Out of ElevenLabs credits, or ElevenLabs refused the call: the browser's voice can still answer.
-  // LIVE_VOICE_UNAVAILABLE (live voice not set up for this character) is not a provider failure.
-  const providerDown = body?.error?.code === 'LIVE_VOICE_QUOTA_EXCEEDED' || body?.error?.code === 'LIVE_VOICE_UPSTREAM_ERROR'
-  if (!response.ok || !body?.signedUrl) throw new SessionError(body?.error?.message || `Chưa mở được cuộc trò chuyện (HTTP ${response.status}).`, providerDown)
+  const body = await response.json().catch(() => null) as { signedUrl?: string; error?: { message?: string } } | null
+  if (!response.ok || !body?.signedUrl) throw new SessionError(body?.error?.message || `Chưa mở được cuộc trò chuyện (HTTP ${response.status}).`)
   return body.signedUrl
 }
 
@@ -73,10 +69,7 @@ function LiveVoice({ character, onFallback, onShowText, lines, failure, setFailu
     if (opening || connected) return
     setFailure(''); clearLines(); setOpening(true)
     try { startSession({ signedUrl: await requestSignedUrl(character.id) }) }
-    catch (error) {
-      if (error instanceof SessionError && error.providerDown && 'speechSynthesis' in window) { onFallback(true); return }
-      setFailure(error instanceof SessionError ? error.message : 'Chưa mở được cuộc trò chuyện. Kiểm tra kết nối mạng rồi thử lại.')
-    }
+    catch (error) { setFailure(error instanceof SessionError ? error.message : 'Chưa mở được cuộc trò chuyện. Kiểm tra kết nối mạng rồi thử lại.') }
     finally { setOpening(false) }
   }
 
@@ -97,14 +90,14 @@ function LiveVoice({ character, onFallback, onShowText, lines, failure, setFailu
     </CharacterVoicePanel>
     <div className="voice-dock">
       <p className="live-voice-status" role="status">{busy && <LoaderCircle size={16} className="voice-spinner" />}{statusText}</p>
-      {failure && <div className="chat-error" role="alert"><p>{failure}</p><button type="button" onClick={() => onFallback()}>Hỏi từng câu bằng mic</button></div>}
+      {failure && <div className="chat-error" role="alert"><p>{failure}</p><button type="button" onClick={onFallback}>Hỏi từng câu bằng mic</button></div>}
       <div className="voice-main-controls">
         {connected ? <>
           <button type="button" className="voice-send" aria-pressed={isMuted} onClick={() => setMuted(!isMuted)}>{isMuted ? <MicOff size={20} /> : <Mic size={20} />}{isMuted ? 'Bật micro' : 'Tắt micro'}</button>
           <button type="button" className="voice-mic is-listening" onClick={endSession}><PhoneOff size={20} /> Kết thúc</button>
         </> : <button ref={startButton} type="button" className="voice-mic" disabled={busy} onClick={() => void start()}><Mic size={24} /><span>{busy ? 'Đang kết nối…' : lines.length ? 'Trò chuyện tiếp' : 'Bắt đầu trò chuyện'}</span></button>}
       </div>
-      <div className="chat-voice-controls"><button type="button" onClick={onShowText}>Nhắn tin kèm nguồn sách</button><button type="button" disabled={connected || busy} onClick={() => onFallback()}>Hỏi từng câu bằng mic</button><span>Nhân vật mô phỏng · Giọng ElevenLabs</span></div>
+      <div className="chat-voice-controls"><button type="button" onClick={onShowText}>Nhắn tin kèm nguồn sách</button><button type="button" disabled={connected || busy} onClick={onFallback}>Hỏi từng câu bằng mic</button><span>Nhân vật mô phỏng · Giọng ElevenLabs</span></div>
     </div>
   </>
 }

@@ -30,8 +30,6 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
   const [voiceMessage, setVoiceMessage] = useState<number | null>(null)
   // Voice mode is a live conversation when the server offers one; otherwise (or on request) the ask-one-question-by-mic flow.
   const [liveFallback, setLiveFallback] = useState(false)
-  // Set when the live call could not open because ElevenLabs is out of credits: the server reads answers with the Google voice.
-  const [googleVoiceNotice, setGoogleVoiceNotice] = useState('')
   const live = mode === 'voice' && character.liveVoice && !liveFallback
   const [input, setInput] = useState('')
   const history = useChatHistory(historyOwner, character.id)
@@ -140,13 +138,6 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
     else void speech.play(answer, index)
   }
 
-  function fallBackFromLive(providerDown?: boolean) {
-    if (providerDown) {
-      setGoogleVoiceNotice(`Giọng ElevenLabs đã hết lượt dùng nên ${character.name} sẽ trả lời bằng giọng Google. Nhấn mic để hỏi từng câu nhé.`)
-    }
-    setLiveFallback(true)
-  }
-
   function switchMode(next: CharacterInteractionMode) {
     if (next === modeRef.current) return
     speech.stop(); mic.stop(); speech.clearError(); mic.clearError()
@@ -171,7 +162,7 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
   const voiceIndex = voiceMessage ?? (messages.length - 1)
   const voiceExchange = messages[voiceIndex]
   const voiceAnswer = voiceExchange?.reply?.answer || character.greeting
-  const voiceNotice = mic.listening ? 'Đang nghe… Nói câu hỏi, kiểm tra nội dung rồi nhấn Gửi.' : mic.error || speech.error || (!mic.supported ? 'Trình duyệt này chưa hỗ trợ mic. Chuyển sang Nhắn tin để nhập câu hỏi.' : '') || googleVoiceNotice || historyNote
+  const voiceNotice = mic.listening ? 'Đang nghe… Nói câu hỏi, kiểm tra nội dung rồi nhấn Gửi.' : mic.error || speech.error || (!mic.supported ? 'Trình duyệt này chưa hỗ trợ mic. Chuyển sang Nhắn tin để nhập câu hỏi.' : '') || historyNote
   function listenButton(answer: string, index: number) {
     const active = speech.activeMessage === index
     return <button type="button" className="chat-listen" disabled={busy} onClick={() => listen(answer, index)} aria-label={active ? 'Dừng đọc' : index === -1 ? 'Nghe lời chào' : `Nghe câu trả lời ${index + 1}`}>
@@ -183,7 +174,7 @@ export function CharacterChatModal({ character, historyOwner, initialMode = 'cha
     <div className="chat-header"><div className={`chat-avatar portrait-${character.tone}${speech.phase === 'speaking' ? ' is-speaking' : ''}`}><img src={character.image} alt="" /></div><div><span>{mode === 'voice' ? 'NÓI CHUYỆN CÙNG' : 'NHẮN TIN CÙNG'}</span><h2 id="chat-title">{character.name}</h2></div><button type="button" disabled={busy} onClick={resetConversation} aria-label="Bắt đầu cuộc trò chuyện mới"><RotateCcw size={18} /></button><button type="button" onClick={onClose} aria-label="Đóng trò chuyện"><X size={21} /></button></div>
     <div className="character-mode-switch" role="group" aria-label="Chế độ trò chuyện"><button type="button" aria-pressed={mode === 'chat'} onClick={() => switchMode('chat')}><MessageCircle size={16} /> Nhắn tin</button><button type="button" aria-pressed={mode === 'voice'} onClick={() => switchMode('voice')}><Mic size={16} /> Nói chuyện</button></div>
     {live ? <Suspense fallback={<p className="voice-loading" role="status"><LoaderCircle size={18} className="voice-spinner" /> Đang chuẩn bị trò chuyện trực tiếp…</p>}>
-      <CharacterLiveVoice character={character} onFallback={fallBackFromLive} onShowText={() => switchMode('chat')} />
+      <CharacterLiveVoice character={character} onFallback={() => setLiveFallback(true)} onShowText={() => switchMode('chat')} />
     </Suspense> : mode === 'voice' ? <>
       <CharacterVoicePanel character={character} activity={activity} studentSpeaking={mic.hearingSpeech}>
         <span className="voice-kicker">{busy ? 'ĐANG TRA CỨU' : 'LỜI NHÂN VẬT'}</span>

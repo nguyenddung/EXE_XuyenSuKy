@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
 import { readFile } from 'node:fs/promises'
-import { createGoogleSpeech, createSpeechService, elevenLabsVoiceId, SpeechError, speechChunks, speechSsml } from '../server/speech.mjs'
+import { createSpeechService, elevenLabsVoiceId, SpeechError, speechSsml } from '../server/speech.mjs'
 import voices from '../shared/character-voices.json' with { type: 'json' }
 import { memoryStore } from '../server/rag/limits.mjs'
 import { handleApi } from '../server/handler.mjs'
@@ -11,8 +11,7 @@ const config = () => ({ key: 'test-server-secret', region: 'southeastasia' })
 const quota = () => ({ perMinute: 100, perDay: 100, globalPerDay: 100 })
 const request = (text = 'Ta kể con nghe về năm 938. [1]', visitor = 'student') => ({ characterId: 'ngo-quyen', text, visitor })
 const mp3 = () => new Response(Buffer.from('mock-mp3'), { headers: { 'Content-Type': 'audio/mpeg' } })
-// The Google backup voice is off unless a test turns it on.
-const service = (extra = {}) => createSpeechService({ config, store: memoryStore(), limits: quota, fetchAudio: async () => mp3(), backup: null, ...extra })
+const service = (extra = {}) => createSpeechService({ config, store: memoryStore(), limits: quota, fetchAudio: async () => mp3(), ...extra })
 
 test('speech uses character voices, escapes SSML and removes only visual citations', async () => {
   const calls = []
@@ -199,35 +198,4 @@ test('the 12 characters have 12 different default voices that fit them, and a de
   voices['ho-chi-minh'].elevenlabs.designedVoiceId = 'DesignedVietnameseVoice'
   try { assert.equal(elevenLabsVoiceId('ho-chi-minh'), 'DesignedVietnameseVoice') } finally { delete voices['ho-chi-minh'].elevenlabs.designedVoiceId }
   assert.equal(elevenLabsVoiceId('ho-chi-minh'), 'pqHfZKP75CvOlQylNhV4')
-})
-
-test('out of ElevenLabs credits or unconfigured, answers are read with the Google voice', async () => {
-  const elevenLabs = () => ({ provider: 'elevenlabs', key: 'test-secret', voiceId: 'JBFqnCBsd6RMkjVDRZzb' })
-  let primaryCalls = 0
-  const spoken = []
-  const backup = async (text) => { spoken.push(text); return Buffer.from('google-mp3') }
-  const synthesize = service({ config: elevenLabs, backup, fetchAudio: async () => { primaryCalls++; return new Response('{"detail":{"status":"quota_exceeded"}}', { status: 401 }) } })
-  assert.equal(String(await synthesize(request())), 'google-mp3')
-  assert.deepEqual(spoken, ['Ta kể con nghe về năm 938.'])
-  // For the next minute the out-of-credits provider is skipped.
-  await synthesize(request('Câu khác'))
-  assert.equal(primaryCalls, 1)
-  assert.equal(String(await service({ config: () => ({}), backup })(request())), 'google-mp3')
-  // The app's own limits stay errors and never reach the backup.
-  const before = spoken.length
-  await assert.rejects(service({ config: elevenLabs, backup, limits: () => ({ perMinute: 100, perDay: 0, globalPerDay: 100 }) })(request()), { code: 'SPEECH_QUOTA_EXCEEDED' })
-  await assert.rejects(service({ config: () => ({}), backup })(request('')), { status: 400 })
-  assert.equal(spoken.length, before)
-})
-
-test('the Google voice reads long answers in short pieces joined into one MP3', async () => {
-  const text = 'Năm 938, ta đánh tan quân Nam Hán trên sông Bạch Đằng, mở ra thời kỳ độc lập. '.repeat(8)
-  const chunks = speechChunks(text)
-  assert.ok(chunks.length > 1 && chunks.every((chunk) => chunk.length <= 180))
-  assert.equal(chunks.join(' '), text.trim())
-  const urls = []
-  const google = createGoogleSpeech({ fetchAudio: async (url) => { urls.push(new URL(url)); return new Response(Buffer.from(`[${new URL(url).searchParams.get('idx')}]`), { headers: { 'Content-Type': 'audio/mpeg' } }) } })
-  assert.equal(String(await google(text)), chunks.map((_, index) => `[${index}]`).join(''))
-  assert.ok(urls.every((url) => url.hostname === 'translate.google.com' && url.searchParams.get('tl') === 'vi'))
-  await assert.rejects(createGoogleSpeech({ fetchAudio: async () => new Response('blocked', { status: 429 }) })('Chào con.'), (error) => error instanceof SpeechError && error.status === 502)
 })
