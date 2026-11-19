@@ -133,6 +133,7 @@ async function drag(from, to) {
 
 const marks = []
 const failures = []
+let cuts = []
 async function scene(id, run) {
   const item = narration.find((entry) => entry.id === id)
   const start = Date.now() / 1000
@@ -140,7 +141,8 @@ async function scene(id, run) {
   const need = (durations[id] || 3) + 0.6
   const spent = Date.now() / 1000 - start
   if (spent < need) await wait((need - spent) * 1000)
-  marks.push({ id, title: item?.title || id, start, end: Date.now() / 1000 })
+  marks.push({ id, title: item?.title || id, start, end: Date.now() / 1000, cuts: cuts.filter(([from, to]) => to - from > 0.5) })
+  cuts = []
   console.log(`scene ${id}: ${(Date.now() / 1000 - start).toFixed(1)} s (narration ${durations[id]?.toFixed(1)} s)`)
 }
 async function setup(run) { try { await run() } catch (error) { failures.push(`setup: ${error.message.split('\n')[0]}`); console.error('[setup]', error.message.split('\n')[0]) } }
@@ -352,10 +354,13 @@ async function askBySpeaking(question) {
   await wait(clip.ms + 1300)
   await click(page.getByRole('button', { name: 'Gửi câu hỏi' }))
   const started = Date.now()
-  while (audioPlays.length <= before && Date.now() - started < 60000) await wait(300)
+  while (audioPlays.length <= before && Date.now() - started < 150000) await wait(250)
   if (audioPlays.length <= before) { console.error('[voice] no playback for', question); return }
+  // The wait for the AI and the voice is cut from the film after a short look at "đang tra cứu".
+  cuts.push([started / 1000 + 2.5, audioPlays[before] - 0.8])
   await wait(1500)
-  while (await page.getByRole('button', { name: 'Dừng đọc' }).count() && Date.now() - started < 120000) await wait(300)
+  const reading = Date.now()
+  while (await page.getByRole('button', { name: 'Dừng đọc' }).count() && Date.now() - reading < 120000) await wait(300)
   await wait(900)
 }
 

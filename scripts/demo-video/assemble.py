@@ -15,17 +15,28 @@ work = out / 'scenes'; work.mkdir(exist_ok=True)
 parts = []
 for number, mark in enumerate(marks):
     start, end = mark['start'], mark['end']
-    before = [f for f in frames if f['t'] <= start]
-    inside = [f for f in frames if start < f['t'] < end]
-    shots = ([{**before[-1], 't': start}] if before else []) + inside
-    if not shots: continue
-    lines = []
-    for index, shot in enumerate(shots):
-        until = shots[index + 1]['t'] if index + 1 < len(shots) else end
-        lines += [f"file '{Path(shot['file']).resolve()}'", f"duration {max(until - shot['t'], 0.001):.3f}"]
-    lines.append(f"file '{Path(shots[-1]['file']).resolve()}'")
+    # Kept stretches of the scene: everything but the cut waits.
+    cuts = sorted(mark.get('cuts', []))
+    pieces, cursor = [], start
+    for cut_from, cut_to in cuts:
+        if cut_from > cursor: pieces.append((cursor, min(cut_from, end)))
+        cursor = max(cursor, cut_to)
+    if cursor < end: pieces.append((cursor, end))
+    def shifted(moment):  # scene time of an absolute moment once the cuts are taken out
+        return sum(min(moment, b) - a for a, b in pieces if moment > a)
+    lines, last = [], None
+    for piece_from, piece_to in pieces:
+        before = [f for f in frames if f['t'] <= piece_from]
+        inside = [f for f in frames if piece_from < f['t'] < piece_to]
+        shots = ([{**before[-1], 't': piece_from}] if before else []) + inside
+        for index, shot in enumerate(shots):
+            until = shots[index + 1]['t'] if index + 1 < len(shots) else piece_to
+            lines += [f"file '{Path(shot['file']).resolve()}'", f"duration {max(until - shot['t'], 0.001):.3f}"]
+            last = shot
+    if not last: continue
+    lines.append(f"file '{Path(last['file']).resolve()}'")
     listing = work / f"{mark['id']}.txt"; listing.write_text('\n'.join(lines) + '\n')
-    length = end - start
+    length = sum(b - a for a, b in pieces)
     title = work / f"{mark['id']}.title.txt"; title.write_text(mark['title'])
     video = 'fps=30,scale=1280:720:flags=lanczos,format=yuv420p'
     if font: video += f",drawtext=fontfile={font}:textfile={title}:fontsize=26:fontcolor=white:box=1:boxcolor=0x0f2a4a@0.82:boxborderw=14:x=28:y=h-th-40:enable='lt(t,4.5)'"
@@ -39,9 +50,9 @@ for number, mark in enumerate(marks):
     temp, final = work / f"{mark['id']}.part.mp4", work / f"{mark['id']}.mp4"
     command = ['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', str(listing)]
     command += ['-i', str(audio)] if audio.exists() else ['-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo']
-    extra = [v for v in voices if start <= v['at'] < end]
+    extra = [{**v, 'offset': shifted(v['at'])} for v in voices if start <= v['at'] < end]
     for clip in extra: command += ['-i', str(Path(clip['file']).resolve())]
-    mix = ''.join(f"[{index + 2}:a]aresample=48000,aformat=channel_layouts=stereo,adelay={int((clip['at'] - start) * 1000) + 150}:all=1[x{index}];" for index, clip in enumerate(extra))
+    mix = ''.join(f"[{index + 2}:a]aresample=48000,aformat=channel_layouts=stereo,adelay={int(clip['offset'] * 1000) + 150}:all=1[x{index}];" for index, clip in enumerate(extra))
     audio_chain = f"[1:a]aresample=48000,aformat=channel_layouts=stereo,adelay=350:all=1[n];{mix}[n]{''.join(f'[x{index}]' for index in range(len(extra)))}amix=inputs={len(extra) + 1}:normalize=0:duration=longest,apad[a]" if extra else "[1:a]aresample=48000,adelay=350:all=1,apad[a]"
     command += ['-filter_complex', f"[0:v]{video}[v];{audio_chain}", '-map', '[v]', '-map', '[a]', '-t', f'{length:.3f}',
                 '-c:v', 'libx264', '-crf', '19', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', '-c:a', 'aac', '-b:a', '160k', '-ac', '2', '-ar', '48000', str(temp)]
