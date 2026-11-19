@@ -7,7 +7,11 @@ const spokenText = (text: string) => text.replace(/\[\d+\]/g, '').trim()
 // Voice lists can arrive asynchronously on first use in Chrome.
 async function vietnameseVoice(signal: AbortSignal): Promise<SpeechSynthesisVoice | undefined> {
   const synth = window.speechSynthesis
-  const choose = () => synth.getVoices().find((voice) => /^vi(?:-|_)?/i.test(voice.lang))
+  // Prefer Chrome's "Google Tiếng Việt" voice, then any other Vietnamese voice the device has.
+  const choose = () => {
+    const vietnamese = synth.getVoices().filter((voice) => /^vi(?:-|_)?/i.test(voice.lang))
+    return vietnamese.find((voice) => /google/i.test(voice.name)) || vietnamese[0]
+  }
   if (choose()) return choose()
   await new Promise<void>((resolve) => {
     const finish = () => { clearTimeout(timer); synth.removeEventListener('voiceschanged', changed); signal.removeEventListener('abort', finish); resolve() }
