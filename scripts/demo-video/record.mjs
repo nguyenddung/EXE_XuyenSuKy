@@ -3,7 +3,9 @@
 // not filmed. Usage: SITE=https://… OUT=demo-out node scripts/demo-video/record.mjs
 import { chromium } from 'playwright'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { spawnSync } from 'node:child_process'
+import { spawnSync, execFile } from 'node:child_process'
+import { promisify } from 'node:util'
+const run = promisify(execFile)
 
 const SITE = process.env.SITE || 'http://127.0.0.1:5199'
 const OUT = process.env.OUT || 'demo-out'
@@ -76,17 +78,34 @@ await context.addInitScript(() => {
   const play = HTMLMediaElement.prototype.play
   HTMLMediaElement.prototype.play = function (...args) { if (this.src?.startsWith('blob:')) window.demoAudioPlay?.(); return play.apply(this, args) }
 })
+// The app gives up on a voice after 20 s, so a long answer is spoken in sentence-sized pieces made in parallel.
+async function characterVoice(text, file) {
+  if (process.env.DEMO_FAKE_VOICE) { await run('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'sine=frequency=220:duration=6', file]); return }
+  const sentences = text.replace(/\s+/g, ' ').split(/(?<=[.!?…])\s+/).filter(Boolean)
+  const pieces = []
+  for (const sentence of sentences) {
+    if (pieces.length && (pieces.at(-1) + ' ' + sentence).length <= 220) pieces[pieces.length - 1] += ' ' + sentence
+    else pieces.push(sentence)
+  }
+  const parts = await Promise.all(pieces.map(async (piece, index) => {
+    const part = `${file}.${index}.mp3`
+    for (let attempt = 1; ; attempt++) {
+      try { await run('edge-tts', ['--voice', 'vi-VN-NamMinhNeural', '--text', piece, '--write-media', part]); return part } catch (error) {
+        if (attempt === 3) throw error
+        await new Promise((resolve) => setTimeout(resolve, 600 * attempt))
+      }
+    }
+  }))
+  writeFileSync(`${file}.txt`, parts.map((part) => `file '${part.split('/').pop()}'`).join('\n') + '\n')
+  await run('ffmpeg', ['-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', `${file}.txt`, '-c:a', 'libmp3lame', '-b:a', '128k', file])
+}
 await page.route('**/api/characters/*/speech', async (route) => {
   if (!voiceScene) return route.continue()
   const text = JSON.parse(route.request().postData() || '{}').text || ''
   const file = `${OUT}/voice/${voiceClips.length + 1}.mp3`
-  const made = process.env.DEMO_FAKE_VOICE
-    ? spawnSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'sine=frequency=220:duration=6', file], { encoding: 'utf8' })
-    : spawnSync('edge-tts', ['--voice', 'vi-VN-NamMinhNeural', '--text', text, '--write-media', file], { encoding: 'utf8' })
-  if (made.status !== 0) { console.error('[voice] edge-tts failed', made.stderr); return route.continue() }
-  // The narration of the scene finishes before the character speaks.
-  const ready = voiceScene.start + voiceScene.narration + 0.4
-  if (Date.now() / 1000 < ready) await new Promise((resolve) => setTimeout(resolve, (ready - Date.now() / 1000) * 1000))
+  const began = Date.now()
+  try { await characterVoice(text, file) } catch (error) { console.error('[voice] edge-tts failed', String(error.stderr || error.message).split('\n').pop()); return route.continue() }
+  console.log(`[voice] clip ${voiceClips.length + 1}: ${text.length} chars in ${((Date.now() - began) / 1000).toFixed(1)} s`)
   voiceClips.push({ file, requested: Date.now() / 1000 })
   await route.fulfill({ status: 200, contentType: 'audio/mpeg', body: readFileSync(file) })
 })
