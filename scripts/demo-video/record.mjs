@@ -3,6 +3,7 @@
 // not filmed. Usage: SITE=https://… OUT=demo-out node scripts/demo-video/record.mjs
 import { chromium } from 'playwright'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
 
 const SITE = process.env.SITE || 'http://127.0.0.1:5199'
 const OUT = process.env.OUT || 'demo-out'
@@ -10,7 +11,7 @@ const narration = JSON.parse(readFileSync(new URL('./narration.json', import.met
 const durations = JSON.parse(readFileSync(`${OUT}/durations.json`, 'utf8'))
 mkdirSync(`${OUT}/frames`, { recursive: true })
 
-const browser = await chromium.launch()
+const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] })
 const context = await browser.newContext({ viewport: { width: 1280, height: 720 }, deviceScaleFactor: 1, locale: 'vi-VN', timezoneId: 'Asia/Ho_Chi_Minh' })
 const page = await context.newPage()
 page.on('dialog', (dialog) => dialog.accept())
@@ -40,6 +41,54 @@ await context.addInitScript(() => {
     }, true)
   }
   if (document.readyState === 'loading') addEventListener('DOMContentLoaded', install); else install()
+})
+
+// Character voice. ElevenLabs is out of credits, so in the voice scene the speech endpoint is answered with a
+// substitute Vietnamese neural voice (edge-tts, labelled "giọng minh hoạ" in the film). Each clip and the moment the
+// app starts playing it are recorded so the assembly can put the sound under the picture.
+const voiceClips = []
+const audioPlays = []
+let voiceScene = null
+mkdirSync(`${OUT}/voice`, { recursive: true })
+await page.exposeFunction('demoAudioPlay', () => { audioPlays.push(Date.now() / 1000) })
+const micStarts = []
+await page.exposeFunction('demoMicStart', () => { micStarts.push(Date.now() / 1000) })
+// The student's spoken question: headless Chromium has no speech recognition, so a stand-in recognizer types the
+// scripted question word by word while the student's recorded voice is laid under the picture.
+await context.addInitScript(() => {
+  class DemoRecognition {
+    start() {
+      const text = (window.__demoSpeechQueue || []).shift() || ''
+      const ms = window.__demoSpeechMs || 2500
+      const words = text.split(' ')
+      window.demoMicStart?.()
+      setTimeout(() => this.onspeechstart?.(), 250)
+      words.forEach((_, index) => setTimeout(() => this.onresult?.({ results: [[{ transcript: words.slice(0, index + 1).join(' ') }]] }), 300 + ms * (index + 1) / words.length))
+      this.timer = setTimeout(() => { this.onspeechend?.(); this.onend?.() }, ms + 700)
+    }
+    stop() { clearTimeout(this.timer); this.onend?.() }
+    abort() { clearTimeout(this.timer) }
+  }
+  window.SpeechRecognition = DemoRecognition
+  window.webkitSpeechRecognition = DemoRecognition
+})
+await context.addInitScript(() => {
+  const play = HTMLMediaElement.prototype.play
+  HTMLMediaElement.prototype.play = function (...args) { if (this.src?.startsWith('blob:')) window.demoAudioPlay?.(); return play.apply(this, args) }
+})
+await page.route('**/api/characters/*/speech', async (route) => {
+  if (!voiceScene) return route.continue()
+  const text = JSON.parse(route.request().postData() || '{}').text || ''
+  const file = `${OUT}/voice/${voiceClips.length + 1}.mp3`
+  const made = process.env.DEMO_FAKE_VOICE
+    ? spawnSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'sine=frequency=220:duration=6', file], { encoding: 'utf8' })
+    : spawnSync('edge-tts', ['--voice', 'vi-VN-NamMinhNeural', '--text', text, '--write-media', file], { encoding: 'utf8' })
+  if (made.status !== 0) { console.error('[voice] edge-tts failed', made.stderr); return route.continue() }
+  // The narration of the scene finishes before the character speaks.
+  const ready = voiceScene.start + voiceScene.narration + 0.4
+  if (Date.now() / 1000 < ready) await new Promise((resolve) => setTimeout(resolve, (ready - Date.now() / 1000) * 1000))
+  voiceClips.push({ file, requested: Date.now() / 1000 })
+  await route.fulfill({ status: 200, contentType: 'audio/mpeg', body: readFileSync(file) })
 })
 
 // Screencast: every painted frame with its timestamp.
@@ -283,10 +332,57 @@ await scene('s7', async () => {
   if (await sources.count()) { await moveTo(sources); await wait(2500) }
 })
 
-await scene('s8', async () => {
+// Two questions asked by voice in the "Nói chuyện" mode and answered aloud, each in full before the next.
+const studentClips = []
+function studentVoice(text) {
+  const file = `${OUT}/voice/student-${studentClips.length + 1}.mp3`
+  const made = process.env.DEMO_FAKE_VOICE
+    ? spawnSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'sine=frequency=660:duration=2.5', file])
+    : spawnSync('edge-tts', ['--voice', 'vi-VN-HoaiMyNeural', '--pitch=+25Hz', '--rate=+6%', '--text', text, '--write-media', file])
+  if (made.status !== 0) throw new Error('student voice failed')
+  const seconds = Number(spawnSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file], { encoding: 'utf8' }).stdout.trim())
+  studentClips.push({ file, seconds })
+  return { file, ms: Math.round(seconds * 1000) }
+}
+async function askBySpeaking(question) {
+  const clip = studentVoice(question)
+  await page.evaluate(([text, ms]) => { window.__demoSpeechQueue = [text]; window.__demoSpeechMs = ms }, [question, clip.ms])
+  const before = audioPlays.length
+  await click(page.getByRole('button', { name: 'Nói câu hỏi' }))
+  await wait(clip.ms + 1300)
+  await click(page.getByRole('button', { name: 'Gửi câu hỏi' }))
+  const started = Date.now()
+  while (audioPlays.length <= before && Date.now() - started < 60000) await wait(300)
+  if (audioPlays.length <= before) { console.error('[voice] no playback for', question); return }
+  await wait(1500)
+  while (await page.getByRole('button', { name: 'Dừng đọc' }).count() && Date.now() - started < 120000) await wait(300)
+  await wait(900)
+}
+
+await scene('s8a', async () => {
+  voiceScene = { start: Date.now() / 1000, narration: durations.s8a || 6 }
   await page.keyboard.press('Escape'); await wait(500)
   await click(card('Trần Hưng Đạo').getByRole('button', { name: 'Nhắn tin', exact: true }))
   await page.getByRole('dialog').waitFor(); await wait(600)
+  await click(page.getByRole('dialog').getByRole('button', { name: 'Nói chuyện', exact: true }))
+  await wait(900)
+  const perQuestion = page.getByRole('button', { name: 'Hỏi từng câu bằng mic' })
+  if (await perQuestion.count()) await click(perQuestion.first())
+  await wait(700)
+  const autoRead = page.getByLabel('Tự đọc câu trả lời')
+  if (await autoRead.count() && !(await autoRead.isChecked())) await click(autoRead)
+  // Narration first, then the student speaks.
+  const ready = voiceScene.start + voiceScene.narration + 0.3
+  if (Date.now() / 1000 < ready) await wait((ready - Date.now() / 1000) * 1000)
+  await askBySpeaking('Hịch tướng sĩ nói về điều gì?')
+  await askBySpeaking('Vì sao quân dân nhà Trần thắng được giặc mạnh?')
+  voiceScene = null
+})
+
+await scene('s8', async () => {
+  const autoRead = page.getByLabel('Tự đọc câu trả lời')
+  if (await autoRead.isChecked().catch(() => false)) await autoRead.uncheck()
+  await click(page.getByRole('dialog').getByRole('button', { name: 'Nhắn tin', exact: true })); await wait(800)
   await type(page.locator('#chat-input'), 'Ông có biết Bác Hồ là ai không?')
   await page.keyboard.press('Enter')
   await page.getByRole('button', { name: 'Trò chuyện với Hồ Chí Minh' }).waitFor({ timeout: 45000 })
@@ -324,5 +420,9 @@ await scene('s11', async () => { await wait(1000); await page.mouse.move(1180, 6
 
 await cdp.send('Page.stopScreencast')
 await browser.close()
-writeFileSync(`${OUT}/marks.json`, JSON.stringify({ marks, frames, failures }, null, 1))
+const clips = [
+  ...voiceClips.map((clip, index) => ({ file: clip.file, at: audioPlays[index] })).filter((clip) => clip.at),
+  ...studentClips.map((clip, index) => ({ file: clip.file, at: micStarts[index] ? micStarts[index] + 0.3 : null })).filter((clip) => clip.at),
+]
+writeFileSync(`${OUT}/marks.json`, JSON.stringify({ marks, frames, failures, clips, voiceClips, audioPlays, micStarts }, null, 1))
 console.log(failures.length ? `FAILURES:\n${failures.join('\n')}` : 'all scenes ok')

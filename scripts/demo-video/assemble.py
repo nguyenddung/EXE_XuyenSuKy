@@ -7,6 +7,9 @@ out = Path(sys.argv[1] if len(sys.argv) > 1 else 'demo-out')
 data = json.loads((out / 'marks.json').read_text())
 durations = json.loads((out / 'durations.json').read_text())
 frames, marks = data['frames'], data['marks']
+narration = {item['id']: item for item in json.loads((Path(__file__).parent / 'narration.json').read_text(encoding='utf-8'))}
+# Voice clips (character answers, the student's spoken questions) at the moment they play.
+voices = data.get('clips', [])
 font = next((f for f in ['/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf'] if os.path.exists(f)), None)
 work = out / 'scenes'; work.mkdir(exist_ok=True)
 parts = []
@@ -26,13 +29,21 @@ for number, mark in enumerate(marks):
     title = work / f"{mark['id']}.title.txt"; title.write_text(mark['title'])
     video = 'fps=30,scale=1280:720:flags=lanczos,format=yuv420p'
     if font: video += f",drawtext=fontfile={font}:textfile={title}:fontsize=26:fontcolor=white:box=1:boxcolor=0x0f2a4a@0.82:boxborderw=14:x=28:y=h-th-40:enable='lt(t,4.5)'"
+    badge = narration.get(mark['id'], {}).get('badge')
+    if font and badge:
+        badge_file = work / f"{mark['id']}.badge.txt"; badge_file.write_text(badge)
+        video += f",drawtext=fontfile={font}:textfile={badge_file}:fontsize=20:fontcolor=white:box=1:boxcolor=0x7a2e12@0.85:boxborderw=10:x=w-tw-28:y=24"
     if number == 0: video += ',fade=t=in:st=0:d=0.6'
     if number == len(marks) - 1: video += f',fade=t=out:st={max(length - 1.2, 0):.2f}:d=1.2'
     audio = out / 'audio' / f"{mark['id']}.mp3"
     temp, final = work / f"{mark['id']}.part.mp4", work / f"{mark['id']}.mp4"
     command = ['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', str(listing)]
     command += ['-i', str(audio)] if audio.exists() else ['-f', 'lavfi', '-i', 'anullsrc=r=48000:cl=stereo']
-    command += ['-filter_complex', f"[0:v]{video}[v];[1:a]aresample=48000,adelay=350:all=1,apad[a]", '-map', '[v]', '-map', '[a]', '-t', f'{length:.3f}',
+    extra = [v for v in voices if start <= v['at'] < end]
+    for clip in extra: command += ['-i', str(Path(clip['file']).resolve())]
+    mix = ''.join(f"[{index + 2}:a]aresample=48000,aformat=channel_layouts=stereo,adelay={int((clip['at'] - start) * 1000) + 150}:all=1[x{index}];" for index, clip in enumerate(extra))
+    audio_chain = f"[1:a]aresample=48000,aformat=channel_layouts=stereo,adelay=350:all=1[n];{mix}[n]{''.join(f'[x{index}]' for index in range(len(extra)))}amix=inputs={len(extra) + 1}:normalize=0:duration=longest,apad[a]" if extra else "[1:a]aresample=48000,adelay=350:all=1,apad[a]"
+    command += ['-filter_complex', f"[0:v]{video}[v];{audio_chain}", '-map', '[v]', '-map', '[a]', '-t', f'{length:.3f}',
                 '-c:v', 'libx264', '-crf', '19', '-preset', 'veryfast', '-pix_fmt', 'yuv420p', '-r', '30', '-c:a', 'aac', '-b:a', '160k', '-ac', '2', '-ar', '48000', str(temp)]
     subprocess.run(command, check=True)
     temp.rename(final); parts.append(final)
