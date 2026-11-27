@@ -19,9 +19,11 @@ export const videoIcons = ['riu_dong', 'luoi_sat', 'lua', 'nguoi', 'thuy_loi', '
   'hang_dong', 'leu', 'san_bat', 'hai_luom', 'tranh_vach', 'trang_suc', 'gom', 'det_vai', 'chan_nuoi', 'tuong', 'mo_tang', 'lua_chay', 'dong_do', 'dong_thau', 'cuoc', 'cay', 'gia_dinh', 'cua_cai', 'giau_ngheo']
 export const videoForms = ['vuon_nguoi', 'nguoi_toi_co', 'nguoi_tinh_khon']
 export const videoFinds = ['hoa_thach', 'rang', 'so', 'riu_tay', 'cong_cu_da', 'riu_mai', 'manh_gom', 'vo_oc', 'dan_da', 'vong_tay', 'mat_nguoi', 'xi_dong', 'mui_ten', 'luoi_cau', 'riu_xeo', 'giao', 'chuoi_dat', 'hat']
-export const videoStyles = ['dong_son', 'tien_su']
+export const videoStyles = ['dong_son', 'tien_su', 'co_dai']
+// Landmarks drawn in title scenes of the co_dai style (src/components/videoAncient.tsx).
+export const videoLandmarks = ['kim_tu_thap', 'thap_tang', 'bao_thap', 'den_hy_lap', 'dau_truong', 'thanh_quach', 'nui', 'rung', 'ngai_vang', 'chu_co', 'cuon_giay', 'sach', 'mai_rua', 'chu_cai', 'chu_so', 'lich', 'la_ban', 'vo_so', 'binh_khi']
 // Illustrated people (no words on screen): river scenes draw boats and planters, the others a band of figures below.
-export const videoRiverCast = ['cheo_thuyen', 'cay_lua']
+export const videoRiverCast = ['cheo_thuyen', 'cay_lua', 'thuyen_buom']
 export const videoBandCast = ['tu_hop', 'lam_ruong', 'dao_muong', 'cam_vu_khi', 'danh_trong', 'ghe_da', 'di_bo', 'san_bat', 'hai_luom', 'lam_gom', 'luyen_kim']
 
 export class JourneyError extends Error {}
@@ -96,6 +98,7 @@ export function validateJourney(journey, dataset) {
           const at = `${scene.id}`
           if (!videoSceneKinds.includes(scene.kind) || !isText(scene.caption) || typeof scene.duration !== 'number' || scene.duration < 4 || scene.duration > 20) fail(`${at}: scene needs a known kind, a caption and 4–20 seconds`)
           if (scene.kind === 'tieu_de' && !isText(scene.title)) fail(`${at}: tieu_de needs a title`)
+          if (scene.landmark !== undefined && (scene.kind !== 'tieu_de' || !videoLandmarks.includes(scene.landmark))) fail(`${at}: unknown landmark ${scene.landmark}`)
           if (scene.kind === 'bieu_tuong' && (!Array.isArray(scene.items) || scene.items.length < 2 || scene.items.length > 4 || !scene.items.every((item) => videoIcons.includes(item?.icon) && isText(item.label)))) fail(`${at}: bieu_tuong needs 2–4 items with known icons`)
           if (scene.kind === 'song_nuoc' && (!Array.isArray(scene.labels) || !scene.labels.length || scene.labels.length > 4 || !scene.labels.every(isText))) fail(`${at}: song_nuoc needs 1–4 labels`)
           if (scene.kind === 'tien_hoa' && (!Array.isArray(scene.forms) || !scene.forms.length || scene.forms.length > 3 || scene.forms.some((form, index) => videoForms.indexOf(form) < 0 || (index > 0 && videoForms.indexOf(form) <= videoForms.indexOf(scene.forms[index - 1]))))) fail(`${at}: tien_hoa needs 1–3 forms in evolutionary order`)

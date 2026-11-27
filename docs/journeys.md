@@ -12,7 +12,7 @@ Hành trình do `course_builder` (repo pipeline OCR) biên soạn: **hành trìn
 | Chương 2 · Buổi bình minh của loài người | Bài 4–6 | 8 |
 | Chương 3 · Những nền văn minh cổ đại | Bài 7–10 | 14 |
 | Chương 4 · Đông Nam Á: ngã tư đường của thế giới | Bài 11–13 | 7 |
-| Chương 5 · Hành trình giữ nước | Bài 14, 16, 18 (Bài 15, 17, 19, 20 đang biên soạn) | 13 |
+| Chương 5 · Hành trình giữ nước | Bài 14–20 | 24 |
 
 File nguồn: `data/journeys/lop6_chuong1.json` … `lop6_chuong5.json`. Bài chưa biên soạn hiện trên bản đồ với nhãn "đang được biên soạn". Học sinh lớp khác thấy ghi chú và vẫn đi thử được. Tên Chương 3 trong dataset còn lỗi OCR ("XÃ HỘI CỔ ĐẠI KẾT"); hành trình dùng `chapter_title` để hiển thị đúng.
 
@@ -27,11 +27,11 @@ File nguồn: `data/journeys/lop6_chuong1.json` … `lop6_chuong5.json`. Bài ch
 
 ## Video nhiệm vụ
 
-Video là animation SVG trong `src/components/JourneyVideo.tsx`. Mỗi cảnh dùng một mẫu có sẵn (`tieu_de`, `bieu_tuong`, `song_nuoc` và các mẫu tiền sử `tien_hoa`, `moc_thoi_gian`, `phat_hien`); phụ đề là lời thuyết minh kèm trang SGK; có tua và chọn cảnh. Biểu tượng, hiện vật và người nguyên thuỷ vẽ trong `videoPrehistory.tsx`, người Việt cổ trong `videoPeople.tsx`. Khung hình là hàm thuần theo thời gian nên có thể xuất MP4 sau này (Remotion).
+Video là animation SVG trong `src/components/JourneyVideo.tsx`. Mỗi cảnh dùng một mẫu có sẵn (`tieu_de`, `bieu_tuong`, `song_nuoc` và các mẫu tiền sử `tien_hoa`, `moc_thoi_gian`, `phat_hien`), với ba phong cách: `dong_son` (mặc định), `tien_su` và `co_dai`; phụ đề là lời thuyết minh kèm trang SGK; có tua và chọn cảnh. Biểu tượng, hiện vật và người nguyên thuỷ vẽ trong `videoPrehistory.tsx`, người Việt cổ trong `videoPeople.tsx`. Khung hình là hàm thuần theo thời gian nên có thể xuất MP4 sau này (Remotion).
 
-Hiện có video "Nhà nước Văn Lang ra đời" (Chương 5) và cả 8 nhiệm vụ của Chương 2 (Bài 4–6). Lời từng cảnh bám câu trích SGK của chính cảnh đó và được `course_builder` kiểm.
+Hiện có video cho cả 8 nhiệm vụ của Chương 2 (Bài 4–6), 14 nhiệm vụ của Chương 3 (Bài 7–10) và 24 nhiệm vụ của Chương 5 (Bài 14–20). Video Chương 3 dùng phong cách `co_dai` (`src/components/videoAncient.tsx`): nền hoàng hôn trên cồn cát, cảnh tiêu đề vẽ dần một công trình theo trường `landmark` (kim tự tháp, tháp tầng, bảo tháp, đền Hy Lạp, đấu trường, chữ viết cổ, la bàn, lịch…), cảnh sông có thuyền buồm (`thuyen_buom`); không vẽ người, vì hình người có sẵn mang trang phục Việt cổ. Lời từng cảnh bám câu trích SGK của chính cảnh đó và được `course_builder` kiểm.
 
-**Thuyết minh thu sẵn**: `npm run build:narration` (cần `ELEVENLABS_API_KEY`, giọng ở `ELEVENLABS_NARRATOR_VOICE_ID`) ghi MP3 vào `public/audio/journeys/<hành trình>/` và dấu băm từng câu vào `data/journeys/narration/`. Chỉ cảnh mới hoặc đổi lời mới được thu lại; server chỉ gắn âm thanh khi câu còn khớp, cảnh lệch tự dùng giọng trình duyệt. Học sinh nghe file tĩnh nên không tốn lượt gọi dịch vụ. Gói ElevenLabs Free chỉ dùng được giọng premade. Mỗi cảnh dài bằng câu đọc + 0,6 giây (đo từ file MP3 bằng `scripts/mp3-duration.mjs`).
+**Thuyết minh thu sẵn**: `npm run build:narration` (cần `ELEVENLABS_API_KEY`, giọng ở `ELEVENLABS_NARRATOR_VOICE_ID`) ghi MP3 vào `public/audio/journeys/<hành trình>/` và dấu băm từng câu vào `data/journeys/narration/`. Chỉ cảnh mới hoặc đổi lời mới được thu lại; server chỉ gắn âm thanh khi câu còn khớp, cảnh lệch tự dùng giọng trình duyệt. Học sinh nghe file tĩnh nên không tốn lượt gọi dịch vụ. Gói ElevenLabs Free chỉ dùng được giọng premade. Script lưu manifest sau từng cảnh và kiểm tra credit trước mỗi cảnh; `ELEVENLABS_API_KEY_2` (tài khoản khác) được dùng khi key đầu hết credit, hết cả hai thì dừng và lần sau chỉ thu phần còn thiếu. Mỗi cảnh dài bằng câu đọc + 0,6 giây (đo từ file MP3 bằng `scripts/mp3-duration.mjs`).
 
 ## API và kiểm tra dữ liệu
 

@@ -3,6 +3,7 @@ import { Pause, Play, RotateCcw, Volume2, VolumeX } from 'lucide-react'
 import { clockLabel, pagesLabel, sceneAt, videoLength, type MissionVideo, type VideoIcon, type VideoScene } from '../lib/journey'
 import { CastBand, RiverCast } from './videoPeople'
 import { DiscoveryScene, EvolutionScene, PrehistoryBackdrop, prehistoryIcons, SunEmblem, TimelineScene } from './videoPrehistory'
+import { AncientBackdrop, Landmark, Sailboat } from './videoAncient'
 
 // Code-drawn animation for a mission. Every frame is a pure function of the time t, so the same scenes can later be
 // rendered to MP4 (e.g. Remotion: t = frame / fps) without changing them. Words on screen and the narration come from
@@ -73,14 +74,15 @@ function Backdrop({ t }: { t: number }) {
 }
 
 // With people (cast) the words move up and the lower third becomes a strip of ground where the figures act.
-function TitleScene({ scene, local, band, prehistoric }: { scene: Extract<VideoScene, { kind: 'tieu_de' }>; local: number; band: boolean; prehistoric: boolean }) {
+function TitleScene({ scene, local, band, prehistoric, ancient }: { scene: Extract<VideoScene, { kind: 'tieu_de' }>; local: number; band: boolean; prehistoric: boolean; ancient: boolean }) {
   const drum = enter(local, 0.1, 1.4)
   const title = enter(local, 0.6)
   const label = enter(local, 1.2)
   const width = (scene.label?.length || 0) * 21 + 90
   const [drumY, drumR, titleY, labelY] = band ? [205, 115, 420, 500] : [320, 170, 610, 690]
   return <g>
-    <g transform={`translate(800 ${drumY}) scale(${0.55 + 0.45 * drum}) rotate(${local * 5})`} opacity={drum}>{prehistoric ? <SunEmblem radius={drumR * 0.8} t={local} /> : <DrumFace radius={drumR} />}</g>
+    {ancient && scene.landmark ? <g transform={`translate(800 ${band ? 230 : 330}) scale(${band ? 0.7 : 1})`}><Landmark name={scene.landmark} local={local} /></g>
+      : <g transform={`translate(800 ${drumY}) scale(${0.55 + 0.45 * drum}) rotate(${local * 5})`} opacity={drum}>{prehistoric || ancient ? <SunEmblem radius={drumR * 0.8} t={local} /> : <DrumFace radius={drumR} />}</g>}
     <text x={800} y={titleY + (1 - title) * 30} textAnchor="middle" fontSize={band ? 80 : 88} fontWeight={800} fill={cream} opacity={title} strokeWidth={10} {...halo}>{scene.title}</text>
     {scene.label && <g opacity={label} transform={`translate(800 ${labelY + (1 - label) * 20})`}><rect x={-width / 2} y={-38} width={width} height={68} rx={34} fill={bronze} /><text y={10} textAnchor="middle" fontSize={38} fontWeight={700} fill={ink}>{scene.label}</text></g>}
   </g>
@@ -116,15 +118,16 @@ const rivers = [
 const labelSpots = [[880, 360], [760, 800], [1080, 470], [1150, 770]]
 const fields = [[640, 540], [760, 470], [900, 600], [1010, 520], [560, 690], [860, 740], [1080, 700]]
 
-function RiverScene({ scene, local }: { scene: Extract<VideoScene, { kind: 'song_nuoc' }>; local: number }) {
+// In the co_dai style the land is sand and the hills are bare; a felucca sails the river.
+function RiverScene({ scene, local, ancient }: { scene: Extract<VideoScene, { kind: 'song_nuoc' }>; local: number; ancient: boolean }) {
   const land = enter(local, 0, 0.8)
   const step = Math.max(1, (scene.duration - 3) / scene.labels.length)
   return <g opacity={land}>
-    <rect x={0} y={200} width={W} height={H - 200} fill="#cfe0a8" />
+    <rect x={0} y={200} width={W} height={H - 200} fill={ancient ? '#e6cf96' : '#cfe0a8'} />
     <path d={`M 1300 200 C 1260 400 1350 600 1290 ${H} L ${W} ${H} L ${W} 200 Z`} fill="#4aa3d8" />
     {[300, 420, 540, 660, 780].map((y, index) => <path key={y} d={`M ${1360 + (index % 2) * 40} ${y} q 25 -18 50 0 t 50 0`} stroke={cream} strokeWidth={5} fill="none" opacity={0.7} transform={`translate(${Math.sin(local * 1.4 + index) * 12} 0)`} />)}
-    <polygon points="0,200 120,90 230,210 330,80 470,220 560,140 680,240 0,330" fill="#6e8f4e" />
-    <polygon points="0,260 160,150 300,280 420,170 540,300 0,380" fill="#58783c" />
+    <polygon points="0,200 120,90 230,210 330,80 470,220 560,140 680,240 0,330" fill={ancient ? '#a87a4a' : '#6e8f4e'} />
+    <polygon points="0,260 160,150 300,280 420,170 540,300 0,380" fill={ancient ? '#8a5f37' : '#58783c'} />
     {rivers.map((path, index) => <path key={path} d={path} pathLength={1} fill="none" stroke="#3b8fc8" strokeWidth={index === 1 ? 16 : 13} strokeLinecap="round" strokeDasharray={1} strokeDashoffset={1 - enter(local, 0.3 + index * 0.4, 1.8)} />)}
     {fields.map(([fx, fy], index) => <rect key={index} x={fx - 34} y={fy - 20} width={68} height={40} rx={6} fill="#86b45a" stroke="#5e8a3a" strokeWidth={3} opacity={enter(local, 1.6 + index * 0.15, 0.5)} />)}
     {scene.labels.map((label, index) => {
@@ -134,6 +137,7 @@ function RiverScene({ scene, local }: { scene: Extract<VideoScene, { kind: 'song
       return <g key={label} opacity={shown} transform={`translate(${lx} ${ly - (1 - shown) * 24})`}><rect x={-width / 2} y={-40} width={width} height={72} rx={36} fill={ink} stroke={bronze} strokeWidth={5} /><text y={10} textAnchor="middle" fontSize={40} fontWeight={800} fill={cream}>{label}</text></g>
     })}
     {scene.cast && <RiverCast cast={scene.cast} t={local} />}
+    {scene.cast?.includes('thuyen_buom') && <Sailboat t={local} />}
     <text x={40} y={H - 34} fontSize={26} fill={ink} opacity={0.75}>Tranh minh hoạ, không phải bản đồ</text>
   </g>
 }
@@ -145,14 +149,15 @@ export function VideoFrame({ video, t, still = false }: { video: MissionVideo; t
   const last = index === video.scenes.length - 1
   const fade = still ? 1 : Math.min(clamp(local / 0.45), last ? 1 : clamp((scene.duration - local) / 0.45))
   const prehistoric = video.style === 'tien_su'
+  const ancient = video.style === 'co_dai'
   return <>
     <defs><linearGradient id="jv-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#0f2747" /><stop offset="1" stopColor="#1c4a7d" /></linearGradient></defs>
-    {prehistoric ? <PrehistoryBackdrop t={t} /> : <Backdrop t={t} />}
+    {prehistoric ? <PrehistoryBackdrop t={t} /> : ancient ? <AncientBackdrop t={t} /> : <Backdrop t={t} />}
     <g opacity={fade}>
-      {scene.kind === 'tieu_de' && <TitleScene scene={scene} local={shown} band={!!scene.cast?.length} prehistoric={prehistoric} />}
+      {scene.kind === 'tieu_de' && <TitleScene scene={scene} local={shown} band={!!scene.cast?.length} prehistoric={prehistoric} ancient={ancient} />}
       {scene.kind === 'bieu_tuong' && <IconScene scene={scene} local={shown} band={!!scene.cast?.length} />}
       {(scene.kind === 'tieu_de' || scene.kind === 'bieu_tuong') && !!scene.cast?.length && <CastBand cast={scene.cast} t={shown} prehistoric={prehistoric} />}
-      {scene.kind === 'song_nuoc' && <RiverScene scene={scene} local={shown} />}
+      {scene.kind === 'song_nuoc' && <RiverScene scene={scene} local={shown} ancient={ancient} />}
       {scene.kind === 'tien_hoa' && <EvolutionScene scene={scene} local={shown} />}
       {scene.kind === 'moc_thoi_gian' && <TimelineScene scene={scene} local={shown} />}
       {scene.kind === 'phat_hien' && <DiscoveryScene scene={scene} local={shown} />}

@@ -58,9 +58,9 @@ test.beforeEach(async ({ page }) => {
 
 test('a mission teaches first, supports mistakes with hints and an equivalent question, and rewards effort with XP', async ({ page }) => {
   const section = await openJourney(page)
-  await expect(section.locator('.journey-stage.is-soon')).toHaveCount(4)
-  await expect(section.locator('.journey-stage.is-locked')).toHaveCount(2)
-  await expect(section.locator('.journey-stage.is-locked').first()).toContainText('Năm ngọn lửa khởi nghĩa')
+  await expect(section.locator('.journey-stage.is-soon')).toHaveCount(0)
+  await expect(section.locator('.journey-stage.is-locked')).toHaveCount(6)
+  await expect(section.locator('.journey-stage.is-locked').first()).toContainText('Dưới ách đô hộ phương Bắc')
   await expect(missionButton(section, 'Bộ máy nhà nước Văn Lang')).toBeDisabled()
   await expect(section.getByRole('button', { name: /Kiểm tra cuối chặng/ }).first()).toBeDisabled()
 
@@ -164,7 +164,7 @@ test('review on another day grants mastery and the Sử Ký piece; the stage che
   await expect(modal(page)).toContainText('Ôn tập xong')
   await page.keyboard.press('Escape')
   await expect(missionButton(section, 'Hai Bà Trưng dựng cờ khởi nghĩa')).toContainText('Nắm vững')
-  await expect(section.locator('.journey-bar')).toContainText('1/13 mảnh Sử Ký')
+  await expect(section.locator('.journey-bar')).toContainText('1/24 mảnh Sử Ký')
   await section.getByRole('button', { name: 'Bộ sưu tập' }).click()
   await expect(modal(page).getByLabel('Mảnh Sử Ký: Hai Bà Trưng: đã nhận')).toBeVisible()
   await expect(modal(page).getByLabel('Mảnh Sử Ký: Bà Triệu: chưa nhận')).toBeVisible()
@@ -189,9 +189,10 @@ test('review on another day grants mastery and the Sử Ký piece; the stage che
   await page.keyboard.press('Escape')
   await section.getByLabel('Mở khoá mọi chặng (quyền giáo viên)').uncheck()
   await expect(section.locator('.journey-stage').nth(2)).toHaveClass(/is-passed/)
-  await expect(section.locator('.journey-stage').nth(4)).toHaveClass(/is-open/)
+  // Passing Bài 16 opens the next stage, Bài 17.
+  await expect(section.locator('.journey-stage').nth(3)).toHaveClass(/is-open/)
   await page.reload()
-  await expect(page.locator('#journey .journey-stage').nth(4)).toHaveClass(/is-open/)
+  await expect(page.locator('#journey .journey-stage').nth(3)).toHaveClass(/is-open/)
 })
 
 test('the chapter test opens after every stage, asks twenty questions from the whole chapter and completes the chapter', async ({ page }) => {
@@ -218,9 +219,9 @@ test('the chapter test opens after every stage, asks twenty questions from the w
     await expect(modal(page).locator('.journey-feedback')).toContainText('Đúng.')
     await modal(page).getByRole('button', { name: index < 19 ? 'Câu tiếp' : 'Xem điểm' }).click()
   }
-  // Every mission of the chapter is asked at least once.
+  // The twenty questions come from twenty different missions (every mission when the chapter has twenty or fewer).
   const owners = new Set(seen.map((id) => id.split('.')[0]))
-  expect(owners.size).toBe(journey.stages.flatMap((stage) => stage.missions).length)
+  expect(owners.size).toBe(Math.min(20, journey.stages.flatMap((stage) => stage.missions).length))
   await expect(modal(page).locator('.journey-big')).toHaveText('20/20')
   await expect(modal(page)).toContainText('Em đã hoàn thành chương và nhận 100 XP')
   await page.keyboard.press('Escape')
@@ -242,6 +243,8 @@ test('a guest who asks for an interview signs in over the mission, then the chat
   await missionButton(section, 'Kế hoạch bãi cọc Bạch Đằng').click()
   expect(await modal(page).evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
   await modal(page).getByRole('button', { name: 'Nhận nhiệm vụ' }).click()
+  // The mission opens on its video; the cards come next.
+  await modal(page).getByRole('button', { name: 'Xem thẻ kiến thức' }).click()
   while (await modal(page).getByRole('button', { name: 'Thẻ tiếp' }).count()) await modal(page).getByRole('button', { name: 'Thẻ tiếp' }).click()
   await modal(page).getByRole('button', { name: 'Đi khám phá' }).click()
   await modal(page).getByRole('button', { name: 'Trò chuyện với Ngô Quyền' }).click()

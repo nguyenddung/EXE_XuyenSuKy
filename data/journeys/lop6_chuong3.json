@@ -105,6 +105,169 @@
             "hu_cau": true,
             "text": "Một nhà sử học Hy Lạp gọi Ai Cập là \"tặng phẩm của sông Nin\". Vì sao một đất nước lại là món quà của một dòng sông?"
           },
+          "video": {
+            "id": "b7_m1.video",
+            "title": "Quà tặng của những dòng sông",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b7_m1.video.s1",
+                "kind": "song_nuoc",
+                "duration": 12,
+                "labels": [
+                  "Sông Nin",
+                  "Ơ-phơ-rát · Ti-gơ-rơ"
+                ],
+                "caption": "Ai Cập nằm ở vùng Đông Bắc châu Phi, nơi có dòng sông Nin chảy qua. Lưỡng Hà là vùng đất giữa hai con sông Ơ-phơ-rát và Ti-gơ-rơ ở Tây Nam Á.",
+                "cast": [
+                  "thuyen_buom"
+                ],
+                "sources": [
+                  {
+                    "quote": "Ai Cập nằm ở vùng Đông Bắc của châu Phi, nơi có dòng sông Nin chảy qua.",
+                    "chunk_id": "LS6_B07_C004",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      31
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Lưỡng Hà là tên gọi vùng đất giữa hai con sông O-phơ-rát và Ti-go-ro ở khu vực Tây Nam Á.",
+                    "chunk_id": "LS6_B07_C004",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      31
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b7_m1.video.s2",
+                "kind": "bieu_tuong",
+                "duration": 13,
+                "items": [
+                  {
+                    "icon": "lua",
+                    "label": "Phù sa màu mỡ"
+                  },
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Nước tưới cho cây cối"
+                  }
+                ],
+                "caption": "Sông Nin tạo nên dải đất phù sa màu mỡ và hằng năm mang nước tưới cho cây cối. Sông Ơ-phơ-rát và Ti-gơ-rơ cũng bồi đắp phù sa, biến vùng hạ lưu thành đồng bằng.",
+                "sources": [
+                  {
+                    "quote": "Sông Nin không chỉ tạo nên ở vùng thung lũng một dải đất phù sa màu mỡ",
+                    "chunk_id": "LS6_B07_C004",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      31
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "mà hằng năm còn mang nước tưới cho cây cối, hoa màu tốt tươi",
+                    "chunk_id": "LS6_B07_C004",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      31
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "mang phù sa màu mỡ bồi đắp cho vùng hạ lưu, biển vùng cửa sông trở thành đồng bằng,",
+                    "chunk_id": "LS6_B07_C005",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      31
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b7_m1.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 13,
+                "items": [
+                  {
+                    "icon": "cay",
+                    "label": "Phát minh cái cày"
+                  },
+                  {
+                    "icon": "chan_nuoi",
+                    "label": "Sức kéo động vật"
+                  },
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Đê, hồ, kênh mương"
+                  }
+                ],
+                "caption": "Khoảng 6 000 năm trước, người Ai Cập và Lưỡng Hà đã biết làm nông nghiệp: phát minh ra cái cày, dùng sức kéo động vật, đắp đê, đào hồ và làm kênh mương tưới tiêu.",
+                "sources": [
+                  {
+                    "quote": "Khoảng 6 000 năm trước, người Ai Cập và Lưỡng Hà đã biết làm nông nghiệp.",
+                    "chunk_id": "LS6_B07_C007",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      32
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Họ đã phát minh ra cái cây, biết sử dụng sức kéo của động vật để cày ruộng, biết đắp đê, đào hố và làm hệ thống kênh mương tưới tiêu.",
+                    "chunk_id": "LS6_B07_C007",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      32
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b7_m1.video.s4",
+                "kind": "tieu_de",
+                "duration": 14,
+                "title": "Văn minh sớm nhất",
+                "label": "Sông là đường giao thương chính",
+                "sources": [
+                  {
+                    "quote": "Các dòng sông trở thành những tuyến đường giao thương chính, thúc đẩy thương mại ở Ai Cập và Lưỡng Hà phát triển.",
+                    "chunk_id": "LS6_B07_C007",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      32
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nhờ biết khai thác những thuận lợi của điều kiện tự nhiên, cư dân Ai Cập, Lưỡng Hà đã sớm tạo dựng được nền văn minh của mình.",
+                    "chunk_id": "LS6_B07_C007",
+                    "lesson_number": 7,
+                    "pages": [
+                      31,
+                      32
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "kim_tu_thap",
+                "caption": "Các dòng sông trở thành tuyến đường giao thương chính. Nhờ biết khai thác thuận lợi của tự nhiên, cư dân Ai Cập, Lưỡng Hà đã sớm tạo dựng được nền văn minh của mình."
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b7_m1.c1",
@@ -456,6 +619,132 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Một ông vua huyền thoại thống nhất các công xã ven sông Nin; những người Xu-me dựng thành bang giữa hai dòng sông. Hai nhà nước cổ ra đời như thế nào?"
+          },
+          "video": {
+            "id": "b7_m2.video",
+            "title": "Hành trình lập quốc",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b7_m2.video.s1",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Vua Mê-nét",
+                "label": "Khoảng năm 3200 TCN",
+                "sources": [
+                  {
+                    "quote": "Khoảng năm 3200 TCN, ông vua huyền thoại có tên là Mê-nét đã thống nhất các công xã (còn gọi là các nôm) thành Nhà nước Ai Cập.",
+                    "chunk_id": "LS6_B07_C009",
+                    "lesson_number": 7,
+                    "pages": [
+                      32,
+                      32
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "thanh_quach",
+                "caption": "Khoảng năm 3200 trước Công nguyên, vua Mê-nét thống nhất các công xã, còn gọi là các nôm, thành Nhà nước Ai Cập."
+              },
+              {
+                "id": "b7_m2.video.s2",
+                "kind": "tieu_de",
+                "duration": 12,
+                "title": "Ai Cập cổ đại",
+                "label": "Bị La Mã xâm lược giữa thế kỉ I TCN",
+                "sources": [
+                  {
+                    "quote": "Tảo kì vương quốc, Cổ vương quốc, Trung vương quốc, Tân vương quốc và Hậu kì vương quốc. Đến giữa thế kỉ I TCN thì bị La Mã xâm lược và thống trị.",
+                    "chunk_id": "LS6_B07_C009",
+                    "lesson_number": 7,
+                    "pages": [
+                      32,
+                      32
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "kim_tu_thap",
+                "caption": "Ai Cập trải qua các thời kì Tảo kì, Cổ, Trung, Tân và Hậu kì vương quốc. Đến giữa thế kỉ I trước Công nguyên, Ai Cập bị La Mã xâm lược và thống trị."
+              },
+              {
+                "id": "b7_m2.video.s3",
+                "kind": "song_nuoc",
+                "duration": 12,
+                "labels": [
+                  "Người Xu-me",
+                  "Hạ lưu hai dòng sông"
+                ],
+                "caption": "Ở Lưỡng Hà, khoảng thiên niên kỉ IV trước Công nguyên, người Xu-me đến định cư và xây dựng các nhà nước thành bang ở vùng hạ lưu hai dòng sông.",
+                "cast": [
+                  "thuyen_buom"
+                ],
+                "sources": [
+                  {
+                    "quote": "Ở Lưỡng Hà, vào khoảng thiên niên kỉ IV TCN, người Xu-me đến định cư và xây dựng các nhà nước thành bang tại vùng hạ lưu hai dòng sông.",
+                    "chunk_id": "LS6_B07_C009",
+                    "lesson_number": 7,
+                    "pages": [
+                      32,
+                      32
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b7_m2.video.s4",
+                "kind": "tieu_de",
+                "duration": 11,
+                "title": "Năm 539 TCN",
+                "label": "Ba Tư xâm lược Lưỡng Hà",
+                "sources": [
+                  {
+                    "quote": "Sau đó người Ác-cát, Át-xi-ri, Ba-bi-lon,... đã thành lập vương triều của mình, thay nhau làm chủ vùng đất này cho đến khi bị Ba Tư xâm lược vào năm 539 TCN.",
+                    "chunk_id": "LS6_B07_C009",
+                    "lesson_number": 7,
+                    "pages": [
+                      32,
+                      32
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "thap_tang",
+                "caption": "Sau đó, người Ác-cát, Át-xi-ri, Ba-bi-lon thay nhau làm chủ vùng đất này, cho đến khi bị Ba Tư xâm lược vào năm 539 trước Công nguyên."
+              },
+              {
+                "id": "b7_m2.video.s5",
+                "kind": "tieu_de",
+                "duration": 12,
+                "title": "Quân chủ chuyên chế",
+                "label": "Pha-ra-ông · En-xi",
+                "sources": [
+                  {
+                    "quote": "Ở Ai Cập, vua được gọi là pha-ra-ông (kẻ ngự trong cung điện), còn ở Lưỡng Hà gọi là en-xi (người đứng đầu).",
+                    "chunk_id": "LS6_B07_C009",
+                    "lesson_number": 7,
+                    "pages": [
+                      32,
+                      32
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nhà nước do vua đứng đầu và có toàn quyền gọi là nhà nước quân chủ chuyên chế.",
+                    "chunk_id": "LS6_B07_C009",
+                    "lesson_number": 7,
+                    "pages": [
+                      32,
+                      32
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "ngai_vang",
+                "caption": "Vua Ai Cập được gọi là pha-ra-ông, vua Lưỡng Hà gọi là en-xi. Nhà nước do vua đứng đầu và có toàn quyền gọi là nhà nước quân chủ chuyên chế."
+              }
+            ]
           },
           "cards": [
             {
@@ -836,6 +1125,174 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Chữ \"paper\" (giấy) trong tiếng Anh có quê hương ở bờ sông Nin. Còn những gì khác người xưa để lại cho chúng ta?"
+          },
+          "video": {
+            "id": "b7_m3.video",
+            "title": "Kim tự tháp và chữ viết",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b7_m3.video.s1",
+                "kind": "tieu_de",
+                "duration": 16,
+                "title": "Chữ viết cổ nhất",
+                "label": "Chữ tượng hình · chữ hình nêm",
+                "sources": [
+                  {
+                    "quote": "Người Ai Cập dùng hình vẽ thực để biểu đạt ý niệm gọi là chữ tượng hình",
+                    "chunk_id": "LS6_B07_C013",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "source"
+                  },
+                  {
+                    "quote": "Người Ai Cập đã dùng thân cây pa-pi-rút (papyrus) để tạo ra giấy",
+                    "chunk_id": "LS6_B07_C012",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "rồi viết lên tấm đất sét ướt, tạo thành chữ giống hình cái nêm nên gọi là chữ hình nêm",
+                    "chunk_id": "LS6_B07_C012",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "Người Lưỡng Hà dùng chữ hình nêm. Đó là những loại chữ cổ nhất thế giới.",
+                    "chunk_id": "LS6_B07_C013",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "chu_co",
+                "caption": "Người Ai Cập dùng hình vẽ để biểu đạt ý niệm, gọi là chữ tượng hình, và làm giấy từ cây pa-pi-rút. Người Lưỡng Hà viết lên đất sét ướt, tạo thành chữ hình nêm. Đó là những loại chữ cổ nhất thế giới."
+              },
+              {
+                "id": "b7_m3.video.s2",
+                "kind": "tieu_de",
+                "duration": 15,
+                "title": "Toán học và lịch",
+                "label": "Một năm có 12 tháng",
+                "sources": [
+                  {
+                    "quote": "Người Ai Cập đã biết làm các phép tính theo hệ đếm thập phân còn người lưỡng hà thì theo hệ đếm 60, tính được diện tích các hình.",
+                    "chunk_id": "LS6_B07_C013",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Họ cũng biết làm lịch, một năm có 12 tháng, một tháng có 29 hoặc 30 ngày.",
+                    "chunk_id": "LS6_B07_C013",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "lich",
+                "caption": "Người Ai Cập làm tính theo hệ đếm thập phân, người Lưỡng Hà theo hệ đếm 60 và tính được diện tích các hình. Họ còn biết làm lịch: một năm có 12 tháng, một tháng có 29 hoặc 30 ngày."
+              },
+              {
+                "id": "b7_m3.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 13,
+                "items": [
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Cách làm thuỷ lợi"
+                  },
+                  {
+                    "icon": "cay",
+                    "label": "Cái cày"
+                  }
+                ],
+                "caption": "Họ có nhiều phát minh còn giá trị đến ngày nay như cách làm thuỷ lợi, cái cày, bánh xe, chữ viết. Kĩ thuật ướp xác của người Ai Cập vẫn còn nhiều điều bí ẩn.",
+                "sources": [
+                  {
+                    "quote": "Người Ai Cập và Lưỡng Hà cổ đại có nhiều phát minh quan trọng còn có giá trị đến ngày nay như cách làm thuỷ lợi, phát minh ra cái cây, bánh xe, chữ viết,...",
+                    "chunk_id": "LS6_B07_C011",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Kĩ thuật ướp xác của người Ai Cập cũng còn nhiều điều bí ẩn",
+                    "chunk_id": "LS6_B07_C013",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b7_m3.video.s4",
+                "kind": "tieu_de",
+                "duration": 14,
+                "title": "Kim tự tháp Kê-ốp",
+                "label": "Cao tới 147 m",
+                "sources": [
+                  {
+                    "quote": "tiêu biểu nhất là các kim tự tháp và tượng nhân sư ở Ai Cập.",
+                    "chunk_id": "LS6_B07_C014",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "vườn treo ba-bi-lon ở lưỡng hà, đều là kì quan của thế giới cổ đại.",
+                    "chunk_id": "LS6_B07_C014",
+                    "lesson_number": 7,
+                    "pages": [
+                      33,
+                      33
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Kim tự tháp Kê-ốp cao tới 147m.",
+                    "chunk_id": "LS6_B07_C015",
+                    "lesson_number": 7,
+                    "pages": [
+                      34,
+                      34
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ],
+                "landmark": "kim_tu_thap",
+                "caption": "Công trình tiêu biểu là các kim tự tháp, tượng nhân sư ở Ai Cập và vườn treo Ba-bi-lon ở Lưỡng Hà, đều là kì quan của thế giới cổ đại. Kim tự tháp Kê-ốp cao tới 147 mét."
+              }
+            ]
           },
           "cards": [
             {
@@ -1454,6 +1911,110 @@
             "hu_cau": true,
             "text": "Phía bắc là dãy núi cao nhất thế giới, ba mặt là biển. Giữa đó là những đồng bằng mênh mông. Hãy khám phá bán đảo Ấn Độ."
           },
+          "video": {
+            "id": "b8_m1.video",
+            "title": "Bán đảo giữa núi và biển",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b8_m1.video.s1",
+                "kind": "tieu_de",
+                "duration": 16,
+                "title": "Bán đảo Ấn Độ",
+                "label": "Ba mặt giáp biển",
+                "sources": [
+                  {
+                    "quote": "là một bán đảo ở Nam Á, có ba mặt giáp biển, nằm trên trục đường biển từ Tây sang Đông.",
+                    "chunk_id": "LS6_B08_C003",
+                    "lesson_number": 8,
+                    "pages": [
+                      35,
+                      35
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Phía bắc được bao bọc bởi một vòng cung khổng lồ là dãy Hi-ma-lay-a, thoải dần về phía nam là các đồng bằng sông Ấn, sông Hằng rộng lớn.",
+                    "chunk_id": "LS6_B08_C003",
+                    "lesson_number": 8,
+                    "pages": [
+                      35,
+                      35
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Chính nơi đây đã hình thành nên những trung tâm văn minh sớm nhất của nhân loại.",
+                    "chunk_id": "LS6_B08_C003",
+                    "lesson_number": 8,
+                    "pages": [
+                      35,
+                      35
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "nui",
+                "caption": "Ấn Độ là một bán đảo ở Nam Á, có ba mặt giáp biển. Phía bắc là dãy Hi-ma-lay-a, thoải dần về phía nam là đồng bằng sông Ấn, sông Hằng rộng lớn, nơi hình thành những trung tâm văn minh sớm nhất."
+              },
+              {
+                "id": "b8_m1.video.s2",
+                "kind": "song_nuoc",
+                "duration": 11,
+                "labels": [
+                  "Sông Ấn: khô nóng",
+                  "Sông Hằng: mưa nhiều"
+                ],
+                "caption": "Lưu vực sông Ấn chịu tác động của sa mạc nên rất ít mưa, khí hậu khô nóng. Lưu vực sông Hằng có gió mùa nên mưa nhiều, cây cối tươi tốt.",
+                "cast": [
+                  "thuyen_buom"
+                ],
+                "sources": [
+                  {
+                    "quote": "Lưu vực sông Ấn chịu tác động của sa mạc nên rất ít mưa, khí hậu khô nóng.",
+                    "chunk_id": "LS6_B08_C005",
+                    "lesson_number": 8,
+                    "pages": [
+                      36,
+                      36
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Ở lưu vực sông Hằng, do tác động của gió mùa nên lượng mưa nhiều, cây cối tươi tốt",
+                    "chunk_id": "LS6_B08_C005",
+                    "lesson_number": 8,
+                    "pages": [
+                      36,
+                      36
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b8_m1.video.s3",
+                "kind": "tieu_de",
+                "duration": 13,
+                "title": "Cao nguyên Đê-can",
+                "label": "Rừng rậm, núi đá hiểm trở",
+                "sources": [
+                  {
+                    "quote": "Miền Trung và miền Nam là cao nguyên Đê-can với rừng rậm và núi đá hiểm trở, chỉ có vùng cực Nam và dọc theo hai bờ ven biển là những đồng bằng nhỏ hẹp, là nơi sinh sống tương đối thuận lợi, dân cư đông đúc.",
+                    "chunk_id": "LS6_B08_C005",
+                    "lesson_number": 8,
+                    "pages": [
+                      36,
+                      36
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "rung",
+                "caption": "Miền Trung và miền Nam là cao nguyên Đê-can với rừng rậm, núi đá hiểm trở. Chỉ vùng cực Nam và dọc hai bờ ven biển có đồng bằng nhỏ hẹp, dân cư đông đúc."
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b8_m1.c1",
@@ -1783,6 +2344,136 @@
             "hu_cau": true,
             "text": "Ở Ấn Độ cổ đại, người ta bị chia thành bốn tầng lớp chỉ vì nguồn gốc và màu da. Chuyện gì đã xảy ra?"
           },
+          "video": {
+            "id": "b8_m2.video",
+            "title": "Chế độ đẳng cấp Vác-na",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b8_m2.video.s1",
+                "kind": "song_nuoc",
+                "duration": 10,
+                "labels": [
+                  "Sông Ấn",
+                  "Những thành thị đầu tiên"
+                ],
+                "caption": "Khoảng năm 2500 trước Công nguyên, người bản địa Đra-vi-đa xây dựng những thành thị đầu tiên dọc hai bên bờ sông Ấn.",
+                "cast": [
+                  "thuyen_buom"
+                ],
+                "sources": [
+                  {
+                    "quote": "Khoảng năm 2500 TCN, người bản địa Đra-vi-đa đã xây dựng những thành thị đầu tiên dọc theo hai bên bờ sông",
+                    "chunk_id": "LS6_B08_C008",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      37
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b8_m2.video.s2",
+                "kind": "tieu_de",
+                "duration": 13,
+                "title": "Người A-ri-a",
+                "label": "Giữa thiên niên kỉ II TCN",
+                "sources": [
+                  {
+                    "quote": "Ấn.\nGiữa thiên niên kỉ II TCN, người A-ri-a từ vùng Trung Á tràn vào miền Bắc Ấn Độ, xua đuổi người Đra-vi-đa và biến họ thành đẳng cấp thứ tư (Su-đra) trong hệ thống bốn đẳng cấp (dựa trên sự phân biệt về chủng tộc và màu da).",
+                    "chunk_id": "LS6_B08_C008",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      37
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "binh_khi",
+                "caption": "Giữa thiên niên kỉ II trước Công nguyên, người A-ri-a từ Trung Á tràn vào miền Bắc Ấn Độ, xua đuổi người Đra-vi-đa và biến họ thành đẳng cấp thứ tư, Su-đra."
+              },
+              {
+                "id": "b8_m2.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 11,
+                "items": [
+                  {
+                    "icon": "tuong",
+                    "label": "Bra-man"
+                  },
+                  {
+                    "icon": "khien",
+                    "label": "Ksa-tri-a"
+                  },
+                  {
+                    "icon": "lua",
+                    "label": "Vai-si-a"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Su-đra"
+                  }
+                ],
+                "caption": "Xã hội chia thành bốn đẳng cấp dựa trên chủng tộc và màu da, gọi là chế độ đẳng cấp Vác-na: Bra-man, Ksa-tri-a, Vai-si-a và Su-đra.",
+                "sources": [
+                  {
+                    "quote": "Ấn.\nGiữa thiên niên kỉ II TCN, người A-ri-a từ vùng Trung Á tràn vào miền Bắc Ấn Độ, xua đuổi người Đra-vi-đa và biến họ thành đẳng cấp thứ tư (Su-đra) trong hệ thống bốn đẳng cấp (dựa trên sự phân biệt về chủng tộc và màu da).",
+                    "chunk_id": "LS6_B08_C008",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      37
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Chế độ này còn được gọi là chế độ đẳng cấp Vác-na.",
+                    "chunk_id": "LS6_B08_C008",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      37
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Bra-man Tăng lữ – Quý tộc\nKsa-tri-a Vương công – Vũ sĩ\nVai-si-a Người bình dân (nông dân, thợ thủ công, thương nhân)\nSu-đra Những người có địa vị thấp kém\nHình",
+                    "chunk_id": "LS6_B08_C009",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      37
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b8_m2.video.s4",
+                "kind": "tieu_de",
+                "duration": 14,
+                "title": "Bốn đẳng cấp",
+                "label": "Từ tăng lữ, quý tộc đến người thấp kém",
+                "sources": [
+                  {
+                    "quote": "Bra-man Tăng lữ – Quý tộc\nKsa-tri-a Vương công – Vũ sĩ\nVai-si-a Người bình dân (nông dân, thợ thủ công, thương nhân)\nSu-đra Những người có địa vị thấp kém\nHình",
+                    "chunk_id": "LS6_B08_C009",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      37
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "thap_tang",
+                "caption": "Bra-man là tăng lữ, quý tộc; Ksa-tri-a là vương công, vũ sĩ; Vai-si-a là người bình dân như nông dân, thợ thủ công, thương nhân; Su-đra là những người có địa vị thấp kém."
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b8_m2.c1",
@@ -2075,6 +2766,167 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Mỗi khi em viết số 10, em đang dùng một phát minh của người Ấn Độ cổ đại. Cùng khám phá kho báu văn hoá của họ."
+          },
+          "video": {
+            "id": "b8_m3.video",
+            "title": "Chữ số 0, sử thi và tôn giáo",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b8_m3.video.s1",
+                "kind": "tieu_de",
+                "duration": 17,
+                "title": "Chữ Phạn",
+                "label": "Khoảng thế kỉ VII TCN",
+                "sources": [
+                  {
+                    "quote": "Chữ viết cổ nhất của họ khắc trên các con dấu, được phát hiện ở lưu vực sông Ấn, có từ hơn 2 000 năm TCN",
+                    "chunk_id": "LS6_B08_C011",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      38
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Vào khoảng thế kỉ VII TCN, chữ Phạn (San-xkrit) ra đời",
+                    "chunk_id": "LS6_B08_C011",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      38
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đây là cơ sở của nhiều loại chữ viết ở Ấn Độ và Đông Nam Á sau này.",
+                    "chunk_id": "LS6_B08_C011",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      38
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "cuon_giay",
+                "caption": "Chữ viết cổ nhất của người Ấn Độ khắc trên các con dấu, có từ hơn 2 000 năm trước Công nguyên. Khoảng thế kỉ VII trước Công nguyên, chữ Phạn ra đời, là cơ sở của nhiều loại chữ viết ở Ấn Độ và Đông Nam Á."
+              },
+              {
+                "id": "b8_m3.video.s2",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Hai bộ sử thi",
+                "label": "Ma-ha-bha-ra-ta · Ra-ma-y-a-na",
+                "sources": [
+                  {
+                    "quote": "Ấn\nHai tác phẩm văn học nổi bật nhất thời cổ đại là Ma-ha-bha-ra-ta và Ra-ma-y-a-na, có ảnh hưởng to lớn tới sự phát triển của văn học Ấn Độ và Đông Nam Á ở các giai đoạn sau này.\nHình 6. Các",
+                    "chunk_id": "LS6_B08_C011",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      38
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "sach",
+                "caption": "Hai tác phẩm văn học nổi bật là Ma-ha-bha-ra-ta và Ra-ma-y-a-na, có ảnh hưởng to lớn tới văn học Ấn Độ và Đông Nam Á."
+              },
+              {
+                "id": "b8_m3.video.s3",
+                "kind": "tieu_de",
+                "duration": 13,
+                "title": "Chữ số 0",
+                "label": "Chủ nhân của 10 chữ số",
+                "sources": [
+                  {
+                    "quote": "Người Ấn Độ cổ đại đã biết làm lịch.",
+                    "chunk_id": "LS6_B08_C011",
+                    "lesson_number": 8,
+                    "pages": [
+                      37,
+                      38
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Họ cũng là chủ nhân của 10 chữ số mà ngày nay được dùng rộng rãi trên thế giới, đặc biệt là chữ số 0.",
+                    "chunk_id": "LS6_B08_C012",
+                    "lesson_number": 8,
+                    "pages": [
+                      38,
+                      38
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Người Ả Rập đã học tập chữ số Ấn Độ rồi truyền sang châu Âu.",
+                    "chunk_id": "LS6_B08_C012",
+                    "lesson_number": 8,
+                    "pages": [
+                      38,
+                      38
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "chu_so",
+                "caption": "Người Ấn Độ biết làm lịch và là chủ nhân của 10 chữ số ngày nay được dùng rộng rãi, đặc biệt là chữ số 0. Người Ả Rập đã học chữ số Ấn Độ rồi truyền sang châu Âu."
+              },
+              {
+                "id": "b8_m3.video.s4",
+                "kind": "tieu_de",
+                "duration": 16,
+                "title": "Quê hương các tôn giáo lớn",
+                "label": "Đạo Hin-đu · Phật giáo",
+                "sources": [
+                  {
+                    "quote": "Ấn Độ cổ đại là quê hương của các tôn giáo lớn. Ra đời sớm nhất là đạo Bà La Môn.",
+                    "chunk_id": "LS6_B08_C012",
+                    "lesson_number": 8,
+                    "pages": [
+                      38,
+                      38
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "đạo Bà La Môn phát triển thành đạo Hin-đu (Ấn Độ giáo).",
+                    "chunk_id": "LS6_B08_C012",
+                    "lesson_number": 8,
+                    "pages": [
+                      38,
+                      38
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Khoảng thế kỉ VI TCN, Phật giáo được hình thành, người sáng lập là Xít-đắc-ta Gô-ta-ma (Thích Ca Mâu Ni).",
+                    "chunk_id": "LS6_B08_C012",
+                    "lesson_number": 8,
+                    "pages": [
+                      38,
+                      38
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Công trình kiến trúc tiêu biểu của Ấn Độ cổ đại là cột đá A-sô-ca và đại bảo tháp San-chi.",
+                    "chunk_id": "LS6_B08_C012",
+                    "lesson_number": 8,
+                    "pages": [
+                      38,
+                      38
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "bao_thap",
+                "caption": "Ấn Độ là quê hương của các tôn giáo lớn: đạo Bà La Môn, về sau thành đạo Hin-đu, và Phật giáo ra đời khoảng thế kỉ VI trước Công nguyên. Công trình tiêu biểu là cột đá A-sô-ca và đại bảo tháp San-chi."
+              }
+            ]
           },
           "cards": [
             {
@@ -2633,6 +3485,104 @@
             "hu_cau": true,
             "text": "Hoàng Hà và Trường Giang vừa là \"mẹ hiền\" mang phù sa, vừa có lúc nổi giận gây lũ lụt. Em hãy tìm hiểu cả hai mặt."
           },
+          "video": {
+            "id": "b9_m1.video",
+            "title": "Hai dòng sông lớn",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b9_m1.video.s1",
+                "kind": "song_nuoc",
+                "duration": 11,
+                "labels": [
+                  "Hoàng Hà",
+                  "Trường Giang"
+                ],
+                "caption": "Người Trung Quốc xây dựng nền văn minh đầu tiên ở lưu vực Hoàng Hà, sau đó mở rộng đến lưu vực Trường Giang, còn gọi là sông Dương Tử.",
+                "cast": [
+                  "thuyen_buom"
+                ],
+                "sources": [
+                  {
+                    "quote": "Người Trung Quốc đã xây dựng nền văn minh đầu tiên ở lưu vực Hoàng hà, sau đó mở rộng đến lưu vực Trường Giang (Dương Tử).",
+                    "chunk_id": "LS6_B09_C004",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      41
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b9_m1.video.s2",
+                "kind": "bieu_tuong",
+                "duration": 14,
+                "items": [
+                  {
+                    "icon": "lua",
+                    "label": "Đồng bằng phì nhiêu"
+                  },
+                  {
+                    "icon": "thuy_loi",
+                    "label": "Lũ lụt gây khó khăn"
+                  }
+                ],
+                "caption": "Phù sa của hai dòng sông tạo nên đồng bằng Hoa Bắc, Hoa Trung, Hoa Nam rộng lớn, phì nhiêu, thuận lợi cho nông nghiệp. Tuy nhiên, lũ lụt cũng gây nhiều khó khăn cho người dân.",
+                "sources": [
+                  {
+                    "quote": "Phù sa của hai dòng sông này đã tạo nên đồng bằng Hoa Bắc, Hoa Trung và Hoa Nam rộng lớn, phì nhiêu, thuận lợi cho phát triển nông nghiệp.",
+                    "chunk_id": "LS6_B09_C004",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      41
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Tuy nhiên, lũ lụt do hai con sông cũng đã gây ra nhiều khó khăn cho đời sống của người dân.",
+                    "chunk_id": "LS6_B09_C004",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      41
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b9_m1.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 8,
+                "items": [
+                  {
+                    "icon": "leu",
+                    "label": "Vùng đất cao, đồng cỏ"
+                  },
+                  {
+                    "icon": "chan_nuoi",
+                    "label": "Chăn nuôi phát triển sớm"
+                  }
+                ],
+                "caption": "Thượng nguồn các dòng sông là vùng đất cao, có nhiều đồng cỏ, nên chăn nuôi đã phát triển từ sớm.",
+                "sources": [
+                  {
+                    "quote": "Thượng nguồn các dòng sông là vùng đất cao, có nhiều đồng cỏ nên chăn nuôi đã phát triển từ sớm.",
+                    "chunk_id": "LS6_B09_C004",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      41
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b9_m1.c1",
@@ -2938,6 +3888,169 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Sau nhà Chu, Trung Quốc vỡ ra thành nhiều nước nhỏ đánh nhau liên miên. Nước nào đã thống nhất tất cả?"
+          },
+          "video": {
+            "id": "b9_m2.video",
+            "title": "Tần Thuỷ Hoàng thống nhất Trung Quốc",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b9_m2.video.s1",
+                "kind": "tieu_de",
+                "duration": 13,
+                "title": "Hạ, Thương, Chu",
+                "label": "Thế kỉ XXI – III TCN",
+                "sources": [
+                  {
+                    "quote": "Từ thế kỉ XXI đến thế kỉ III TCN lịch sử Trung Quốc trải qua các triều đại Hạ, Thương, Chu.",
+                    "chunk_id": "LS6_B09_C006",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      42
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Sau triều đại nhà Chu, Trung Quốc lại bị chia thành nhiều nước nhỏ.",
+                    "chunk_id": "LS6_B09_C006",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      42
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "thanh_quach",
+                "caption": "Từ thế kỉ XXI đến thế kỉ III trước Công nguyên, Trung Quốc trải qua các triều đại Hạ, Thương, Chu. Sau nhà Chu, Trung Quốc lại bị chia thành nhiều nước nhỏ."
+              },
+              {
+                "id": "b9_m2.video.s2",
+                "kind": "tieu_de",
+                "duration": 17,
+                "title": "Tần Thuỷ Hoàng",
+                "label": "Thống nhất năm 221 TCN",
+                "sources": [
+                  {
+                    "quote": "nước Tần có tiềm lực kinh tế và quân sự mạnh nhất",
+                    "chunk_id": "LS6_B09_C006",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      42
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "năm 221 TCN, Tần Thuỷ Hoàng đã thống nhất lãnh thổ, tự xưng hoàng đế.",
+                    "chunk_id": "LS6_B09_C006",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      42
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nhà Tần chia đất nước thành các quận, huyện, đặt các chức quan cai quản, lập ra triều đại phong kiến đầu tiên ở Trung Quốc.",
+                    "chunk_id": "LS6_B09_C006",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      42
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "ngai_vang",
+                "caption": "Nước Tần có tiềm lực kinh tế, quân sự mạnh nhất. Năm 221 trước Công nguyên, Tần Thuỷ Hoàng thống nhất lãnh thổ, tự xưng hoàng đế, chia đất nước thành quận, huyện, lập ra triều đại phong kiến đầu tiên ở Trung Quốc."
+              },
+              {
+                "id": "b9_m2.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 9,
+                "items": [
+                  {
+                    "icon": "giau_ngheo",
+                    "label": "Đo lường chung"
+                  },
+                  {
+                    "icon": "cua_cai",
+                    "label": "Tiền tệ chung"
+                  },
+                  {
+                    "icon": "det_vai",
+                    "label": "Chữ viết chung"
+                  },
+                  {
+                    "icon": "khien",
+                    "label": "Pháp luật chung"
+                  }
+                ],
+                "caption": "Để củng cố sự thống nhất, nhà Tần áp dụng chế độ đo lường, tiền tệ, chữ viết và pháp luật chung trên cả nước.",
+                "sources": [
+                  {
+                    "quote": "Để củng cố sự thống nhất đất nước, nhà Tần còn áp dụng chế độ đo lường, tiền tệ, chữ viết và pháp luật chung trên cả nước.",
+                    "chunk_id": "LS6_B09_C006",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      42
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b9_m2.video.s4",
+                "kind": "bieu_tuong",
+                "duration": 17,
+                "items": [
+                  {
+                    "icon": "cua_cai",
+                    "label": "Địa chủ: nhiều ruộng đất"
+                  },
+                  {
+                    "icon": "lua",
+                    "label": "Tá điền: nhận ruộng canh tác"
+                  }
+                ],
+                "caption": "Nhiều giai cấp mới hình thành: quý tộc, quan lại chiếm nhiều ruộng đất trở thành địa chủ; nông dân mất ruộng phải nhận ruộng canh tác, trở thành tá điền. Quan hệ bóc lột giữa địa chủ và tá điền dần được xác lập.",
+                "sources": [
+                  {
+                    "quote": "Nhiều giai cấp mới được hình thành. Quan hệ bóc lột giữa địa chủ và tá điền dần được xác lập.",
+                    "chunk_id": "LS6_B09_C006",
+                    "lesson_number": 9,
+                    "pages": [
+                      41,
+                      42
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Quý tộc, quan lại Chiếm nhiều ruộng đất",
+                    "chunk_id": "LS6_B09_C007",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Bị mất ruộng đất phải nhận ruộng để canh tác | Tá điền (Nông dân lĩnh canh)",
+                    "chunk_id": "LS6_B09_C007",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
           },
           "cards": [
             {
@@ -3380,6 +4493,106 @@
             "hu_cau": true,
             "text": "Gần tám trăm năm, Trung Quốc lúc thống nhất, lúc chia cắt. Em hãy dựng lại trục thời gian ấy."
           },
+          "video": {
+            "id": "b9_m3.video",
+            "title": "Từ nhà Hán đến nhà Tuỳ",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b9_m3.video.s1",
+                "kind": "tieu_de",
+                "duration": 13,
+                "title": "Nhà Hán",
+                "label": "206 TCN – 220",
+                "sources": [
+                  {
+                    "quote": "Nhà Hán (206 TCN - 220) tiếp tục củng cố bộ máy cai trị và mở rộng lãnh thổ.",
+                    "chunk_id": "LS6_B09_C010",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đây là một trong những triều đại thịnh vượng của chế độ phong kiến Trung Quốc, có ảnh hưởng lớn tới các dân tộc láng giềng.",
+                    "chunk_id": "LS6_B09_C010",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "thanh_quach",
+                "caption": "Nhà Hán tiếp tục củng cố bộ máy cai trị và mở rộng lãnh thổ. Đây là một trong những triều đại thịnh vượng, có ảnh hưởng lớn tới các dân tộc láng giềng."
+              },
+              {
+                "id": "b9_m3.video.s2",
+                "kind": "tieu_de",
+                "duration": 9,
+                "title": "Nhà Tuỳ thống nhất",
+                "label": "Năm 581",
+                "sources": [
+                  {
+                    "quote": "Sau thời nhà Hán, lịch sử Trung Quốc tiếp tục trải qua các thời kỉ Tam quốc (220 – 280), nhà Tần (280 – 420), Nam – Bắc triều (420 – 581).",
+                    "chunk_id": "LS6_B09_C010",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đến năm 581. nhà Tuỳ mới thống nhất lại Trung Quốc",
+                    "chunk_id": "LS6_B09_C010",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "ngai_vang",
+                "caption": "Sau nhà Hán là thời Tam quốc, nhà Tấn rồi Nam – Bắc triều. Đến năm 581, nhà Tuỳ mới thống nhất lại Trung Quốc."
+              },
+              {
+                "id": "b9_m3.video.s3",
+                "kind": "tieu_de",
+                "duration": 15,
+                "title": "Chiến tranh mở rộng lãnh thổ",
+                "label": "Hơn một nghìn năm Bắc thuộc",
+                "sources": [
+                  {
+                    "quote": "Các triều đại Trung Quốc liên tiếp mở những cuộc chiến tranh để mở rộng lãnh thổ.",
+                    "chunk_id": "LS6_B09_C012",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "did_you_know"
+                  },
+                  {
+                    "quote": "Đó cũng chính là nguyên nhân khiến nhân dân Việt Nam đã phải trải qua hơn một nghìn năm đấu tranh chống Bắc thuộc.",
+                    "chunk_id": "LS6_B09_C012",
+                    "lesson_number": 9,
+                    "pages": [
+                      42,
+                      42
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ],
+                "landmark": "binh_khi",
+                "caption": "Các triều đại Trung Quốc liên tiếp gây chiến tranh để mở rộng lãnh thổ. Đó cũng là nguyên nhân khiến nhân dân Việt Nam phải trải qua hơn một nghìn năm đấu tranh chống Bắc thuộc."
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b9_m3.c1",
@@ -3793,6 +5006,147 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Giấy em viết, pháo hoa ngày Tết, chiếc la bàn của nhà thám hiểm: bốn phát minh lớn của người Trung Quốc cổ đại vẫn ở quanh ta."
+          },
+          "video": {
+            "id": "b9_m4.video",
+            "title": "Giấy, la bàn và những bộ sử",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b9_m4.video.s1",
+                "kind": "tieu_de",
+                "duration": 11,
+                "title": "Giáp cốt văn",
+                "label": "Nguồn gốc của chữ Hán",
+                "sources": [
+                  {
+                    "quote": "Từ thời nhà Thương, người Trung Quốc đã khắc chữ trên mai rùa, xương thú, gọi là giáp cốt văn.",
+                    "chunk_id": "LS6_B09_C014",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Chữ giáp cốt - nguồn gốc của chữ Hán ngày nay",
+                    "chunk_id": "LS6_B09_C013",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "mai_rua",
+                "caption": "Từ thời nhà Thương, người Trung Quốc đã khắc chữ trên mai rùa, xương thú, gọi là giáp cốt văn, nguồn gốc của chữ Hán ngày nay."
+              },
+              {
+                "id": "b9_m4.video.s2",
+                "kind": "tieu_de",
+                "duration": 13,
+                "title": "Thơ, tư tưởng và sử học",
+                "label": "Kinh Thi · Khổng Tử · Sử kí",
+                "sources": [
+                  {
+                    "quote": "Kinh Thi là tập thơ cổ nhất ở Trung Quốc, gồm nhiều sáng tác dân gian, được Khổng Tử sưu tập",
+                    "chunk_id": "LS6_B09_C014",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Thời cổ đại, xuất hiện nhiều nhà tư tưởng nổi tiếng, tiêu biểu là Khổng Tử và Lão Tử.",
+                    "chunk_id": "LS6_B09_C014",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Những bộ sử tiêu biểu như sử kí của Tư Mã Thiên, Hán thư của Ban Cố",
+                    "chunk_id": "LS6_B09_C015",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "cuon_giay",
+                "caption": "Kinh Thi là tập thơ cổ nhất, được Khổng Tử sưu tập. Tiêu biểu về tư tưởng là Khổng Tử và Lão Tử. Bộ sử tiêu biểu có Sử kí của Tư Mã Thiên, Hán thư của Ban Cố."
+              },
+              {
+                "id": "b9_m4.video.s3",
+                "kind": "tieu_de",
+                "duration": 15,
+                "title": "Bốn phát minh",
+                "label": "Giấy · thuốc nổ · la bàn · kĩ thuật in",
+                "sources": [
+                  {
+                    "quote": "người Trung Quốc cổ đại đã có bốn phát minh quan trọng về mặt kĩ thuật, đó là giấy, thuốc nổ, la bàn và kĩ thuật in.",
+                    "chunk_id": "LS6_B09_C015",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Thế kỉ II TCN, họ đã phát minh ra thiết bị đo động đất sớm nhất thế giới gọi là địa động nghi.",
+                    "chunk_id": "LS6_B09_C015",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "la_ban",
+                "caption": "Người Trung Quốc có bốn phát minh quan trọng: giấy, thuốc nổ, la bàn và kĩ thuật in. Thế kỉ II trước Công nguyên, họ còn phát minh địa động nghi, thiết bị đo động đất sớm nhất thế giới."
+              },
+              {
+                "id": "b9_m4.video.s4",
+                "kind": "tieu_de",
+                "duration": 15,
+                "title": "Âm dương lịch",
+                "label": "Hoa Đà phẫu thuật gây mê",
+                "sources": [
+                  {
+                    "quote": "Người Trung Quốc cũng đã phát minh ra một loại lịch dựa trên sự kết hợp giữa âm lịch và dương lịch mà cho đến ngày nay vẫn ảnh hưởng đến cách tính thời gian của nhiều nước phương Đông, trong đó có Việt Nam",
+                    "chunk_id": "LS6_B09_C015",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Hoa Đà cũng là người đầu tiên thực hiện phương pháp phẫu thuật gây mê.",
+                    "chunk_id": "LS6_B09_C015",
+                    "lesson_number": 9,
+                    "pages": [
+                      43,
+                      43
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "lich",
+                "caption": "Lịch của người Trung Quốc kết hợp âm lịch và dương lịch, đến nay vẫn ảnh hưởng tới nhiều nước phương Đông, trong đó có Việt Nam. Hoa Đà là người đầu tiên thực hiện phẫu thuật gây mê."
+              }
+            ]
           },
           "cards": [
             {
@@ -4356,6 +5710,150 @@
             "hu_cau": true,
             "text": "Đất đai ít và cằn, nhưng bờ biển đầy vũng vịnh. Người Hy Lạp đã biến bất lợi thành lợi thế ra sao?"
           },
+          "video": {
+            "id": "b10_m1.video",
+            "title": "Biển cả và những hải cảng",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b10_m1.video.s1",
+                "kind": "tieu_de",
+                "duration": 15,
+                "title": "Hy Lạp",
+                "label": "Phía nam bán đảo Ban-căng",
+                "sources": [
+                  {
+                    "quote": "với trung tâm nằm ở phía nam bán đảo Ban-căng",
+                    "chunk_id": "LS6_B10_C003",
+                    "lesson_number": 10,
+                    "pages": [
+                      46,
+                      46
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Địa hình ở đây bị chia cắt thành nhiều vùng đồng bằng nhỏ hẹp bởi các dãy núi thấp chạy dài ra biển.",
+                    "chunk_id": "LS6_B10_C003",
+                    "lesson_number": 10,
+                    "pages": [
+                      46,
+                      46
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đất đai canh tác ít và không màu mỡ, chỉ thích hợp trồng các cây lâu năm như nho, ô liu",
+                    "chunk_id": "LS6_B10_C003",
+                    "lesson_number": 10,
+                    "pages": [
+                      46,
+                      46
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "den_hy_lap",
+                "caption": "Hy Lạp cổ đại có trung tâm ở phía nam bán đảo Ban-căng. Địa hình bị chia cắt thành nhiều đồng bằng nhỏ hẹp; đất canh tác ít, không màu mỡ, chỉ hợp trồng cây lâu năm như nho, ô liu."
+              },
+              {
+                "id": "b10_m1.video.s2",
+                "kind": "song_nuoc",
+                "duration": 15,
+                "labels": [
+                  "Cảng Pi-rê",
+                  "Vũng, vịnh lập hải cảng"
+                ],
+                "caption": "Bù lại, Hy Lạp có nhiều vũng, vịnh thuận lợi lập hải cảng, nhiều khoáng sản như đồng, vàng, bạc. Cảng Pi-rê là trung tâm xuất nhập khẩu và buôn bán nô lệ sầm uất nhất thế giới cổ đại.",
+                "cast": [
+                  "thuyen_buom"
+                ],
+                "sources": [
+                  {
+                    "quote": "Bù lại, Hy Lạp có nhiều vũng, vịnh, thuận lợi cho việc lập những hải cảng.",
+                    "chunk_id": "LS6_B10_C003",
+                    "lesson_number": 10,
+                    "pages": [
+                      46,
+                      46
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Ở đây còn có nhiều khoáng sản như đồng, vàng, bạc",
+                    "chunk_id": "LS6_B10_C003",
+                    "lesson_number": 10,
+                    "pages": [
+                      46,
+                      46
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Cảng Pi-rê là trung tâm xuất – nhập khẩu và buôn bán nô lệ sầm uất nhất của thế giới cổ đại.",
+                    "chunk_id": "LS6_B10_C004",
+                    "lesson_number": 10,
+                    "pages": [
+                      46,
+                      46
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b10_m1.video.s3",
+                "kind": "tieu_de",
+                "duration": 14,
+                "title": "La Mã",
+                "label": "Bán đảo I-ta-li-a",
+                "sources": [
+                  {
+                    "quote": "bán đảo I-ta-li-a - nơi hình thành Nhà nước La Mã cổ đại, nằm ở Nam Âu, xung quanh được biển bao bọc.",
+                    "chunk_id": "LS6_B10_C006",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      47
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Bờ biển ở phía nam có nhiều vịnh, càng thuận tiện cho tàu bè ra vào trú đậu.",
+                    "chunk_id": "LS6_B10_C006",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      47
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "lãnh thổ được mở rộng ra cả ba châu lục với nhiều đồng bằng và đồng cỏ rộng lớn",
+                    "chunk_id": "LS6_B10_C006",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      47
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Lòng đất chứa nhiều khoáng sản, thuận lợi cho nghề luyện kim.",
+                    "chunk_id": "LS6_B10_C006",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      47
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "dau_truong",
+                "caption": "La Mã hình thành trên bán đảo I-ta-li-a ở Nam Âu, xung quanh là biển, phía nam nhiều vịnh, cảng. Thời đế quốc, lãnh thổ mở rộng ra cả ba châu lục, lòng đất nhiều khoáng sản."
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b10_m1.c1",
@@ -4754,6 +6252,153 @@
             "hu_cau": true,
             "text": "Ở A-ten, công dân có thể viết tên một người lên mảnh vỏ sò để đuổi người đó khỏi thành phố. Vì sao lại có cách bỏ phiếu lạ lùng ấy?"
           },
+          "video": {
+            "id": "b10_m2.video",
+            "title": "Thành bang A-ten và nền dân chủ",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b10_m2.video.s1",
+                "kind": "tieu_de",
+                "duration": 15,
+                "title": "Nhà nước thành bang",
+                "label": "Thế kỉ VIII – IV TCN",
+                "sources": [
+                  {
+                    "quote": "Từ thế kỉ VIII đến thế kỉ IV TCN, ở Hy Lạp đã hình thành hàng trăm nhà nước nhỏ được gọi là nhà nước thành bang (hay thị quốc).",
+                    "chunk_id": "LS6_B10_C008",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Mỗi thành bang đều lấy một thành thị làm trung tâm, xung quanh là vùng đất trồng trọt.",
+                    "chunk_id": "LS6_B10_C008",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      48
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "thanh_quach",
+                "caption": "Từ thế kỉ VIII đến thế kỉ IV trước Công nguyên, Hy Lạp có hàng trăm nhà nước nhỏ gọi là thành bang. Mỗi thành bang lấy một thành thị làm trung tâm, xung quanh là vùng đất trồng trọt."
+              },
+              {
+                "id": "b10_m2.video.s2",
+                "kind": "bieu_tuong",
+                "duration": 15,
+                "items": [
+                  {
+                    "icon": "nguoi",
+                    "label": "Đại hội nhân dân"
+                  },
+                  {
+                    "icon": "giau_ngheo",
+                    "label": "Biểu quyết việc hệ trọng"
+                  }
+                ],
+                "caption": "A-ten là thành bang tiêu biểu cho chế độ dân chủ. Đại hội nhân dân gồm toàn bộ công dân nam từ 18 tuổi trở lên, có quyền thảo luận và biểu quyết mọi vấn đề hệ trọng của đất nước.",
+                "sources": [
+                  {
+                    "quote": "A-ten là thành bang quan trọng nhất tiêu biểu cho chế độ dân chủ ở Hy Lạp cổ đại.",
+                    "chunk_id": "LS6_B10_C008",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Gồm toàn bộ công dân Nam từ",
+                    "chunk_id": "LS6_B10_C008",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "18 tuổi trở lên.",
+                    "chunk_id": "LS6_B10_C008",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Có quyền thảo luận và biểu quyết tất cả những vấn đề hệ trọng của đất nước.",
+                    "chunk_id": "LS6_B10_C009",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              },
+              {
+                "id": "b10_m2.video.s3",
+                "kind": "tieu_de",
+                "duration": 14,
+                "title": "Bỏ phiếu bằng vỏ sò",
+                "label": "Bảo vệ nền dân chủ",
+                "sources": [
+                  {
+                    "quote": "Để bảo vệ nền dân chủ và ngăn chặn những âm mưu đảo chính, \"chế độ bỏ phiếu bằng vỏ sò \" đã được thực hiện",
+                    "chunk_id": "LS6_B10_C008",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nếu công dân nào bị nghi ngờ có âm mưu, hành vi đe doạ tới nền dân chủ thì Đại hội nhân dân sẽ tiến hành bỏ phiếu kín",
+                    "chunk_id": "LS6_B10_C010",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "người đó buộc phải rời khỏi A-ten trong thời hạn 10 năm",
+                    "chunk_id": "LS6_B10_C010",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Nếu có 6 000 phiếu cùng ghi tên một người thì người đó buộc phải rời khỏi A-ten trong thời hạn 10 năm.",
+                    "chunk_id": "LS6_B10_C010",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "did_you_know"
+                  }
+                ],
+                "landmark": "vo_so",
+                "caption": "Để bảo vệ nền dân chủ, A-ten thực hiện chế độ bỏ phiếu bằng vỏ sò: nếu có 6 000 phiếu cùng ghi tên một người bị nghi đe doạ nền dân chủ, người đó phải rời A-ten trong 10 năm."
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b10_m2.c1",
@@ -5130,6 +6775,107 @@
             "hu_cau": true,
             "text": "Từ một thành bang nhỏ ở giữa bán đảo I-ta-li-a, La Mã trở thành đế quốc rộng lớn. Quyền lực tập trung vào tay ai?"
           },
+          "video": {
+            "id": "b10_m3.video",
+            "title": "Đế chế La Mã",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b10_m3.video.s1",
+                "kind": "tieu_de",
+                "duration": 12,
+                "title": "Đế quốc La Mã",
+                "label": "Thế kỉ I TCN",
+                "sources": [
+                  {
+                    "quote": "Từ một thành bang nhỏ bé ở miền Trung bán đảo I-ta-li-a, Nhà nước La Mã đã dần mở rộng lãnh thổ, trở thành đế quốc rộng lớn vào thế kỉ I TCN.",
+                    "chunk_id": "LS6_B10_C012",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "dau_truong",
+                "caption": "Từ một thành bang nhỏ bé ở miền Trung bán đảo I-ta-li-a, La Mã dần mở rộng lãnh thổ, trở thành đế quốc rộng lớn vào thế kỉ I trước Công nguyên."
+              },
+              {
+                "id": "b10_m3.video.s2",
+                "kind": "tieu_de",
+                "duration": 10,
+                "title": "Ốc-ta-vi-út",
+                "label": "Năm 27 TCN · mở đầu thời đế chế",
+                "sources": [
+                  {
+                    "quote": "Năm 27 TCN, Ốc-ta-vi-út được tôn lên thành Đấng tối cao, có quyền lực như hoàng đế, mở đầu thời kì đế chế.",
+                    "chunk_id": "LS6_B10_C012",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "ngai_vang",
+                "caption": "Năm 27 trước Công nguyên, Ốc-ta-vi-út được tôn lên thành Đấng tối cao, có quyền lực như hoàng đế, mở đầu thời kì đế chế."
+              },
+              {
+                "id": "b10_m3.video.s3",
+                "kind": "bieu_tuong",
+                "duration": 14,
+                "items": [
+                  {
+                    "icon": "tuong",
+                    "label": "Hoàng đế"
+                  },
+                  {
+                    "icon": "giau_ngheo",
+                    "label": "Viện Nguyên lão"
+                  },
+                  {
+                    "icon": "nguoi",
+                    "label": "Đại hội nhân dân (hình thức)"
+                  }
+                ],
+                "caption": "Trong nhà nước đế chế La Mã, đứng đầu là Hoàng đế, có Viện Nguyên lão, còn Đại hội nhân dân chỉ là hình thức. Đến thế kỉ I trước Công nguyên, Hy Lạp cũng bị La Mã thôn tính.",
+                "sources": [
+                  {
+                    "quote": "Hoàng đế Viện Nguyên lão",
+                    "chunk_id": "LS6_B10_C012",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đại hội nhân dân (chỉ là hình thức)",
+                    "chunk_id": "LS6_B10_C012",
+                    "lesson_number": 10,
+                    "pages": [
+                      48,
+                      48
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Đến thế kỉ I TCN, Hy Lạp bị đế quốc La Mã thôn tính.",
+                    "chunk_id": "LS6_B10_C008",
+                    "lesson_number": 10,
+                    "pages": [
+                      47,
+                      48
+                    ],
+                    "content_type": "body"
+                  }
+                ]
+              }
+            ]
+          },
           "cards": [
             {
               "id": "b10_m3.c1",
@@ -5498,6 +7244,147 @@
             "speaker": "linh_vat",
             "hu_cau": true,
             "text": "Chữ A, B, C em đang đọc và các số I, V, X trên mặt đồng hồ đều đến từ Hy Lạp, La Mã cổ đại. Còn gì nữa nhỉ?"
+          },
+          "video": {
+            "id": "b10_m4.video",
+            "title": "Chữ cái, đền đài và nhà khoa học",
+            "style": "co_dai",
+            "scenes": [
+              {
+                "id": "b10_m4.video.s1",
+                "kind": "tieu_de",
+                "duration": 11,
+                "title": "Chữ cái La-tinh",
+                "label": "A, B, C… và chữ số La Mã",
+                "sources": [
+                  {
+                    "quote": "Người Hy Lạp và La Mã đã sáng tạo ra hệ chữ cái La-tinh (A, B, C...) và chữ số La Mã mà ngày nay chúng ta đang sử dụng.",
+                    "chunk_id": "LS6_B10_C014",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      49
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Người Hy Lạp và La Mã sáng tạo ra dương lịch.",
+                    "chunk_id": "LS6_B10_C015",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      50
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "chu_cai",
+                "caption": "Người Hy Lạp và La Mã sáng tạo ra hệ chữ cái La-tinh và chữ số La Mã mà ngày nay chúng ta vẫn dùng. Họ cũng sáng tạo ra dương lịch."
+              },
+              {
+                "id": "b10_m4.video.s2",
+                "kind": "tieu_de",
+                "duration": 14,
+                "title": "Văn học và khoa học",
+                "label": "Hô-me · Pi-ta-go · Ác-si-mét",
+                "sources": [
+                  {
+                    "quote": "Văn học Hy Lạp, La Mã cổ đại phong phú về thể loại (thần thoại, kịch và thơ).",
+                    "chunk_id": "LS6_B10_C014",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      49
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "là Hô-me với tác phẩm I-li-át và Ô-di-xê (Hy Lạp), nhà soạn kịch Xô-phốc với",
+                    "chunk_id": "LS6_B10_C014",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      49
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "Hy Lạp là quê hương của các nhà khoa học nổi tiếng như: Pi-ta-go, Ta-lét, Ác-si-mét",
+                    "chunk_id": "LS6_B10_C015",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      50
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "sach",
+                "caption": "Văn học Hy Lạp, La Mã phong phú, với Hô-me và hai tác phẩm I-li-át, Ô-đi-xê, nhà soạn kịch Xô-phốc. Hy Lạp là quê hương của các nhà khoa học Pi-ta-go, Ta-lét, Ác-si-mét."
+              },
+              {
+                "id": "b10_m4.video.s3",
+                "kind": "tieu_de",
+                "duration": 12,
+                "title": "Sử học và điêu khắc",
+                "label": "Hê-rô-đốt · Thần Vệ nữ Mi-lô",
+                "sources": [
+                  {
+                    "quote": "ra dương lịch.\nCác nhà sử học tiêu biểu của Hy Lạp, La Mã thời cổ đại là Hê-rô-đốt, Tuy-xi-đít, Pô-li-bi-út",
+                    "chunk_id": "LS6_B10_C015",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      50
+                    ],
+                    "content_type": "body"
+                  },
+                  {
+                    "quote": "các bức tượng Thần Vệ nữ Mi-lô, Lực sĩ ném đĩa, Nữ thần A-tê-na",
+                    "chunk_id": "LS6_B10_C015",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      50
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "cuon_giay",
+                "caption": "Các nhà sử học tiêu biểu là Hê-rô-đốt, Tuy-xi-đít, Pô-li-bi-út. Về điêu khắc nổi tiếng có tượng Thần Vệ nữ Mi-lô, Lực sĩ ném đĩa, Nữ thần A-tê-na."
+              },
+              {
+                "id": "b10_m4.video.s4",
+                "kind": "tieu_de",
+                "duration": 8,
+                "title": "Pác-tê-nông · Cô-li-dê",
+                "label": "Kiến trúc tiêu biểu",
+                "sources": [
+                  {
+                    "quote": "Đền Pác-tê-nông - công trình kiến trúc tiêu biểu của Hy Lạp cổ đại",
+                    "chunk_id": "LS6_B10_C002",
+                    "lesson_number": 10,
+                    "pages": [
+                      45,
+                      45
+                    ],
+                    "content_type": "intro"
+                  },
+                  {
+                    "quote": "Đấu trường Cô-li-dê (La Mã)",
+                    "chunk_id": "LS6_B10_C015",
+                    "lesson_number": 10,
+                    "pages": [
+                      49,
+                      50
+                    ],
+                    "content_type": "body"
+                  }
+                ],
+                "landmark": "den_hy_lap",
+                "caption": "Công trình kiến trúc tiêu biểu là đền Pác-tê-nông của Hy Lạp và đấu trường Cô-li-dê của La Mã."
+              }
+            ]
           },
           "cards": [
             {
