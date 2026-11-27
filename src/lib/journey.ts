@@ -25,18 +25,20 @@ export type VideoIcon = 'riu_dong' | 'luoi_sat' | 'lua' | 'nguoi' | 'thuy_loi' |
 export type HumanForm = 'vuon_nguoi' | 'nguoi_toi_co' | 'nguoi_tinh_khon'
 export type VideoFind = 'hoa_thach' | 'rang' | 'so' | 'riu_tay' | 'cong_cu_da' | 'riu_mai' | 'manh_gom' | 'vo_oc' | 'dan_da' | 'vong_tay' | 'mat_nguoi' | 'xi_dong' | 'mui_ten' | 'luoi_cau' | 'riu_xeo' | 'giao' | 'chuoi_dat' | 'hat'
 /** Illustrated people acting in a scene (river scenes: cheo_thuyen, cay_lua; others: the rest). */
-export type VideoCast = 'tu_hop' | 'lam_ruong' | 'dao_muong' | 'cam_vu_khi' | 'danh_trong' | 'cheo_thuyen' | 'cay_lua' | 'ghe_da' | 'di_bo' | 'san_bat' | 'hai_luom' | 'lam_gom' | 'luyen_kim'
+export type VideoCast = 'tu_hop' | 'lam_ruong' | 'dao_muong' | 'cam_vu_khi' | 'danh_trong' | 'cheo_thuyen' | 'cay_lua' | 'thuyen_buom' | 'ghe_da' | 'di_bo' | 'san_bat' | 'hai_luom' | 'lam_gom' | 'luyen_kim'
+/** Landmarks drawn in title scenes of the co_dai style (lessons on the ancient world). */
+export type VideoLandmark = 'kim_tu_thap' | 'thap_tang' | 'bao_thap' | 'den_hy_lap' | 'dau_truong' | 'thanh_quach' | 'nui' | 'rung' | 'ngai_vang' | 'chu_co' | 'cuon_giay' | 'sach' | 'mai_rua' | 'chu_cai' | 'chu_so' | 'lich' | 'la_ban' | 'vo_so' | 'binh_khi'
 /** One animated scene: a template the app draws, on-screen words and a narration line, all checked against its quotes. */
 export type VideoScene = { id: string; duration: number; caption: string; sources: SourceRef[]; /** Pre-recorded narration, present only while it matches the caption. */ audio?: string; cast?: VideoCast[] } & (
-  | { kind: 'tieu_de'; title: string; label?: string }
+  | { kind: 'tieu_de'; title: string; label?: string; landmark?: VideoLandmark }
   | { kind: 'bieu_tuong'; items: { icon: VideoIcon; label: string }[] }
   | { kind: 'song_nuoc'; labels: string[] }
   | { kind: 'tien_hoa'; forms: HumanForm[]; label?: string }
   | { kind: 'moc_thoi_gian'; events: { time: string; label: string; form?: HumanForm }[] }
   | { kind: 'phat_hien'; finds: { find: VideoFind; label: string }[] }
 )
-/** style: dong_son (bronze-drum backdrop, default) or tien_su (dusk sky and sun, for prehistoric lessons). */
-export interface MissionVideo { id: string; title: string; style?: 'dong_son' | 'tien_su'; scenes: VideoScene[]; /** Index of the SGK lesson section the video illustrates (added by the server). */ section?: number }
+/** style: dong_son (bronze-drum backdrop, default), tien_su (dusk sky and sun, for prehistoric lessons) or co_dai (dunes and drawn landmarks, for the ancient world). */
+export interface MissionVideo { id: string; title: string; style?: 'dong_son' | 'tien_su' | 'co_dai'; scenes: VideoScene[]; /** Index of the SGK lesson section the video illustrates (added by the server). */ section?: number }
 export interface Mission {
   id: string
   title: string
